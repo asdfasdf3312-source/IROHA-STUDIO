@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>애옹 문의 양식</title>
+<title>애옹 작업 신청서</title>
 
 <style>
 * {
@@ -76,6 +76,10 @@ body {
   background: #e88caf;
   color: #fff;
   border-color: #e88caf;
+}
+
+.choice.long {
+  min-width: 190px;
 }
 
 .guide {
@@ -199,6 +203,10 @@ body {
   .two {
     grid-template-columns: 1fr;
   }
+
+  .choice.long {
+    min-width: 100%;
+  }
 }
 </style>
 </head>
@@ -207,39 +215,41 @@ body {
 
 <div class="form-wrap">
 
-  <div class="title">문의 양식</div>
+  <div class="title">작업 신청서</div>
 
-  <div class="row" data-name="formType">
-    <button class="choice active" type="button" data-value="기본 문의">기본 문의</button>
-    <button class="choice" type="button" data-value="뚜따만 문의">뚜따만 문의</button>
-    <button class="choice" type="button" data-value="블렌더 컨버팅">블렌더 컨버팅</button>
+  <div class="row" data-name="formType" id="formTypeRow">
+    <button class="choice active" type="button" data-value="버츄얼 스타터 세트" data-form="starter">버츄얼 스타터 세트</button>
+    <button class="choice" type="button" data-value="VRC 아바타" data-form="vrc">VRC 아바타</button>
   </div>
 
-  <div class="guide">
-    <b>기본 문의 양식</b> 멜리고 닐로툰만 신청하시거나 의상 입히는 것만 신청하신다면 다른 양식을 이용해주세요!<br>
-    <b>❗ 뿔잉눈/웃는눈은 작업 완료 후 추가 시 추가금이 발생할 수 있습니다. 처음에 미리 말씀해주세요!</b>
+  <div class="guide" id="guideText">
+    <b>버츄얼 스타터 세트와 VRC 아바타는 서로 다른 작업 메뉴입니다.</b><br>
+    ❗ 아무것도 모르겠고 작가가 알잘딱으로 진행해주길 원하거나, 성형 작업을 포함하고 싶다면 <b>버츄얼 스타터 세트</b>를 권장합니다.
   </div>
 
-  <div class="label">0. 작업 일정 확인 여부</div>
+  <div class="label">0. 작업 타입</div>
+  <div class="row" data-name="workType" id="workTypeRow"></div>
+
+  <div class="label">1. 작업 일정 확인 여부</div>
   <div class="row" data-name="schedule">
     <button class="choice active" type="button" data-value="O (확인했어요)">O 확인했어요!</button>
     <button class="choice" type="button" data-value="X">X</button>
     <button class="choice" type="button" data-value="빠른마감신청">빠른마감신청</button>
   </div>
 
-  <div class="label">1. 필독사항 확인 여부</div>
+  <div class="label">2. 필독사항 확인 여부</div>
   <div class="row" data-name="notice">
     <button class="choice active" type="button" data-value="O (읽었어요)">O 읽었어요!</button>
     <button class="choice" type="button" data-value="X">X</button>
   </div>
 
-  <div class="label">2. 포트폴리오 비공개 여부 <span class="tip">비공개 안 하면 샘플로 올라가요</span></div>
+  <div class="label">3. 포트폴리오 비공개 여부 <span class="tip">비공개 안 하면 샘플로 올라가요</span></div>
   <input id="portfolioPrivate" class="input" type="text" placeholder="ex) 이름만 비공개 / 공개 OK / 비공개 신청합니다">
 
-  <div class="label">3. 신청 작업 내용</div>
-  <textarea id="workContent" class="textarea" placeholder="ex) VSF 데뷔 패키지 + 뿔잉눈 추가"></textarea>
+  <div class="label">4. 신청 작업 내용</div>
+  <textarea id="workContent" class="textarea" placeholder="ex) 버츄얼 스타터 풀옵션 - VSF + 뿔잉눈 추가"></textarea>
 
-  <div class="label">4. 방송 정보</div>
+  <div class="label">5. 방송 정보</div>
   <div class="row" data-name="broadcast">
     <button class="choice active" type="button" data-value="방송용 O">방송용 O</button>
     <button class="choice" type="button" data-value="방송용 X">방송용 X</button>
@@ -248,10 +258,10 @@ body {
   <input id="broadcastName" class="input" type="text" placeholder="방송 닉네임">
   <input id="avatarDate" class="input" type="text" placeholder="아바타 공개일 ex. 12월 중순쯤">
 
-  <div class="label">5. Booth 아이템 링크 <span class="tip">의상·헤어가 여러 개면 기본 파츠 표시</span></div>
+  <div class="label">6. Booth 아이템 링크 <span class="tip">의상·헤어가 여러 개면 기본 파츠 표시</span></div>
   <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 눈동자 링크&#10;가슴 물리 필요 여부도 적어주세요!"></textarea>
 
-  <div class="label">5-1. 컬러 정보</div>
+  <div class="label">6-1. 컬러 정보</div>
   <div class="two">
     <input id="hairColor" class="input" type="text" placeholder="헤어 컬러">
     <input id="clothesColor" class="input" type="text" placeholder="의상 컬러">
@@ -263,32 +273,32 @@ body {
   </label>
   <div id="previewArea" class="preview"></div>
 
-  <div class="label">6. 레퍼런스 / 원하는 아바타 설명 <span class="tip">일러 기반이면 원화 첨부</span></div>
+  <div class="label">7. 레퍼런스 / 원하는 아바타 설명 <span class="tip">일러 기반이면 원화 첨부</span></div>
   <textarea id="avatarDesc" class="textarea" placeholder="눈매 :&#10;입모양 :&#10;얼굴 연령대 :&#10;눈썹 모양 :"></textarea>
 
-  <div class="label">7. 페이셜 작업 요청사항</div>
+  <div class="label">8. 페이셜 작업 요청사항</div>
   <textarea id="facialRequest" class="textarea" placeholder="ex) 볼빵빵이 크지 않았으면 좋겠어요"></textarea>
 
-  <div class="label">8. 유니티 파일 필요 여부 <span class="tip">추가금 5만원 / 블렌드 전달 불가</span></div>
+  <div class="label">9. 유니티 파일 필요 여부 <span class="tip">추가금 5만원 / 블렌드 전달 불가</span></div>
   <div class="row" data-name="unityNeed">
     <button class="choice active" type="button" data-value="필요 없어요">필요 없어요</button>
     <button class="choice" type="button" data-value="필요해요 (+5만원)">필요해요 (+5만원)</button>
   </div>
 
-  <div class="label">9. 유니티 파일 용도</div>
+  <div class="label">10. 유니티 파일 용도</div>
   <div class="row" data-name="unityUse">
     <button class="choice active" type="button" data-value="1번 (직접 추가용)">1번 직접 추가용</button>
     <button class="choice" type="button" data-value="2번 (파일 백업용)">2번 파일 백업용</button>
     <button class="choice" type="button" data-value="해당없음">해당없음</button>
   </div>
 
-  <div class="label">10. 리뷰 이벤트 참가 여부 <span class="tip">약속 시 3,000원 할인</span></div>
+  <div class="label">11. 리뷰 이벤트 참가 여부 <span class="tip">약속 시 3,000원 할인</span></div>
   <div class="row" data-name="reviewEvent">
     <button class="choice active" type="button" data-value="O (약속할게요!)">O 약속할게요!</button>
     <button class="choice" type="button" data-value="X">X</button>
   </div>
 
-  <div class="label">11. 그 외 궁금한 점</div>
+  <div class="label">12. 그 외 궁금한 점</div>
   <textarea id="etcText" class="textarea" placeholder="자유롭게 적어주세요!"></textarea>
 
   <button class="copy-btn" type="button" onclick="copyAeongForm()">작성한 양식 복사하기 📋</button>
@@ -296,6 +306,45 @@ body {
 </div>
 
 <script>
+var workTypeMap = {
+  starter: [
+    "버츄얼 스타터 풀옵션 - VSF",
+    "핵고퀄 A 풀옵션 - VRC",
+    "핵고퀄 B 풀옵션 - VRC"
+  ],
+  vrc: [
+    "Basic Options",
+    "Standard Options",
+    "Premium Options"
+  ]
+};
+
+var guideMap = {
+  starter: '<b>버츄얼 스타터 세트</b>는 성형, 세팅, 페이셜 등 전체적인 작업 방향을 작가가 잡아주는 메뉴입니다.<br>❗ 아무것도 모르겠고 작가가 알잘딱으로 진행해주길 원하거나, 성형 작업을 포함하고 싶다면 <b>버츄얼 스타터 세트</b>를 권장합니다.',
+  vrc: '<b>VRC 아바타</b>는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 옵션 중 필요한 범위를 선택해 주세요. 헤어와 의상을 몇 개 입힐지도 신청 내용에 적어주세요.'
+};
+
+function renderWorkTypes(type) {
+  var row = document.getElementById("workTypeRow");
+  if (!row) return;
+
+  row.innerHTML = "";
+
+  workTypeMap[type].forEach(function(text, index) {
+    var btn = document.createElement("button");
+    btn.className = "choice long" + (index === 0 ? " active" : "");
+    btn.type = "button";
+    btn.setAttribute("data-value", text);
+    btn.textContent = text;
+    row.appendChild(btn);
+  });
+
+  var guide = document.getElementById("guideText");
+  if (guide && guideMap[type]) {
+    guide.innerHTML = guideMap[type];
+  }
+}
+
 function getSelected(name) {
   var row = document.querySelector('[data-name="' + name + '"]');
   if (!row) return "";
@@ -317,6 +366,11 @@ document.querySelectorAll(".row").forEach(function(row) {
     });
 
     e.target.classList.add("active");
+
+    if (row.getAttribute("data-name") === "formType") {
+      var type = e.target.getAttribute("data-form");
+      renderWorkTypes(type);
+    }
   });
 });
 
@@ -345,26 +399,30 @@ document.getElementById("colorImages").addEventListener("change", function() {
 });
 
 function copyAeongForm() {
+  var formType = emptyCheck(getSelected("formType"));
+  var workType = emptyCheck(getSelected("workType"));
+
   var text =
-"[애옹 기본 문의 양식]\n" +
-"0. 작업 일정 확인 여부 : " + emptyCheck(getSelected("schedule")) + "\n" +
-"1. 필독사항 확인 여부 : " + emptyCheck(getSelected("notice")) + "\n" +
-"2. 포트폴리오 비공개 여부 : " + emptyCheck(document.getElementById("portfolioPrivate").value) + "\n" +
-"3. 신청 작업 내용 : " + emptyCheck(document.getElementById("workContent").value) + "\n" +
-"4. 방송 여부 : " + emptyCheck(getSelected("broadcast")) + "\n" +
+"[애옹 " + formType + " 신청 양식]\n" +
+"0. 작업 타입 : " + workType + "\n" +
+"1. 작업 일정 확인 여부 : " + emptyCheck(getSelected("schedule")) + "\n" +
+"2. 필독사항 확인 여부 : " + emptyCheck(getSelected("notice")) + "\n" +
+"3. 포트폴리오 비공개 여부 : " + emptyCheck(document.getElementById("portfolioPrivate").value) + "\n" +
+"4. 신청 작업 내용 : " + emptyCheck(document.getElementById("workContent").value) + "\n" +
+"5. 방송 여부 : " + emptyCheck(getSelected("broadcast")) + "\n" +
 "  방송 플랫폼(링크) : " + emptyCheck(document.getElementById("broadcastLink").value) + "\n" +
 "  방송 닉네임 : " + emptyCheck(document.getElementById("broadcastName").value) + "\n" +
 "  아바타 공개일 : " + emptyCheck(document.getElementById("avatarDate").value) + "\n" +
-"5. Booth 아이템 링크 :\n" + emptyCheck(document.getElementById("boothLink").value) + "\n\n" +
-"5-1. 컬러 정보 :\n" +
+"6. Booth 아이템 링크 :\n" + emptyCheck(document.getElementById("boothLink").value) + "\n\n" +
+"6-1. 컬러 정보 :\n" +
 "헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
 "의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
-"6. 레퍼런스 / 아바타 설명 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
-"7. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
-"8. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
-"9. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +
-"10. 리뷰 이벤트 : " + emptyCheck(getSelected("reviewEvent")) + "\n" +
-"11. 그 외 : " + emptyCheck(document.getElementById("etcText").value);
+"7. 레퍼런스 / 아바타 설명 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
+"8. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
+"9. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
+"10. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +
+"11. 리뷰 이벤트 : " + emptyCheck(getSelected("reviewEvent")) + "\n" +
+"12. 그 외 : " + emptyCheck(document.getElementById("etcText").value);
 
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(function() {
@@ -386,6 +444,8 @@ function fallbackCopy(text) {
   document.body.removeChild(temp);
   alert("양식이 복사되었습니다!");
 }
+
+renderWorkTypes("starter");
 </script>
 
 </body>

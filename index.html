@@ -1,1 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>애옹 문의 양식</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 40px 0;
+  background: #ffffff;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+  color: #333;
+}
+
+.form-wrap {
+  width: 760px;
+  max-width: calc(100% - 32px);
+  margin: 0 auto;
+  padding: 34px;
+  background: rgba(255,255,255,0.98);
+  border: 1px solid #f4c8d9;
+  border-radius: 28px;
+  box-shadow: 0 16px 42px rgba(230,150,190,0.12);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.title::before {
+  content: "";
+  width: 5px;
+  height: 22px;
+  background: #e88caf;
+  border-radius: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.choice {
+  padding: 9px 18px;
+  border-radius: 11px;
+  border: 1px solid #ead5df;
+  background: #fff;
+  color: #666;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.choice:hover {
+  transform: translateY(-1px);
+  background: #fff7fb;
+}
+
+.choice.active {
+  background: #e88caf;
+  color: #fff;
+  border-color: #e88caf;
+}
+
+.guide {
+  background: #fff7fa;
+  border: 1px solid #f1c9d8;
+  border-radius: 16px;
+  padding: 15px 18px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #777;
+}
+
+.guide b {
+  color: #d75f8d;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 18px 0 8px;
+}
+
+.tip {
+  font-size: 13px;
+  color: #999;
+  font-weight: 500;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 13px 15px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+.textarea {
+  min-height: 70px;
+  resize: vertical;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #e88caf;
+  box-shadow: 0 0 0 3px rgba(232,140,175,0.18);
+}
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.upload {
+  display: block;
+  border: 1.5px dashed #e9b8ca;
+  border-radius: 12px;
+  padding: 12px 15px;
+  color: #777;
+  font-size: 14px;
+  font-weight: 700;
+  background: #fff7fa;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.upload input {
+  display: none;
+}
+
+.preview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.preview img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #f1c9d8;
+}
+
+.copy-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px 0;
+  border: none;
+  border-radius: 13px;
+  background: #e88caf;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(232,140,175,0.32);
+  transition: 0.18s;
+}
+
+.copy-btn:hover {
+  background: #df7fa7;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .form-wrap {
+    padding: 24px 18px;
+  }
+
+  .two {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-wrap">
+
+  <div class="title">문의 양식</div>
+
+  <div class="row" data-name="formType">
+    <button class="choice active" type="button" data-value="기본 문의">기본 문의</button>
+    <button class="choice" type="button" data-value="뚜따만 문의">뚜따만 문의</button>
+    <button class="choice" type="button" data-value="블렌더 컨버팅">블렌더 컨버팅</button>
+  </div>
+
+  <div class="guide">
+    <b>기본 문의 양식</b> 멜리고 닐로툰만 신청하시거나 의상 입히는 것만 신청하신다면 다른 양식을 이용해주세요!<br>
+    <b>❗ 뿔잉눈/웃는눈은 작업 완료 후 추가 시 추가금이 발생할 수 있습니다. 처음에 미리 말씀해주세요!</b>
+  </div>
+
+  <div class="label">0. 작업 일정 확인 여부</div>
+  <div class="row" data-name="schedule">
+    <button class="choice active" type="button" data-value="O (확인했어요)">O 확인했어요!</button>
+    <button class="choice" type="button" data-value="X">X</button>
+    <button class="choice" type="button" data-value="빠른마감신청">빠른마감신청</button>
+  </div>
+
+  <div class="label">1. 필독사항 확인 여부</div>
+  <div class="row" data-name="notice">
+    <button class="choice active" type="button" data-value="O (읽었어요)">O 읽었어요!</button>
+    <button class="choice" type="button" data-value="X">X</button>
+  </div>
+
+  <div class="label">2. 포트폴리오 비공개 여부 <span class="tip">비공개 안 하면 샘플로 올라가요</span></div>
+  <input id="portfolioPrivate" class="input" type="text" placeholder="ex) 이름만 비공개 / 공개 OK / 비공개 신청합니다">
+
+  <div class="label">3. 신청 작업 내용</div>
+  <textarea id="workContent" class="textarea" placeholder="ex) VSF 데뷔 패키지 + 뿔잉눈 추가"></textarea>
+
+  <div class="label">4. 방송 정보</div>
+  <div class="row" data-name="broadcast">
+    <button class="choice active" type="button" data-value="방송용 O">방송용 O</button>
+    <button class="choice" type="button" data-value="방송용 X">방송용 X</button>
+  </div>
+  <input id="broadcastLink" class="input" type="text" placeholder="방송 플랫폼 링크">
+  <input id="broadcastName" class="input" type="text" placeholder="방송 닉네임">
+  <input id="avatarDate" class="input" type="text" placeholder="아바타 공개일 ex. 12월 중순쯤">
+
+  <div class="label">5. Booth 아이템 링크 <span class="tip">의상·헤어가 여러 개면 기본 파츠 표시</span></div>
+  <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 눈동자 링크&#10;가슴 물리 필요 여부도 적어주세요!"></textarea>
+
+  <div class="label">5-1. 컬러 정보</div>
+  <div class="two">
+    <input id="hairColor" class="input" type="text" placeholder="헤어 컬러">
+    <input id="clothesColor" class="input" type="text" placeholder="의상 컬러">
+  </div>
+
+  <label class="upload">
+    📎 의상 컬러 이미지 첨부 <span class="tip">여러 장 가능</span>
+    <input id="colorImages" type="file" accept="image/*" multiple>
+  </label>
+  <div id="previewArea" class="preview"></div>
+
+  <div class="label">6. 레퍼런스 / 원하는 아바타 설명 <span class="tip">일러 기반이면 원화 첨부</span></div>
+  <textarea id="avatarDesc" class="textarea" placeholder="눈매 :&#10;입모양 :&#10;얼굴 연령대 :&#10;눈썹 모양 :"></textarea>
+
+  <div class="label">7. 페이셜 작업 요청사항</div>
+  <textarea id="facialRequest" class="textarea" placeholder="ex) 볼빵빵이 크지 않았으면 좋겠어요"></textarea>
+
+  <div class="label">8. 유니티 파일 필요 여부 <span class="tip">추가금 5만원 / 블렌드 전달 불가</span></div>
+  <div class="row" data-name="unityNeed">
+    <button class="choice active" type="button" data-value="필요 없어요">필요 없어요</button>
+    <button class="choice" type="button" data-value="필요해요 (+5만원)">필요해요 (+5만원)</button>
+  </div>
+
+  <div class="label">9. 유니티 파일 용도</div>
+  <div class="row" data-name="unityUse">
+    <button class="choice active" type="button" data-value="1번 (직접 추가용)">1번 직접 추가용</button>
+    <button class="choice" type="button" data-value="2번 (파일 백업용)">2번 파일 백업용</button>
+    <button class="choice" type="button" data-value="해당없음">해당없음</button>
+  </div>
+
+  <div class="label">10. 리뷰 이벤트 참가 여부 <span class="tip">약속 시 3,000원 할인</span></div>
+  <div class="row" data-name="reviewEvent">
+    <button class="choice active" type="button" data-value="O (약속할게요!)">O 약속할게요!</button>
+    <button class="choice" type="button" data-value="X">X</button>
+  </div>
+
+  <div class="label">11. 그 외 궁금한 점</div>
+  <textarea id="etcText" class="textarea" placeholder="자유롭게 적어주세요!"></textarea>
+
+  <button class="copy-btn" type="button" onclick="copyAeongForm()">작성한 양식 복사하기 📋</button>
+
+</div>
+
+<script>
+function getSelected(name) {
+  var row = document.querySelector('[data-name="' + name + '"]');
+  if (!row) return "";
+  var active = row.querySelector(".choice.active");
+  return active ? active.getAttribute("data-value") : "";
+}
+
+function emptyCheck(value) {
+  value = (value || "").trim();
+  return value ? value : "(미작성)";
+}
+
+document.querySelectorAll(".row").forEach(function(row) {
+  row.addEventListener("click", function(e) {
+    if (!e.target.classList.contains("choice")) return;
+
+    row.querySelectorAll(".choice").forEach(function(btn) {
+      btn.classList.remove("active");
+    });
+
+    e.target.classList.add("active");
+  });
+});
+
+document.querySelectorAll(".textarea").forEach(function(textarea) {
+  textarea.addEventListener("input", function() {
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + "px";
+  });
+});
+
+document.getElementById("colorImages").addEventListener("change", function() {
+  var preview = document.getElementById("previewArea");
+  preview.innerHTML = "";
+
+  Array.from(this.files).forEach(function(file) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      var img = document.createElement("img");
+      img.src = e.target.result;
+      preview.appendChild(img);
+    };
+
+    reader.readAsDataURL(file);
+  });
+});
+
+function copyAeongForm() {
+  var text =
+"[애옹 기본 문의 양식]\n" +
+"0. 작업 일정 확인 여부 : " + emptyCheck(getSelected("schedule")) + "\n" +
+"1. 필독사항 확인 여부 : " + emptyCheck(getSelected("notice")) + "\n" +
+"2. 포트폴리오 비공개 여부 : " + emptyCheck(document.getElementById("portfolioPrivate").value) + "\n" +
+"3. 신청 작업 내용 : " + emptyCheck(document.getElementById("workContent").value) + "\n" +
+"4. 방송 여부 : " + emptyCheck(getSelected("broadcast")) + "\n" +
+"  방송 플랫폼(링크) : " + emptyCheck(document.getElementById("broadcastLink").value) + "\n" +
+"  방송 닉네임 : " + emptyCheck(document.getElementById("broadcastName").value) + "\n" +
+"  아바타 공개일 : " + emptyCheck(document.getElementById("avatarDate").value) + "\n" +
+"5. Booth 아이템 링크 :\n" + emptyCheck(document.getElementById("boothLink").value) + "\n\n" +
+"5-1. 컬러 정보 :\n" +
+"헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
+"의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
+"6. 레퍼런스 / 아바타 설명 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
+"7. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
+"8. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
+"9. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +
+"10. 리뷰 이벤트 : " + emptyCheck(getSelected("reviewEvent")) + "\n" +
+"11. 그 외 : " + emptyCheck(document.getElementById("etcText").value);
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      alert("양식이 복사되었습니다!");
+    }).catch(function() {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  var temp = document.createElement("textarea");
+  temp.value = text;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
+  alert("양식이 복사되었습니다!");
+}
+</script>
+
+</body>
+</html>

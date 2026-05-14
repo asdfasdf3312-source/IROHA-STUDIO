@@ -11,12 +11,22 @@
   box-sizing: border-box;
 }
 
+:root {
+  --main: #BEB7DC;
+  --main-dark: #8f86bd;
+  --main-light: #f4f1ff;
+  --line: #ded8f1;
+  --text: #333333;
+  --sub: #888888;
+  --warning: #8f86bd;
+}
+
 body {
   margin: 0;
   padding: 40px 0;
   background: #ffffff;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
-  color: #333;
+  color: var(--text);
 }
 
 .form-wrap {
@@ -25,9 +35,9 @@ body {
   margin: 0 auto;
   padding: 34px;
   background: rgba(255,255,255,0.98);
-  border: 1px solid #f4c8d9;
+  border: 1px solid var(--line);
   border-radius: 28px;
-  box-shadow: 0 16px 42px rgba(230,150,190,0.12);
+  box-shadow: 0 16px 42px rgba(190,183,220,0.20);
 }
 
 .title {
@@ -37,13 +47,14 @@ body {
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: 800;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
 }
 
 .title::before {
   content: "";
   width: 5px;
   height: 22px;
-  background: #e88caf;
+  background: var(--main);
   border-radius: 10px;
 }
 
@@ -57,10 +68,10 @@ body {
 .choice {
   padding: 9px 18px;
   border-radius: 11px;
-  border: 1px solid #ead5df;
+  border: 1px solid var(--line);
   background: #fff;
   color: #666;
-  font-family: inherit;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -69,13 +80,13 @@ body {
 
 .choice:hover {
   transform: translateY(-1px);
-  background: #fff7fb;
+  background: var(--main-light);
 }
 
 .choice.active {
-  background: #e88caf;
+  background: var(--main);
   color: #fff;
-  border-color: #e88caf;
+  border-color: var(--main);
 }
 
 .choice.long {
@@ -83,24 +94,30 @@ body {
 }
 
 .guide {
-  background: #fff7fa;
-  border: 1px solid #f1c9d8;
+  background: #fbf9ff;
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 15px 18px;
   margin-bottom: 22px;
   font-size: 14px;
   line-height: 1.7;
   color: #777;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
 }
 
 .guide b {
-  color: #d75f8d;
+  color: var(--main-dark);
 }
 
 .label {
   font-size: 15px;
   font-weight: 800;
   margin: 18px 0 8px;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
+
+.required {
+  color: var(--main-dark);
 }
 
 .tip {
@@ -115,7 +132,7 @@ body {
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   padding: 13px 15px;
-  font-family: inherit;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
   font-size: 14px;
   color: #333;
   background: #fff;
@@ -132,8 +149,8 @@ body {
 .input:focus,
 .textarea:focus {
   outline: none;
-  border-color: #e88caf;
-  box-shadow: 0 0 0 3px rgba(232,140,175,0.18);
+  border-color: var(--main);
+  box-shadow: 0 0 0 3px rgba(190,183,220,0.25);
 }
 
 .two {
@@ -144,15 +161,16 @@ body {
 
 .upload {
   display: block;
-  border: 1.5px dashed #e9b8ca;
+  border: 1.5px dashed var(--main);
   border-radius: 12px;
   padding: 12px 15px;
   color: #777;
   font-size: 14px;
   font-weight: 700;
-  background: #fff7fa;
+  background: #fbf9ff;
   cursor: pointer;
   margin-bottom: 10px;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
 }
 
 .upload input {
@@ -171,7 +189,25 @@ body {
   height: 64px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid #f1c9d8;
+  border: 1px solid var(--line);
+}
+
+.portfolio-warning {
+  display: none;
+  margin: -4px 0 14px 0;
+  padding: 13px 15px;
+  background: #fbf9ff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--warning);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.7;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
+
+.portfolio-warning b {
+  color: var(--main-dark);
 }
 
 .copy-btn {
@@ -180,18 +216,18 @@ body {
   padding: 16px 0;
   border: none;
   border-radius: 13px;
-  background: #e88caf;
+  background: var(--main);
   color: #fff;
-  font-family: inherit;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 10px 22px rgba(232,140,175,0.32);
+  box-shadow: 0 10px 22px rgba(190,183,220,0.35);
   transition: 0.18s;
 }
 
 .copy-btn:hover {
-  background: #df7fa7;
+  background: var(--main-dark);
   transform: translateY(-1px);
 }
 
@@ -227,26 +263,35 @@ body {
     ❗ 아무것도 모르겠고 작가가 알잘딱으로 진행해주길 원하거나, 성형 작업을 포함하고 싶다면 <b>버츄얼 스타터 세트</b>를 권장합니다.
   </div>
 
-  <div class="label">0. 작업 타입</div>
+  <div class="label">0. 작업 타입 <span class="required">*</span></div>
   <div class="row" data-name="workType" id="workTypeRow"></div>
 
-  <div class="label">1. 작업 일정 확인 여부</div>
+  <div class="label">1. 작업 일정 확인 여부 <span class="required">*</span></div>
   <div class="row" data-name="schedule">
     <button class="choice active" type="button" data-value="O (확인했어요)">O 확인했어요!</button>
     <button class="choice" type="button" data-value="X">X</button>
     <button class="choice" type="button" data-value="빠른마감신청">빠른마감신청</button>
   </div>
 
-  <div class="label">2. 필독사항 확인 여부</div>
+  <div class="label">2. 필독사항 확인 여부 <span class="required">*</span></div>
   <div class="row" data-name="notice">
     <button class="choice active" type="button" data-value="O (읽었어요)">O 읽었어요!</button>
     <button class="choice" type="button" data-value="X">X</button>
   </div>
 
-  <div class="label">3. 포트폴리오 비공개 여부 <span class="tip">비공개 안 하면 샘플로 올라가요</span></div>
-  <input id="portfolioPrivate" class="input" type="text" placeholder="ex) 이름만 비공개 / 공개 OK / 비공개 신청합니다">
+  <div class="label">3. 포트폴리오 공개 여부 <span class="required">*</span></div>
+  <div class="row" data-name="portfolioPrivate">
+    <button class="choice active" type="button" data-value="공개 가능">공개 가능</button>
+    <button class="choice" type="button" data-value="비공개 요청">비공개 요청</button>
+  </div>
 
-  <div class="label">4. 신청 작업 내용</div>
+  <div class="portfolio-warning">
+    ❗ 성형 작업이 포함된 작업물의 영구 비공개 요청 시 아래 사항을 필독해주세요.<br>
+    ⚠️ 작업물 비공개 추가금은 <b>총 결제금액의 10배</b>로 산정됩니다.<br>
+    ⚠️ 예: 주문 결제금액이 25,000원이라면, 비공개 요청 시 총 결제금액은 250,000원으로 진행됩니다.
+  </div>
+
+  <div class="label">4. 신청 작업 내용 <span class="required">*</span></div>
   <textarea id="workContent" class="textarea" placeholder="ex) 버츄얼 스타터 풀옵션 - VSF + 뿔잉눈 추가"></textarea>
 
   <div class="label">5. 방송 정보</div>
@@ -357,6 +402,19 @@ function emptyCheck(value) {
   return value ? value : "(미작성)";
 }
 
+function updatePortfolioWarning() {
+  var selected = getSelected("portfolioPrivate");
+  var warning = document.querySelector(".portfolio-warning");
+
+  if (!warning) return;
+
+  if (selected.indexOf("비공개") !== -1) {
+    warning.style.display = "block";
+  } else {
+    warning.style.display = "none";
+  }
+}
+
 document.querySelectorAll(".row").forEach(function(row) {
   row.addEventListener("click", function(e) {
     if (!e.target.classList.contains("choice")) return;
@@ -370,6 +428,10 @@ document.querySelectorAll(".row").forEach(function(row) {
     if (row.getAttribute("data-name") === "formType") {
       var type = e.target.getAttribute("data-form");
       renderWorkTypes(type);
+    }
+
+    if (row.getAttribute("data-name") === "portfolioPrivate") {
+      updatePortfolioWarning();
     }
   });
 });
@@ -401,13 +463,19 @@ document.getElementById("colorImages").addEventListener("change", function() {
 function copyAeongForm() {
   var formType = emptyCheck(getSelected("formType"));
   var workType = emptyCheck(getSelected("workType"));
+  var portfolio = emptyCheck(getSelected("portfolioPrivate"));
+  var portfolioNotice = "";
+
+  if (portfolio.indexOf("비공개") !== -1) {
+    portfolioNotice = "\n   ※ 비공개 요청 시 총 결제금액의 10배로 진행됩니다.";
+  }
 
   var text =
 "[애옹 " + formType + " 신청 양식]\n" +
 "0. 작업 타입 : " + workType + "\n" +
 "1. 작업 일정 확인 여부 : " + emptyCheck(getSelected("schedule")) + "\n" +
 "2. 필독사항 확인 여부 : " + emptyCheck(getSelected("notice")) + "\n" +
-"3. 포트폴리오 비공개 여부 : " + emptyCheck(document.getElementById("portfolioPrivate").value) + "\n" +
+"3. 포트폴리오 공개 여부 : " + portfolio + portfolioNotice + "\n" +
 "4. 신청 작업 내용 : " + emptyCheck(document.getElementById("workContent").value) + "\n" +
 "5. 방송 여부 : " + emptyCheck(getSelected("broadcast")) + "\n" +
 "  방송 플랫폼(링크) : " + emptyCheck(document.getElementById("broadcastLink").value) + "\n" +
@@ -446,6 +514,7 @@ function fallbackCopy(text) {
 }
 
 renderWorkTypes("starter");
+updatePortfolioWarning();
 </script>
 
 </body>

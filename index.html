@@ -348,10 +348,11 @@ body {
   <div class="label">6. Booth 아이템 링크 <span class="tip">의상·헤어 갯수도 기입</span></div>
   <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 메이크업 / 눈동자 / 네일 링크&#10;필요한 파츠만 기입하셔도 됩니다."></textarea>
 
-<div class="label">
-  6-1. 컬러 정보
-  <span class="tip">※ 색상코드를 함께 기재해주시면 더욱 정확하게 반영할 수 있습니다.</span>
-</div>
+  <div class="label">
+    6-1. 컬러 정보
+    <span class="tip">※ 색상코드를 함께 기재해주시면 더욱 정확하게 반영할 수 있습니다.</span>
+  </div>
+
   <div class="three">
     <input id="hairColor" class="input" type="text" placeholder="헤어 컬러">
     <input id="eyeColor" class="input" type="text" placeholder="눈 컬러">
@@ -366,13 +367,15 @@ body {
   <div id="previewArea" class="preview"></div>
 
   <div class="label">7. 캐릭터 디자인 방향 <span class="tip">※ 원화 기반 작업은 제작 기준 자료 첨부가 필요합니다.</span></div>
-  <textarea id="avatarDesc" class="textarea" placeholder="전체 분위기: 걸크러쉬 / 귀여움 / 도도함 / 몽환적 / 아이돌 느낌 &#10;입모양: 웃는상 / 무표정 / 살짝 미소 / 고양이 3자 모양 &#10;눈매: 동글동글 / 고양이상 / 처진 눈매 / 살짝 올라간 눈"></textarea>
-  <label class="upload">
-  📎 캐릭터 디자인 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
-  <input id="designImages" type="file" accept="image/*" multiple>
-</label>
 
-<div id="designPreviewArea" class="preview"></div>
+  <textarea id="avatarDesc" class="textarea" placeholder="전체 분위기: 걸크러쉬 / 귀여움 / 도도함 / 몽환적 / 아이돌 느낌 &#10;입모양: 웃는상 / 무표정 / 살짝 미소 / 고양이 3자 모양 &#10;눈매: 동글동글 / 고양이상 / 처진 눈매 / 살짝 올라간 눈"></textarea>
+
+  <label class="upload">
+    📎 캐릭터 디자인 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
+    <input id="designImages" type="file" accept="image/*" multiple>
+  </label>
+
+  <div id="designPreviewArea" class="preview"></div>
 
   <div class="label">8. 페이셜 요청사항</div>
   <textarea id="facialRequest" class="textarea" placeholder="ex) 볼빵빵이 크지 않았으면 좋겠어요. 입 움직임이 컸으면 좋겠어요."></textarea>
@@ -571,15 +574,15 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
-function makeImageHtml() {
-  if (!attachedImages || attachedImages.length === 0) {
+function makeImageHtml(title, images) {
+  if (!images || images.length === 0) {
     return "";
   }
 
   var html = '<div style="margin:10px 0 16px 0;">';
-  html += '<div style="font-weight:700; margin:8px 0;">첨부 이미지</div>';
+  html += '<div style="font-weight:700; margin:8px 0;">' + escapeHtml(title) + '</div>';
 
-  attachedImages.forEach(function(image, index) {
+  images.forEach(function(image, index) {
     html +=
       '<div style="margin:10px 0;">' +
       '<div style="font-size:12px; color:#777; margin-bottom:4px;">' +
@@ -593,31 +596,39 @@ function makeImageHtml() {
   return html;
 }
 
-function makeCopyHtml(text) {
-  var marker = "7. . 캐릭터 디자인 방향";
-  var imageHtml = makeImageHtml();
+function textBlock(value) {
+  return (
+    '<div style="font-family:Arial, sans-serif; font-size:14px; line-height:1.7; white-space:pre-wrap;">' +
+    escapeHtml(value) +
+    '</div>'
+  );
+}
 
-  if (text.indexOf(marker) !== -1 && imageHtml) {
-    var before = text.substring(0, text.indexOf(marker));
-    var after = text.substring(text.indexOf(marker));
+function makeCopyHtml(text) {
+  var marker7 = "7. 캐릭터 디자인 방향";
+  var marker8 = "8. 페이셜 요청사항";
+
+  var colorImageHtml = makeImageHtml("컬러 참고 자료", colorAttachedImages);
+  var designImageHtml = makeImageHtml("캐릭터 디자인 참고 자료", designAttachedImages);
+
+  var index7 = text.indexOf(marker7);
+  var index8 = text.indexOf(marker8);
+
+  if (index7 !== -1 && index8 !== -1) {
+    var before7 = text.substring(0, index7);
+    var section7 = text.substring(index7, index8);
+    var after8 = text.substring(index8);
 
     return (
-      '<div style="font-family:Arial, sans-serif; font-size:14px; line-height:1.7; white-space:pre-wrap;">' +
-      escapeHtml(before) +
-      '</div>' +
-      imageHtml +
-      '<div style="font-family:Arial, sans-serif; font-size:14px; line-height:1.7; white-space:pre-wrap;">' +
-      escapeHtml(after) +
-      '</div>'
+      textBlock(before7) +
+      colorImageHtml +
+      textBlock(section7) +
+      designImageHtml +
+      textBlock(after8)
     );
   }
 
-  return (
-    '<div style="font-family:Arial, sans-serif; font-size:14px; line-height:1.7; white-space:pre-wrap;">' +
-    escapeHtml(text) +
-    '</div>' +
-    imageHtml
-  );
+  return textBlock(text) + colorImageHtml + designImageHtml;
 }
 
 function copyRichForm(text) {
@@ -709,7 +720,7 @@ function copyAeongForm() {
 "  헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
 "  눈 컬러 : " + emptyCheck(document.getElementById("eyeColor").value) + "\n" +
 "  의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
-"7. 레퍼런스 / 아바타 설명 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
+"7. 캐릭터 디자인 방향 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
 "8. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
 "9. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
 "10. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +

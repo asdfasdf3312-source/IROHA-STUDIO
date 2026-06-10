@@ -435,7 +435,8 @@ var guideMap = {
   vrc: '<b>VRC 아바타</b>는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 또는 핵고퀄 풀옵션 중 필요한 작업 범위를 선택해주세요.'
 };
 
-var attachedImages = [];
+var colorAttachedImages = [];
+var designAttachedImages = [];
 
 function renderWorkTypes(type) {
   var row = document.getElementById("workTypeRow");
@@ -528,31 +529,39 @@ document.querySelectorAll(".textarea").forEach(function(textarea) {
   });
 });
 
-document.getElementById("colorImages").addEventListener("change", function() {
-  var preview = document.getElementById("previewArea");
+function setupImageUpload(inputId, previewId, targetArray) {
+  var input = document.getElementById(inputId);
+  var preview = document.getElementById(previewId);
 
-  Array.from(this.files).forEach(function(file) {
-    var reader = new FileReader();
+  if (!input || !preview) return;
 
-    reader.onload = function(e) {
-      var imageData = {
-        name: file.name,
-        src: e.target.result
+  input.addEventListener("change", function() {
+    Array.from(this.files).forEach(function(file) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        var imageData = {
+          name: file.name,
+          src: e.target.result
+        };
+
+        targetArray.push(imageData);
+
+        var img = document.createElement("img");
+        img.src = imageData.src;
+        img.alt = imageData.name;
+        preview.appendChild(img);
       };
 
-      attachedImages.push(imageData);
+      reader.readAsDataURL(file);
+    });
 
-      var img = document.createElement("img");
-      img.src = imageData.src;
-      img.alt = imageData.name;
-      preview.appendChild(img);
-    };
-
-    reader.readAsDataURL(file);
+    this.value = "";
   });
+}
 
-  this.value = "";
-});
+setupImageUpload("colorImages", "previewArea", colorAttachedImages);
+setupImageUpload("designImages", "designPreviewArea", designAttachedImages);
 
 function escapeHtml(value) {
   return String(value || "")

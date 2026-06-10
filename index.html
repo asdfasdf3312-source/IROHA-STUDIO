@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>애옹 작업 신청서</title>
+<title>이로하 작업 신청서</title>
 
 <style>
 @font-face {
@@ -286,13 +286,15 @@ body {
   <div class="title">작업 신청서</div>
 
   <div class="row" data-name="formType" id="formTypeRow">
-    <button class="choice active" type="button" data-value="버츄얼 스타터 세트" data-form="starter">버츄얼 스타터 세트</button>
+    <button class="choice active" type="button" data-value="입문 패키지" data-form="intro">입문 패키지</button>
+    <button class="choice" type="button" data-value="올인원 데뷔 패키지" data-form="allinone">올인원 데뷔 패키지</button>
+    <button class="choice" type="button" data-value="데뷔 플랜" data-form="debut">데뷔 플랜</button>
     <button class="choice" type="button" data-value="VRC 아바타" data-form="vrc">VRC 아바타</button>
   </div>
 
   <div class="guide" id="guideText">
-    <b>버츄얼 스타터 세트와 VRC 아바타는 서로 다른 작업 메뉴입니다.</b><br>
-    ❗ 아무것도 모르겠고 작가가 알잘딱으로 진행해주길 원하거나, 성형 작업을 포함하고 싶다면 <b>버츄얼 스타터 세트</b>를 권장합니다.
+    <b>입문 패키지</b>는 이미 보유한 아바타, 의상, 헤어, 파츠를 기반으로 기본 세팅을 진행하는 메뉴입니다.<br>
+    ❗ 원하는 사용 프로그램과 작업 범위에 맞는 패키지를 선택해주세요.
   </div>
 
   <div class="label">0. 작업 타입 <span class="required">*</span></div>
@@ -394,21 +396,34 @@ body {
 
 <script>
 var workTypeMap = {
-  starter: [
-    "버츄얼 스타터 풀옵션 - VSF",
-    "핵고퀄 A 풀옵션 - VRC",
-    "핵고퀄 B 풀옵션 - VRC"
+  intro: [
+    "Warudo 베이직 뚜따 패키지",
+    "Warudo 프리미엄 물리 뚜따 패키지",
+    "VSF 베이직 뚜따 패키지",
+    "Meligo 프리미엄 물리 뚜따 패키지"
+  ],
+  allinone: [
+    "VSF 올인원 데뷔 패키지",
+    "Warudo 올인원 데뷔 패키지"
+  ],
+  debut: [
+    "2D 원화 기반 VSF 데뷔 플랜",
+    "2D 원화 기반 Warudo VSF 데뷔 플랜"
   ],
   vrc: [
     "Basic Options",
     "Standard Options",
-    "Premium Options"
+    "Premium Options",
+    "핵고퀄 A 풀옵션",
+    "핵고퀄 B 풀옵션"
   ]
 };
 
 var guideMap = {
-  starter: '<b>버츄얼 스타터 세트</b>는 성형, 세팅, 페이셜 등 전체적인 작업 방향을 작가가 잡아주는 메뉴입니다.<br>❗ 아무것도 모르겠고 작가가 알잘딱으로 진행해주길 원하거나, 성형 작업을 포함하고 싶다면 <b>버츄얼 스타터 세트</b>를 권장합니다.',
-  vrc: '<b>VRC 아바타</b>는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 옵션 중 필요한 범위를 선택해 주세요. 헤어와 의상을 몇 개 입힐지도 신청 내용에 적어주세요.'
+  intro: '<b>입문 패키지</b>는 이미 보유한 아바타, 의상, 헤어, 파츠를 기반으로 기본 세팅을 진행하는 메뉴입니다.<br>❗ Warudo / VSF / Meligo 중 사용 목적에 맞는 작업 타입을 선택해주세요.',
+  allinone: '<b>올인원 데뷔 패키지</b>는 방송용 아바타 세팅, 페이셜, 기본 연동 등 데뷔에 필요한 구성을 한 번에 준비하는 메뉴입니다.<br>❗ VSF 또는 Warudo 중 사용 예정 프로그램을 선택해주세요.',
+  debut: '<b>데뷔 플랜</b>은 2D 원화를 기반으로 방송용 버츄얼 데뷔 구성을 준비하는 메뉴입니다.<br>❗ 원화 자료, 원하는 분위기, 방송 플랫폼 정보를 함께 작성해주세요.',
+  vrc: '<b>VRC 아바타</b>는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 또는 핵고퀄 풀옵션 중 필요한 작업 범위를 선택해주세요.'
 };
 
 var attachedImages = [];
@@ -584,7 +599,7 @@ function fallbackCopy(text) {
   alert("양식이 복사되었습니다!");
 }
 
-renderWorkTypes("starter");
+renderWorkTypes("intro");
 updatePortfolioWarning();
 updateRushWarning();
 </script>

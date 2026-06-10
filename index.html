@@ -7,18 +7,25 @@
 <title>애옹 작업 신청서</title>
 
 <style>
+@font-face {
+  font-family: 'Paperlogi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
 
 :root {
-  --main: #B392FF;
-  --main-dark: #8D6ED6;
-  --main-light: #F4EEFF;
-  --line: #DCCEFF;
+  --main: #66E0B8;
+  --main-dark: #35B98F;
+  --main-light: #ECFFF8;
+  --line: #BDF4E2;
   --text: #333333;
   --sub: #888888;
-  --warning: #8D6ED6;
+  --warning: #35B98F;
 }
 
 body {
@@ -37,7 +44,7 @@ body {
   background: rgba(255,255,255,0.98);
   border: 1px solid var(--line);
   border-radius: 28px;
-  box-shadow: 0 16px 42px rgba(179,146,255,0.18);
+  box-shadow: 0 16px 42px rgba(102,224,184,0.18);
 }
 
 .title {
@@ -94,14 +101,14 @@ body {
 }
 
 .guide {
-  background: #fbf9ff;
+  background: var(--main-light);
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 15px 18px;
   margin-bottom: 22px;
   font-size: 14px;
   line-height: 1.7;
-  color: #777;
+  color: #666;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
 }
 
@@ -150,7 +157,7 @@ body {
 .textarea:focus {
   outline: none;
   border-color: var(--main);
-  box-shadow: 0 0 0 3px rgba(179,146,255,0.20);
+  box-shadow: 0 0 0 3px rgba(102,224,184,0.20);
 }
 
 .two {
@@ -173,7 +180,7 @@ body {
   color: #777;
   font-size: 14px;
   font-weight: 700;
-  background: #fbf9ff;
+  background: var(--main-light);
   cursor: pointer;
   margin-bottom: 10px;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
@@ -202,7 +209,7 @@ body {
   display: none;
   margin: -4px 0 14px 0;
   padding: 13px 15px;
-  background: #fbf9ff;
+  background: var(--main-light);
   border: 1px solid var(--line);
   border-radius: 12px;
   color: var(--warning);
@@ -220,7 +227,7 @@ body {
   display: none;
   margin: -4px 0 14px 0;
   padding: 13px 15px;
-  background: #fbf9ff;
+  background: var(--main-light);
   border: 1px solid var(--line);
   border-radius: 12px;
   color: var(--main-dark);
@@ -246,7 +253,7 @@ body {
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 10px 22px rgba(179,146,255,0.30);
+  box-shadow: 0 10px 22px rgba(102,224,184,0.30);
   transition: 0.18s;
 }
 
@@ -324,18 +331,20 @@ body {
   </div>
 
   <div class="label">4. 신청 작업 내용 <span class="required">*</span></div>
-  <textarea id="workContent" class="textarea" placeholder="따로 기입 해야하는 특이사항이 있다면 입력해주세요."></textarea>
+  <textarea id="workContent" class="textarea" placeholder="따로 기입해야 하는 특이사항이 있다면 입력해주세요."></textarea>
 
   <div class="label">5. 방송 정보</div>
   <div class="row" data-name="broadcast">
     <button class="choice active" type="button" data-value="방송용 O">방송용 O</button>
     <button class="choice" type="button" data-value="방송용 X">방송용 X</button>
   </div>
+
   <input id="broadcastLink" class="input" type="text" placeholder="방송 플랫폼 링크">
   <input id="broadcastName" class="input" type="text" placeholder="방송 닉네임">
+  <input id="avatarDate" class="input" type="text" placeholder="아바타 공개일 ex) 12월 중순쯤">
 
   <div class="label">6. Booth 아이템 링크 <span class="tip">의상·헤어 갯수도 기입</span></div>
-  <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 메이크업 / 눈동자 / 네일 링크&#10;필요한 파츠만 기입 하셔도 됩니다"></textarea>
+  <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 메이크업 / 눈동자 / 네일 링크&#10;필요한 파츠만 기입하셔도 됩니다."></textarea>
 
   <div class="label">6-1. 컬러 정보</div>
   <div class="three">
@@ -348,25 +357,29 @@ body {
     📎 의상 컬러 이미지 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
     <input id="colorImages" type="file" accept="image/*" multiple>
   </label>
+
   <div id="previewArea" class="preview"></div>
 
   <div class="label">7. 레퍼런스 / 원하는 아바타 설명 <span class="tip">일러 기반이면 원화 첨부</span></div>
-  <textarea id="avatarDesc" class="textarea" placeholder="눈매는 사진 보다 조금 올라갔으면 좋겠어요 &#10;입모양은 3자 모양이였음 좋겠어요 &#10;사진보다 얼굴형은 성숙했음 좋겠어요 :&#10;눈썹 모양 :"></textarea>
+  <textarea id="avatarDesc" class="textarea" placeholder="눈매 :&#10;입모양 :&#10;얼굴 연령대 :&#10;눈썹 모양 :"></textarea>
 
-  <div class="label">8. 유니티 파일 필요 여부 <span class=
+  <div class="label">8. 페이셜 요청사항</div>
+  <textarea id="facialRequest" class="textarea" placeholder="ex) 볼빵빵이 크지 않았으면 좋겠어요. 웃는눈, 뽀잉눈 등 필요한 표정을 적어주세요."></textarea>
+
+  <div class="label">9. 유니티 파일 필요 여부 <span class="tip">추가금 5만원</span></div>
   <div class="row" data-name="unityNeed">
     <button class="choice active" type="button" data-value="필요 없어요">필요 없어요</button>
     <button class="choice" type="button" data-value="필요해요 (+5만원)">필요해요 (+5만원)</button>
   </div>
 
-  <div class="label">9. 유니티 파일 용도</div>
+  <div class="label">10. 유니티 파일 용도</div>
   <div class="row" data-name="unityUse">
     <button class="choice active" type="button" data-value="1번 (파일 백업용)">1번 파일 백업용</button>
     <button class="choice" type="button" data-value="2번 (타작가에게 작업 맡기는 용도)">2번 타작가에게 작업 맡기는 용도</button>
     <button class="choice" type="button" data-value="해당없음">해당없음</button>
   </div>
 
-  <div class="label">10. 리뷰 이벤트 참가 여부 <span class="tip">약속 시 다음 방문때에 10,000원 할인</span></div>
+  <div class="label">11. 리뷰 이벤트 참가 여부 <span class="tip">약속 시 다음 방문 때 10,000원 할인</span></div>
   <div class="row" data-name="reviewEvent">
     <button class="choice active" type="button" data-value="O (약속할게요!)">O 약속할게요!</button>
     <button class="choice" type="button" data-value="X">X</button>
@@ -519,7 +532,7 @@ function copyAeongForm() {
 
   var portfolioNotice = "";
   if (portfolio.indexOf("비공개") !== -1) {
-    portfolioNotice = "\n   ※ 비공개 요청 시 총 결제금액의 10배로 진행됩니다.";
+    portfolioNotice = "\n   ※ 비공개 요청 시 총 결제금액의 2배로 진행됩니다.";
   }
 
   var rushNotice = "";
@@ -540,9 +553,9 @@ function copyAeongForm() {
 "  아바타 공개일 : " + emptyCheck(document.getElementById("avatarDate").value) + "\n" +
 "6. Booth 아이템 링크 :\n" + emptyCheck(document.getElementById("boothLink").value) + "\n\n" +
 "6-1. 컬러 정보 :\n" +
-"헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
-"눈 컬러 : " + emptyCheck(document.getElementById("eyeColor").value) + "\n" +
-"의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
+"  헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
+"  눈 컬러 : " + emptyCheck(document.getElementById("eyeColor").value) + "\n" +
+"  의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
 "7. 레퍼런스 / 아바타 설명 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
 "8. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
 "9. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +

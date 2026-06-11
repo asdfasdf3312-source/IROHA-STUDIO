@@ -113,7 +113,6 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       background: #ffffff;
-
       transition:
         border-color 0.45s ease,
         box-shadow 0.45s ease;
@@ -126,22 +125,18 @@
       border: 0;
       outline: none;
       background: transparent;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-
       color: var(--text);
       font-size: 14.08px;
       font-weight: 700;
       line-height: 1.5;
       text-align: left;
-
       word-break: keep-all;
       overflow-wrap: break-word;
       cursor: pointer;
-
       transition:
         color 0.4s ease,
         background-color 0.4s ease;
@@ -162,37 +157,30 @@
       border-radius: 50%;
       background: var(--mint-pale);
       color: var(--mint);
-
       display: flex;
       align-items: center;
       justify-content: center;
       flex: 0 0 22px;
-
       font-size: 16px;
       font-weight: 500;
       line-height: 1;
-
       transition:
-        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
         background-color 0.45s ease,
         color 0.45s ease;
     }
 
-    /*
-      답변 높이를 0fr → 1fr로 변경해
-      실제 내용 길이에 맞춰 부드럽게 열립니다.
-    */
     .faq-answer {
       display: grid;
       grid-template-rows: 0fr;
-
       opacity: 0;
       visibility: hidden;
-
+      transform: translateY(-7px);
       transition:
-        grid-template-rows 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.45s ease,
-        visibility 0s linear 0.8s;
+        grid-template-rows 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.55s ease,
+        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s linear 0.95s;
     }
 
     .faq-answer-clip {
@@ -203,24 +191,20 @@
     .faq-answer-content {
       padding: 0 18px;
       border-top: 1px solid transparent;
-
       color: var(--sub-text);
       font-size: 13.44px;
       font-weight: 400;
       line-height: 1.8;
       text-align: left;
-
       word-break: keep-all;
       overflow-wrap: break-word;
-
       opacity: 0;
-      transform: translateY(-10px);
-
+      transform: translateY(-8px);
       transition:
-        padding 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+        padding 0.85s cubic-bezier(0.16, 1, 0.3, 1),
         border-color 0.45s ease,
-        opacity 0.4s ease,
-        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity 0.55s ease,
+        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .faq-answer-content strong {
@@ -257,25 +241,24 @@
       grid-template-rows: 1fr;
       opacity: 1;
       visibility: visible;
-
+      transform: translateY(0);
       transition:
-        grid-template-rows 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.5s ease 0.08s,
+        grid-template-rows 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.6s ease 0.08s,
+        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
         visibility 0s linear 0s;
     }
 
     .faq-item.open .faq-answer-content {
       padding: 15px 18px 18px;
       border-top-color: var(--answer-border);
-
       opacity: 1;
       transform: translateY(0);
-
       transition:
-        padding 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+        padding 0.85s cubic-bezier(0.16, 1, 0.3, 1),
         border-color 0.45s ease,
-        opacity 0.55s ease 0.13s,
-        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity 0.65s ease 0.16s,
+        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @media (max-width: 560px) {
@@ -332,7 +315,6 @@
       <span class="faq-question-text">
         3D 버츄얼이 처음인데도 신청할 수 있나요?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -354,7 +336,6 @@
       <span class="faq-question-text">
         페이셜 작업은 어떤 기능인가요?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -376,7 +357,6 @@
       <span class="faq-question-text">
         특수 표현 리깅이란?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -408,7 +388,6 @@
         이미 완성된 모델에 뽀잉눈이나 표정 연동형 귀·꼬리 모션을
         추가할 수 있나요?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -430,7 +409,6 @@
       <span class="faq-question-text">
         유니티 패키지는 어떤 파일로 구성되나요?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -456,7 +434,6 @@
       <span class="faq-question-text">
         신청이 어려운 작업 안내
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -523,7 +500,6 @@
       <span class="faq-question-text">
         아바타 베이스는 어떤 기준으로 선택하면 되나요?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -562,7 +538,6 @@
         페이셜 작업이 완료된 아바타에 추가 작업을 맡기면 비용은
         어떻게 되나요?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -586,7 +561,6 @@
       <span class="faq-question-text">
         작가 개인작 구매는 어떤 메뉴인가요?
       </span>
-
       <span class="faq-icon" aria-hidden="true">+</span>
     </button>
 
@@ -643,7 +617,7 @@
 
       function sendHeightDuringAnimation() {
         const startTime = performance.now();
-        const duration = 950;
+        const duration = 1100;
 
         function update(currentTime) {
           sendHeight();

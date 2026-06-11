@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -12,39 +11,6 @@
   font-family: 'Paperlogi';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
   font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Paperlogi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Paperlogi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Paperlogi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Paperlogi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
-  font-weight: 800;
-  font-style: normal;
   font-display: swap;
 }
 
@@ -86,7 +52,7 @@ body {
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
 }
@@ -107,13 +73,13 @@ body {
 }
 
 .choice {
-  padding: 10px 18px;
+  padding: 9px 18px;
   border-radius: 11px;
   border: 1px solid var(--line);
   background: #fff;
   color: #666;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: 0.18s;
@@ -140,7 +106,7 @@ body {
   border-radius: 16px;
   padding: 15px 18px;
   margin-bottom: 22px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.7;
   color: #666;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
@@ -151,7 +117,7 @@ body {
 }
 
 .label {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   margin: 18px 0 8px;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
@@ -162,7 +128,7 @@ body {
 }
 
 .tip {
-  font-size: 14px;
+  font-size: 13px;
   color: #999;
   font-weight: 500;
 }
@@ -172,9 +138,9 @@ body {
   width: 100%;
   border: 1px solid #e6e6e6;
   border-radius: 12px;
-  padding: 14px 15px;
+  padding: 13px 15px;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   color: #333;
   background: #fff;
   margin-bottom: 10px;
@@ -184,7 +150,7 @@ body {
   min-height: 70px;
   resize: vertical;
   overflow: hidden;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .input:focus,
@@ -212,7 +178,7 @@ body {
   border-radius: 12px;
   padding: 12px 15px;
   color: #777;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   background: var(--main-light);
   cursor: pointer;
@@ -247,7 +213,7 @@ body {
   border: 1px solid var(--line);
   border-radius: 12px;
   color: var(--warning);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.7;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
@@ -265,7 +231,7 @@ body {
   border: 1px solid var(--line);
   border-radius: 12px;
   color: var(--main-dark);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.8;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
@@ -278,13 +244,13 @@ body {
 .copy-btn {
   width: 100%;
   margin-top: 18px;
-  padding: 17px 0;
+  padding: 16px 0;
   border: none;
   border-radius: 13px;
   background: var(--main);
   color: #fff;
   font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 10px 22px rgba(36,198,191,0.30);
@@ -311,7 +277,6 @@ body {
   }
 }
 </style>
-
 </head>
 
 <body>
@@ -437,7 +402,7 @@ body {
   <div class="label">12. 그 외 궁금한 점</div>
   <textarea id="etcText" class="textarea" placeholder="자유롭게 적어주세요!"></textarea>
 
-<button class="copy-btn" type="button" onclick="copyAeongForm()">작성한 양식 복사하기 📋</button>
+  <button class="copy-btn" type="button" onclick="copyAeongForm()">작성한 양식 복사하기 📋</button>
 
 </div>
 

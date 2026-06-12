@@ -57,6 +57,7 @@
     html,
     body {
       width: 100%;
+      overflow-anchor: none;
       margin: 0;
       padding: 0;
       background: #ffffff;
@@ -876,6 +877,12 @@
   <script>
     (function () {
       const questions = document.querySelectorAll('.faq-question');
+      const exampleToggles = document.querySelectorAll(
+        '.parts-example-toggle'
+      );
+
+      let heightAnimationToken = 0;
+      let anchorFinishTimer = null;
 
       function sendHeight() {
         const height = Math.ceil(
@@ -891,22 +898,41 @@
         );
       }
 
-      let heightAnimationToken = 0;
-      let focusTimer = null;
+      function sendAnchorStart(button) {
+        if (!button) return;
 
-      function sendHeightDuringAnimation(focusButton) {
+        window.parent.postMessage(
+          {
+            type: 'iroha-qna-anchor-start',
+            top: button.getBoundingClientRect().top
+          },
+          '*'
+        );
+      }
+
+      function sendAnchorFinish(button) {
+        if (!button) return;
+
+        window.parent.postMessage(
+          {
+            type: 'iroha-qna-anchor-finish',
+            top: button.getBoundingClientRect().top
+          },
+          '*'
+        );
+      }
+
+      function sendHeightDuringAnimation(anchorButton) {
         const token = ++heightAnimationToken;
         const startTime = performance.now();
-        const duration = 1050;
+        const duration = 1150;
 
-        if (focusTimer) {
-          clearTimeout(focusTimer);
+        if (anchorFinishTimer) {
+          clearTimeout(anchorFinishTimer);
         }
 
         function update(currentTime) {
-          if (token !== heightAnimationToken) {
-            return;
-          }
+          if (token !== heightAnimationToken) return;
 
           sendHeight();
 
@@ -919,17 +945,10 @@
 
         requestAnimationFrame(update);
 
-        if (focusButton) {
-          focusTimer = setTimeout(function () {
-            window.parent.postMessage(
-              {
-                type: 'iroha-qna-focus',
-                top: focusButton.getBoundingClientRect().top
-              },
-              '*'
-            );
-          }, 980);
-        }
+        anchorFinishTimer = setTimeout(function () {
+          sendHeight();
+          sendAnchorFinish(anchorButton);
+        }, 1220);
       }
 
       function closePartsExample(scope) {
@@ -949,6 +968,13 @@
         button.addEventListener('click', function () {
           const item = button.closest('.faq-item');
           const willOpen = !item.classList.contains('open');
+
+          /*
+           * DOM 높이가 바뀌기 전 클릭한 버튼의 현재 화면 위치를 저장합니다.
+           * 애니메이션이 끝난 뒤 같은 버튼의 새 위치와 비교해
+           * 부모 페이지가 한 번만 스크롤을 보정합니다.
+           */
+          sendAnchorStart(button);
 
           document.querySelectorAll('.faq-item').forEach(function (otherItem) {
             if (otherItem !== item) {
@@ -977,14 +1003,12 @@
         });
       });
 
-      const exampleToggles = document.querySelectorAll(
-        '.parts-example-toggle'
-      );
-
       exampleToggles.forEach(function (button) {
         button.addEventListener('click', function () {
           const example = button.nextElementSibling;
           const willOpen = !example.classList.contains('open');
+
+          sendAnchorStart(button);
 
           example.classList.toggle('open', willOpen);
           button.setAttribute(

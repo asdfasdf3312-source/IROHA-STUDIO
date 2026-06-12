@@ -24,15 +24,15 @@
     }
 
     :root {
-      --mint: #24c6bf;
-      --mint-dark: #159a95;
-      --mint-pale: #e2f9f7;
-      --border: #b9efea;
+      --mint: #76d8d2;
+      --mint-dark: #4eaaa5;
+      --mint-pale: #edf9f8;
+      --border: #b4e5e1;
       --text: #333333;
       --text-light: #8a9a9a;
       --white-glass: rgba(255, 255, 255, 0.96);
-      --shadow-sm: 0 4px 14px rgba(36, 198, 191, 0.10);
-      --shadow-md: 0 16px 42px rgba(36, 198, 191, 0.16);
+      --shadow-sm: 0 4px 14px rgba(78, 170, 165, 0.10);
+      --shadow-md: 0 16px 42px rgba(78, 170, 165, 0.14);
     }
 
     * {
@@ -91,15 +91,6 @@
       color: var(--text);
     }
 
-    .sec-subtitle {
-      margin-left: 2px;
-      color: var(--text-light);
-      font-size: 12.5px;
-      font-weight: 400;
-      line-height: 1.4;
-      white-space: nowrap;
-    }
-
     .scroll-grid {
       display: flex;
       gap: 12px;
@@ -112,7 +103,6 @@
       cursor: grab;
       user-select: none;
       overscroll-behavior-inline: contain;
-      touch-action: pan-y;
     }
 
     .scroll-grid.dragging {
@@ -156,7 +146,7 @@
     .img-card:hover {
       transform: translateY(-3px);
       border-color: var(--mint);
-      box-shadow: 0 10px 24px rgba(36, 198, 191, 0.16);
+      box-shadow: 0 10px 24px rgba(78, 170, 165, 0.15);
     }
 
     .img-card img {
@@ -211,7 +201,7 @@
       align-items: center;
       justify-content: center;
       padding: 32px;
-      background: rgba(232, 249, 247, 0.90);
+      background: rgba(240, 250, 249, 0.94);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
@@ -239,7 +229,7 @@
       justify-content: center;
       border: 0;
       color: #ffffff;
-      background: rgba(36, 198, 191, 0.9);
+      background: rgba(118, 216, 210, 0.94);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
       cursor: pointer;
       transition:
@@ -292,7 +282,7 @@
       padding: 7px 13px;
       border-radius: 999px;
       color: #ffffff;
-      background: rgba(21, 154, 149, 0.88);
+      background: rgba(78, 170, 165, 0.92);
       font-size: 13px;
       font-weight: 700;
       line-height: 1;
@@ -324,19 +314,10 @@
 
       .sec-header {
         margin-bottom: 18px;
-        flex-wrap: wrap;
       }
 
       .sec-title {
         font-size: 20px;
-      }
-
-      .sec-subtitle {
-        width: 100%;
-        margin-left: 16px;
-        margin-top: -4px;
-        font-size: 12px;
-        white-space: normal;
       }
 
       .img-card {
@@ -399,7 +380,6 @@
     <div class="sec-header">
       <div class="sec-bar" aria-hidden="true"></div>
       <h1 class="sec-title">보유 중인 아바타</h1>
-      <span class="sec-subtitle">🩵이미지를 클릭하면 확대하여 자세히 확인할 수 있습니다</span>
     </div>
 
     <div
@@ -561,7 +541,6 @@
       let startX = 0;
       let startScrollLeft = 0;
       let moved = false;
-      let pressedCard = null;
       let currentImageIndex = 0;
       let lastFocusedCard = null;
 
@@ -601,6 +580,14 @@
           'aria-label',
           '보유 아바타 ' + (index + 1) + ' 크게 보기'
         );
+
+        card.addEventListener('click', function () {
+          if (moved) {
+            return;
+          }
+
+          openLightbox(index, card);
+        });
 
         card.addEventListener('keydown', function (event) {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -694,9 +681,11 @@
 
         isDragging = true;
         moved = false;
-        pressedCard = event.target.closest('.img-card');
         startX = event.clientX;
         startScrollLeft = grid.scrollLeft;
+
+        grid.classList.add('dragging');
+        grid.setPointerCapture(event.pointerId);
       });
 
       grid.addEventListener('pointermove', function (event) {
@@ -706,32 +695,17 @@
 
         const distance = event.clientX - startX;
 
-        if (!moved && Math.abs(distance) > 5) {
+        if (Math.abs(distance) > 4) {
           moved = true;
-          grid.classList.add('dragging');
-
-          if (
-            event.pointerId !== undefined &&
-            !grid.hasPointerCapture(event.pointerId)
-          ) {
-            grid.setPointerCapture(event.pointerId);
-          }
         }
 
-        if (moved) {
-          grid.scrollLeft = startScrollLeft - distance;
-          event.preventDefault();
-        }
+        grid.scrollLeft = startScrollLeft - distance;
       });
 
-      function stopDragging(event, openWhenClicked) {
+      function stopDragging(event) {
         if (!isDragging) {
           return;
         }
-
-        const cardToOpen = !moved && openWhenClicked
-          ? pressedCard
-          : null;
 
         isDragging = false;
         grid.classList.remove('dragging');
@@ -744,30 +718,14 @@
           grid.releasePointerCapture(event.pointerId);
         }
 
-        pressedCard = null;
-
-        if (cardToOpen) {
-          const index = cards.indexOf(cardToOpen);
-
-          if (index !== -1) {
-            openLightbox(index, cardToOpen);
-          }
-        }
-
-        moved = false;
+        setTimeout(function () {
+          moved = false;
+        }, 0);
       }
 
-      grid.addEventListener('pointerup', function (event) {
-        stopDragging(event, true);
-      });
-
-      grid.addEventListener('pointercancel', function (event) {
-        stopDragging(event, false);
-      });
-
-      grid.addEventListener('lostpointercapture', function (event) {
-        stopDragging(event, false);
-      });
+      grid.addEventListener('pointerup', stopDragging);
+      grid.addEventListener('pointercancel', stopDragging);
+      grid.addEventListener('lostpointercapture', stopDragging);
 
       grid.addEventListener(
         'wheel',

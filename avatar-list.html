@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>보유 중인 아바타</title>
+
+  <style>
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --mint: #24c6bf;
+      --mint-dark: #159a95;
+      --mint-pale: #e2f9f7;
+      --border: #b9efea;
+      --text: #333333;
+      --text-light: #8a9a9a;
+      --white-glass: rgba(255, 255, 255, 0.96);
+      --shadow-sm: 0 4px 14px rgba(36, 198, 191, 0.10);
+      --shadow-md: 0 16px 42px rgba(36, 198, 191, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    body {
+      padding: 34px 16px 42px;
+      color: var(--text);
+      font-family: 'Paperozi', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    .section {
+      width: 100%;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 32px;
+      background: var(--white-glass);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 24px;
+    }
+
+    .sec-bar {
+      width: 5px;
+      height: 22px;
+      flex: 0 0 5px;
+      border-radius: 999px;
+      background: var(--mint);
+    }
+
+    .sec-title {
+      font-size: 23px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .scroll-grid {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0 12px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+      user-select: none;
+      overscroll-behavior-inline: contain;
+    }
+
+    .scroll-grid.dragging {
+      cursor: grabbing;
+      scroll-snap-type: none;
+    }
+
+    .scroll-grid::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .scroll-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scroll-grid::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: var(--mint);
+    }
+
+    .img-card {
+      position: relative;
+      height: 360px;
+      flex: 0 0 auto;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      background: var(--mint-pale);
+      box-shadow: var(--shadow-sm);
+      scroll-snap-align: start;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .img-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--mint);
+      box-shadow: 0 10px 24px rgba(36, 198, 191, 0.16);
+    }
+
+    .img-card img {
+      display: block;
+      width: auto;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    .card-skeleton {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(226, 249, 247, 0.75) 25%,
+          rgba(255, 255, 255, 0.92) 50%,
+          rgba(226, 249, 247, 0.75) 75%
+        );
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    .card-skeleton.hide {
+      display: none;
+    }
+
+    .notice {
+      margin: 15px 0 0;
+      color: var(--text-light);
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 14px 34px;
+      }
+
+      .section {
+        padding: 24px 18px;
+        border-radius: 22px;
+      }
+
+      .sec-header {
+        margin-bottom: 18px;
+      }
+
+      .sec-title {
+        font-size: 20px;
+      }
+
+      .img-card {
+        height: 280px;
+        border-radius: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .img-card,
+      .card-skeleton {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="section" aria-label="보유 중인 아바타">
+    <div class="sec-header">
+      <div class="sec-bar" aria-hidden="true"></div>
+      <h1 class="sec-title">보유 중인 아바타</h1>
+    </div>
+
+    <div
+      id="owned-chars-grid"
+      class="scroll-grid"
+      aria-label="보유 아바타 이미지 목록"
+    >
+      <div class="img-card">
+        <div class="card-skeleton"></div>
+        <img
+          src="https://www.dropbox.com/scl/fi/adz0bd0c837487axfqjag/1.png?rlkey=7mgg7dcbsahvs3dl60ap6vh9a&amp;st=q4jxl1c0&amp;dl=1"
+          alt="보유 아바타 1"
+          loading="eager"
+        >
+      </div>
+
+      <div class="img-card">
+        <div class="card-skeleton"></div>
+        <img
+          src="https://www.dropbox.com/scl/fi/7lem5ufo41ocirg191782/2.png?rlkey=7tcldafop0x2f83w9sakilah3&amp;st=rotw5l83&amp;dl=1"
+          alt="보유 아바타 2"
+          loading="eager"
+        >
+      </div>
+
+      <div class="img-card">
+        <div class="card-skeleton"></div>
+        <img
+          src="https://www.dropbox.com/scl/fi/x7fa06jvlcnmthhs32ved/3.png?rlkey=lqt0lqqu0cu71bcr4dlqukyzb&amp;st=8hp2wzdz&amp;dl=1"
+          alt="보유 아바타 3"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="img-card">
+        <div class="card-skeleton"></div>
+        <img
+          src="https://www.dropbox.com/scl/fi/j4pj2nnxe0ewpigoa8orm/4.png?rlkey=lwtdkhrgn15eopanes0fyokbg&amp;st=q2o1ulio&amp;dl=1"
+          alt="보유 아바타 4"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="img-card">
+        <div class="card-skeleton"></div>
+        <img
+          src="https://www.dropbox.com/scl/fi/rsdbx41qzmrx2nz50xwai/5.png?rlkey=49ljp9yw91834q3tnd7k14c6u&amp;st=v2vugnp1&amp;dl=1"
+          alt="보유 아바타 5"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="img-card">
+        <div class="card-skeleton"></div>
+        <img
+          src="https://www.dropbox.com/scl/fi/129bktguhib5zxqes5ulz/6.png?rlkey=0osmaxn8j3j8fa9j4005qouzb&amp;st=3o9rw6jz&amp;dl=1"
+          alt="보유 아바타 6"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="img-card">
+        <div class="card-skeleton"></div>
+        <img
+          src="https://www.dropbox.com/scl/fi/xldqt27tymnt7m937bxc5/7.png?rlkey=296nd0qgkjlx3x85undkis2b5&amp;st=lgrd16ta&amp;dl=1"
+          alt="보유 아바타 7"
+          loading="lazy"
+        >
+      </div>
+    </div>
+
+    <p class="notice">
+      꼭 아바타 이용규약을 확인해주세요!
+    </p>
+  </section>
+
+  <script>
+    (function () {
+      const grid = document.getElementById('owned-chars-grid');
+      const images = grid.querySelectorAll('img');
+
+      let isDragging = false;
+      let startX = 0;
+      let startScrollLeft = 0;
+      let moved = false;
+
+      function sendHeight() {
+        const height = Math.ceil(
+          Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight
+          )
+        );
+
+        window.parent.postMessage(
+          {
+            type: 'iroha-avatar-height',
+            height: height
+          },
+          '*'
+        );
+      }
+
+      images.forEach(function (image) {
+        const skeleton =
+          image.parentElement.querySelector('.card-skeleton');
+
+        function finishLoading() {
+          image.classList.add('loaded');
+
+          if (skeleton) {
+            skeleton.classList.add('hide');
+          }
+
+          sendHeight();
+        }
+
+        if (image.complete) {
+          finishLoading();
+        } else {
+          image.addEventListener('load', finishLoading, { once: true });
+          image.addEventListener(
+            'error',
+            function () {
+              if (skeleton) {
+                skeleton.classList.add('hide');
+              }
+            },
+            { once: true }
+          );
+        }
+      });
+
+      grid.addEventListener('pointerdown', function (event) {
+        if (event.pointerType === 'mouse' && event.button !== 0) {
+          return;
+        }
+
+        isDragging = true;
+        moved = false;
+        startX = event.clientX;
+        startScrollLeft = grid.scrollLeft;
+
+        grid.classList.add('dragging');
+        grid.setPointerCapture(event.pointerId);
+      });
+
+      grid.addEventListener('pointermove', function (event) {
+        if (!isDragging) {
+          return;
+        }
+
+        const distance = event.clientX - startX;
+
+        if (Math.abs(distance) > 4) {
+          moved = true;
+        }
+
+        grid.scrollLeft = startScrollLeft - distance;
+      });
+
+      function stopDragging(event) {
+        if (!isDragging) {
+          return;
+        }
+
+        isDragging = false;
+        grid.classList.remove('dragging');
+
+        if (
+          event &&
+          event.pointerId !== undefined &&
+          grid.hasPointerCapture(event.pointerId)
+        ) {
+          grid.releasePointerCapture(event.pointerId);
+        }
+
+        setTimeout(function () {
+          moved = false;
+        }, 0);
+      }
+
+      grid.addEventListener('pointerup', stopDragging);
+      grid.addEventListener('pointercancel', stopDragging);
+      grid.addEventListener('lostpointercapture', stopDragging);
+
+      grid.addEventListener(
+        'wheel',
+        function (event) {
+          if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
+            return;
+          }
+
+          grid.scrollLeft += event.deltaY;
+          event.preventDefault();
+        },
+        { passive: false }
+      );
+
+      grid.addEventListener('dragstart', function (event) {
+        event.preventDefault();
+      });
+
+      window.addEventListener('load', function () {
+        sendHeight();
+        setTimeout(sendHeight, 250);
+        setTimeout(sendHeight, 800);
+      });
+
+      window.addEventListener('resize', sendHeight);
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(sendHeight);
+      }
+
+      if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(sendHeight);
+        observer.observe(document.body);
+      }
+    })();
+  </script>
+</body>
+</html>

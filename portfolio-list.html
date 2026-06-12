@@ -350,6 +350,10 @@
       background: rgba(118, 216, 210, 0.95);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
       cursor: pointer;
+      transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease,
+        background-color 0.2s ease;
     }
 
     .lightbox-close {
@@ -368,6 +372,12 @@
       border-radius: 16px;
       transform: translateY(-50%);
       font-size: 30px;
+    }
+
+    .lightbox.zoom-active .lightbox-nav {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .lightbox-prev {
@@ -708,7 +718,8 @@
         if (!visibleItems.length) return;
 
         updateLightbox(index);
-        lightboxImage.classList.remove('zoomed');
+        lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
         lightbox.hidden = false;
         document.body.classList.add('lightbox-open');
         lightboxClose.focus();
@@ -718,6 +729,7 @@
         lightbox.hidden = true;
         lightboxImage.src = '';
         lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
         zoomDragging = false;
         zoomMoved = false;
         lightbox.scrollTop = 0;
@@ -836,6 +848,7 @@
 
       lightboxPrev.addEventListener('click', function () {
         lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
         lightbox.scrollTop = 0;
         lightbox.scrollLeft = 0;
         updateLightbox(currentImageIndex - 1);
@@ -843,6 +856,7 @@
 
       lightboxNext.addEventListener('click', function () {
         lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
         lightbox.scrollTop = 0;
         lightbox.scrollLeft = 0;
         updateLightbox(currentImageIndex + 1);
@@ -853,6 +867,7 @@
 
         if (!lightboxImage.classList.contains('zoomed')) {
           lightboxImage.classList.add('zoomed');
+          lightbox.classList.add('zoom-active');
 
           requestAnimationFrame(function () {
             lightbox.scrollLeft =
@@ -943,6 +958,7 @@
 
         if (shouldZoomOut) {
           lightboxImage.classList.remove('zoomed');
+          lightbox.classList.remove('zoom-active');
 
           lightbox.scrollTo({
             top: 0,
@@ -982,11 +998,13 @@
           closeLightbox();
         } else if (event.key === 'ArrowLeft') {
           lightboxImage.classList.remove('zoomed', 'dragging');
+          lightbox.classList.remove('zoom-active');
           lightbox.scrollTop = 0;
           lightbox.scrollLeft = 0;
           updateLightbox(currentImageIndex - 1);
         } else if (event.key === 'ArrowRight') {
           lightboxImage.classList.remove('zoomed', 'dragging');
+          lightbox.classList.remove('zoom-active');
           lightbox.scrollTop = 0;
           lightbox.scrollLeft = 0;
           updateLightbox(currentImageIndex + 1);

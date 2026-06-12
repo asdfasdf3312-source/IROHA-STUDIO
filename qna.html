@@ -885,8 +885,21 @@
       let finishTimer = null;
 
       function getPageHeight() {
+        const card = document.querySelector('.qna-card');
+        const bodyStyle = window.getComputedStyle(document.body);
+        const bottomPadding =
+          parseFloat(bodyStyle.paddingBottom) || 0;
+
+        const cardBottom = card
+          ? card.getBoundingClientRect().bottom +
+            window.scrollY +
+            bottomPadding +
+            24
+          : 0;
+
         return Math.ceil(
           Math.max(
+            cardBottom,
             document.body.scrollHeight,
             document.documentElement.scrollHeight,
             document.documentElement.getBoundingClientRect().height
@@ -995,6 +1008,30 @@
               height: finalHeight
             });
           }
+
+          finishTimer = null;
+
+          /*
+            폰트 렌더링과 아트머그 iframe 반영이 늦는 경우를 대비해
+            최종 높이를 추가로 재전송합니다.
+          */
+          [80, 220, 500].forEach(function (delay) {
+            setTimeout(function () {
+              const correctedHeight = getPageHeight();
+
+              if (preserve && button) {
+                sendMessage({
+                  type: 'iroha-qna-preserve-grow',
+                  height: correctedHeight
+                });
+              } else {
+                sendMessage({
+                  type: 'iroha-qna-height',
+                  height: correctedHeight
+                });
+              }
+            }, delay);
+          });
         }, 1160);
       }
 
@@ -1076,6 +1113,7 @@
         sendHeight();
         setTimeout(sendHeight, 150);
         setTimeout(sendHeight, 600);
+        setTimeout(sendHeight, 1200);
       });
 
       window.addEventListener('resize', sendHeight);

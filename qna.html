@@ -892,21 +892,16 @@
       }
 
       let heightAnimationToken = 0;
+      let focusTimer = null;
 
-      function sendAnchorMessage(type, button) {
-        const data = { type: type };
-
-        if (button) {
-          data.top = button.getBoundingClientRect().top;
-        }
-
-        window.parent.postMessage(data, '*');
-      }
-
-      function sendHeightDuringAnimation(anchorButton) {
+      function sendHeightDuringAnimation(focusButton) {
         const token = ++heightAnimationToken;
         const startTime = performance.now();
-        const duration = 1100;
+        const duration = 1050;
+
+        if (focusTimer) {
+          clearTimeout(focusTimer);
+        }
 
         function update(currentTime) {
           if (token !== heightAnimationToken) {
@@ -915,29 +910,26 @@
 
           sendHeight();
 
-          if (anchorButton) {
-            sendAnchorMessage(
-              'iroha-qna-anchor-update',
-              anchorButton
-            );
-          }
-
           if (currentTime - startTime < duration) {
             requestAnimationFrame(update);
           } else {
             sendHeight();
-
-            if (anchorButton) {
-              sendAnchorMessage(
-                'iroha-qna-anchor-update',
-                anchorButton
-              );
-              sendAnchorMessage('iroha-qna-anchor-end');
-            }
           }
         }
 
         requestAnimationFrame(update);
+
+        if (focusButton) {
+          focusTimer = setTimeout(function () {
+            window.parent.postMessage(
+              {
+                type: 'iroha-qna-focus',
+                top: focusButton.getBoundingClientRect().top
+              },
+              '*'
+            );
+          }, 980);
+        }
       }
 
       function closePartsExample(scope) {
@@ -957,8 +949,6 @@
         button.addEventListener('click', function () {
           const item = button.closest('.faq-item');
           const willOpen = !item.classList.contains('open');
-
-          sendAnchorMessage('iroha-qna-anchor-start', button);
 
           document.querySelectorAll('.faq-item').forEach(function (otherItem) {
             if (otherItem !== item) {
@@ -995,8 +985,6 @@
         button.addEventListener('click', function () {
           const example = button.nextElementSibling;
           const willOpen = !example.classList.contains('open');
-
-          sendAnchorMessage('iroha-qna-anchor-start', button);
 
           example.classList.toggle('open', willOpen);
           button.setAttribute(

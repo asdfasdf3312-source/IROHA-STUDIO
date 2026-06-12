@@ -891,15 +891,49 @@
         );
       }
 
-      function sendHeightDuringAnimation() {
+      let heightAnimationToken = 0;
+
+      function sendAnchorMessage(type, button) {
+        const data = { type: type };
+
+        if (button) {
+          data.top = button.getBoundingClientRect().top;
+        }
+
+        window.parent.postMessage(data, '*');
+      }
+
+      function sendHeightDuringAnimation(anchorButton) {
+        const token = ++heightAnimationToken;
         const startTime = performance.now();
         const duration = 1100;
 
         function update(currentTime) {
+          if (token !== heightAnimationToken) {
+            return;
+          }
+
           sendHeight();
+
+          if (anchorButton) {
+            sendAnchorMessage(
+              'iroha-qna-anchor-update',
+              anchorButton
+            );
+          }
 
           if (currentTime - startTime < duration) {
             requestAnimationFrame(update);
+          } else {
+            sendHeight();
+
+            if (anchorButton) {
+              sendAnchorMessage(
+                'iroha-qna-anchor-update',
+                anchorButton
+              );
+              sendAnchorMessage('iroha-qna-anchor-end');
+            }
           }
         }
 
@@ -924,6 +958,8 @@
           const item = button.closest('.faq-item');
           const willOpen = !item.classList.contains('open');
 
+          sendAnchorMessage('iroha-qna-anchor-start', button);
+
           document.querySelectorAll('.faq-item').forEach(function (otherItem) {
             if (otherItem !== item) {
               otherItem.classList.remove('open');
@@ -947,7 +983,7 @@
             willOpen ? 'true' : 'false'
           );
 
-          sendHeightDuringAnimation();
+          sendHeightDuringAnimation(button);
         });
       });
 
@@ -960,13 +996,15 @@
           const example = button.nextElementSibling;
           const willOpen = !example.classList.contains('open');
 
+          sendAnchorMessage('iroha-qna-anchor-start', button);
+
           example.classList.toggle('open', willOpen);
           button.setAttribute(
             'aria-expanded',
             willOpen ? 'true' : 'false'
           );
 
-          sendHeightDuringAnimation();
+          sendHeightDuringAnimation(button);
         });
       });
 

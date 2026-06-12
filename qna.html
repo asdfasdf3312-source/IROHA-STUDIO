@@ -881,74 +881,72 @@
         '.parts-example-toggle'
       );
 
-      let heightAnimationToken = 0;
-      let anchorFinishTimer = null;
+      let animationToken = 0;
+      let finalizeTimer = null;
 
-      function sendHeight() {
-        const height = Math.ceil(
-          document.documentElement.getBoundingClientRect().height
-        );
-
-        window.parent.postMessage(
-          {
-            type: 'iroha-qna-height',
-            height: height
-          },
-          '*'
+      function getPageHeight() {
+        return Math.ceil(
+          Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+            document.documentElement.getBoundingClientRect().height
+          )
         );
       }
 
-      function sendAnchorStart(button) {
-        if (!button) return;
-
-        window.parent.postMessage(
-          {
-            type: 'iroha-qna-anchor-start',
-            top: button.getBoundingClientRect().top
-          },
-          '*'
-        );
+      function sendMessage(data) {
+        window.parent.postMessage(data, '*');
       }
 
-      function sendAnchorFinish(button) {
-        if (!button) return;
-
-        window.parent.postMessage(
-          {
-            type: 'iroha-qna-anchor-finish',
-            top: button.getBoundingClientRect().top
-          },
-          '*'
-        );
+      function sendInitialHeight() {
+        sendMessage({
+          type: 'iroha-qna-height',
+          height: getPageHeight()
+        });
       }
 
-      function sendHeightDuringAnimation(anchorButton) {
-        const token = ++heightAnimationToken;
+      function startStableResize(button) {
+        const token = ++animationToken;
         const startTime = performance.now();
-        const duration = 1150;
+        const duration = 1050;
 
-        if (anchorFinishTimer) {
-          clearTimeout(anchorFinishTimer);
+        if (finalizeTimer) {
+          clearTimeout(finalizeTimer);
         }
 
-        function update(currentTime) {
-          if (token !== heightAnimationToken) return;
+        sendMessage({
+          type: 'iroha-qna-anchor-start',
+          top: button.getBoundingClientRect().top
+        });
 
-          sendHeight();
+        function growOnly(currentTime) {
+          if (token !== animationToken) {
+            return;
+          }
+
+          sendMessage({
+            type: 'iroha-qna-grow',
+            height: getPageHeight()
+          });
 
           if (currentTime - startTime < duration) {
-            requestAnimationFrame(update);
-          } else {
-            sendHeight();
+            requestAnimationFrame(growOnly);
           }
         }
 
-        requestAnimationFrame(update);
+        requestAnimationFrame(growOnly);
 
-        anchorFinishTimer = setTimeout(function () {
-          sendHeight();
-          sendAnchorFinish(anchorButton);
-        }, 1220);
+        finalizeTimer = setTimeout(function () {
+          if (token !== animationToken) {
+            return;
+          }
+
+          sendMessage({
+            type: 'iroha-qna-finalize',
+            height: getPageHeight(),
+            top: button.getBoundingClientRect().top
+          });
+        }, 1120);
       }
 
       function closePartsExample(scope) {
@@ -970,11 +968,14 @@
           const willOpen = !item.classList.contains('open');
 
           /*
-           * DOM 높이가 바뀌기 전 클릭한 버튼의 현재 화면 위치를 저장합니다.
-           * 애니메이션이 끝난 뒤 같은 버튼의 새 위치와 비교해
-           * 부모 페이지가 한 번만 스크롤을 보정합니다.
+           * 반드시 DOM 변경 전에 현재 버튼 위치를 부모 페이지에 저장합니다.
+           * 이후 긴 답변이 접혀도, 같은 버튼이 화면의 같은 높이에 남도록
+           * 부모 페이지가 최종 한 번만 정확히 보정합니다.
            */
-          sendAnchorStart(button);
+          sendMessage({
+            type: 'iroha-qna-anchor-start',
+            top: button.getBoundingClientRect().top
+          });
 
           document.querySelectorAll('.faq-item').forEach(function (otherItem) {
             if (otherItem !== item) {
@@ -999,7 +1000,7 @@
             willOpen ? 'true' : 'false'
           );
 
-          sendHeightDuringAnimation(button);
+          startStableResize(button);
         });
       });
 
@@ -1008,7 +1009,10 @@
           const example = button.nextElementSibling;
           const willOpen = !example.classList.contains('open');
 
-          sendAnchorStart(button);
+          sendMessage({
+            type: 'iroha-qna-anchor-start',
+            top: button.getBoundingClientRect().top
+          });
 
           example.classList.toggle('open', willOpen);
           button.setAttribute(
@@ -1016,25 +1020,31 @@
             willOpen ? 'true' : 'false'
           );
 
-          sendHeightDuringAnimation(button);
+          startStableResize(button);
         });
       });
 
       window.addEventListener('load', function () {
-        sendHeight();
-        setTimeout(sendHeight, 150);
-        setTimeout(sendHeight, 600);
+        sendInitialHeight();
+        setTimeout(sendInitialHeight, 150);
+        setTimeout(sendInitialHeight, 600);
       });
 
-      window.addEventListener('resize', sendHeight);
+      window.addEventListener('resize', sendInitialHeight);
 
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(sendHeight);
+        document.fonts.ready.then(sendInitialHeight);
       }
 
       if ('ResizeObserver' in window) {
         const observer = new ResizeObserver(function () {
-          sendHeight();
+          /*
+           * 클릭 애니메이션 도중에는 부모 높이를 자동 축소하지 않습니다.
+           * 초기 로드나 일반 리사이즈에서만 최종 높이를 동기화합니다.
+           */
+          if (!finalizeTimer) {
+            sendInitialHeight();
+          }
         });
 
         observer.observe(document.body);

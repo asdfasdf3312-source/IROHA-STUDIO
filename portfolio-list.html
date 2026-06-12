@@ -320,10 +320,14 @@
       cursor: zoom-in;
       user-select: none;
       -webkit-user-drag: none;
+      transition:
+        width 0.28s ease,
+        max-width 0.28s ease,
+        max-height 0.28s ease;
     }
 
     .lightbox-image.zoomed {
-      width: min(150vw, 2100px);
+      width: min(220vw, 3000px);
       max-width: none;
       max-height: none;
       cursor: zoom-out;
@@ -448,7 +452,7 @@
       }
 
       .lightbox-image.zoomed {
-        width: 185vw;
+        width: 240vw;
       }
     }
   </style>

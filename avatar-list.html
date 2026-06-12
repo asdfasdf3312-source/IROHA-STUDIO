@@ -103,6 +103,7 @@
       cursor: grab;
       user-select: none;
       overscroll-behavior-inline: contain;
+      touch-action: pan-y;
     }
 
     .scroll-grid.dragging {
@@ -541,6 +542,7 @@
       let startX = 0;
       let startScrollLeft = 0;
       let moved = false;
+      let pressedCard = null;
       let currentImageIndex = 0;
       let lastFocusedCard = null;
 
@@ -580,14 +582,6 @@
           'aria-label',
           '보유 아바타 ' + (index + 1) + ' 크게 보기'
         );
-
-        card.addEventListener('click', function () {
-          if (moved) {
-            return;
-          }
-
-          openLightbox(index, card);
-        });
 
         card.addEventListener('keydown', function (event) {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -681,11 +675,9 @@
 
         isDragging = true;
         moved = false;
+        pressedCard = event.target.closest('.img-card');
         startX = event.clientX;
         startScrollLeft = grid.scrollLeft;
-
-        grid.classList.add('dragging');
-        grid.setPointerCapture(event.pointerId);
       });
 
       grid.addEventListener('pointermove', function (event) {
@@ -695,17 +687,32 @@
 
         const distance = event.clientX - startX;
 
-        if (Math.abs(distance) > 4) {
+        if (!moved && Math.abs(distance) > 5) {
           moved = true;
+          grid.classList.add('dragging');
+
+          if (
+            event.pointerId !== undefined &&
+            !grid.hasPointerCapture(event.pointerId)
+          ) {
+            grid.setPointerCapture(event.pointerId);
+          }
         }
 
-        grid.scrollLeft = startScrollLeft - distance;
+        if (moved) {
+          grid.scrollLeft = startScrollLeft - distance;
+          event.preventDefault();
+        }
       });
 
-      function stopDragging(event) {
+      function stopDragging(event, openWhenClicked) {
         if (!isDragging) {
           return;
         }
+
+        const cardToOpen = !moved && openWhenClicked
+          ? pressedCard
+          : null;
 
         isDragging = false;
         grid.classList.remove('dragging');
@@ -718,14 +725,30 @@
           grid.releasePointerCapture(event.pointerId);
         }
 
-        setTimeout(function () {
-          moved = false;
-        }, 0);
+        pressedCard = null;
+
+        if (cardToOpen) {
+          const index = cards.indexOf(cardToOpen);
+
+          if (index !== -1) {
+            openLightbox(index, cardToOpen);
+          }
+        }
+
+        moved = false;
       }
 
-      grid.addEventListener('pointerup', stopDragging);
-      grid.addEventListener('pointercancel', stopDragging);
-      grid.addEventListener('lostpointercapture', stopDragging);
+      grid.addEventListener('pointerup', function (event) {
+        stopDragging(event, true);
+      });
+
+      grid.addEventListener('pointercancel', function (event) {
+        stopDragging(event, false);
+      });
+
+      grid.addEventListener('lostpointercapture', function (event) {
+        stopDragging(event, false);
+      });
 
       grid.addEventListener(
         'wheel',

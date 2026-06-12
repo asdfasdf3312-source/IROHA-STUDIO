@@ -1,824 +1,749 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>커미션 Q&A</title>
+<title>이로하 작업 신청서</title>
 
-  <style>
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
+<style>
+@font-face {
+  font-family: 'Paperlogi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
 
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
+:root {
+  --main: #24C6BF;
+  --main-dark: #159A95;
+  --main-light: #E9FFFD;
+  --line: #B9EFEA;
+  --text: #333333;
+  --sub: #888888;
+  --warning: #159A95;
+}
 
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
+body {
+  margin: 0;
+  padding: 40px 0;
+  background: #ffffff;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+  color: var(--text);
+}
 
-    :root {
-      --mint: #24c6bf;
-      --mint-dark: #159a95;
-      --mint-pale: #e2f9f7;
-      --border: #ddf6f4;
-      --answer-border: #edf9f8;
-      --text: #333333;
-      --sub-text: #555555;
-    }
+.form-wrap {
+  width: 760px;
+  max-width: calc(100% - 32px);
+  margin: 0 auto;
+  padding: 34px;
+  background: rgba(255,255,255,0.98);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 16px 42px rgba(36,198,191,0.18);
+}
 
-    * {
-      box-sizing: border-box;
-    }
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 800;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
 
-    html,
-    body {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      background: #ffffff;
-    }
+.title::before {
+  content: "";
+  width: 5px;
+  height: 22px;
+  background: var(--main);
+  border-radius: 10px;
+}
 
-    body {
-      padding: 40px 0 58px;
-      font-family: 'Paperozi', sans-serif;
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
 
-    button {
-      font-family: 'Paperozi', sans-serif;
-    }
+.choice {
+  padding: 9px 18px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #666;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.18s;
+}
 
-    .qna-card {
-      width: 760px;
-      max-width: calc(100% - 32px);
-      margin: 0 auto;
-      padding: 34px;
-      background: rgba(255,255,255,0.98);
-      border: 1px solid #B9EFEA;
-      border-radius: 28px;
-      box-shadow: 0 16px 42px rgba(36,198,191,0.18);
-    }
+.choice:hover {
+  transform: translateY(-1px);
+  background: var(--main-light);
+}
 
-    .qna-title {
-      display: flex;
-      align-items: center;
-      min-height: 26px;
-      margin: 0 0 16px;
-      color: var(--text);
-      font-size: 23px;
-      font-weight: 700;
-      line-height: 1.3;
-    }
+.choice.active {
+  background: var(--main);
+  color: #fff;
+  border-color: var(--main);
+}
 
-    .qna-title::before {
-      content: '';
-      width: 5px;
-      height: 20px;
-      margin-right: 10px;
-      border-radius: 3px;
-      background: var(--mint);
-      flex: 0 0 5px;
-    }
+.choice.long {
+  min-width: 190px;
+}
 
-    .faq-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+.guide {
+  background: var(--main-light);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 15px 18px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #666;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
 
-    .faq-item {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #ffffff;
-      transition:
-        border-color 0.45s ease,
-        box-shadow 0.45s ease;
-    }
+.guide b {
+  color: var(--main-dark);
+}
 
-    .faq-question {
-      width: 100%;
-      min-height: 60px;
-      padding: 0 18px;
-      border: 0;
-      outline: none;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      color: var(--text);
-      font-size: 16.5px;
-      font-weight: 700;
-      line-height: 1.5;
-      text-align: left;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-      cursor: pointer;
-      transition:
-        color 0.4s ease,
-        background-color 0.4s ease;
-    }
+.label {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 18px 0 8px;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
 
-    .faq-question:hover {
-      background: rgba(226,249,247,0.22);
-    }
+.required {
+  color: #FF573D;
+}
 
-    .faq-question-text {
-      min-width: 0;
-      flex: 1;
-    }
+.tip {
+  font-size: 13px;
+  color: #999;
+  font-weight: 500;
+}
 
-    .faq-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--mint-pale);
-      color: var(--mint);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 24px;
-      font-size: 17px;
-      font-weight: 500;
-      line-height: 1;
-      transition:
-        transform 0.85s cubic-bezier(0.16,1,0.3,1),
-        background-color 0.45s ease,
-        color 0.45s ease;
-    }
+.input,
+.textarea {
+  width: 100%;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 13px 15px;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  margin-bottom: 10px;
+}
 
-    .faq-answer {
-      display: grid;
-      grid-template-rows: 0fr;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-7px);
-      transition:
-        grid-template-rows 0.95s cubic-bezier(0.16,1,0.3,1),
-        opacity 0.55s ease,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1),
-        visibility 0s linear 0.95s;
-    }
+.textarea {
+  min-height: 70px;
+  resize: vertical;
+  overflow: hidden;
+  line-height: 1.6;
+}
 
-    .faq-answer-clip {
-      min-height: 0;
-      overflow: hidden;
-    }
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--main);
+  box-shadow: 0 0 0 3px rgba(36,198,191,0.20);
+}
 
-    .faq-answer-content {
-      padding: 0 18px;
-      border-top: 1px solid transparent;
-      color: var(--sub-text);
-      font-size: 15.5px;
-      font-weight: 400;
-      line-height: 1.8;
-      text-align: left;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-      opacity: 0;
-      transform: translateY(-8px);
-      transition:
-        padding 0.85s cubic-bezier(0.16,1,0.3,1),
-        border-color 0.45s ease,
-        opacity 0.55s ease,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1);
-    }
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
 
-    .faq-answer-content strong {
-      font-weight: 700;
-    }
+.three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
 
-    .answer-title {
-      display: block;
-      margin: 16px 0 6px;
-      color: var(--mint-dark);
-      font-weight: 700;
-    }
+.upload {
+  display: block;
+  border: 1.5px dashed var(--main);
+  border-radius: 12px;
+  padding: 12px 15px;
+  color: #777;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--main-light);
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
 
-    .answer-image {
-      display: block;
-      width: 100%;
-      max-width: 616px;
-      height: auto;
-      margin: 12px auto 16px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #f7fbfd;
-    }
+.upload input {
+  display: none;
+}
 
-    .answer-notice {
-      color: var(--mint-dark);
-    }
+.preview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
 
-    .faq-item.open {
-      border-color: var(--mint);
-      box-shadow: 0 5px 18px rgba(36,198,191,0.09);
-    }
+.preview img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
 
-    .faq-item.open .faq-question {
-      color: var(--mint-dark);
-    }
+.portfolio-warning {
+  display: none;
+  margin: -4px 0 14px 0;
+  padding: 13px 15px;
+  background: var(--main-light);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--warning);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.7;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
 
-    .faq-item.open .faq-icon {
-      background: var(--mint);
-      color: #ffffff;
-      transform: rotate(45deg);
-    }
+.portfolio-warning b {
+  color: var(--main-dark);
+}
 
-    .faq-item.open .faq-answer {
-      grid-template-rows: 1fr;
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-      transition:
-        grid-template-rows 0.95s cubic-bezier(0.16,1,0.3,1),
-        opacity 0.6s ease 0.08s,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1),
-        visibility 0s linear 0s;
-    }
+.rush-warning {
+  display: none;
+  margin: -4px 0 14px 0;
+  padding: 13px 15px;
+  background: var(--main-light);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--main-dark);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.8;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+}
 
-    .faq-item.open .faq-answer-content {
-      padding: 15px 18px 18px;
-      border-top-color: var(--answer-border);
-      opacity: 1;
-      transform: translateY(0);
-      transition:
-        padding 0.85s cubic-bezier(0.16,1,0.3,1),
-        border-color 0.45s ease,
-        opacity 0.65s ease 0.16s,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1);
-    }
+.rush-warning b {
+  color: #FF573D;
+}
 
-    @media (max-width: 560px) {
-      body {
-        padding: 28px 0 42px;
-      }
+.copy-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px 0;
+  border: none;
+  border-radius: 13px;
+  background: var(--main);
+  color: #fff;
+  font-family: Paperlogi, "Noto Sans KR", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(36,198,191,0.30);
+  transition: 0.18s;
+}
 
-      .qna-card {
-        width: calc(100% - 32px);
-        padding: 24px 18px;
-        border-radius: 20px;
-      }
+.copy-btn:hover {
+  background: var(--main-dark);
+  transform: translateY(-1px);
+}
 
-      .qna-title {
-        margin-bottom: 14px;
-        font-size: 21px;
-      }
+@media (max-width: 600px) {
+  .form-wrap {
+    padding: 24px 18px;
+  }
 
-      .faq-question {
-        min-height: 58px;
-        padding: 0 15px;
-        font-size: 16px;
-      }
+  .two,
+  .three {
+    grid-template-columns: 1fr;
+  }
 
-      .faq-answer-content {
-        padding-right: 15px;
-        padding-left: 15px;
-        font-size: 15px;
-      }
-
-      .faq-item.open .faq-answer-content {
-        padding: 13px 15px 16px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .faq-item,
-      .faq-question,
-      .faq-icon,
-      .faq-answer,
-      .faq-answer-content {
-        transition-duration: 0.01ms !important;
-        transition-delay: 0ms !important;
-      }
-    }
-  </style>
-
+  .choice.long {
+    min-width: 100%;
+  }
+}
+</style>
 </head>
 
 <body>
-  <section class="qna-card" aria-label="커미션 Q&A">
-    <h2 class="qna-title">커미션 Q&amp;A</h2>
 
-<div class="faq-list">
+<div class="form-wrap">
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        3D 버츄얼이 처음인데도 신청할 수 있나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
+  <div class="title">작업 신청서</div>
 
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          네, 처음 시작하시는 분도 신청 가능합니다.<br>
-          상담을 통해 필요한 준비 사항과 작업 과정을 안내해드리며,
-          사용 목적과 예산에 맞는 구성을 추천해드립니다.<br>
-          간단한 구성으로 부담 없이 시작하고 싶으신 경우에는
-          입문 패키지를 권장드립니다.
-        </div>
-      </div>
-    </div>
+  <div class="row" data-name="formType" id="formTypeRow">
+    <button class="choice active" type="button" data-value="입문 패키지" data-form="intro">입문 패키지</button>
+    <button class="choice" type="button" data-value="올인원 데뷔 패키지" data-form="allinone">올인원 데뷔 패키지</button>
+    <button class="choice" type="button" data-value="데뷔 플랜" data-form="debut">데뷔 플랜</button>
+    <button class="choice" type="button" data-value="VRC 아바타" data-form="vrc">VRC 아바타</button>
   </div>
 
-
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        BOOTH에서 검색을 어떻게 해야 할지 모르겠고, 어떻게 꾸며야 할지 감이 안 와요
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          <strong class="answer-title" style="margin-top:0;">
-            대신 파츠 서칭 해드립니다
-          </strong>
-원하시는 분위기와 스타일을 알려주시면 아바타에 어울리는
-          의상·헤어·액세서리 등을 대신 찾아드립니다.<br>
-          활용도가 높고 많은 분이 사용하는 인기 파츠를 중심으로
-          추천드리며, 원하시는 콘셉트에 맞춰 여러 후보를
-          안내해드립니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 작업자가 보유하지 않은 상품도 추천 목록에 포함될 수
-            있습니다. 보유 중인 파츠 내에서만 추천을 원하시는 경우
-            미리 말씀해주세요.<br>
-            ※ 대중적이지 않거나 특수한 콘셉트의 경우, 적합한 파츠를
-            찾기 어렵거나 추천 가능한 상품이 제한될 수 있습니다.
-          </span>
-
-          <img
-            class="answer-image"
-            src="./parts-search-example-v27.jpg"
-            alt="파츠 서칭 결과 안내 예시 이미지"
-          >
-        </div>
-      </div>
-    </div>
+  <div class="guide" id="guideText">
+    <b>입문 패키지</b>는 입문 패키지는 아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.<br>
+    ❗ 사용하실 프로그램에 맞춰 Warudo / VSF / Meligo 중 원하는 작업 타입을 선택해주세요.
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        나에게 맞는 3D 버튜버 프로그램은 무엇인가요?
-        (VRC · VSF · VRM · Warudo · Meligo 차이 안내)
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
+  <div class="label">0. 작업 타입 <span class="required">*</span></div>
+  <div class="row" data-name="workType" id="workTypeRow"></div>
 
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          <strong class="answer-title" style="margin-top:0;">
-            VRC｜VRChat
-          </strong>
-
-          VRChat을 줄여 부르는 명칭으로, 다른 사용자들과 아바타를
-          이용해 소통하는 소셜 VR 플랫폼입니다. 버츄얼 방송
-          프로그램과는 용도가 다르며, 커스텀 아바타는 계정에 직접
-          업로드해 사용합니다.
-
-          <strong class="answer-title">
-            VSF｜VSeeFace용 아바타 세팅
-          </strong>
-
-          본 페이지에서 VSF는 VSeeFace에서 사용할 수 있도록 제작된
-          아바타 작업을 의미합니다.<br>
-          VSeeFace는 얼굴과 손 움직임을 추적해 3D 아바타로 방송할
-          수 있는 프로그램으로, 기본적인 페이셜 방송을 중심으로
-          사용하기 좋습니다.<br>
-          비교적 가벼운 환경에서도 사용할 수 있어 버츄얼 방송을
-          처음 시작하는 분들이 입문용으로 많이 선택합니다.<br>
-          다만 Warudo나 Meligo에 비해 무대·이펙트·자동 연출 등
-          방송 연출 기능은 제한적인 편입니다.
-
-          <strong class="answer-title">
-            VRM｜3D 아바타 파일 형식
-          </strong>
-
-          VRM은 프로그램 이름이 아니라, 여러 버츄얼 프로그램에서
-          사용할 수 있도록 만들어진 3D 휴머노이드 아바타 파일
-          형식입니다.<br>
-          VSeeFace와 Warudo 등 VRM을 지원하는 프로그램에서 불러와
-          사용할 수 있습니다.
-
-          <strong class="answer-title">
-            Warudo｜방송 연출 중심 프로그램
-          </strong>
-
-          Warudo는 Steam에서 무료로 이용할 수 있는 해외 3D 버츄얼
-          방송 프로그램입니다.<br>
-          다양한 방송 연출이 가능해 스트리머와 버튜버가 많이
-          사용하며, 완성도 높은 화면을 구성할 수 있는 프로그램으로
-          평가받고 있습니다.<br>
-          3D 소품·배경·무대·시각 효과·방송 채팅 연동·자동 이벤트
-          등 여러 기능을 활용할 수 있어 자신만의 방송 화면을
-          세밀하게 꾸미고 싶은 분께 적합합니다.<br>
-          다만 적용하는 기능과 에셋이 많아질수록 PC 사용량도 함께
-          증가하므로, 원활한 구동을 위해서는 어느 정도의 컴퓨터
-          사양이 필요할 수 있습니다.<br>
-          해외 프로그램 특성상 국내 이용 정보가 비교적 적고,
-          문의 및 소통이 다소 어렵게 느껴질 수 있습니다.<br>
-          사용 중 문제가 발생한 경우 Warudo 공식 디스코드의
-          한국어 커뮤니티를 통해 질문하거나 관련 정보를 확인할 수
-          있습니다.
-
-          <strong class="answer-title">
-            Meligo｜국산 통합 모션 캡처 프로그램
-          </strong>
-
-          Meligo는 국내에서 개발된 버츄얼 방송용 통합 모션 캡처
-          프로그램으로, 상반신 및 전신 움직임을 추적할 수
-          있습니다.<br>
-          VSeeFace보다 모션 캡처와 방송 연출 기능이 다양하며,
-          한국어 환경과 국내 이용자 자료가 잘 갖춰져 있어 처음
-          사용하는 분도 비교적 쉽게 정보를 찾을 수 있습니다.<br>
-          한국어 지원이 필요하거나, 단순 페이셜 방송을 넘어
-          상반신·전신 모션과 다양한 방송 연출을 활용하고 싶은
-          분께 적합합니다. 국내 버튜버와 스트리머 사이에서도 많이
-          사용되는 프로그램입니다.<br>
-          또한 Meligo 공식 디스코드를 통해 사용 중 발생한 문제를
-          문의할 수 있으며, 비교적 빠르게 안내받을 수 있다는
-          장점이 있습니다.<br><br>
-
-          <span class="answer-notice">
-            <strong>입문형 버츄얼 방송</strong> → VSeeFace<br>
-            <strong>확장된 모션 캡처와 방송 연출, 국내 버튜버의 인기 선택지</strong>
-            → Meligo<br>
-            <strong>고퀄리티 3D 방송 연출의 끝판왕</strong> → Warudo
-          </span>
-        </div>
-      </div>
-    </div>
+  <div class="label">1. 작업 일정 확인 여부 <span class="required">*</span></div>
+  <div class="row" data-name="schedule">
+    <button class="choice active" type="button" data-value="O (확인했어요)">O 확인했어요!</button>
+    <button class="choice" type="button" data-value="X">X</button>
+    <button class="choice" type="button" data-value="빠른마감신청">빠른마감신청</button>
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        페이셜 작업은 어떤 기능인가요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          Face ID를 지원하는 iPhone 또는 iPad로 사용자의 얼굴 움직임을
-          인식해, 아바타의 눈·입·볼 등 다양한 표정을 실시간으로
-          표현할 수 있도록 제작하는 작업입니다.<br>
-          자연스러운 얼굴 추적을 위해 Blender에서 총 52종의
-          페이셜 쉐이프키를 개별 제작하여 아바타에 적용합니다.
-        </div>
-      </div>
-    </div>
+  <div class="rush-warning">
+    ⚡ 빠른 마감 신청 시 아래 추가금이 발생합니다.<br>
+    대기 없이 순번 맨앞으로 이동합니다 <b>(200,000원)</b><br>
+    결제 후 24시간 내에 완성해드립니다 <b>(100,000원)</b><br>
+    결제 후 2일~3일 내에 완성해드립니다 <b>(50,000원)</b>
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        특수 표현 리깅이란?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          아바타에 기본으로 탑재되어 있는 반짝이는 눈, 하트눈,
-          눈물, 홍조 등의 특수 표현을 얼굴 움직임에 맞춰
-          자연스럽게 반응하도록 대응하는 추가 작업입니다.<br>
-
-          페이셜 사용 중 해당 연출을 함께 적용하려면 별도의 대응
-          작업이 필요합니다. 연동되지 않은 경우 눈동자는 움직여도
-          하트나 별과 같은 눈 내부 효과는 제자리에 고정되어
-          부자연스럽게 보일 수 있습니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 아바타 베이스에 이미 포함된 쉐이프키에 한해 작업
-            가능하며, 존재하지 않는 효과의 신규 제작은 포함되지
-            않습니다.
-          </span>
-        </div>
-      </div>
-    </div>
+  <div class="label">2. 필독사항 확인 여부 <span class="required">*</span></div>
+  <div class="row" data-name="notice">
+    <button class="choice active" type="button" data-value="O (읽었어요)">O 읽었어요!</button>
+    <button class="choice" type="button" data-value="X">X</button>
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        이미 완성된 모델에 뽀잉눈이나 표정 연동형 귀·꼬리 모션을
-        추가할 수 있나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          뽀잉눈은 신규 제작 과정에서 함께 적용하는 조건으로
-          가격이 책정된 항목입니다.<br>
-          완성된 아바타에 단독으로 추가할 경우 작업 범위와
-          소요 시간이 크게 달라져, 별도의 추가 작업은
-          진행하기 어렵습니다.
-        </div>
-      </div>
-    </div>
+  <div class="label">3. 포트폴리오 공개 여부 <span class="required">*</span></div>
+  <div class="row" data-name="portfolioPrivate">
+    <button class="choice active" type="button" data-value="공개 가능">공개 가능</button>
+    <button class="choice" type="button" data-value="비공개 요청">비공개 요청</button>
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        유니티 패키지는 어떤 파일로 구성되나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          작업 완료 후 헤드·바디가 포함된 FBX, VRM 및 텍스처
-          데이터를 전달드립니다.<br>
-          의상, 헤어, 액세서리 등의 모델링 파츠와 본 물리,
-          쉐이더 관련 세팅은 전달 범위에 포함되지 않습니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 별도의 의상이나 헤어가 적용되지 않은 기본 캐릭터
-            형태로 제공됩니다.
-          </span>
-        </div>
-      </div>
-    </div>
+  <div class="portfolio-warning">
+    ❗ 성형 작업이 포함된 작업물의 영구 비공개 요청 시 아래 사항을 필독해주세요.<br>
+    ⚠️ 작업물 비공개 추가금은 <b>총 결제금액의 2배</b>로 산정됩니다.<br>
+    ⚠️ 예: 주문 결제금액이 20,000원이라면, 비공개 요청 시 총 결제금액은 40,000원으로 진행됩니다.
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        신청이 어려운 작업 안내
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
+  <div class="label">4. 신청 작업 내용 <span class="required">*</span></div>
+  <textarea id="workContent" class="textarea" placeholder="EX) VSF 베이직 뚜따 패키지 + Magica Cloth2 콜라이더/물리 세팅 추가"></textarea>
 
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          아래 항목에 해당하는 작업은 진행하지 않습니다.
-          신청 전 반드시 확인해주세요.
-
-          <strong class="answer-title">
-            Q. 현재 사용 중인 VSF 또는 Warudo 아바타에 의상만
-            추가할 수 있나요?
-          </strong>
-
-          타 작업자가 제작하거나 세팅한 아바타의 수정·추가
-          작업은 진행하지 않습니다.
-
-          <strong class="answer-title">
-            Q. 유니티 패키지를 보유하고 있는데 VSF 변환만
-            맡길 수 있나요?
-          </strong>
-
-          외부에서 제작된 유니티 패키지의 변환 및 후속 작업은
-          진행하지 않습니다.
-
-          <strong class="answer-title">
-            Q. 사용 중인 VRoid 모델로 아바타 제작을 신청할 수
-            있나요?
-          </strong>
-
-          VRoid 모델은 작업 대상에 포함되지 않습니다.
-          본 커미션은 Booth에서 정식 판매되는 아바타 베이스와
-          파츠를 활용한 작업만 진행합니다.
-
-          <strong class="answer-title">
-            Q. 다른 스트리머나 다른 사용자의 캐릭터와 똑같이
-            제작할 수 있나요?
-          </strong>
-
-          타인의 캐릭터 디자인이나 아바타 사진을 제작 기준으로
-          사용하지 않습니다. 신청자 본인의 원화 또는 직접 준비한
-          디자인 자료를 제출해주세요.
-
-          <strong class="answer-title">
-            Q. 포트폴리오에 올라온 아바타를 구매할 수 있나요?
-          </strong>
-
-          포트폴리오 속 아바타는 기존 의뢰인의 작업물이므로
-          복제·판매하지 않습니다.<br>
-          별도로 구매 가능한 모델은 ‘작가 개인작’으로 안내된
-          아바타에 한합니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 타 사용자 또는 타 작업자가 제작한 아바타 이미지는
-            외형 참고 자료로 제출하지 말아주세요.
-          </span>
-        </div>
-      </div>
-    </div>
+  <div class="label">5. 방송 정보</div>
+  <div class="row" data-name="broadcast">
+    <button class="choice active" type="button" data-value="방송용 O">방송용 O</button>
+    <button class="choice" type="button" data-value="방송용 X">방송용 X</button>
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        아바타 베이스는 어떤 기준으로 선택하면 되나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
+  <input id="broadcastLink" class="input" type="text" placeholder="방송 플랫폼 링크">
+  <input id="broadcastName" class="input" type="text" placeholder="방송 닉네임">
+  <input id="avatarDate" class="input" type="text" placeholder="아바타 공개일">
 
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          베이스는 얼굴 인상뿐 아니라 체형, 전용 의상 선택지,
-          향후 확장성까지 함께 고려해 선택하는 것이 좋습니다.<br>
+  <div class="label">6. Booth 아이템 링크 <span class="tip">의상·헤어 갯수도 기입</span></div>
+  <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 메이크업 / 눈동자 / 네일 링크&#10;필요한 파츠만 기입하셔도 됩니다."></textarea>
 
-          마음에 드는 얼굴과 원하는 소체가 서로 다른 경우에는
-          헤드와 소체를 조합해 구성할 수 있습니다.
-          다만 서로 다른 베이스를 사용하려면 아바타를 각각
-          구매해야 하므로 추가 비용이 발생할 수 있습니다.<br>
-
-          원하는 얼굴 베이스의 전용 의상이 많지 않아 고민된다면,
-          헤드는 취향에 맞는 모델을 사용하고 소체는 대중성이 높아
-          전용 의상이 풍부한 베이스로 선택하는 방법도
-          추천드립니다.<br>
-
-          처음에는 구매 비용이 늘어날 수 있지만, 이후 의상
-          선택의 폭이 넓어지고 비전용 의상 적용에 드는 비용도
-          줄일 수 있습니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 비전용 의상 적용 및 대응 작업은 진행하지 않으므로,
-            소체 선택 전 전용 의상 보유 여부를 반드시 확인해주세요.
-          </span>
-        </div>
-      </div>
-    </div>
+  <div class="label">
+    6-1. 컬러 정보
+    <span class="tip">※ 색상코드를 함께 기재해주시면 더욱 정확하게 반영할 수 있습니다.</span>
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        페이셜 작업이 완료된 아바타에 추가 작업을 맡기면 비용은
-        어떻게 되나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          기존에 본 작업자에게 페이셜, 실시간 그림자,
-          아바타 세팅을 함께 진행하신 경우에는 기본 작업비를
-          다시 청구하지 않으며, 새로 추가하거나 변경하는
-          항목의 비용만 발생합니다.<br><br>
-
-          예시: 의상 2개 변경, 헤어 2개 변경,
-          Magica Cloth 2 물리 작업
-        </div>
-      </div>
-    </div>
+  <div class="three">
+    <input id="hairColor" class="input" type="text" placeholder="헤어 컬러">
+    <input id="eyeColor" class="input" type="text" placeholder="눈 컬러">
+    <input id="clothesColor" class="input" type="text" placeholder="의상 컬러">
   </div>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        작가 개인작 구매는 어떤 메뉴인가요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
+  <label class="upload">
+    📎 컬러 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
+    <input id="colorImages" type="file" accept="image/*" multiple>
+  </label>
 
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          작가가 직접 선정한 아바타 베이스와 정식 판매 중인
-          의상·헤어·액세서리를 조합하고, 외형 커스터마이징과
-          세팅을 더해 완성한 아바타를 구매하는 메뉴입니다.<br>
+  <div id="previewArea" class="preview"></div>
 
-          ※ 헤드, 바디, 의상 등의 파츠를 처음부터 모델링하는
-          오리지널 제작 방식은 아닙니다.<br><br>
+  <div class="label">7. 캐릭터 디자인 방향 <span class="tip">※ 원화 기반 작업은 제작 기준 자료 첨부가 필요합니다.</span></div>
 
-          완성된 개인작은 VSF의 경우 VSF 확장자 파일로 전달되며,
-          VRC의 경우 아바타 업로드 방식으로 제공됩니다.<br>
+  <textarea id="avatarDesc" class="textarea" placeholder="전체 분위기: 걸크러쉬 / 귀여움 / 도도함 / 몽환적 / 아이돌 느낌 &#10;입모양: 웃는상 / 무표정 / 살짝 미소 / 고양이 3자 모양 &#10;눈매: 동글동글 / 고양이상 / 처진 눈매 / 살짝 올라간 눈"></textarea>
 
-          구매 후 일부 구성을 변경하고 싶으신 경우에는
-          수정 범위에 따라 추가 비용이 발생할 수 있습니다.<br>
+  <label class="upload">
+    📎 캐릭터 디자인 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
+    <input id="designImages" type="file" accept="image/*" multiple>
+  </label>
 
-          기본 베이스 형태로 판매되는 개인작은 원하는 의상 1종,
-          헤어 1종, 액세서리 최대 2종을 선택해 완성형 아바타로
-          구성할 수 있습니다.<br>
+  <div id="designPreviewArea" class="preview"></div>
 
-          이미 외형과 페이셜 작업이 완료된 모델이므로,
-          취향에 맞는 아바타가 있다면 일반 맞춤 제작보다
-          빠르게 받아보실 수 있습니다.
-        </div>
-      </div>
-    </div>
+  <div class="label">8. 페이셜 요청사항</div>
+  <textarea id="facialRequest" class="textarea" placeholder="ex) 볼빵빵이 크지 않았으면 좋겠어요. 입 움직임이 컸으면 좋겠어요."></textarea>
+
+  <div class="label">9. 유니티 파일 필요 여부 <span class="tip">추가금 5만원</span></div>
+  <div class="row" data-name="unityNeed">
+    <button class="choice active" type="button" data-value="필요 없어요">필요 없어요</button>
+    <button class="choice" type="button" data-value="필요해요 (+5만원)">필요해요 (+5만원)</button>
   </div>
+
+  <div class="label">10. 유니티 파일 용도</div>
+  <div class="row" data-name="unityUse">
+    <button class="choice active" type="button" data-value="1번 (파일 백업용)">1번 파일 백업용</button>
+    <button class="choice" type="button" data-value="2번 (타작가에게 작업 맡기는 용도)">2번 타작가에게 작업 맡기는 용도</button>
+    <button class="choice" type="button" data-value="해당없음">해당없음</button>
+  </div>
+
+  <div class="label">11. 리뷰 이벤트 참가 여부 <span class="tip">약속 시 10,000원 할인 (주문1회당) </span></div>
+  <div class="row" data-name="reviewEvent">
+    <button class="choice active" type="button" data-value="O (약속할게요!)">O 약속할게요!</button>
+    <button class="choice" type="button" data-value="X">X</button>
+  </div>
+
+  <div class="label">12. 그 외 궁금한 점</div>
+  <textarea id="etcText" class="textarea" placeholder="자유롭게 적어주세요!"></textarea>
+
+  <button class="copy-btn" type="button" onclick="copyAeongForm()">작성한 양식 복사하기 📋</button>
 
 </div>
 
-  </section>
+<script>
+var workTypeMap = {
+  intro: [
+    "Warudo 베이직 뚜따 패키지",
+    "Warudo 프리미엄 물리 뚜따 패키지",
+    "VSF 베이직 뚜따 패키지",
+    "Meligo 프리미엄 물리 뚜따 패키지"
+  ],
+  allinone: [
+    "VSF 올인원 데뷔 패키지",
+    "Warudo 올인원 데뷔 패키지"
+  ],
+  debut: [
+    "2D 원화 기반 VSF 데뷔 플랜",
+    "2D 원화 기반 Warudo 데뷔 플랜"
+  ],
+  vrc: [
+    "Basic Options",
+    "Standard Options",
+    "Premium Options",
+    "핵고퀄 A 풀옵션",
+    "핵고퀄 B 풀옵션"
+  ]
+};
 
-  <script>
-    (function () {
-      const questions = document.querySelectorAll('.faq-question');
+var guideMap = {
+  intro: '<b>입문 패키지</b>는 입문 패키지는 아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.<br>❗ Warudo / VSF / Meligo 중 사용 목적에 맞는 작업 타입을 선택해주세요.',
+  allinone: '<b>올인원 데뷔 패키지</b>는 방송용 아바타 세팅, 페이셜, 기본 연동 등 데뷔에 필요한 구성을 한 번에 준비하는 메뉴입니다.<br>❗ VSF 작업물은 VSeeFace 또는 Meligo 프로그램에서 사용 가능합니다',
+  debut: '<b>데뷔 플랜</b>은 2D 원화를 기반으로 방송용 버츄얼 데뷔 구성을 준비하는 메뉴입니다.<br>',
+  vrc: '<b>VRC 아바타</b>는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 또는 핵고퀄 풀옵션 중 필요한 작업 범위를 선택해주세요.'
+};
 
-      function sendHeight() {
-        const height = Math.ceil(
-          document.documentElement.getBoundingClientRect().height
-        );
+var colorAttachedImages = [];
+var designAttachedImages = [];
 
-        window.parent.postMessage(
-          {
-            type: 'iroha-qna-height',
-            height: height
-          },
-          '*'
-        );
-      }
+function renderWorkTypes(type) {
+  var row = document.getElementById("workTypeRow");
+  if (!row) return;
 
-      function sendHeightDuringAnimation() {
-        const startTime = performance.now();
-        const duration = 1100;
+  row.innerHTML = "";
 
-        function update(currentTime) {
-          sendHeight();
+  workTypeMap[type].forEach(function(text, index) {
+    var btn = document.createElement("button");
+    btn.className = "choice long" + (index === 0 ? " active" : "");
+    btn.type = "button";
+    btn.setAttribute("data-value", text);
+    btn.textContent = text;
+    row.appendChild(btn);
+  });
 
-          if (currentTime - startTime < duration) {
-            requestAnimationFrame(update);
-          }
-        }
+  var guide = document.getElementById("guideText");
+  if (guide && guideMap[type]) {
+    guide.innerHTML = guideMap[type];
+  }
+}
 
-        requestAnimationFrame(update);
-      }
+function getSelected(name) {
+  var row = document.querySelector('[data-name="' + name + '"]');
+  if (!row) return "";
+  var active = row.querySelector(".choice.active");
+  return active ? active.getAttribute("data-value") : "";
+}
 
-      questions.forEach(function (button) {
-        button.addEventListener('click', function () {
-          const item = button.closest('.faq-item');
-          const willOpen = !item.classList.contains('open');
+function emptyCheck(value) {
+  value = (value || "").trim();
+  return value ? value : "(미작성)";
+}
 
-          item.classList.toggle('open', willOpen);
+function updatePortfolioWarning() {
+  var selected = getSelected("portfolioPrivate");
+  var warning = document.querySelector(".portfolio-warning");
 
-          button.setAttribute(
-            'aria-expanded',
-            willOpen ? 'true' : 'false'
-          );
+  if (!warning) return;
 
-          sendHeightDuringAnimation();
-        });
-      });
+  if (selected.indexOf("비공개") !== -1) {
+    warning.style.display = "block";
+  } else {
+    warning.style.display = "none";
+  }
+}
 
-      window.addEventListener('load', function () {
-        sendHeight();
-        setTimeout(sendHeight, 150);
-        setTimeout(sendHeight, 600);
-      });
+function updateRushWarning() {
+  var selected = getSelected("schedule");
+  var warning = document.querySelector(".rush-warning");
 
-      window.addEventListener('resize', sendHeight);
+  if (!warning) return;
 
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(sendHeight);
-      }
+  if (selected.indexOf("빠른마감신청") !== -1) {
+    warning.style.display = "block";
+  } else {
+    warning.style.display = "none";
+  }
+}
 
-      if ('ResizeObserver' in window) {
-        const observer = new ResizeObserver(function () {
-          sendHeight();
-        });
+document.querySelectorAll(".row").forEach(function(row) {
+  row.addEventListener("click", function(e) {
+    if (!e.target.classList.contains("choice")) return;
 
-        observer.observe(document.body);
-      }
-    })();
-  </script>
+    row.querySelectorAll(".choice").forEach(function(btn) {
+      btn.classList.remove("active");
+    });
+
+    e.target.classList.add("active");
+
+    if (row.getAttribute("data-name") === "formType") {
+      var type = e.target.getAttribute("data-form");
+      renderWorkTypes(type);
+    }
+
+    if (row.getAttribute("data-name") === "portfolioPrivate") {
+      updatePortfolioWarning();
+    }
+
+    if (row.getAttribute("data-name") === "schedule") {
+      updateRushWarning();
+    }
+  });
+});
+
+document.querySelectorAll(".textarea").forEach(function(textarea) {
+  textarea.addEventListener("input", function() {
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + "px";
+  });
+});
+
+function setupImageUpload(inputId, previewId, targetArray) {
+  var input = document.getElementById(inputId);
+  var preview = document.getElementById(previewId);
+
+  if (!input || !preview) return;
+
+  input.addEventListener("change", function() {
+    Array.from(this.files).forEach(function(file) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        var imageData = {
+          name: file.name,
+          src: e.target.result
+        };
+
+        targetArray.push(imageData);
+
+        var img = document.createElement("img");
+        img.src = imageData.src;
+        img.alt = imageData.name;
+        preview.appendChild(img);
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    this.value = "";
+  });
+}
+
+setupImageUpload("colorImages", "previewArea", colorAttachedImages);
+setupImageUpload("designImages", "designPreviewArea", designAttachedImages);
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function makeImageHtml(title, images) {
+  if (!images || images.length === 0) {
+    return "";
+  }
+
+  var html = '<div style="margin:10px 0 16px 0;">';
+  html += '<div style="font-weight:700; margin:8px 0;">' + escapeHtml(title) + '</div>';
+
+  images.forEach(function(image, index) {
+    html +=
+      '<div style="margin:10px 0;">' +
+      '<div style="font-size:12px; color:#777; margin-bottom:4px;">' +
+      escapeHtml(index + 1 + ". " + image.name) +
+      '</div>' +
+      '<img src="' + image.src + '" alt="' + escapeHtml(image.name) + '" style="width:auto; max-width:100%; height:auto; display:block; border-radius:8px;">' +
+      '</div>';
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function textBlock(value) {
+  return (
+    '<div style="font-family:Arial, sans-serif; font-size:14px; line-height:1.7; white-space:pre-wrap;">' +
+    escapeHtml(value) +
+    '</div>'
+  );
+}
+
+function makeCopyHtml(text) {
+  var marker7 = "7. 캐릭터 디자인 방향";
+  var marker8 = "8. 페이셜 요청사항";
+
+  var colorImageHtml = makeImageHtml("컬러 참고 자료", colorAttachedImages);
+  var designImageHtml = makeImageHtml("캐릭터 디자인 참고 자료", designAttachedImages);
+
+  var index7 = text.indexOf(marker7);
+  var index8 = text.indexOf(marker8);
+
+  if (index7 !== -1 && index8 !== -1) {
+    var before7 = text.substring(0, index7);
+    var section7 = text.substring(index7, index8);
+    var after8 = text.substring(index8);
+
+    return (
+      textBlock(before7) +
+      colorImageHtml +
+      textBlock(section7) +
+      designImageHtml +
+      textBlock(after8)
+    );
+  }
+
+  return textBlock(text) + colorImageHtml + designImageHtml;
+}
+
+function copyRichForm(text) {
+  var html = makeCopyHtml(text);
+
+  if (navigator.clipboard && window.ClipboardItem) {
+    navigator.clipboard.write([
+      new ClipboardItem({
+        "text/html": new Blob([html], { type: "text/html" }),
+        "text/plain": new Blob([text], { type: "text/plain" })
+      })
+    ]).then(function() {
+      alert("양식이 복사되었습니다!");
+    }).catch(function() {
+      fallbackRichCopy(text, html);
+    });
+  } else {
+    fallbackRichCopy(text, html);
+  }
+}
+
+function fallbackRichCopy(text, html) {
+  var temp = document.createElement("div");
+
+  temp.contentEditable = "true";
+  temp.style.position = "fixed";
+  temp.style.left = "-9999px";
+  temp.style.top = "0";
+  temp.style.width = "1px";
+  temp.style.height = "1px";
+  temp.style.overflow = "hidden";
+  temp.innerHTML = html;
+
+  document.body.appendChild(temp);
+
+  var range = document.createRange();
+  range.selectNodeContents(temp);
+
+  var selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  try {
+    var success = document.execCommand("copy");
+    selection.removeAllRanges();
+    document.body.removeChild(temp);
+
+    if (success) {
+      alert("양식이 복사되었습니다!");
+    } else {
+      fallbackCopy(text);
+    }
+  } catch (e) {
+    selection.removeAllRanges();
+    document.body.removeChild(temp);
+    fallbackCopy(text);
+  }
+}
+
+function copyAeongForm() {
+  var formType = emptyCheck(getSelected("formType"));
+  var workType = emptyCheck(getSelected("workType"));
+  var portfolio = emptyCheck(getSelected("portfolioPrivate"));
+  var schedule = emptyCheck(getSelected("schedule"));
+
+  var portfolioNotice = "";
+  if (portfolio.indexOf("비공개") !== -1) {
+    portfolioNotice = "\n   ※ 비공개 요청 시 총 결제금액의 2배로 진행됩니다.";
+  }
+
+  var rushNotice = "";
+  if (schedule.indexOf("빠른마감신청") !== -1) {
+    rushNotice = "\n   ※ 빠른 마감 신청 시 추가금이 발생합니다.";
+  }
+
+  var text =
+"[이로하 " + formType + " 신청 양식]\n" +
+"0. 작업 타입 : " + workType + "\n" +
+"1. 작업 일정 확인 여부 : " + schedule + rushNotice + "\n" +
+"2. 필독사항 확인 여부 : " + emptyCheck(getSelected("notice")) + "\n" +
+"3. 포트폴리오 공개 여부 : " + portfolio + portfolioNotice + "\n" +
+"4. 신청 작업 내용 : " + emptyCheck(document.getElementById("workContent").value) + "\n" +
+"5. 방송 여부 : " + emptyCheck(getSelected("broadcast")) + "\n" +
+"  방송 플랫폼(링크) : " + emptyCheck(document.getElementById("broadcastLink").value) + "\n" +
+"  방송 닉네임 : " + emptyCheck(document.getElementById("broadcastName").value) + "\n" +
+"  아바타 공개일 : " + emptyCheck(document.getElementById("avatarDate").value) + "\n" +
+"6. Booth 아이템 링크 :\n" + emptyCheck(document.getElementById("boothLink").value) + "\n\n" +
+"6-1. 컬러 정보 :\n" +
+"  헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
+"  눈 컬러 : " + emptyCheck(document.getElementById("eyeColor").value) + "\n" +
+"  의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
+"7. 캐릭터 디자인 방향 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
+"8. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
+"9. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
+"10. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +
+"11. 리뷰 이벤트 : " + emptyCheck(getSelected("reviewEvent")) + "\n" +
+"12. 그 외 : " + emptyCheck(document.getElementById("etcText").value);
+
+  copyRichForm(text);
+}
+
+function fallbackCopy(text) {
+  var temp = document.createElement("textarea");
+  temp.value = text;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
+  alert("양식이 복사되었습니다!");
+}
+
+renderWorkTypes("intro");
+updatePortfolioWarning();
+updateRushWarning();
+</script>
 
 </body>
 </html>

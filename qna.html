@@ -882,7 +882,7 @@
       );
 
       let animationToken = 0;
-      let finalizeTimer = null;
+      let finishTimer = null;
 
       function getPageHeight() {
         return Math.ceil(
@@ -898,55 +898,11 @@
         window.parent.postMessage(data, '*');
       }
 
-      function sendInitialHeight() {
+      function sendHeight() {
         sendMessage({
           type: 'iroha-qna-height',
           height: getPageHeight()
         });
-      }
-
-      function startStableResize(button) {
-        const token = ++animationToken;
-        const startTime = performance.now();
-        const duration = 1050;
-
-        if (finalizeTimer) {
-          clearTimeout(finalizeTimer);
-        }
-
-        sendMessage({
-          type: 'iroha-qna-anchor-start',
-          top: button.getBoundingClientRect().top
-        });
-
-        function growOnly(currentTime) {
-          if (token !== animationToken) {
-            return;
-          }
-
-          sendMessage({
-            type: 'iroha-qna-grow',
-            height: getPageHeight()
-          });
-
-          if (currentTime - startTime < duration) {
-            requestAnimationFrame(growOnly);
-          }
-        }
-
-        requestAnimationFrame(growOnly);
-
-        finalizeTimer = setTimeout(function () {
-          if (token !== animationToken) {
-            return;
-          }
-
-          sendMessage({
-            type: 'iroha-qna-finalize',
-            height: getPageHeight(),
-            top: button.getBoundingClientRect().top
-          });
-        }, 1120);
       }
 
       function closePartsExample(scope) {
@@ -962,20 +918,111 @@
         }
       }
 
+      function isBefore(first, second) {
+        return Boolean(
+          first.compareDocumentPosition(second) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+        );
+      }
+
+      function getOpenAnswerHeight(item) {
+        if (!item) {
+          return 0;
+        }
+
+        const answer = item.querySelector('.faq-answer-content');
+        return answer ? answer.getBoundingClientRect().height : 0;
+      }
+
+      function animateHeight(options) {
+        const token = ++animationToken;
+        const startTime = performance.now();
+        const duration = 1100;
+        const preserve = Boolean(options && options.preserve);
+        const button = options && options.button;
+
+        if (finishTimer) {
+          clearTimeout(finishTimer);
+        }
+
+        /*
+          일반 질문은 이전 버전처럼 매 프레임 높이를 동기화합니다.
+          긴 답변이 위에서 접히는 특별한 경우에만 부모 iframe의
+          축소를 잠시 보류해 클릭한 질문이 화면 밖으로 밀리지 않게 합니다.
+        */
+        function update(currentTime) {
+          if (token !== animationToken) {
+            return;
+          }
+
+          const height = getPageHeight();
+
+          if (preserve) {
+            sendMessage({
+              type: 'iroha-qna-preserve-grow',
+              height: height
+            });
+          } else {
+            sendMessage({
+              type: 'iroha-qna-height',
+              height: height
+            });
+          }
+
+          if (currentTime - startTime < duration) {
+            requestAnimationFrame(update);
+          }
+        }
+
+        requestAnimationFrame(update);
+
+        finishTimer = setTimeout(function () {
+          if (token !== animationToken) {
+            return;
+          }
+
+          const finalHeight = getPageHeight();
+
+          if (preserve && button) {
+            sendMessage({
+              type: 'iroha-qna-preserve-end',
+              height: finalHeight,
+              top: button.getBoundingClientRect().top
+            });
+          } else {
+            sendMessage({
+              type: 'iroha-qna-height',
+              height: finalHeight
+            });
+          }
+        }, 1160);
+      }
+
       questions.forEach(function (button) {
         button.addEventListener('click', function () {
           const item = button.closest('.faq-item');
           const willOpen = !item.classList.contains('open');
+          const currentlyOpen = document.querySelector('.faq-item.open');
 
           /*
-           * 반드시 DOM 변경 전에 현재 버튼 위치를 부모 페이지에 저장합니다.
-           * 이후 긴 답변이 접혀도, 같은 버튼이 화면의 같은 높이에 남도록
-           * 부모 페이지가 최종 한 번만 정확히 보정합니다.
-           */
-          sendMessage({
-            type: 'iroha-qna-anchor-start',
-            top: button.getBoundingClientRect().top
-          });
+            위치 보정은 아래 조건을 모두 만족할 때만 사용합니다.
+            1. 다른 질문이 이미 열려 있음
+            2. 열린 질문이 새로 누른 질문보다 위에 있음
+            3. 접힐 답변이 충분히 길어 화면 점프가 발생할 가능성이 큼
+          */
+          const shouldPreserve =
+            Boolean(currentlyOpen) &&
+            currentlyOpen !== item &&
+            isBefore(currentlyOpen, item) &&
+            getOpenAnswerHeight(currentlyOpen) >= 420;
+
+          if (shouldPreserve) {
+            sendMessage({
+              type: 'iroha-qna-preserve-start',
+              top: button.getBoundingClientRect().top,
+              height: getPageHeight()
+            });
+          }
 
           document.querySelectorAll('.faq-item').forEach(function (otherItem) {
             if (otherItem !== item) {
@@ -1000,7 +1047,10 @@
             willOpen ? 'true' : 'false'
           );
 
-          startStableResize(button);
+          animateHeight({
+            preserve: shouldPreserve,
+            button: button
+          });
         });
       });
 
@@ -1009,41 +1059,39 @@
           const example = button.nextElementSibling;
           const willOpen = !example.classList.contains('open');
 
-          sendMessage({
-            type: 'iroha-qna-anchor-start',
-            top: button.getBoundingClientRect().top
-          });
-
           example.classList.toggle('open', willOpen);
           button.setAttribute(
             'aria-expanded',
             willOpen ? 'true' : 'false'
           );
 
-          startStableResize(button);
+          animateHeight({
+            preserve: false,
+            button: button
+          });
         });
       });
 
       window.addEventListener('load', function () {
-        sendInitialHeight();
-        setTimeout(sendInitialHeight, 150);
-        setTimeout(sendInitialHeight, 600);
+        sendHeight();
+        setTimeout(sendHeight, 150);
+        setTimeout(sendHeight, 600);
       });
 
-      window.addEventListener('resize', sendInitialHeight);
+      window.addEventListener('resize', sendHeight);
 
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(sendInitialHeight);
+        document.fonts.ready.then(sendHeight);
       }
 
       if ('ResizeObserver' in window) {
         const observer = new ResizeObserver(function () {
           /*
-           * 클릭 애니메이션 도중에는 부모 높이를 자동 축소하지 않습니다.
-           * 초기 로드나 일반 리사이즈에서만 최종 높이를 동기화합니다.
-           */
-          if (!finalizeTimer) {
-            sendInitialHeight();
+            클릭 애니메이션이 끝난 뒤 최종 높이는 animateHeight가 보냅니다.
+            일반적인 글꼴·화면 크기 변화는 여기서 다시 동기화합니다.
+          */
+          if (!finishTimer) {
+            sendHeight();
           }
         });
 

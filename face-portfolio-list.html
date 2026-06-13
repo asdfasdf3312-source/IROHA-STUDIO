@@ -305,7 +305,7 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       opacity: 1;
-      transition: opacity 0.28s ease;
+      transition: opacity 0.18s ease;
     }
 
     .lightbox.is-opening {
@@ -327,8 +327,8 @@
       user-select: none;
       -webkit-user-drag: none;
       transition:
-        opacity 0.28s ease,
-        transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.18s ease,
+        transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
@@ -357,7 +357,7 @@
     }
 
     .lightbox-image.zoomed {
-      width: min(220vw, 3000px);
+      width: min(165vw, 2200px);
       max-width: none;
       max-height: none;
       cursor: grab;
@@ -542,7 +542,7 @@
       }
 
       .lightbox-image.zoomed {
-        width: 240vw;
+        width: 180vw;
       }
 
       .lightbox.zoom-active .lightbox-image.zoomed {
@@ -864,7 +864,7 @@
 
               setTimeout(function () {
                 isSwitching = false;
-              }, 340);
+              }, 240);
             });
           });
         }
@@ -873,7 +873,7 @@
         preload.onerror = changeImage;
         preload.src = nextItem.src;
 
-        setTimeout(changeImage, 180);
+        setTimeout(changeImage, 120);
       }
 
       function openLightbox(index) {

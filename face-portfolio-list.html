@@ -327,8 +327,8 @@
       user-select: none;
       -webkit-user-drag: none;
       transition:
-        opacity 0.38s ease,
-        transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.24s ease,
+        transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
@@ -336,42 +336,14 @@
 
     .lightbox-image.slide-enter-left {
       opacity: 1;
-      transform: translateX(-46px) scale(0.996);
+      transform: translateX(-30px) scale(0.997);
       transition: none;
     }
 
     .lightbox-image.slide-enter-right {
       opacity: 1;
-      transform: translateX(46px) scale(0.996);
+      transform: translateX(30px) scale(0.997);
       transition: none;
-    }
-
-    .lightbox-slide-clone {
-      position: fixed;
-      z-index: 3;
-      display: block;
-      object-fit: contain;
-      pointer-events: none;
-      user-select: none;
-      -webkit-user-drag: none;
-      border: 2px solid rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      background: #ffffff;
-      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
-      opacity: 1;
-      transition:
-        opacity 0.38s ease,
-        transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .lightbox-slide-clone.slide-leave-left {
-      opacity: 0;
-      transform: translateX(-54px) scale(0.996);
-    }
-
-    .lightbox-slide-clone.slide-leave-right {
-      opacity: 0;
-      transform: translateX(54px) scale(0.996);
     }
 
     .lightbox-image.zoomed {
@@ -689,6 +661,12 @@
       let zoomTargetScrollLeft = 0;
       let zoomTargetScrollTop = 0;
       let zoomScrollRaf = null;
+      let zoomLastX = 0;
+      let zoomLastY = 0;
+      let zoomLastTime = 0;
+      let zoomVelocityX = 0;
+      let zoomVelocityY = 0;
+      let zoomMomentumRaf = null;
 
       function sendHeight() {
         const height = Math.ceil(
@@ -809,8 +787,48 @@
         }
       }
 
+      function stopZoomMomentum() {
+        if (zoomMomentumRaf !== null) {
+          cancelAnimationFrame(zoomMomentumRaf);
+          zoomMomentumRaf = null;
+        }
+      }
+
+      function runZoomMomentum() {
+        if (
+          Math.abs(zoomVelocityX) < 0.12 &&
+          Math.abs(zoomVelocityY) < 0.12
+        ) {
+          zoomMomentumRaf = null;
+          return;
+        }
+
+        lightbox.scrollLeft += zoomVelocityX;
+        lightbox.scrollTop += zoomVelocityY;
+
+        zoomVelocityX *= 0.90;
+        zoomVelocityY *= 0.90;
+
+        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+      }
+
+      function startZoomMomentum() {
+        stopZoomSmoothScroll();
+        stopZoomMomentum();
+
+        if (
+          Math.abs(zoomVelocityX) < 0.8 &&
+          Math.abs(zoomVelocityY) < 0.8
+        ) {
+          return;
+        }
+
+        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+      }
+
       function resetLightboxZoom() {
         stopZoomSmoothScroll();
+        stopZoomMomentum();
 
         lightboxImage.classList.remove(
           'zoomed',
@@ -862,42 +880,20 @@
 
           changed = true;
 
-          const rect = lightboxImage.getBoundingClientRect();
-          const clone = document.createElement('img');
-
-          clone.className = 'lightbox-slide-clone';
-          clone.src = lightboxImage.src;
-          clone.alt = '';
-          clone.style.left = rect.left + 'px';
-          clone.style.top = rect.top + 'px';
-          clone.style.width = rect.width + 'px';
-          clone.style.height = rect.height + 'px';
-
-          lightbox.appendChild(clone);
-
           const enterClass = step > 0
             ? 'slide-enter-right'
             : 'slide-enter-left';
-
-          const leaveClass = step > 0
-            ? 'slide-leave-left'
-            : 'slide-leave-right';
 
           updateLightbox(nextIndex);
           lightboxImage.classList.add(enterClass);
 
           requestAnimationFrame(function () {
             requestAnimationFrame(function () {
-              clone.classList.add(leaveClass);
               lightboxImage.classList.remove(enterClass);
 
               setTimeout(function () {
-                if (clone && clone.parentNode) {
-                  clone.parentNode.removeChild(clone);
-                }
-
                 isSwitching = false;
-              }, 430);
+              }, 340);
             });
           });
         }
@@ -907,10 +903,10 @@
         preload.src = nextItem.src;
 
         /*
-          기본은 다음 이미지를 미리 불러온 뒤 슬라이드쇼처럼 전환합니다.
-          네트워크가 느릴 때만 fallback으로 처리합니다.
+          다음 이미지를 미리 불러온 뒤 전환합니다.
+          잔상처럼 남는 이전 사진 복제본은 사용하지 않습니다.
         */
-        setTimeout(changeImage, 900);
+        setTimeout(changeImage, 700);
       }
 
       function openLightbox(index) {
@@ -1078,6 +1074,7 @@
         }
 
         stopZoomSmoothScroll();
+        stopZoomMomentum();
 
         zoomDragging = true;
         zoomMoved = false;
@@ -1087,6 +1084,11 @@
         zoomStartScrollTop = lightbox.scrollTop;
         zoomTargetScrollLeft = zoomStartScrollLeft;
         zoomTargetScrollTop = zoomStartScrollTop;
+        zoomLastX = event.clientX;
+        zoomLastY = event.clientY;
+        zoomLastTime = performance.now();
+        zoomVelocityX = 0;
+        zoomVelocityY = 0;
 
         lightboxImage.classList.add('dragging');
 
@@ -1117,13 +1119,28 @@
         }
 
         if (zoomMoved) {
+          const now = performance.now();
+          const deltaX = event.clientX - zoomLastX;
+          const deltaY = event.clientY - zoomLastY;
+          const deltaTime = Math.max(8, now - zoomLastTime);
+          const velocityScale = Math.min(2.2, 16 / deltaTime) * 1.28;
+
+          zoomVelocityX = -deltaX * velocityScale;
+          zoomVelocityY = -deltaY * velocityScale;
+
           zoomTargetScrollLeft =
             zoomStartScrollLeft - distanceX;
 
           zoomTargetScrollTop =
             zoomStartScrollTop - distanceY;
 
-          requestZoomSmoothScroll();
+          lightbox.scrollLeft = zoomTargetScrollLeft;
+          lightbox.scrollTop = zoomTargetScrollTop;
+
+          zoomLastX = event.clientX;
+          zoomLastY = event.clientY;
+          zoomLastTime = now;
+
           event.preventDefault();
         }
       });
@@ -1150,6 +1167,7 @@
 
         if (shouldZoomOut) {
           stopZoomSmoothScroll();
+          stopZoomMomentum();
           lightboxImage.classList.remove('zoomed');
           lightbox.classList.remove('zoom-active');
 
@@ -1158,6 +1176,8 @@
             left: 0,
             behavior: 'smooth'
           });
+        } else if (zoomMoved) {
+          startZoomMomentum();
         }
 
         zoomMoved = false;

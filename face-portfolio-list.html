@@ -299,6 +299,8 @@
       justify-content: center;
       padding: 18px;
       overflow: auto;
+      scroll-behavior: auto;
+      overscroll-behavior: contain;
       background: rgba(240, 250, 249, 0.94);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -362,6 +364,7 @@
       touch-action: none;
       transform: none !important;
       opacity: 1 !important;
+      will-change: scroll-position;
     }
 
     .lightbox.zoom-active {
@@ -664,6 +667,9 @@
       let zoomStartY = 0;
       let zoomStartScrollLeft = 0;
       let zoomStartScrollTop = 0;
+      let zoomTargetScrollLeft = 0;
+      let zoomTargetScrollTop = 0;
+      let zoomScrollRaf = null;
 
       function sendHeight() {
         const height = Math.ceil(
@@ -746,7 +752,47 @@
         sendHeight();
       }
 
+      function stopZoomSmoothScroll() {
+        if (zoomScrollRaf !== null) {
+          cancelAnimationFrame(zoomScrollRaf);
+          zoomScrollRaf = null;
+        }
+      }
+
+      function runZoomSmoothScroll() {
+        const currentLeft = lightbox.scrollLeft;
+        const currentTop = lightbox.scrollTop;
+
+        const nextLeft =
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.55;
+
+        const nextTop =
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.55;
+
+        lightbox.scrollLeft = nextLeft;
+        lightbox.scrollTop = nextTop;
+
+        if (
+          Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
+          Math.abs(zoomTargetScrollTop - nextTop) > 0.5
+        ) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        } else {
+          lightbox.scrollLeft = zoomTargetScrollLeft;
+          lightbox.scrollTop = zoomTargetScrollTop;
+          zoomScrollRaf = null;
+        }
+      }
+
+      function requestZoomSmoothScroll() {
+        if (zoomScrollRaf === null) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        }
+      }
+
       function resetLightboxZoom() {
+        stopZoomSmoothScroll();
+
         lightboxImage.classList.remove(
           'zoomed',
           'dragging',
@@ -982,6 +1028,9 @@
                 0,
                 (lightbox.scrollHeight - lightbox.clientHeight) / 2
               );
+
+            zoomTargetScrollLeft = lightbox.scrollLeft;
+            zoomTargetScrollTop = lightbox.scrollTop;
           });
 
           return;
@@ -991,12 +1040,16 @@
           return;
         }
 
+        stopZoomSmoothScroll();
+
         zoomDragging = true;
         zoomMoved = false;
         zoomStartX = event.clientX;
         zoomStartY = event.clientY;
         zoomStartScrollLeft = lightbox.scrollLeft;
         zoomStartScrollTop = lightbox.scrollTop;
+        zoomTargetScrollLeft = zoomStartScrollLeft;
+        zoomTargetScrollTop = zoomStartScrollTop;
 
         lightboxImage.classList.add('dragging');
 
@@ -1027,12 +1080,13 @@
         }
 
         if (zoomMoved) {
-          lightbox.scrollLeft =
+          zoomTargetScrollLeft =
             zoomStartScrollLeft - distanceX;
 
-          lightbox.scrollTop =
+          zoomTargetScrollTop =
             zoomStartScrollTop - distanceY;
 
+          requestZoomSmoothScroll();
           event.preventDefault();
         }
       });
@@ -1058,6 +1112,7 @@
         }
 
         if (shouldZoomOut) {
+          stopZoomSmoothScroll();
           lightboxImage.classList.remove('zoomed');
           lightbox.classList.remove('zoom-active');
 

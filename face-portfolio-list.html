@@ -299,9 +299,15 @@
       justify-content: center;
       padding: 18px;
       overflow: auto;
-      background: rgba(240, 250, 249, 0.94);
+      background: rgba(0, 0, 0, 0.94);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      opacity: 1;
+      transition: opacity 0.28s ease;
+    }
+
+    .lightbox.is-opening {
+      opacity: 0;
     }
 
     .lightbox-image {
@@ -319,9 +325,33 @@
       user-select: none;
       -webkit-user-drag: none;
       transition:
+        opacity 0.28s ease,
+        transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
+    }
+
+    .lightbox-image.slide-out-left {
+      opacity: 0;
+      transform: translateX(-42px) scale(0.985);
+    }
+
+    .lightbox-image.slide-out-right {
+      opacity: 0;
+      transform: translateX(42px) scale(0.985);
+    }
+
+    .lightbox-image.slide-in-left {
+      opacity: 0;
+      transform: translateX(-42px) scale(0.985);
+      transition: none;
+    }
+
+    .lightbox-image.slide-in-right {
+      opacity: 0;
+      transform: translateX(42px) scale(0.985);
+      transition: none;
     }
 
     .lightbox-image.zoomed {
@@ -330,6 +360,8 @@
       max-height: none;
       cursor: grab;
       touch-action: none;
+      transform: none !important;
+      opacity: 1 !important;
     }
 
     .lightbox-image.zoomed.dragging {
@@ -602,6 +634,7 @@
       let currentFilter = 'all';
       let visibleItems = [];
       let currentImageIndex = 0;
+      let isSwitching = false;
 
       let isDragging = false;
       let moved = false;
@@ -697,6 +730,23 @@
         sendHeight();
       }
 
+      function resetLightboxZoom() {
+        lightboxImage.classList.remove(
+          'zoomed',
+          'dragging',
+          'slide-out-left',
+          'slide-out-right',
+          'slide-in-left',
+          'slide-in-right'
+        );
+
+        lightbox.classList.remove('zoom-active');
+        lightbox.scrollTop = 0;
+        lightbox.scrollLeft = 0;
+        zoomDragging = false;
+        zoomMoved = false;
+      }
+
       function updateLightbox(index) {
         currentImageIndex =
           (index + visibleItems.length) % visibleItems.length;
@@ -709,26 +759,85 @@
           (currentImageIndex + 1) + ' / ' + visibleItems.length;
       }
 
+      function moveLightbox(step) {
+        if (!visibleItems.length || isSwitching) {
+          return;
+        }
+
+        isSwitching = true;
+
+        const nextIndex =
+          (currentImageIndex + step + visibleItems.length) %
+          visibleItems.length;
+
+        const outClass = step > 0
+          ? 'slide-out-left'
+          : 'slide-out-right';
+
+        const inClass = step > 0
+          ? 'slide-in-right'
+          : 'slide-in-left';
+
+        resetLightboxZoom();
+        lightboxImage.classList.add(outClass);
+
+        const nextItem = visibleItems[nextIndex];
+        const preload = new Image();
+        let changed = false;
+
+        function changeImage() {
+          if (changed) {
+            return;
+          }
+
+          changed = true;
+
+          updateLightbox(nextIndex);
+          lightboxImage.classList.remove(outClass);
+          lightboxImage.classList.add(inClass);
+
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              lightboxImage.classList.remove(inClass);
+
+              setTimeout(function () {
+                isSwitching = false;
+              }, 340);
+            });
+          });
+        }
+
+        preload.onload = changeImage;
+        preload.onerror = changeImage;
+        preload.src = nextItem.src;
+
+        setTimeout(changeImage, 180);
+      }
+
       function openLightbox(index) {
         if (!visibleItems.length) return;
 
         updateLightbox(index);
-        lightboxImage.classList.remove('zoomed', 'dragging');
-        lightbox.classList.remove('zoom-active');
-        lightbox.scrollTop = 0;
-        lightbox.scrollLeft = 0;
+        resetLightboxZoom();
+        lightbox.classList.add('is-opening');
         lightbox.hidden = false;
         document.body.classList.add('lightbox-open');
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            lightbox.classList.remove('is-opening');
+          });
+        });
+
         lightboxClose.focus();
       }
 
       function closeLightbox() {
         lightbox.hidden = true;
         lightboxImage.src = '';
-        lightboxImage.classList.remove('zoomed', 'dragging');
-        lightbox.classList.remove('zoom-active');
-        zoomDragging = false;
-        zoomMoved = false;
+        resetLightboxZoom();
+        lightbox.classList.remove('is-opening');
+        isSwitching = false;
         lightbox.scrollTop = 0;
         lightbox.scrollLeft = 0;
         document.body.classList.remove('lightbox-open');
@@ -831,19 +940,11 @@
       lightboxClose.addEventListener('click', closeLightbox);
 
       lightboxPrev.addEventListener('click', function () {
-        lightboxImage.classList.remove('zoomed', 'dragging');
-        lightbox.classList.remove('zoom-active');
-        lightbox.scrollTop = 0;
-        lightbox.scrollLeft = 0;
-        updateLightbox(currentImageIndex - 1);
+        moveLightbox(-1);
       });
 
       lightboxNext.addEventListener('click', function () {
-        lightboxImage.classList.remove('zoomed', 'dragging');
-        lightbox.classList.remove('zoom-active');
-        lightbox.scrollTop = 0;
-        lightbox.scrollLeft = 0;
-        updateLightbox(currentImageIndex + 1);
+        moveLightbox(1);
       });
 
       lightboxImage.addEventListener('pointerdown', function (event) {
@@ -981,17 +1082,9 @@
         if (event.key === 'Escape') {
           closeLightbox();
         } else if (event.key === 'ArrowLeft') {
-          lightboxImage.classList.remove('zoomed', 'dragging');
-          lightbox.classList.remove('zoom-active');
-          lightbox.scrollTop = 0;
-          lightbox.scrollLeft = 0;
-          updateLightbox(currentImageIndex - 1);
+          moveLightbox(-1);
         } else if (event.key === 'ArrowRight') {
-          lightboxImage.classList.remove('zoomed', 'dragging');
-          lightbox.classList.remove('zoom-active');
-          lightbox.scrollTop = 0;
-          lightbox.scrollLeft = 0;
-          updateLightbox(currentImageIndex + 1);
+          moveLightbox(1);
         }
       });
 

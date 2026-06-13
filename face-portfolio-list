@@ -1,1 +1,1018 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>뽀잉눈｜페이셜｜성형</title>
 
+  <style>
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --mint: #76d8d2;
+      --mint-dark: #4eaaa5;
+      --mint-pale: #edf9f8;
+      --border: #b4e5e1;
+      --text: #333333;
+      --text-light: #819392;
+      --white: rgba(255, 255, 255, 0.97);
+      --shadow-sm: 0 5px 16px rgba(78, 170, 165, 0.10);
+      --shadow-md: 0 16px 42px rgba(78, 170, 165, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    body {
+      padding: 34px 16px 42px;
+      color: var(--text);
+      font-family: 'Paperozi', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    .section {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 32px;
+      background: var(--white);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .sec-bar {
+      width: 5px;
+      height: 22px;
+      flex: 0 0 5px;
+      border-radius: 999px;
+      background: var(--mint);
+    }
+
+    .sec-title {
+      margin: 0;
+      color: var(--text);
+      font-size: 23px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .sec-subtitle {
+      margin-left: 2px;
+      color: var(--text-light);
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .filter-btn {
+      min-width: 88px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--text-light);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--mint);
+      color: var(--mint-dark);
+    }
+
+    .filter-btn.active {
+      border-color: var(--mint);
+      background: var(--mint);
+      color: #ffffff;
+      box-shadow: 0 7px 18px rgba(78, 170, 165, 0.18);
+    }
+
+    .portfolio-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: -4px 0 22px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-left: 5px solid var(--mint);
+      border-radius: 16px;
+      background: var(--mint-pale);
+      color: var(--text-light);
+      font-size: 12.8px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .portfolio-notice-icon {
+      flex: 0 0 auto;
+      margin-top: 1px;
+      color: var(--mint-dark);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .portfolio-notice strong {
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+
+    .portfolio-grid {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0 12px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-inline: contain;
+      touch-action: pan-y;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .portfolio-grid.dragging {
+      cursor: grabbing;
+      scroll-snap-type: none;
+    }
+
+    .portfolio-grid::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .portfolio-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .portfolio-grid::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: var(--mint);
+    }
+
+    .portfolio-card {
+      position: relative;
+      flex: 0 0 auto;
+      width: min(78vw, 560px);
+      height: 380px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--border);
+      border-radius: 22px;
+      background: var(--mint-pale);
+      box-shadow: var(--shadow-sm);
+      scroll-snap-align: start;
+      cursor: zoom-in;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--mint);
+      box-shadow: 0 12px 26px rgba(78, 170, 165, 0.15);
+    }
+
+    .portfolio-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    .portfolio-badge {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 2;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .empty-state {
+      width: 100%;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 34px 20px;
+      border: 1.5px dashed var(--border);
+      border-radius: 22px;
+      background: var(--mint-pale);
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .empty-title {
+      color: var(--mint-dark);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .empty-text {
+      color: var(--text-light);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .lightbox[hidden] {
+      display: none !important;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow: auto;
+      background: rgba(240, 250, 249, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .lightbox-image {
+      display: block;
+      max-width: min(97vw, 1500px);
+      max-height: 93vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
+      cursor: zoom-in;
+      user-select: none;
+      -webkit-user-drag: none;
+      transition:
+        width 0.28s ease,
+        max-width 0.28s ease,
+        max-height 0.28s ease;
+    }
+
+    .lightbox-image.zoomed {
+      width: min(220vw, 3000px);
+      max-width: none;
+      max-height: none;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .lightbox-image.zoomed.dragging {
+      cursor: grabbing;
+    }
+
+    .lightbox.zoom-active .lightbox-nav {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .lightbox-close,
+    .lightbox-nav {
+      position: fixed;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      color: #ffffff;
+      background: rgba(118, 216, 210, 0.95);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+      transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease,
+        background-color 0.2s ease;
+    }
+
+    .lightbox-close {
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 26px;
+    }
+
+    .lightbox-nav {
+      top: 50%;
+      width: 48px;
+      height: 64px;
+      border-radius: 16px;
+      transform: translateY(-50%);
+      font-size: 30px;
+    }
+
+    .lightbox-prev {
+      left: 20px;
+    }
+
+    .lightbox-next {
+      right: 20px;
+    }
+
+    .lightbox-guide {
+      position: fixed;
+      left: 50%;
+      bottom: 52px;
+      z-index: 2;
+      transform: translateX(-50%);
+      max-width: calc(100vw - 40px);
+      padding: 9px 14px;
+      border: 1px solid rgba(180, 229, 225, 0.95);
+      border-radius: 999px;
+      color: var(--mint-dark);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 7px 20px rgba(78, 170, 165, 0.14);
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .lightbox-count {
+      position: fixed;
+      left: 50%;
+      bottom: 17px;
+      z-index: 2;
+      transform: translateX(-50%);
+      padding: 7px 13px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    body.lightbox-open {
+      overflow: hidden;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 14px 34px;
+      }
+
+      .section {
+        padding: 24px 18px;
+        border-radius: 22px;
+      }
+
+      .sec-title {
+        font-size: 20px;
+      }
+
+      .sec-subtitle {
+        width: 100%;
+        margin-left: 16px;
+        margin-top: -4px;
+        font-size: 12px;
+      }
+
+      .filter-btn {
+        min-width: auto;
+        padding: 9px 14px;
+        font-size: 13px;
+      }
+
+      .portfolio-notice {
+        margin-bottom: 18px;
+        padding: 12px 13px;
+        font-size: 12px;
+      }
+
+      .portfolio-card {
+        width: 84vw;
+        height: 300px;
+        border-radius: 17px;
+      }
+
+      .lightbox-nav {
+        top: auto;
+        bottom: 10px;
+        width: 46px;
+        height: 42px;
+        transform: none;
+      }
+
+      .lightbox-prev {
+        left: calc(50% - 58px);
+      }
+
+      .lightbox-next {
+        right: calc(50% - 58px);
+      }
+
+      .lightbox-guide {
+        bottom: 104px;
+        width: calc(100vw - 28px);
+        padding: 8px 11px;
+        border-radius: 14px;
+        font-size: 11.5px;
+        white-space: normal;
+      }
+
+      .lightbox-count {
+        bottom: 58px;
+      }
+
+      .lightbox-image.zoomed {
+        width: 240vw;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="section" aria-label="뽀잉눈｜페이셜｜성형">
+    <div class="sec-header">
+      <div class="sec-bar" aria-hidden="true"></div>
+      <h1 class="sec-title">뽀잉눈｜페이셜｜성형</h1>
+      <span class="sec-subtitle">
+        🔎 이미지를 두 번 클릭해 확대해보세요!
+      </span>
+    </div>
+
+    <div class="filter-bar" role="tablist" aria-label="작업 분류">
+      <button class="filter-btn active" type="button" data-filter="all">
+        전체
+      </button>
+      <button class="filter-btn" type="button" data-filter="boing-eye">
+        뽀잉눈
+      </button>
+      <button class="filter-btn" type="button" data-filter="facial">
+        페이셜
+      </button>
+      <button class="filter-btn" type="button" data-filter="detail">
+        성형디테일
+      </button>
+    </div>
+
+    <div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
+      <div class="portfolio-notice-icon">※</div>
+      <div>
+        <strong>Blender를 활용한 페이셜 성형·쉐이프키 디테일</strong> 작업 예시입니다.<br>
+        아바타 구조에 따라 작업 가능 범위가 달라질 수 있으며, 세부 내용은 상담 후 안내드립니다.
+      </div>
+    </div>
+
+    <div id="face-portfolio-grid" class="portfolio-grid"></div>
+  </section>
+
+  <div
+    id="face-portfolio-lightbox"
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="작업 이미지 크게 보기"
+    hidden
+  >
+    <button class="lightbox-close" type="button" aria-label="닫기">×</button>
+    <button class="lightbox-nav lightbox-prev" type="button" aria-label="이전 이미지">‹</button>
+    <img class="lightbox-image" src="" alt="">
+    <button class="lightbox-nav lightbox-next" type="button" aria-label="다음 이미지">›</button>
+
+    <div class="lightbox-guide">
+      🖱️ 확대 후 이미지를 누른 채 드래그하면 원하는 부분을 볼 수 있습니다.
+    </div>
+
+    <div class="lightbox-count" aria-live="polite"></div>
+  </div>
+
+  <script>
+    (function () {
+      const portfolioItems = [
+        {
+          src: './images/portfolio/blender-shapekey-face-01.png',
+          category: 'detail',
+          title: '성형 디테일 1'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-02.png',
+          category: 'detail',
+          title: '성형 디테일 2'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-03.png',
+          category: 'detail',
+          title: '성형 디테일 3'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-04.png',
+          category: 'detail',
+          title: '성형 디테일 4'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-05.png',
+          category: 'detail',
+          title: '성형 디테일 5'
+        }
+      ];
+
+      const grid = document.getElementById('face-portfolio-grid');
+      const filterButtons = Array.from(
+        document.querySelectorAll('.filter-btn')
+      );
+
+      const lightbox = document.getElementById('face-portfolio-lightbox');
+      const lightboxImage = lightbox.querySelector('.lightbox-image');
+      const lightboxClose = lightbox.querySelector('.lightbox-close');
+      const lightboxPrev = lightbox.querySelector('.lightbox-prev');
+      const lightboxNext = lightbox.querySelector('.lightbox-next');
+      const lightboxCount = lightbox.querySelector('.lightbox-count');
+
+      let currentFilter = 'all';
+      let visibleItems = [];
+      let currentImageIndex = 0;
+
+      let isDragging = false;
+      let moved = false;
+      let startX = 0;
+      let startScrollLeft = 0;
+      let pressedCard = null;
+
+      let zoomDragging = false;
+      let zoomMoved = false;
+      let zoomStartX = 0;
+      let zoomStartY = 0;
+      let zoomStartScrollLeft = 0;
+      let zoomStartScrollTop = 0;
+
+      function sendHeight() {
+        const height = Math.ceil(
+          Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight
+          )
+        );
+
+        window.parent.postMessage(
+          {
+            type: 'iroha-face-portfolio-height',
+            height: height
+          },
+          '*'
+        );
+      }
+
+      function getCategoryLabel(category) {
+        if (category === 'boing-eye') return '뽀잉눈';
+        if (category === 'facial') return '페이셜';
+        if (category === 'detail') return '성형디테일';
+        return '';
+      }
+
+      function renderPortfolio() {
+        visibleItems = portfolioItems.filter(function (item) {
+          return currentFilter === 'all' ||
+            item.category === currentFilter;
+        });
+
+        grid.innerHTML = '';
+
+        if (visibleItems.length === 0) {
+          grid.innerHTML =
+            '<div class="empty-state">' +
+              '<div class="empty-icon">🖼️</div>' +
+              '<div class="empty-title">등록된 작업물이 없습니다.</div>' +
+              '<div class="empty-text">' +
+                '사진이 준비되면 이 메뉴에 작업물이 표시됩니다.' +
+              '</div>' +
+            '</div>';
+
+          sendHeight();
+          return;
+        }
+
+        visibleItems.forEach(function (item, index) {
+          const card = document.createElement('div');
+          card.className = 'portfolio-card';
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          card.setAttribute(
+            'aria-label',
+            (item.title || '작업 이미지') + ' 크게 보기'
+          );
+
+          const image = document.createElement('img');
+          image.src = item.src;
+          image.alt = item.title || '작업 이미지';
+          image.loading = index < 2 ? 'eager' : 'lazy';
+
+          const badge = document.createElement('div');
+          badge.className = 'portfolio-badge';
+          badge.textContent = getCategoryLabel(item.category);
+
+          card.appendChild(image);
+          card.appendChild(badge);
+
+          card.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openLightbox(index);
+            }
+          });
+
+          grid.appendChild(card);
+        });
+
+        sendHeight();
+      }
+
+      function updateLightbox(index) {
+        currentImageIndex =
+          (index + visibleItems.length) % visibleItems.length;
+
+        const item = visibleItems[currentImageIndex];
+
+        lightboxImage.src = item.src;
+        lightboxImage.alt = item.title || '작업 이미지';
+        lightboxCount.textContent =
+          (currentImageIndex + 1) + ' / ' + visibleItems.length;
+      }
+
+      function openLightbox(index) {
+        if (!visibleItems.length) return;
+
+        updateLightbox(index);
+        lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
+        lightbox.scrollTop = 0;
+        lightbox.scrollLeft = 0;
+        lightbox.hidden = false;
+        document.body.classList.add('lightbox-open');
+        lightboxClose.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lightboxImage.src = '';
+        lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
+        zoomDragging = false;
+        zoomMoved = false;
+        lightbox.scrollTop = 0;
+        lightbox.scrollLeft = 0;
+        document.body.classList.remove('lightbox-open');
+      }
+
+      filterButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          currentFilter = button.dataset.filter;
+
+          filterButtons.forEach(function (otherButton) {
+            otherButton.classList.toggle(
+              'active',
+              otherButton === button
+            );
+          });
+
+          renderPortfolio();
+        });
+      });
+
+      grid.addEventListener('pointerdown', function (event) {
+        if (event.pointerType === 'mouse' && event.button !== 0) {
+          return;
+        }
+
+        isDragging = true;
+        moved = false;
+        pressedCard = event.target.closest('.portfolio-card');
+        startX = event.clientX;
+        startScrollLeft = grid.scrollLeft;
+      });
+
+      grid.addEventListener('pointermove', function (event) {
+        if (!isDragging) return;
+
+        const distance = event.clientX - startX;
+
+        if (!moved && Math.abs(distance) > 5) {
+          moved = true;
+          grid.classList.add('dragging');
+
+          if (
+            event.pointerId !== undefined &&
+            !grid.hasPointerCapture(event.pointerId)
+          ) {
+            grid.setPointerCapture(event.pointerId);
+          }
+        }
+
+        if (moved) {
+          grid.scrollLeft = startScrollLeft - distance;
+          event.preventDefault();
+        }
+      });
+
+      function finishPointer(event, openWhenClicked) {
+        if (!isDragging) return;
+
+        const cardToOpen = !moved && openWhenClicked
+          ? pressedCard
+          : null;
+
+        isDragging = false;
+        moved = false;
+        pressedCard = null;
+        grid.classList.remove('dragging');
+
+        if (
+          event &&
+          event.pointerId !== undefined &&
+          grid.hasPointerCapture(event.pointerId)
+        ) {
+          grid.releasePointerCapture(event.pointerId);
+        }
+
+        if (cardToOpen) {
+          const cards = Array.from(
+            grid.querySelectorAll('.portfolio-card')
+          );
+          const index = cards.indexOf(cardToOpen);
+
+          if (index !== -1) {
+            openLightbox(index);
+          }
+        }
+      }
+
+      grid.addEventListener('pointerup', function (event) {
+        finishPointer(event, true);
+      });
+
+      grid.addEventListener('pointercancel', function (event) {
+        finishPointer(event, false);
+      });
+
+      grid.addEventListener('lostpointercapture', function (event) {
+        finishPointer(event, false);
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+
+      lightboxPrev.addEventListener('click', function () {
+        lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
+        lightbox.scrollTop = 0;
+        lightbox.scrollLeft = 0;
+        updateLightbox(currentImageIndex - 1);
+      });
+
+      lightboxNext.addEventListener('click', function () {
+        lightboxImage.classList.remove('zoomed', 'dragging');
+        lightbox.classList.remove('zoom-active');
+        lightbox.scrollTop = 0;
+        lightbox.scrollLeft = 0;
+        updateLightbox(currentImageIndex + 1);
+      });
+
+      lightboxImage.addEventListener('pointerdown', function (event) {
+        event.stopPropagation();
+
+        if (!lightboxImage.classList.contains('zoomed')) {
+          lightboxImage.classList.add('zoomed');
+          lightbox.classList.add('zoom-active');
+
+          requestAnimationFrame(function () {
+            lightbox.scrollLeft =
+              Math.max(
+                0,
+                (lightbox.scrollWidth - lightbox.clientWidth) / 2
+              );
+
+            lightbox.scrollTop =
+              Math.max(
+                0,
+                (lightbox.scrollHeight - lightbox.clientHeight) / 2
+              );
+          });
+
+          return;
+        }
+
+        if (event.pointerType === 'mouse' && event.button !== 0) {
+          return;
+        }
+
+        zoomDragging = true;
+        zoomMoved = false;
+        zoomStartX = event.clientX;
+        zoomStartY = event.clientY;
+        zoomStartScrollLeft = lightbox.scrollLeft;
+        zoomStartScrollTop = lightbox.scrollTop;
+
+        lightboxImage.classList.add('dragging');
+
+        if (
+          event.pointerId !== undefined &&
+          !lightboxImage.hasPointerCapture(event.pointerId)
+        ) {
+          lightboxImage.setPointerCapture(event.pointerId);
+        }
+      });
+
+      lightboxImage.addEventListener('pointermove', function (event) {
+        if (!zoomDragging) {
+          return;
+        }
+
+        const distanceX = event.clientX - zoomStartX;
+        const distanceY = event.clientY - zoomStartY;
+
+        if (
+          !zoomMoved &&
+          (
+            Math.abs(distanceX) > 4 ||
+            Math.abs(distanceY) > 4
+          )
+        ) {
+          zoomMoved = true;
+        }
+
+        if (zoomMoved) {
+          lightbox.scrollLeft =
+            zoomStartScrollLeft - distanceX;
+
+          lightbox.scrollTop =
+            zoomStartScrollTop - distanceY;
+
+          event.preventDefault();
+        }
+      });
+
+      function finishZoomDrag(event, allowClickToggle) {
+        if (!zoomDragging) {
+          return;
+        }
+
+        const shouldZoomOut =
+          allowClickToggle &&
+          !zoomMoved;
+
+        zoomDragging = false;
+        lightboxImage.classList.remove('dragging');
+
+        if (
+          event &&
+          event.pointerId !== undefined &&
+          lightboxImage.hasPointerCapture(event.pointerId)
+        ) {
+          lightboxImage.releasePointerCapture(event.pointerId);
+        }
+
+        if (shouldZoomOut) {
+          lightboxImage.classList.remove('zoomed');
+          lightbox.classList.remove('zoom-active');
+
+          lightbox.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }
+
+        zoomMoved = false;
+      }
+
+      lightboxImage.addEventListener('pointerup', function (event) {
+        finishZoomDrag(event, true);
+      });
+
+      lightboxImage.addEventListener('pointercancel', function (event) {
+        finishZoomDrag(event, false);
+      });
+
+      lightboxImage.addEventListener(
+        'lostpointercapture',
+        function (event) {
+          finishZoomDrag(event, false);
+        }
+      );
+
+      lightbox.addEventListener('click', function (event) {
+        if (event.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (lightbox.hidden) return;
+
+        if (event.key === 'Escape') {
+          closeLightbox();
+        } else if (event.key === 'ArrowLeft') {
+          lightboxImage.classList.remove('zoomed', 'dragging');
+          lightbox.classList.remove('zoom-active');
+          lightbox.scrollTop = 0;
+          lightbox.scrollLeft = 0;
+          updateLightbox(currentImageIndex - 1);
+        } else if (event.key === 'ArrowRight') {
+          lightboxImage.classList.remove('zoomed', 'dragging');
+          lightbox.classList.remove('zoom-active');
+          lightbox.scrollTop = 0;
+          lightbox.scrollLeft = 0;
+          updateLightbox(currentImageIndex + 1);
+        }
+      });
+
+      window.addEventListener('load', function () {
+        renderPortfolio();
+        sendHeight();
+        setTimeout(sendHeight, 250);
+        setTimeout(sendHeight, 800);
+      });
+
+      window.addEventListener('resize', sendHeight);
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(sendHeight);
+      }
+
+      if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(sendHeight);
+        observer.observe(document.body);
+      }
+    })();
+  </script>
+</body>
+</html>

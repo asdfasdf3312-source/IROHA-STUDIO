@@ -334,25 +334,15 @@
         max-height 0.28s ease;
     }
 
-    .lightbox-image.slide-out-left {
-      opacity: 0;
-      transform: translateX(-42px) scale(0.985);
-    }
-
-    .lightbox-image.slide-out-right {
-      opacity: 0;
-      transform: translateX(42px) scale(0.985);
-    }
-
-    .lightbox-image.slide-in-left {
-      opacity: 0;
-      transform: translateX(-42px) scale(0.985);
+    .lightbox-image.soft-in-left {
+      opacity: 0.92;
+      transform: translateX(-18px) scale(0.995);
       transition: none;
     }
 
-    .lightbox-image.slide-in-right {
-      opacity: 0;
-      transform: translateX(42px) scale(0.985);
+    .lightbox-image.soft-in-right {
+      opacity: 0.92;
+      transform: translateX(18px) scale(0.995);
       transition: none;
     }
 
@@ -764,10 +754,10 @@
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.55;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.75;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.55;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.75;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -796,10 +786,8 @@
         lightboxImage.classList.remove(
           'zoomed',
           'dragging',
-          'slide-out-left',
-          'slide-out-right',
-          'slide-in-left',
-          'slide-in-right'
+          'soft-in-left',
+          'soft-in-right'
         );
 
         lightbox.classList.remove('zoom-active');
@@ -832,16 +820,11 @@
           (currentImageIndex + step + visibleItems.length) %
           visibleItems.length;
 
-        const outClass = step > 0
-          ? 'slide-out-left'
-          : 'slide-out-right';
-
         const inClass = step > 0
-          ? 'slide-in-right'
-          : 'slide-in-left';
+          ? 'soft-in-right'
+          : 'soft-in-left';
 
         resetLightboxZoom();
-        lightboxImage.classList.add(outClass);
 
         const nextItem = visibleItems[nextIndex];
         const preload = new Image();
@@ -855,7 +838,6 @@
           changed = true;
 
           updateLightbox(nextIndex);
-          lightboxImage.classList.remove(outClass);
           lightboxImage.classList.add(inClass);
 
           requestAnimationFrame(function () {
@@ -864,7 +846,7 @@
 
               setTimeout(function () {
                 isSwitching = false;
-              }, 240);
+              }, 190);
             });
           });
         }
@@ -873,7 +855,7 @@
         preload.onerror = changeImage;
         preload.src = nextItem.src;
 
-        setTimeout(changeImage, 120);
+        setTimeout(changeImage, 90);
       }
 
       function openLightbox(index) {

@@ -327,26 +327,51 @@
       user-select: none;
       -webkit-user-drag: none;
       transition:
-        opacity 0.22s ease,
-        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-        filter 0.32s ease,
+        opacity 0.38s ease,
+        transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
     }
 
-    .lightbox-image.soft-in-left {
-      opacity: 0.97;
-      transform: translateX(-8px) scale(0.998);
-      filter: blur(1px);
+    .lightbox-image.slide-enter-left {
+      opacity: 1;
+      transform: translateX(-46px) scale(0.996);
       transition: none;
     }
 
-    .lightbox-image.soft-in-right {
-      opacity: 0.97;
-      transform: translateX(8px) scale(0.998);
-      filter: blur(1px);
+    .lightbox-image.slide-enter-right {
+      opacity: 1;
+      transform: translateX(46px) scale(0.996);
       transition: none;
+    }
+
+    .lightbox-slide-clone {
+      position: fixed;
+      z-index: 3;
+      display: block;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
+      opacity: 1;
+      transition:
+        opacity 0.38s ease,
+        transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lightbox-slide-clone.slide-leave-left {
+      opacity: 0;
+      transform: translateX(-54px) scale(0.996);
+    }
+
+    .lightbox-slide-clone.slide-leave-right {
+      opacity: 0;
+      transform: translateX(54px) scale(0.996);
     }
 
     .lightbox-image.zoomed {
@@ -758,10 +783,10 @@
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.92;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.98;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.92;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.98;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -790,8 +815,8 @@
         lightboxImage.classList.remove(
           'zoomed',
           'dragging',
-          'soft-in-left',
-          'soft-in-right'
+          'slide-enter-left',
+          'slide-enter-right'
         );
 
         lightbox.classList.remove('zoom-active');
@@ -824,10 +849,6 @@
           (currentImageIndex + step + visibleItems.length) %
           visibleItems.length;
 
-        const inClass = step > 0
-          ? 'soft-in-right'
-          : 'soft-in-left';
-
         resetLightboxZoom();
 
         const nextItem = visibleItems[nextIndex];
@@ -841,16 +862,42 @@
 
           changed = true;
 
+          const rect = lightboxImage.getBoundingClientRect();
+          const clone = document.createElement('img');
+
+          clone.className = 'lightbox-slide-clone';
+          clone.src = lightboxImage.src;
+          clone.alt = '';
+          clone.style.left = rect.left + 'px';
+          clone.style.top = rect.top + 'px';
+          clone.style.width = rect.width + 'px';
+          clone.style.height = rect.height + 'px';
+
+          lightbox.appendChild(clone);
+
+          const enterClass = step > 0
+            ? 'slide-enter-right'
+            : 'slide-enter-left';
+
+          const leaveClass = step > 0
+            ? 'slide-leave-left'
+            : 'slide-leave-right';
+
           updateLightbox(nextIndex);
-          lightboxImage.classList.add(inClass);
+          lightboxImage.classList.add(enterClass);
 
           requestAnimationFrame(function () {
             requestAnimationFrame(function () {
-              lightboxImage.classList.remove(inClass);
+              clone.classList.add(leaveClass);
+              lightboxImage.classList.remove(enterClass);
 
               setTimeout(function () {
+                if (clone && clone.parentNode) {
+                  clone.parentNode.removeChild(clone);
+                }
+
                 isSwitching = false;
-              }, 320);
+              }, 430);
             });
           });
         }
@@ -860,10 +907,10 @@
         preload.src = nextItem.src;
 
         /*
-          이미지가 아직 완전히 준비되지 않았는데 강제로 바꾸면 깜빡임이 생길 수 있어
-          기본은 preload 완료 후 교체하고, 네트워크가 느릴 때만 fallback으로 처리합니다.
+          기본은 다음 이미지를 미리 불러온 뒤 슬라이드쇼처럼 전환합니다.
+          네트워크가 느릴 때만 fallback으로 처리합니다.
         */
-        setTimeout(changeImage, 700);
+        setTimeout(changeImage, 900);
       }
 
       function openLightbox(index) {

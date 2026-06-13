@@ -327,22 +327,25 @@
       user-select: none;
       -webkit-user-drag: none;
       transition:
-        opacity 0.18s ease,
-        transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.22s ease,
+        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.32s ease,
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
     }
 
     .lightbox-image.soft-in-left {
-      opacity: 0.92;
-      transform: translateX(-18px) scale(0.995);
+      opacity: 0.97;
+      transform: translateX(-8px) scale(0.998);
+      filter: blur(1px);
       transition: none;
     }
 
     .lightbox-image.soft-in-right {
-      opacity: 0.92;
-      transform: translateX(18px) scale(0.995);
+      opacity: 0.97;
+      transform: translateX(8px) scale(0.998);
+      filter: blur(1px);
       transition: none;
     }
 
@@ -354,6 +357,7 @@
       touch-action: none;
       transform: none !important;
       opacity: 1 !important;
+      filter: none !important;
       will-change: scroll-position;
     }
 
@@ -754,10 +758,10 @@
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.75;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.92;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.75;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.92;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -846,7 +850,7 @@
 
               setTimeout(function () {
                 isSwitching = false;
-              }, 190);
+              }, 320);
             });
           });
         }
@@ -855,7 +859,11 @@
         preload.onerror = changeImage;
         preload.src = nextItem.src;
 
-        setTimeout(changeImage, 90);
+        /*
+          이미지가 아직 완전히 준비되지 않았는데 강제로 바꾸면 깜빡임이 생길 수 있어
+          기본은 preload 완료 후 교체하고, 네트워크가 느릴 때만 fallback으로 처리합니다.
+        */
+        setTimeout(changeImage, 700);
       }
 
       function openLightbox(index) {

@@ -299,7 +299,7 @@
       justify-content: center;
       padding: 18px;
       overflow: auto;
-      background: rgba(0, 0, 0, 0.94);
+      background: rgba(240, 250, 249, 0.94);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       opacity: 1;
@@ -312,8 +312,8 @@
 
     .lightbox-image {
       display: block;
-      max-width: min(97vw, 1500px);
-      max-height: 93vh;
+      max-width: min(calc(100vw - 48px), 1500px);
+      max-height: calc(100vh - 86px);
       width: auto;
       height: auto;
       object-fit: contain;
@@ -362,6 +362,18 @@
       touch-action: none;
       transform: none !important;
       opacity: 1 !important;
+    }
+
+    .lightbox.zoom-active {
+      display: block;
+      text-align: center;
+      align-items: initial;
+      justify-content: initial;
+    }
+
+    .lightbox.zoom-active .lightbox-image.zoomed {
+      display: block;
+      margin: 72px auto 120px;
     }
 
     .lightbox-image.zoomed.dragging {
@@ -528,6 +540,10 @@
 
       .lightbox-image.zoomed {
         width: 240vw;
+      }
+
+      .lightbox.zoom-active .lightbox-image.zoomed {
+        margin: 70px auto 118px;
       }
     }
   </style>

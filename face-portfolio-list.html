@@ -600,6 +600,54 @@
       overflow: hidden;
     }
 
+
+    /* 확대 이미지를 드래그해도 안내 문구와 번호가 화면 하단 중앙에 고정되도록 보정 */
+    .lightbox {
+      --iroha-scroll-left: 0px;
+      --iroha-scroll-top: 0px;
+    }
+
+    .lightbox .lightbox-guide {
+      position: fixed !important;
+      left: 50vw !important;
+      right: auto !important;
+      bottom: 52px !important;
+      transform: translate3d(calc(-50% + var(--iroha-scroll-left, 0px)), var(--iroha-scroll-top, 0px), 0) !important;
+      z-index: 10020 !important;
+      margin: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .lightbox .lightbox-count {
+      position: fixed !important;
+      left: 50vw !important;
+      right: auto !important;
+      bottom: 17px !important;
+      transform: translate3d(calc(-50% + var(--iroha-scroll-left, 0px)), var(--iroha-scroll-top, 0px), 0) !important;
+      z-index: 10021 !important;
+      margin: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .lightbox.video-mode .lightbox-count {
+      display: none !important;
+    }
+
+    @media (max-width: 640px) {
+      .lightbox .lightbox-guide {
+        left: 50vw !important;
+        bottom: 104px !important;
+        width: calc(100vw - 28px) !important;
+        max-width: calc(100vw - 28px) !important;
+        white-space: normal !important;
+      }
+
+      .lightbox .lightbox-count {
+        left: 50vw !important;
+        bottom: 58px !important;
+      }
+    }
+
     @media (max-width: 640px) {
       body {
         padding: 24px 14px 34px;
@@ -850,6 +898,19 @@
         );
       }
 
+
+      function updateFixedOverlayPosition() {
+        const isZoomed =
+          lightbox.classList.contains('zoom-active') ||
+          lightbox.classList.contains('zoom-mode');
+
+        const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
+        const scrollTop = isZoomed ? lightbox.scrollTop : 0;
+
+        lightbox.style.setProperty('--iroha-scroll-left', scrollLeft + 'px');
+        lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
+      }
+
       function getCategoryLabel(category) {
         if (category === 'boing-eye') return '뽀잉눈';
         if (category === 'facial') return '페이셜';
@@ -966,6 +1027,8 @@
         } else {
           lightbox.scrollLeft = zoomTargetScrollLeft;
           lightbox.scrollTop = zoomTargetScrollTop;
+
+          updateFixedOverlayPosition();
           zoomScrollRaf = null;
         }
       }
@@ -994,6 +1057,8 @@
 
         lightbox.scrollLeft += zoomVelocityX;
         lightbox.scrollTop += zoomVelocityY;
+
+        updateFixedOverlayPosition();
 
         zoomVelocityX *= 0.90;
         zoomVelocityY *= 0.90;
@@ -1077,6 +1142,7 @@
         lightbox.classList.remove('zoom-active');
         lightbox.scrollTop = 0;
         lightbox.scrollLeft = 0;
+        updateFixedOverlayPosition();
         zoomDragging = false;
         zoomMoved = false;
       }
@@ -1190,6 +1256,7 @@
         isSwitching = false;
         lightbox.scrollTop = 0;
         lightbox.scrollLeft = 0;
+        updateFixedOverlayPosition();
         document.body.classList.remove('lightbox-open');
       }
 
@@ -1291,6 +1358,13 @@
         finishPointer(event, false);
       });
 
+
+      lightbox.addEventListener(
+        'scroll',
+        updateFixedOverlayPosition,
+        { passive: true }
+      );
+
       lightboxClose.addEventListener('click', closeLightbox);
 
       lightboxPrev.addEventListener('click', function () {
@@ -1320,6 +1394,8 @@
                 0,
                 (lightbox.scrollHeight - lightbox.clientHeight) / 2
               );
+
+            updateFixedOverlayPosition();
 
             zoomTargetScrollLeft = lightbox.scrollLeft;
             zoomTargetScrollTop = lightbox.scrollTop;
@@ -1395,6 +1471,8 @@
 
           lightbox.scrollLeft = zoomTargetScrollLeft;
           lightbox.scrollTop = zoomTargetScrollTop;
+
+          updateFixedOverlayPosition();
 
           zoomLastX = event.clientX;
           zoomLastY = event.clientY;

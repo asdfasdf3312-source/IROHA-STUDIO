@@ -7,15 +7,16 @@
 
   <style>
     @font-face {
-      font-family: 'Paperlogy';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-1@1.0/Paperlogy-4Regular.woff2') format('woff2');
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
     }
+
     @font-face {
-      font-family: 'Paperlogy';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-1@1.0/Paperlogy-7Bold.woff2') format('woff2');
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
       font-weight: 700;
       font-style: normal;
       font-display: swap;
@@ -45,17 +46,22 @@
       --shadow: 0 14px 34px rgba(72,175,170,0.12);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       background: transparent;
-      font-family: 'Paperlogy', 'Noto Sans KR', sans-serif;
+      font-family: 'Paperozi', sans-serif;
       color: var(--ink);
     }
 
-    body { padding: 18px; }
+    body {
+      padding: 18px;
+    }
 
     .phase-wrap {
       width: 100%;
@@ -192,9 +198,17 @@
       pointer-events: none;
     }
 
-    .phase-card:nth-child(2)::after { background: rgba(246,199,213,0.13); }
-    .phase-card:nth-child(3)::after { background: rgba(231,225,255,0.19); }
-    .phase-card:nth-child(4)::after { background: rgba(255,242,213,0.24); }
+    .phase-card:nth-child(2)::after {
+      background: rgba(246,199,213,0.13);
+    }
+
+    .phase-card:nth-child(3)::after {
+      background: rgba(231,225,255,0.19);
+    }
+
+    .phase-card:nth-child(4)::after {
+      background: rgba(255,242,213,0.24);
+    }
 
     .phase-top {
       position: relative;
@@ -387,7 +401,9 @@
     }
 
     @media (max-width: 540px) {
-      body { padding: 12px; }
+      body {
+        padding: 12px;
+      }
 
       .phase-wrap {
         padding: 20px 14px 18px;
@@ -505,7 +521,7 @@
       }
     }
 
-    window.addEventListener('load', () => {
+    window.addEventListener('load', function () {
       sendHeight();
       setTimeout(sendHeight, 200);
       setTimeout(sendHeight, 600);

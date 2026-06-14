@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>제작 과정 4구역 요약형</title>
+
+  <style>
+    @font-face {
+      font-family: 'Paperlogy';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-1@1.0/Paperlogy-4Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Paperlogy';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-1@1.0/Paperlogy-7Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --mint: #76D8D2;
+      --mint-deep: #35AAA3;
+      --mint-soft: #EAFBFA;
+
+      --pink: #F6C7D5;
+      --pink-deep: #E78BAA;
+      --pink-soft: #FFF4F8;
+
+      --lavender: #E7E1FF;
+      --lavender-deep: #8A79D6;
+      --lavender-soft: #F7F4FF;
+
+      --cream: #FFF2D5;
+      --cream-deep: #C99527;
+      --cream-soft: #FFF9EA;
+
+      --ink: #2F3D3D;
+      --sub: #748484;
+      --line: rgba(118,216,210,0.40);
+      --white: rgba(255,255,255,0.88);
+      --shadow: 0 14px 34px rgba(72,175,170,0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: 'Paperlogy', 'Noto Sans KR', sans-serif;
+      color: var(--ink);
+    }
+
+    body { padding: 18px; }
+
+    .phase-wrap {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 23px 24px 22px;
+      border-radius: 28px;
+      border: 1.5px solid var(--line);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(118,216,210,0.15), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(246,199,213,0.18), transparent 35%),
+        linear-gradient(135deg, #FCFFFE 0%, #FFF8FB 100%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phase-wrap::after {
+      content: "";
+      position: absolute;
+      right: -100px;
+      bottom: -130px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(118,216,210,0.13);
+      pointer-events: none;
+    }
+
+    .head {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(118,216,210,0.42);
+      color: var(--mint-deep);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(72,175,170,0.09);
+    }
+
+    .title {
+      margin: 9px 0 6px;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+    }
+
+    .desc {
+      margin: 0;
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .head-chip {
+      flex: 0 0 auto;
+      padding: 11px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(255,255,255,0.92);
+      box-shadow: 0 10px 22px rgba(72,175,170,0.09);
+      color: var(--mint-deep);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .phase-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .phase-card {
+      position: relative;
+      padding: 16px 15px 15px;
+      border-radius: 22px;
+      background: var(--white);
+      border: 1px solid rgba(255,255,255,0.92);
+      box-shadow: 0 10px 22px rgba(72,175,170,0.08);
+      overflow: hidden;
+      min-height: 100%;
+    }
+
+    .phase-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--mint), #BFEFEB);
+    }
+
+    .phase-card:nth-child(2)::before {
+      background: linear-gradient(90deg, var(--pink), #FFDCE7);
+    }
+
+    .phase-card:nth-child(3)::before {
+      background: linear-gradient(90deg, var(--lavender), #F1EDFF);
+    }
+
+    .phase-card:nth-child(4)::before {
+      background: linear-gradient(90deg, var(--cream), #FFF7DF);
+    }
+
+    .phase-card::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      bottom: -38px;
+      width: 104px;
+      height: 104px;
+      border-radius: 32px;
+      transform: rotate(22deg);
+      background: rgba(118,216,210,0.10);
+      pointer-events: none;
+    }
+
+    .phase-card:nth-child(2)::after { background: rgba(246,199,213,0.13); }
+    .phase-card:nth-child(3)::after { background: rgba(231,225,255,0.19); }
+    .phase-card:nth-child(4)::after { background: rgba(255,242,213,0.24); }
+
+    .phase-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .phase-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      background: var(--mint-soft);
+      border: 1px solid rgba(118,216,210,0.36);
+      color: var(--mint-deep);
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 7px 16px rgba(72,175,170,0.09);
+    }
+
+    .phase-card:nth-child(2) .phase-num {
+      background: var(--pink-soft);
+      border-color: rgba(246,199,213,0.42);
+      color: var(--pink-deep);
+    }
+
+    .phase-card:nth-child(3) .phase-num {
+      background: var(--lavender-soft);
+      border-color: rgba(138,121,214,0.26);
+      color: var(--lavender-deep);
+    }
+
+    .phase-card:nth-child(4) .phase-num {
+      background: var(--cream-soft);
+      border-color: rgba(201,149,39,0.25);
+      color: var(--cream-deep);
+    }
+
+    .phase-label {
+      color: #A0ADAD;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      white-space: nowrap;
+    }
+
+    .phase-title {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 10px;
+      color: #334747;
+      font-size: 21px;
+      line-height: 1.32;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      word-break: keep-all;
+    }
+
+    .step-stack {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 8px;
+    }
+
+    .step-chip {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 8px;
+      align-items: center;
+      min-height: 40px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(248,255,254,0.82);
+      border: 1px solid rgba(118,216,210,0.20);
+      color: #536767;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.38;
+      word-break: keep-all;
+    }
+
+    .phase-card:nth-child(2) .step-chip {
+      background: rgba(255,248,251,0.84);
+      border-color: rgba(246,199,213,0.24);
+    }
+
+    .phase-card:nth-child(3) .step-chip {
+      background: rgba(249,247,255,0.84);
+      border-color: rgba(138,121,214,0.18);
+    }
+
+    .phase-card:nth-child(4) .step-chip {
+      background: rgba(255,251,241,0.90);
+      border-color: rgba(201,149,39,0.18);
+    }
+
+    .step-chip span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 23px;
+      border-radius: 999px;
+      background: rgba(118,216,210,0.16);
+      color: var(--mint-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .phase-card:nth-child(2) .step-chip span {
+      background: rgba(246,199,213,0.18);
+      color: var(--pink-deep);
+    }
+
+    .phase-card:nth-child(3) .step-chip span {
+      background: rgba(231,225,255,0.55);
+      color: var(--lavender-deep);
+    }
+
+    .phase-card:nth-child(4) .step-chip span {
+      background: rgba(255,242,213,0.88);
+      color: var(--cream-deep);
+    }
+
+    .phase-note {
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      padding: 10px 11px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.72);
+      border: 1px dashed rgba(231,138,173,0.38);
+      color: #8A6D77;
+      font-size: 12.3px;
+      line-height: 1.55;
+      font-weight: 700;
+      word-break: keep-all;
+    }
+
+    .quick-line {
+      position: relative;
+      z-index: 2;
+      margin-top: 12px;
+      padding: 11px 13px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(118,216,210,0.15), rgba(246,199,213,0.15));
+      border: 1px solid rgba(255,255,255,0.82);
+      color: #5B6F6F;
+      font-size: 12.8px;
+      line-height: 1.55;
+      font-weight: 700;
+      text-align: center;
+      word-break: keep-all;
+    }
+
+    .bottom-note {
+      position: relative;
+      z-index: 2;
+      margin-top: 10px;
+      padding: 11px 13px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.58);
+      border: 1px dashed rgba(118,216,210,0.45);
+      color: #7B8B8A;
+      font-size: 12.4px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    @media (max-width: 820px) {
+      .head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .head-chip {
+        width: 100%;
+      }
+
+      .phase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 540px) {
+      body { padding: 12px; }
+
+      .phase-wrap {
+        padding: 20px 14px 18px;
+        border-radius: 24px;
+      }
+
+      .title {
+        font-size: 25px;
+      }
+
+      .desc {
+        font-size: 13.5px;
+      }
+
+      .phase-title {
+        font-size: 19px;
+      }
+
+      .step-chip {
+        font-size: 12.8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="phase-wrap">
+    <div class="head">
+      <div>
+        <div class="kicker">✦ COMPACT PHASE</div>
+        <h1 class="title">제작 과정 한눈에 보기</h1>
+        <p class="desc">
+          신청부터 완성본 전달까지의 기본 진행 순서입니다.<br>
+          작업 종류와 요청 내용에 따라 일부 단계는 조정될 수 있습니다.
+        </p>
+      </div>
+
+      <div class="head-chip">4 STEP</div>
+    </div>
+
+    <div class="phase-grid">
+      <article class="phase-card">
+        <div class="phase-top">
+          <div class="phase-num">01</div>
+          <div class="phase-label">READY</div>
+        </div>
+        <h2 class="phase-title">신청준비</h2>
+        <div class="step-stack">
+          <div class="step-chip"><span>01</span>문의 및 상담</div>
+          <div class="step-chip"><span>02</span>주문 및 입금</div>
+          <div class="step-chip"><span>03</span>2D 일러 기반 및 참고자료 기반 파츠서칭</div>
+          <div class="step-chip"><span>04</span>파츠 구매 인증</div>
+        </div>
+      </article>
+
+      <article class="phase-card">
+        <div class="phase-top">
+          <div class="phase-num">02</div>
+          <div class="phase-label">MAKE</div>
+        </div>
+        <h2 class="phase-title">성형 · 페이셜 제작</h2>
+        <div class="step-stack">
+          <div class="step-chip"><span>05</span>성형 작업</div>
+          <div class="step-chip"><span>06</span>1차 컨펌</div>
+          <div class="step-chip"><span>07</span>페이셜 작업</div>
+          <div class="step-chip"><span>08</span>2차 컨펌</div>
+        </div>
+        <div class="phase-note">
+          ※ 페이셜 단계부터는 성형 수정이 불가하니, 신중한 결정 부탁드립니다.
+        </div>
+      </article>
+
+      <article class="phase-card">
+        <div class="phase-top">
+          <div class="phase-num">03</div>
+          <div class="phase-label">UNITY</div>
+        </div>
+        <h2 class="phase-title">유니티 세팅 및 물리 작업</h2>
+        <div class="step-stack">
+          <div class="step-chip"><span>A</span>헤어·의상 적용 상태와 전체 조합을 확인합니다.</div>
+          <div class="step-chip"><span>B</span>스프링본 및 Magica Cloth 2 물리 세팅 후, 확인용 영상을 전달드립니다.</div>
+        </div>
+      </article>
+
+      <article class="phase-card">
+        <div class="phase-top">
+          <div class="phase-num">04</div>
+          <div class="phase-label">FINAL</div>
+        </div>
+        <h2 class="phase-title">최종확인 · 전달</h2>
+        <div class="step-stack">
+          <div class="step-chip"><span>09</span>변환 전 최종컨펌</div>
+          <div class="step-chip"><span>10</span>완성본 전달</div>
+        </div>
+      </article>
+    </div>
+
+    <div class="quick-line">
+      신청준비 → 파츠서칭·인증 → 성형·페이셜 제작 → 유니티 세팅 및 물리 작업 → 최종확인·전달
+    </div>
+
+    <div class="bottom-note">
+      ※ 작업 종류와 요청 범위에 따라 컨펌 횟수, 세부 진행 방식, 전달 자료는 일부 조정될 수 있습니다.
+    </div>
+  </section>
+
+  <script>
+    function sendHeight() {
+      const height = document.documentElement.scrollHeight;
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'iroha-process-phase-4zone-height',
+          height: height
+        }, '*');
+      }
+    }
+
+    window.addEventListener('load', () => {
+      sendHeight();
+      setTimeout(sendHeight, 200);
+      setTimeout(sendHeight, 600);
+    });
+
+    window.addEventListener('resize', sendHeight);
+  </script>
+</body>
+</html>

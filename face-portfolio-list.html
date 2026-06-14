@@ -239,6 +239,47 @@
       -webkit-user-drag: none;
     }
 
+
+    .portfolio-card.video-card::after {
+      content: '▶';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 3;
+      width: 62px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.20);
+      font-size: 24px;
+      line-height: 1;
+      padding-left: 4px;
+      pointer-events: none;
+    }
+
+    .portfolio-card.video-card::before {
+      content: 'VIDEO';
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      z-index: 3;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: var(--mint-dark);
+      background: rgba(255, 255, 255, 0.90);
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.10);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
     .portfolio-badge {
       position: absolute;
       left: 14px;
@@ -445,6 +486,34 @@
       pointer-events: none;
     }
 
+
+    .lightbox-video-wrap {
+      width: min(94vw, 1180px);
+      aspect-ratio: 16 / 9;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
+    }
+
+    .lightbox-video-wrap[hidden] {
+      display: none !important;
+    }
+
+    .lightbox-video-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000000;
+    }
+
+    .lightbox.video-mode .lightbox-image,
+    .lightbox.video-mode .lightbox-guide {
+      display: none !important;
+    }
+
     .lightbox-count {
       position: fixed;
       left: 50%;
@@ -603,6 +672,13 @@
     (function () {
       const portfolioItems = [
         {
+          src: 'https://img.youtube.com/vi/pFfbLfAzeqQ/hqdefault.jpg',
+          category: 'facial',
+          title: '페이셜 움직임 샘플',
+          type: 'youtube',
+          youtubeId: 'pFfbLfAzeqQ'
+        },
+        {
           src: './images/portfolio/blender-shapekey-face-01.png',
           category: 'detail',
           title: '성형 디테일 1'
@@ -636,6 +712,8 @@
 
       const lightbox = document.getElementById('face-portfolio-lightbox');
       const lightboxImage = lightbox.querySelector('.lightbox-image');
+      const lightboxVideoWrap = lightbox.querySelector('.lightbox-video-wrap');
+      const lightboxVideo = lightbox.querySelector('.lightbox-video');
       const lightboxClose = lightbox.querySelector('.lightbox-close');
       const lightboxPrev = lightbox.querySelector('.lightbox-prev');
       const lightboxNext = lightbox.querySelector('.lightbox-next');
@@ -716,7 +794,9 @@
 
         visibleItems.forEach(function (item, index) {
           const card = document.createElement('div');
-          card.className = 'portfolio-card';
+          card.className = item.type === 'youtube'
+            ? 'portfolio-card video-card'
+            : 'portfolio-card';
           card.setAttribute('role', 'button');
           card.setAttribute('tabindex', '0');
           card.setAttribute(
@@ -826,6 +906,45 @@
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
 
+      function isVideoItem(item) {
+        return item && item.type === 'youtube' && item.youtubeId;
+      }
+
+      function stopVideo() {
+        if (lightboxVideo) {
+          lightboxVideo.src = '';
+        }
+      }
+
+      function showImageMode() {
+        lightbox.classList.remove('video-mode');
+
+        if (lightboxVideoWrap) {
+          lightboxVideoWrap.hidden = true;
+        }
+
+        stopVideo();
+        lightboxImage.hidden = false;
+      }
+
+      function showVideoMode(item) {
+        resetLightboxZoom();
+        lightbox.classList.add('video-mode');
+
+        if (lightboxVideoWrap) {
+          lightboxVideoWrap.hidden = false;
+        }
+
+        lightboxImage.hidden = true;
+
+        if (lightboxVideo) {
+          lightboxVideo.src =
+            'https://www.youtube.com/embed/' +
+            item.youtubeId +
+            '?rel=0&modestbranding=1';
+        }
+      }
+
       function resetLightboxZoom() {
         stopZoomSmoothScroll();
         stopZoomMomentum();
@@ -850,10 +969,17 @@
 
         const item = visibleItems[currentImageIndex];
 
-        lightboxImage.src = item.src;
-        lightboxImage.alt = item.title || '작업 이미지';
         lightboxCount.textContent =
           (currentImageIndex + 1) + ' / ' + visibleItems.length;
+
+        if (isVideoItem(item)) {
+          showVideoMode(item);
+          return;
+        }
+
+        showImageMode();
+        lightboxImage.src = item.src;
+        lightboxImage.alt = item.title || '작업 이미지';
       }
 
       function moveLightbox(step) {
@@ -912,8 +1038,8 @@
       function openLightbox(index) {
         if (!visibleItems.length) return;
 
-        updateLightbox(index);
         resetLightboxZoom();
+        updateLightbox(index);
         lightbox.classList.add('is-opening');
         lightbox.hidden = false;
         document.body.classList.add('lightbox-open');
@@ -930,8 +1056,15 @@
       function closeLightbox() {
         lightbox.hidden = true;
         lightboxImage.src = '';
+        stopVideo();
         resetLightboxZoom();
-        lightbox.classList.remove('is-opening');
+        lightbox.classList.remove('is-opening', 'video-mode');
+
+        if (lightboxVideoWrap) {
+          lightboxVideoWrap.hidden = true;
+        }
+
+        lightboxImage.hidden = false;
         isSwitching = false;
         lightbox.scrollTop = 0;
         lightbox.scrollLeft = 0;

@@ -487,18 +487,35 @@
     }
 
 
+    .lightbox.video-mode {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow: hidden;
+    }
+
     .lightbox-video-wrap {
+      position: relative;
+      z-index: 5;
       width: min(94vw, 1180px);
       aspect-ratio: 16 / 9;
+      display: block;
       border: 2px solid rgba(255, 255, 255, 0.95);
       border-radius: 20px;
       overflow: hidden;
-      background: #ffffff;
+      background: #000000;
       box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
     }
 
     .lightbox-video-wrap[hidden] {
       display: none !important;
+    }
+
+    .lightbox.video-mode .lightbox-video-wrap {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
 
     .lightbox-video-wrap iframe {
@@ -507,6 +524,28 @@
       height: 100%;
       border: 0;
       background: #000000;
+    }
+
+    .video-fallback-link {
+      position: absolute;
+      left: 50%;
+      bottom: -46px;
+      transform: translateX(-50%);
+      z-index: 6;
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.95);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    }
+
+    .video-fallback-link[hidden] {
+      display: none !important;
     }
 
     .lightbox.video-mode .lightbox-image,
@@ -659,6 +698,25 @@
     <button class="lightbox-close" type="button" aria-label="닫기">×</button>
     <button class="lightbox-nav lightbox-prev" type="button" aria-label="이전 이미지">‹</button>
     <img class="lightbox-image" src="" alt="">
+
+    <div class="lightbox-video-wrap" hidden>
+      <iframe
+        class="lightbox-video"
+        src=""
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+      <a
+        class="video-fallback-link"
+        href="https://youtu.be/pFfbLfAzeqQ"
+        target="_blank"
+        rel="noopener noreferrer"
+        hidden
+      >
+        YouTube에서 보기
+      </a>
+    </div>
     <button class="lightbox-nav lightbox-next" type="button" aria-label="다음 이미지">›</button>
 
     <div class="lightbox-guide">
@@ -714,6 +772,7 @@
       const lightboxImage = lightbox.querySelector('.lightbox-image');
       const lightboxVideoWrap = lightbox.querySelector('.lightbox-video-wrap');
       const lightboxVideo = lightbox.querySelector('.lightbox-video');
+      const videoFallbackLink = lightbox.querySelector('.video-fallback-link');
       const lightboxClose = lightbox.querySelector('.lightbox-close');
       const lightboxPrev = lightbox.querySelector('.lightbox-prev');
       const lightboxNext = lightbox.querySelector('.lightbox-next');
@@ -920,7 +979,11 @@
         lightbox.classList.remove('video-mode');
 
         if (lightboxVideoWrap) {
-          lightboxVideoWrap.hidden = true;
+          lightboxVideoWrap.setAttribute('hidden', '');
+        }
+
+        if (videoFallbackLink) {
+          videoFallbackLink.setAttribute('hidden', '');
         }
 
         stopVideo();
@@ -932,8 +995,23 @@
         lightbox.classList.add('video-mode');
 
         if (lightboxVideoWrap) {
-          lightboxVideoWrap.hidden = false;
+          lightboxVideoWrap.removeAttribute('hidden');
         }
+
+        lightboxImage.hidden = true;
+
+        if (videoFallbackLink) {
+          videoFallbackLink.href = 'https://youtu.be/' + item.youtubeId;
+          videoFallbackLink.removeAttribute('hidden');
+        }
+
+        if (lightboxVideo) {
+          lightboxVideo.src =
+            'https://www.youtube-nocookie.com/embed/' +
+            item.youtubeId +
+            '?rel=0&modestbranding=1&playsinline=1';
+        }
+      }
 
         lightboxImage.hidden = true;
 
@@ -1061,7 +1139,11 @@
         lightbox.classList.remove('is-opening', 'video-mode');
 
         if (lightboxVideoWrap) {
-          lightboxVideoWrap.hidden = true;
+          lightboxVideoWrap.setAttribute('hidden', '');
+        }
+
+        if (videoFallbackLink) {
+          videoFallbackLink.setAttribute('hidden', '');
         }
 
         lightboxImage.hidden = false;

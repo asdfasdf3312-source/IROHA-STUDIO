@@ -218,14 +218,14 @@
     position:relative;
     z-index:1;
     display:grid;
-    grid-template-columns:repeat(7,minmax(0,1fr));
-    gap:10px;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
   }
 
   .day-card{
     position:relative;
-    min-height:186px;
-    padding:14px 12px 13px;
+    min-height:218px;
+    padding:16px 14px 52px;
     border-radius:22px;
     border:1px solid rgba(255,255,255,.90);
     background:var(--white);
@@ -299,9 +299,11 @@
   }
 
   .day-name{
-    font-size:15px;
+    font-size:16px;
     font-weight:900;
     color:#2f4545;
+    white-space:nowrap;
+    word-break:keep-all;
   }
 
   .day-date{
@@ -314,6 +316,7 @@
 
   .day-status{
     flex:0 0 auto;
+    min-width:max-content;
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -364,19 +367,19 @@
   .day-text{
     position:relative;
     z-index:1;
-    margin:0;
+    margin:0 0 16px;
     color:#556565;
     font-size:13px;
-    line-height:1.55;
+    line-height:1.62;
     word-break:keep-all;
   }
 
   .day-bottom{
     position:absolute;
     z-index:1;
-    left:12px;
-    right:12px;
-    bottom:12px;
+    left:14px;
+    right:14px;
+    bottom:16px;
     display:flex;
     align-items:center;
     justify-content:space-between;

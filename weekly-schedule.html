@@ -1,533 +1,727 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>제작 과정 4구역 요약형</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IROHA 주간 작업 보드</title>
+<style>
+  @font-face{
+    font-family:'Paperozi';
+    src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/Paperlogy-4Regular.woff2') format('woff2');
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
 
-  <style>
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
+  :root{
+    --mint:#76D8D2;
+    --mint-deep:#3db9b1;
+    --pink:#ffd9e9;
+    --pink-deep:#ed94bb;
+    --cream:#fff1c6;
+    --violet:#e7e1ff;
+    --violet-deep:#7465d8;
+    --green:#dff7ff;
+    --green-deep:#4bb8d4;
+    --ink:#344444;
+    --sub:#7d8b8b;
+    --line:rgba(118,216,210,.36);
+    --white:rgba(255,255,255,.82);
+  }
+
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;
+    padding:0;
+    background:transparent;
+    color:var(--ink);
+    font-family:'Paperozi','Pretendard','Apple SD Gothic Neo',sans-serif;
+  }
+
+  .weekly-board{
+    width:100%;
+    max-width:980px;
+    margin:0 auto;
+    padding:24px 18px 28px;
+  }
+
+  .board-shell{
+    position:relative;
+    overflow:hidden;
+    border-radius:30px;
+    border:1px solid var(--line);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(118,216,210,.30), transparent 34%),
+      radial-gradient(circle at 100% 12%, rgba(255,217,233,.48), transparent 36%),
+      linear-gradient(135deg,#f7fffe 0%,#fff7fb 100%);
+    box-shadow:
+      0 18px 46px rgba(61,185,177,.15),
+      inset 0 0 0 1px rgba(255,255,255,.7);
+    padding:26px;
+  }
+
+  .board-shell:before{
+    content:"";
+    position:absolute;
+    width:230px;
+    height:230px;
+    right:-120px;
+    bottom:-140px;
+    border-radius:50%;
+    background:rgba(118,216,210,.24);
+    filter:blur(4px);
+    pointer-events:none;
+  }
+
+  .board-top{
+    position:relative;
+    z-index:1;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:18px;
+    margin-bottom:16px;
+  }
+
+  .board-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 12px;
+    border-radius:999px;
+    border:1px solid rgba(118,216,210,.44);
+    background:rgba(255,255,255,.66);
+    color:var(--mint-deep);
+    font-size:13px;
+    font-weight:900;
+    box-shadow:0 8px 18px rgba(61,185,177,.10);
+  }
+
+  .board-title{
+    margin:10px 0 8px;
+    font-size:30px;
+    line-height:1.22;
+    letter-spacing:-.04em;
+    color:#263a3a;
+    font-weight:900;
+  }
+
+  .board-desc{
+    margin:0;
+    color:var(--sub);
+    font-size:14px;
+    line-height:1.65;
+    word-break:keep-all;
+  }
+
+  .board-period{
+    flex:0 0 auto;
+    padding:13px 16px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,.92);
+    background:rgba(255,255,255,.72);
+    box-shadow:0 10px 24px rgba(61,185,177,.11);
+    text-align:right;
+  }
+
+  .board-period .label{
+    display:block;
+    font-size:12px;
+    color:var(--sub);
+    font-weight:800;
+    margin-bottom:4px;
+  }
+
+  .board-period .range{
+    display:block;
+    font-size:16px;
+    color:#314747;
+    font-weight:900;
+  }
+
+  .week-tabs{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px;
+    margin:0 0 14px;
+    padding:6px;
+    border-radius:22px;
+    background:rgba(255,255,255,.48);
+    border:1px solid rgba(255,255,255,.72);
+  }
+
+  .week-tab{
+    appearance:none;
+    border:0;
+    cursor:pointer;
+    border-radius:17px;
+    padding:11px 10px;
+    background:transparent;
+    color:#6d7b7b;
+    font-family:inherit;
+    font-size:14px;
+    font-weight:900;
+    transition:transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+  }
+
+  .week-tab:hover{
+    transform:translateY(-1px);
+    background:rgba(255,255,255,.54);
+  }
+
+  .week-tab.active{
+    color:#2f7470;
+    background:linear-gradient(135deg,rgba(118,216,210,.34),rgba(255,255,255,.82));
+    box-shadow:0 9px 20px rgba(61,185,177,.16), inset 0 0 0 1px rgba(255,255,255,.82);
+  }
+
+  .board-legend{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:18px;
+  }
+
+  .legend-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:8px 11px;
+    border-radius:999px;
+    background:rgba(255,255,255,.72);
+    border:1px solid rgba(255,255,255,.88);
+    color:#405454;
+    font-size:13px;
+    font-weight:900;
+    box-shadow:0 8px 18px rgba(61,185,177,.08);
+  }
+
+  .dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--mint);
+    box-shadow:0 0 0 4px rgba(118,216,210,.18);
+  }
+
+  .legend-chip.today .dot{background:#ff8a45;box-shadow:0 0 0 4px rgba(255,138,69,.18)}
+  .legend-chip.closed .dot{background:var(--pink-deep);box-shadow:0 0 0 4px rgba(237,148,187,.18)}
+  .legend-chip.off .dot{background:#e6be55;box-shadow:0 0 0 4px rgba(230,190,85,.20)}
+  .legend-chip.work .dot{background:var(--violet-deep);box-shadow:0 0 0 4px rgba(116,101,216,.16)}
+  .legend-chip.available .dot{background:var(--green-deep);box-shadow:0 0 0 4px rgba(75,184,212,.18)}
+
+  .week-grid{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
+  }
+
+  .day-card{
+    position:relative;
+    min-height:218px;
+    padding:16px 14px 52px;
+    border-radius:22px;
+    border:1px solid rgba(255,255,255,.90);
+    background:var(--white);
+    box-shadow:0 14px 26px rgba(61,185,177,.10);
+    overflow:hidden;
+    animation:fadeUp .22s ease both;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:.55;transform:translateY(5px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  .day-card:after{
+    content:"";
+    position:absolute;
+    inset:auto -32px -34px auto;
+    width:88px;
+    height:88px;
+    border-radius:28px;
+    transform:rotate(22deg);
+    background:rgba(118,216,210,.14);
+  }
+
+  .day-card.closed:after{background:rgba(255,153,195,.18)}
+  .day-card.off:after{background:rgba(255,224,137,.28)}
+  .day-card.work:after{background:rgba(116,101,216,.15)}
+  .day-card.available:after{background:rgba(75,184,212,.18)}
+
+  .day-card.is-today{
+    background:
+      radial-gradient(circle at 18% 0%, rgba(255,255,255,.96), transparent 34%),
+      linear-gradient(135deg, rgba(255,201,145,.82), rgba(255,246,236,.97) 48%, rgba(255,223,188,.86));
+    border-color:rgba(255,147,78,.96);
+    box-shadow:
+      0 18px 38px rgba(255,147,78,.20),
+      0 0 0 4px rgba(255,191,127,.28),
+      inset 0 0 0 1px rgba(255,255,255,.92);
+  }
+
+  .day-card.is-today:after{
+    background:rgba(255,255,255,.46);
+  }
+
+  .day-card.is-today .day-name,
+  .day-card.is-today .day-text{
+    color:#5b3d2d;
+  }
+
+  .day-card.is-today .day-date{
+    color:#b06b41;
+  }
+
+  .day-card.is-today .day-line{
+    background:linear-gradient(90deg, #ff964f, #ffe7cf);
+    height:6px;
+  }
+
+  .today-ribbon{
+    display:none;
+  }
+
+  .day-head{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:12px;
+  }
+
+  .day-name{
+    font-size:16px;
+    font-weight:900;
+    color:#2f4545;
+    white-space:nowrap;
+    word-break:keep-all;
+  }
+
+  .day-date{
+    display:block;
+    margin-top:4px;
+    color:var(--sub);
+    font-size:12px;
+    font-weight:800;
+  }
+
+  .day-status{
+    flex:0 0 auto;
+    min-width:max-content;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:5px 8px;
+    border-radius:999px;
+    background:rgba(118,216,210,.20);
+    color:#2e9d96;
+    font-size:11px;
+    font-weight:900;
+    white-space:nowrap;
+  }
+
+  .day-card.closed .day-status{
+    background:rgba(255,153,195,.24);
+    color:#cf6893;
+  }
+
+  .day-card.off .day-status{
+    background:rgba(255,226,142,.44);
+    color:#a77a12;
+  }
+
+  .day-card.work .day-status{
+    background:rgba(116,101,216,.16);
+    color:var(--violet-deep);
+  }
+
+  .day-card.available .day-status{
+    background:rgba(75,184,212,.20);
+    color:var(--green-deep);
+  }
+
+  .day-line{
+    position:relative;
+    z-index:1;
+    width:100%;
+    height:5px;
+    border-radius:999px;
+    background:rgba(118,216,210,.42);
+    margin-bottom:12px;
+  }
+
+  .day-card.closed .day-line{background:rgba(237,148,187,.46)}
+  .day-card.off .day-line{background:rgba(230,190,85,.46)}
+  .day-card.work .day-line{background:rgba(116,101,216,.34)}
+  .day-card.available .day-line{background:rgba(75,184,212,.42)}
+
+  .day-text{
+    position:relative;
+    z-index:1;
+    margin:0 0 16px;
+    color:#556565;
+    font-size:13px;
+    line-height:1.62;
+    word-break:keep-all;
+  }
+
+  .day-bottom{
+    position:absolute;
+    z-index:1;
+    left:14px;
+    right:14px;
+    bottom:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    color:#9aa5a5;
+    font-size:11px;
+    font-weight:900;
+  }
+
+  .day-bottom b{
+    color:var(--mint-deep);
+    font-weight:900;
+  }
+
+  .day-card.closed .day-bottom b{color:#cf6893}
+  .day-card.off .day-bottom b{color:#a77a12}
+  .day-card.work .day-bottom b{color:var(--violet-deep)}
+  .day-card.available .day-bottom b{color:var(--green-deep)}
+
+  /* TODAY 카드 안에서는 상태 표시도 오렌지 계열로 통일 */
+  .day-card.is-today .day-status{
+    background:rgba(255,180,112,.28) !important;
+    color:#ff7a3d !important;
+  }
+
+  .day-card.is-today .day-date{
+    color:#ff7a3d !important;
+  }
+
+  .day-card.is-today .day-bottom b{
+    color:#ff7a3d !important;
+  }
+
+  .day-card.is-today .day-bottom span{
+    color:#c17b52 !important;
+  }
+
+  .day-card.is-today .day-line{
+    background:linear-gradient(90deg, #ff8f3f, #ffb066) !important;
+    height:6px !important;
+    box-shadow:0 1px 0 rgba(255,255,255,.55) inset;
+  }
+
+
+  .board-note{
+    position:relative;
+    z-index:1;
+    margin:16px 0 0;
+    padding:12px 14px;
+    border-radius:18px;
+    background:rgba(255,255,255,.58);
+    border:1px dashed rgba(118,216,210,.45);
+    color:#778585;
+    font-size:13px;
+    line-height:1.6;
+    word-break:keep-all;
+  }
+
+  @media(max-width:920px){
+    .week-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  }
+
+  @media(max-width:700px){
+    .board-top{
+      align-items:flex-start;
+      flex-direction:column;
     }
-
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
+    .board-period{
+      width:100%;
+      text-align:left;
     }
+    .week-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
 
-    :root {
-      --mint: #76D8D2;
-      --mint-deep: #35AAA3;
-      --mint-soft: #EAFBFA;
+  @media(max-width:520px){
+    .week-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
 
-      --pink: #F6C7D5;
-      --pink-deep: #E78BAA;
-      --pink-soft: #FFF4F8;
-
-      --lavender: #E7E1FF;
-      --lavender-deep: #8A79D6;
-      --lavender-soft: #F7F4FF;
-
-      --cream: #FFF2D5;
-      --cream-deep: #C99527;
-      --cream-soft: #FFF9EA;
-
-      --ink: #2F3D3D;
-      --sub: #748484;
-      --line: rgba(118,216,210,0.40);
-      --white: rgba(255,255,255,0.88);
-      --shadow: 0 14px 34px rgba(72,175,170,0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      font-family: 'Paperozi', sans-serif;
-      color: var(--ink);
-    }
-
-    body {
-      padding: 18px;
-    }
-
-    .phase-wrap {
-      width: 100%;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 23px 24px 22px;
-      border-radius: 28px;
-      border: 1.5px solid var(--line);
-      background:
-        radial-gradient(circle at 8% 0%, rgba(118,216,210,0.15), transparent 34%),
-        radial-gradient(circle at 100% 12%, rgba(246,199,213,0.18), transparent 35%),
-        linear-gradient(135deg, #FCFFFE 0%, #FFF8FB 100%);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .phase-wrap::after {
-      content: "";
-      position: absolute;
-      right: -100px;
-      bottom: -130px;
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-      background: rgba(118,216,210,0.13);
-      pointer-events: none;
-    }
-
-    .head {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.74);
-      border: 1px solid rgba(118,216,210,0.42);
-      color: var(--mint-deep);
-      font-size: 13px;
-      font-weight: 700;
-      box-shadow: 0 8px 18px rgba(72,175,170,0.09);
-    }
-
-    .title {
-      margin: 9px 0 6px;
-      font-size: 30px;
-      line-height: 1.2;
-      letter-spacing: -0.04em;
-      font-weight: 700;
-    }
-
-    .desc {
-      margin: 0;
-      color: var(--sub);
-      font-size: 14px;
-      line-height: 1.6;
-      word-break: keep-all;
-    }
-
-    .head-chip {
-      flex: 0 0 auto;
-      padding: 11px 14px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.76);
-      border: 1px solid rgba(255,255,255,0.92);
-      box-shadow: 0 10px 22px rgba(72,175,170,0.09);
-      color: var(--mint-deep);
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .phase-grid {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .phase-card {
-      position: relative;
-      padding: 16px 15px 15px;
-      border-radius: 22px;
-      background: var(--white);
-      border: 1px solid rgba(255,255,255,0.92);
-      box-shadow: 0 10px 22px rgba(72,175,170,0.08);
-      overflow: hidden;
-      min-height: 100%;
-    }
-
-    .phase-card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 6px;
-      background: linear-gradient(90deg, var(--mint), #BFEFEB);
-    }
-
-    .phase-card:nth-child(2)::before {
-      background: linear-gradient(90deg, var(--pink), #FFDCE7);
-    }
-
-    .phase-card:nth-child(3)::before {
-      background: linear-gradient(90deg, var(--lavender), #F1EDFF);
-    }
-
-    .phase-card:nth-child(4)::before {
-      background: linear-gradient(90deg, var(--cream), #FFF7DF);
-    }
-
-    .phase-card::after {
-      content: "";
-      position: absolute;
-      right: -30px;
-      bottom: -38px;
-      width: 104px;
-      height: 104px;
-      border-radius: 32px;
-      transform: rotate(22deg);
-      background: rgba(118,216,210,0.10);
-      pointer-events: none;
-    }
-
-    .phase-card:nth-child(2)::after {
-      background: rgba(246,199,213,0.13);
-    }
-
-    .phase-card:nth-child(3)::after {
-      background: rgba(231,225,255,0.19);
-    }
-
-    .phase-card:nth-child(4)::after {
-      background: rgba(255,242,213,0.24);
-    }
-
-    .phase-top {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 13px;
-    }
-
-    .phase-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 16px;
-      background: var(--mint-soft);
-      border: 1px solid rgba(118,216,210,0.36);
-      color: var(--mint-deep);
-      font-size: 16px;
-      font-weight: 700;
-      box-shadow: 0 7px 16px rgba(72,175,170,0.09);
-    }
-
-    .phase-card:nth-child(2) .phase-num {
-      background: var(--pink-soft);
-      border-color: rgba(246,199,213,0.42);
-      color: var(--pink-deep);
-    }
-
-    .phase-card:nth-child(3) .phase-num {
-      background: var(--lavender-soft);
-      border-color: rgba(138,121,214,0.26);
-      color: var(--lavender-deep);
-    }
-
-    .phase-card:nth-child(4) .phase-num {
-      background: var(--cream-soft);
-      border-color: rgba(201,149,39,0.25);
-      color: var(--cream-deep);
-    }
-
-    .phase-label {
-      color: #A0ADAD;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .07em;
-      white-space: nowrap;
-    }
-
-    .phase-title {
-      position: relative;
-      z-index: 1;
-      margin: 0 0 10px;
-      color: #334747;
-      font-size: 21px;
-      line-height: 1.32;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      word-break: keep-all;
-    }
-
-    .step-stack {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      gap: 8px;
-    }
-
-    .step-chip {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 8px;
-      align-items: center;
-      min-height: 40px;
-      padding: 8px 10px;
-      border-radius: 14px;
-      background: rgba(248,255,254,0.82);
-      border: 1px solid rgba(118,216,210,0.20);
-      color: #536767;
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.38;
-      word-break: keep-all;
-    }
-
-    .phase-card:nth-child(2) .step-chip {
-      background: rgba(255,248,251,0.84);
-      border-color: rgba(246,199,213,0.24);
-    }
-
-    .phase-card:nth-child(3) .step-chip {
-      background: rgba(249,247,255,0.84);
-      border-color: rgba(138,121,214,0.18);
-    }
-
-    .phase-card:nth-child(4) .step-chip {
-      background: rgba(255,251,241,0.90);
-      border-color: rgba(201,149,39,0.18);
-    }
-
-    .step-chip span {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 23px;
-      border-radius: 999px;
-      background: rgba(118,216,210,0.16);
-      color: var(--mint-deep);
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .phase-card:nth-child(2) .step-chip span {
-      background: rgba(246,199,213,0.18);
-      color: var(--pink-deep);
-    }
-
-    .phase-card:nth-child(3) .step-chip span {
-      background: rgba(231,225,255,0.55);
-      color: var(--lavender-deep);
-    }
-
-    .phase-card:nth-child(4) .step-chip span {
-      background: rgba(255,242,213,0.88);
-      color: var(--cream-deep);
-    }
-
-    .phase-note {
-      position: relative;
-      z-index: 1;
-      margin-top: 10px;
-      padding: 10px 11px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.72);
-      border: 1px dashed rgba(231,138,173,0.38);
-      color: #8A6D77;
-      font-size: 12.3px;
-      line-height: 1.55;
-      font-weight: 700;
-      word-break: keep-all;
-    }
-
-    .quick-line {
-      position: relative;
-      z-index: 2;
-      margin-top: 12px;
-      padding: 11px 13px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(118,216,210,0.15), rgba(246,199,213,0.15));
-      border: 1px solid rgba(255,255,255,0.82);
-      color: #5B6F6F;
-      font-size: 12.8px;
-      line-height: 1.55;
-      font-weight: 700;
-      text-align: center;
-      word-break: keep-all;
-    }
-
-    .bottom-note {
-      position: relative;
-      z-index: 2;
-      margin-top: 10px;
-      padding: 11px 13px;
-      border-radius: 15px;
-      background: rgba(255,255,255,0.58);
-      border: 1px dashed rgba(118,216,210,0.45);
-      color: #7B8B8A;
-      font-size: 12.4px;
-      line-height: 1.6;
-      word-break: keep-all;
-    }
-
-    @media (max-width: 820px) {
-      .head {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .head-chip {
-        width: 100%;
-      }
-
-      .phase-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 540px) {
-      body {
-        padding: 12px;
-      }
-
-      .phase-wrap {
-        padding: 20px 14px 18px;
-        border-radius: 24px;
-      }
-
-      .title {
-        font-size: 25px;
-      }
-
-      .desc {
-        font-size: 13.5px;
-      }
-
-      .phase-title {
-        font-size: 19px;
-      }
-
-      .step-chip {
-        font-size: 12.8px;
-      }
-    }
-  </style>
+  @media(max-width:460px){
+    .weekly-board{padding:18px 10px 22px}
+    .board-shell{padding:20px 14px;border-radius:24px}
+    .board-title{font-size:25px}
+    .week-grid{grid-template-columns:1fr}
+    .day-card{min-height:150px}
+  }
+</style>
 </head>
-
 <body>
-  <section class="phase-wrap">
-    <div class="head">
-      <div>
-        <div class="kicker">✦ COMPACT PHASE</div>
-        <h1 class="title">제작 과정 한눈에 보기</h1>
-        <p class="desc">
-          신청부터 완성본 전달까지의 기본 진행 순서입니다.<br>
-          작업 종류와 요청 내용에 따라 일부 단계는 조정될 수 있습니다.
-        </p>
+  <section class="weekly-board" aria-label="IROHA 주간 작업 보드">
+    <div class="board-shell">
+      <div class="board-top">
+        <div>
+          <div class="board-kicker">✦ WEEKLY SLOT</div>
+          <h1 class="board-title">IROHA 주간 작업 보드</h1>
+          <p class="board-desc">
+            주차별 예약 및 작업 진행 상태를 한눈에 확인할 수 있습니다.<br>
+            세부 일정은 상담 및 자료 확인 후 조정될 수 있습니다.
+          </p>
+        </div>
+        <div class="board-period" aria-label="표시 기간">
+          <span class="label" id="weekLabel">3주차</span>
+          <span class="range" id="weekRange">06.15 - 06.21</span>
+        </div>
       </div>
 
-      <div class="head-chip">4 STEP</div>
-    </div>
+      <div class="week-tabs" aria-label="주차 선택">
+        <button class="week-tab" type="button" data-week="1">1주차</button>
+        <button class="week-tab" type="button" data-week="2">2주차</button>
+        <button class="week-tab active" type="button" data-week="3">3주차</button>
+        <button class="week-tab" type="button" data-week="4">4주차</button>
+      </div>
 
-    <div class="phase-grid">
-      <article class="phase-card">
-        <div class="phase-top">
-          <div class="phase-num">01</div>
-          <div class="phase-label">READY</div>
-        </div>
-        <h2 class="phase-title">신청준비</h2>
-        <div class="step-stack">
-          <div class="step-chip"><span>01</span>문의 및 상담</div>
-          <div class="step-chip"><span>02</span>주문 및 입금</div>
-          <div class="step-chip"><span>03</span>2D 일러 기반 및 참고자료 기반 파츠서칭</div>
-          <div class="step-chip"><span>04</span>파츠 구매 인증</div>
-        </div>
-      </article>
+      <div class="board-legend" aria-label="상태 안내">
+        <div class="legend-chip today"><span class="dot"></span>TODAY</div>
+        <div class="legend-chip available"><span class="dot"></span>예약 가능</div>
+        <div class="legend-chip closed"><span class="dot"></span>예약 마감</div>
+        <div class="legend-chip off"><span class="dot"></span>휴무일</div>
+        <div class="legend-chip work"><span class="dot"></span>진행중</div>
+      </div>
 
-      <article class="phase-card">
-        <div class="phase-top">
-          <div class="phase-num">02</div>
-          <div class="phase-label">MAKE</div>
-        </div>
-        <h2 class="phase-title">성형 · 페이셜 제작</h2>
-        <div class="step-stack">
-          <div class="step-chip"><span>05</span>성형 작업</div>
-          <div class="step-chip"><span>06</span>1차 컨펌</div>
-          <div class="step-chip"><span>07</span>페이셜 작업</div>
-          <div class="step-chip"><span>08</span>2차 컨펌</div>
-        </div>
-        <div class="phase-note">
-          ※ 페이셜 단계부터는 성형 수정이 불가하니, 신중한 결정 부탁드립니다.
-        </div>
-      </article>
+      <div class="week-grid" id="weekGrid">
+        <article class="day-card available is-today">
+          <div class="day-head">
+            <div class="day-name">월요일<span class="day-date">06.15</span></div>
+            <span class="day-status">예약 가능</span>
+          </div>
+          <div class="day-line"></div>
+          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+        </article>
 
-      <article class="phase-card">
-        <div class="phase-top">
-          <div class="phase-num">03</div>
-          <div class="phase-label">UNITY</div>
-        </div>
-        <h2 class="phase-title">유니티 세팅 및 물리 작업</h2>
-        <div class="step-stack">
-          <div class="step-chip"><span>A</span>헤어·의상 적용 상태와 전체 조합을 확인합니다.</div>
-          <div class="step-chip"><span>B</span>스프링본 및 Magica Cloth 2 물리 세팅 후, 확인용 영상을 전달드립니다.</div>
-        </div>
-      </article>
+        <article class="day-card available">
+          <div class="day-head">
+            <div class="day-name">화요일<span class="day-date">06.16</span></div>
+            <span class="day-status">예약 가능</span>
+          </div>
+          <div class="day-line"></div>
+          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+        </article>
 
-      <article class="phase-card">
-        <div class="phase-top">
-          <div class="phase-num">04</div>
-          <div class="phase-label">FINAL</div>
-        </div>
-        <h2 class="phase-title">최종확인 · 전달</h2>
-        <div class="step-stack">
-          <div class="step-chip"><span>09</span>변환 전 최종컨펌</div>
-          <div class="step-chip"><span>10</span>완성본 전달</div>
-        </div>
-      </article>
-    </div>
+        <article class="day-card available">
+          <div class="day-head">
+            <div class="day-name">수요일<span class="day-date">06.17</span></div>
+            <span class="day-status">예약 가능</span>
+          </div>
+          <div class="day-line"></div>
+          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+        </article>
 
-    <div class="quick-line">
-      신청준비 → 파츠서칭·인증 → 성형·페이셜 제작 → 유니티 세팅 및 물리 작업 → 최종확인·전달
-    </div>
+        <article class="day-card available">
+          <div class="day-head">
+            <div class="day-name">목요일<span class="day-date">06.18</span></div>
+            <span class="day-status">예약 가능</span>
+          </div>
+          <div class="day-line"></div>
+          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+        </article>
 
-    <div class="bottom-note">
-      ※ 작업 종류와 요청 범위에 따라 컨펌 횟수, 세부 진행 방식, 전달 자료는 일부 조정될 수 있습니다.
+        <article class="day-card available">
+          <div class="day-head">
+            <div class="day-name">금요일<span class="day-date">06.19</span></div>
+            <span class="day-status">예약 가능</span>
+          </div>
+          <div class="day-line"></div>
+          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+        </article>
+
+        <article class="day-card available">
+          <div class="day-head">
+            <div class="day-name">토요일<span class="day-date">06.20</span></div>
+            <span class="day-status">예약 가능</span>
+          </div>
+          <div class="day-line"></div>
+          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+        </article>
+
+        <article class="day-card available">
+          <div class="day-head">
+            <div class="day-name">일요일<span class="day-date">06.21</span></div>
+            <span class="day-status">예약 가능</span>
+          </div>
+          <div class="day-line"></div>
+          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+        </article>
+
+      </div>
+
+      <p class="board-note">
+        ※ 주간 작업 보드는 예약 가능 여부를 빠르게 확인하기 위한 안내용이며, 실제 일정은 신청 내용과 자료 전달 상황에 따라 달라질 수 있습니다.
+      </p>
     </div>
   </section>
 
-  <script>
-    function sendHeight() {
-      const height = document.documentElement.scrollHeight;
-      if (window.parent !== window) {
-        window.parent.postMessage({
-          type: 'iroha-process-phase-4zone-height',
-          height: height
-        }, '*');
-      }
+<script>
+/*
+  수정 방법:
+  - 아래 weekData 안의 날짜, 상태, 안내문구만 바꾸면 됩니다.
+  - type 값은 available / closed / work / off 중 하나를 사용하면 됩니다.
+  - TODAY 표시는 날짜가 지나면 자동으로 이동합니다.
+  - 첫 화면도 오늘 날짜가 포함된 주차로 자동 표시됩니다.
+*/
+const weekData = {
+  1: {
+    label: '1주차',
+    range: '06.01 - 06.07',
+    days: [
+      {day:'월요일', date:'06.01', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'화요일', date:'06.02', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'수요일', date:'06.03', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'목요일', date:'06.04', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'금요일', date:'06.05', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'토요일', date:'06.06', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'일요일', date:'06.07', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
+    ]
+  },
+  2: {
+    label: '2주차',
+    range: '06.08 - 06.14',
+    days: [
+      {day:'월요일', date:'06.08', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'화요일', date:'06.09', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'수요일', date:'06.10', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'목요일', date:'06.11', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'금요일', date:'06.12', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'토요일', date:'06.13', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'일요일', date:'06.14', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
+    ]
+  },
+  3: {
+    label: '3주차',
+    range: '06.15 - 06.21',
+    days: [
+      {day:'월요일', date:'06.15', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'화요일', date:'06.16', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'수요일', date:'06.17', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'목요일', date:'06.18', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'금요일', date:'06.19', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'토요일', date:'06.20', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'일요일', date:'06.21', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'}
+    ]
+  },
+  4: {
+    label: '4주차',
+    range: '06.22 - 06.28',
+    days: [
+      {day:'월요일', date:'06.22', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'화요일', date:'06.23', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'수요일', date:'06.24', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'목요일', date:'06.25', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'금요일', date:'06.26', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'토요일', date:'06.27', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'일요일', date:'06.28', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'}
+    ]
+  }
+};
+
+function getTodayKey(){
+  const formatter = new Intl.DateTimeFormat('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    month: '2-digit',
+    day: '2-digit'
+  });
+
+  const parts = formatter.formatToParts(new Date());
+  const month = parts.find(part => part.type === 'month').value;
+  const day = parts.find(part => part.type === 'day').value;
+  return month + '.' + day;
+}
+
+function findCurrentWeek(){
+  const todayKey = getTodayKey();
+
+  for(const week in weekData){
+    if(weekData[week].days.some(item => item.date === todayKey)){
+      return week;
     }
+  }
 
-    window.addEventListener('load', function () {
-      sendHeight();
-      setTimeout(sendHeight, 200);
-      setTimeout(sendHeight, 600);
-    });
+  return '3';
+}
 
-    window.addEventListener('resize', sendHeight);
-  </script>
+function renderWeek(week){
+  const data = weekData[week];
+  const todayKey = getTodayKey();
+  const grid = document.getElementById('weekGrid');
+
+  document.getElementById('weekLabel').textContent = data.label;
+  document.getElementById('weekRange').textContent = data.range;
+
+  grid.innerHTML = data.days.map((item, idx) => {
+    const isToday = item.date === todayKey;
+    const cardClass = item.type + (isToday ? ' is-today' : '');
+
+    return `
+      <article class="day-card ${cardClass}" style="animation-delay:${idx * 25}ms">
+        <div class="day-head">
+          <div class="day-name">${item.day}<span class="day-date">${item.date}</span></div>
+          <span class="day-status">${item.status}</span>
+        </div>
+        <div class="day-line"></div>
+        <p class="day-text">${item.text}</p>
+        <div class="day-bottom"><span>${item.bottom}</span><b>${item.code}</b></div>
+      </article>
+    `;
+  }).join('');
+
+  document.querySelectorAll('.week-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.week === String(week));
+  });
+
+  sendHeight();
+  setTimeout(sendHeight, 180);
+}
+
+function sendHeight(){
+  var h = Math.max(
+    document.documentElement.scrollHeight,
+    document.body ? document.body.scrollHeight : 0
+  );
+  try{
+    parent.postMessage({type:'iroha-weekly-schedule-height', height:h}, '*');
+  }catch(e){}
+}
+
+document.querySelectorAll('.week-tab').forEach(btn => {
+  btn.addEventListener('click', function(){
+    renderWeek(this.dataset.week);
+  });
+});
+
+window.addEventListener('load', function(){
+  renderWeek('3');
+  sendHeight();
+});
+window.addEventListener('resize', sendHeight);
+setTimeout(sendHeight, 120);
+setTimeout(sendHeight, 500);
+</script>
 </body>
 </html>

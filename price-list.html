@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IROHA 패키지 구성</title>
+
+  <style>
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --mint: #76D8D2;
+      --mint-main: #24C6BF;
+      --mint-dark: #159A95;
+      --mint-soft: #E9FFFD;
+      --mint-line: #B9EFEA;
+
+      --lavender: #E7E1FF;
+      --lavender-main: #7A67D8;
+      --lavender-deep: #5748B3;
+      --lavender-soft: #F7F4FF;
+      --lavender-line: #DCD7FF;
+
+      --vrc-soft: #FFF9EA;
+      --vrc-main: #FFF4D8;
+      --vrc-deep: #A8741A;
+      --vrc-line: #F4C96B;
+
+      --cream: #FFF6DF;
+      --pink-soft: #FFF7FA;
+
+      --text: #30383A;
+      --sub: #7C898A;
+      --light: #B5BDBE;
+      --white: rgba(255,255,255,0.96);
+      --shadow: 0 18px 46px rgba(36,198,191,0.13);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Paperozi', sans-serif;
+    }
+
+    body {
+      padding: 28px 16px 40px;
+    }
+
+    .price-section {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 34px;
+      border: 1.5px solid var(--mint-line);
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(118,216,210,0.22), transparent 34%),
+        radial-gradient(circle at 98% 6%, rgba(231,225,255,0.50), transparent 34%),
+        linear-gradient(135deg, #FFFFFF 0%, #FBFFFF 58%, #FFF9FC 100%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .price-section::after {
+      content: "";
+      position: absolute;
+      right: -120px;
+      bottom: -145px;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      background: rgba(118,216,210,0.15);
+      pointer-events: none;
+    }
+
+    .price-header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .price-header::before {
+      content: "";
+      width: 6px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--mint-main);
+      flex: 0 0 auto;
+    }
+
+    .price-title {
+      margin: 0;
+      font-size: 27px;
+      line-height: 1.25;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+    }
+
+    .tabs {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .shader-note {
+      position: relative;
+      z-index: 1;
+      margin: -8px 0 20px 18px;
+      padding: 14px 17px;
+      border-radius: 18px;
+      border: 1.3px solid rgba(118,216,210,0.42);
+      background: linear-gradient(135deg, rgba(233,255,253,0.82), rgba(247,244,255,0.72));
+      color: #5F7070;
+      font-size: 13.5px;
+      line-height: 1.68;
+      word-break: keep-all;
+    }
+
+    .shader-note b {
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+
+
+    .tab-btn {
+      appearance: none;
+      border: 1.5px solid var(--mint-line);
+      border-radius: 14px;
+      background: #FFFFFF;
+      color: #465454;
+      padding: 12px 19px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .tab-btn:hover {
+      transform: translateY(-1px);
+      background: var(--mint-soft);
+      color: var(--mint-dark);
+    }
+
+    .tab-btn.active {
+      background: var(--mint-main);
+      border-color: var(--mint-main);
+      color: #FFFFFF;
+      box-shadow: 0 10px 22px rgba(36,198,191,0.24);
+    }
+
+    .price-section.is-vrc .tab-btn.active {
+      background: #FFF4D8;
+      border-color: #F4C96B;
+      color: #A8741A;
+      box-shadow: 0 10px 22px rgba(244,201,107,0.26);
+    }
+
+    .price-section.is-vrc .price-header::before {
+      background: #F4C96B;
+    }
+
+    .price-section.is-vrc .sub-title::before {
+      background: #F4C96B;
+    }
+
+.panel {
+      position: relative;
+      z-index: 1;
+      display: none;
+      animation: fadeUp 0.22s ease both;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0.55; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sub-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 20px 0 10px;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      color: #293737;
+    }
+
+    .sub-title::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--lavender-main);
+    }
+
+    .sub-desc {
+      margin: -3px 0 12px 13px;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .price-list {
+      display: grid;
+      gap: 13px;
+    }
+
+    .price-card {
+      position: relative;
+      padding: 19px 22px 18px;
+      border: 1.4px solid rgba(232,184,204,0.46);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 8px 20px rgba(36,198,191,0.055);
+      overflow: hidden;
+    }
+
+    .price-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--mint), #BFEFEB);
+    }
+
+    .panel.debut .price-card::before {
+      background: linear-gradient(180deg, var(--lavender), #B8AEF6);
+    }
+
+    .panel.vrc .price-card::before {
+      background: linear-gradient(180deg, var(--vrc-line), var(--vrc-main));
+    }
+
+    .price-card.recommend {
+      border-color: rgba(118,216,210,0.64);
+      background:
+        linear-gradient(135deg, rgba(233,255,253,0.72), rgba(255,255,255,0.94));
+    }
+
+    .price-card.recommend::after {
+      content: none;
+      display: none;
+    }
+
+    .panel.debut .price-card.recommend::after {
+      content: none;
+      display: none;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding-left: 4px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid rgba(120,140,140,0.12);
+      margin-bottom: 13px;
+    }
+
+    .name-area {
+      min-width: 0;
+    }
+
+    .package-name {
+      margin: 0;
+      color: var(--mint-dark);
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      word-break: keep-all;
+    }
+
+    .panel.debut .package-name {
+      color: var(--lavender-deep);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 9px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--mint-soft);
+      color: var(--mint-dark);
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .best-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #FF6FA8 0%, #FF9CC8 100%);
+      color: #FFFFFF;
+      border: 1px solid rgba(255,255,255,0.78);
+      font-size: 11.8px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      box-shadow:
+        0 8px 18px rgba(255,111,168,0.34),
+        0 0 0 4px rgba(255,111,168,0.10);
+      transform: translateY(-1px) scale(1);
+      animation: bestPop 1.8s ease-in-out infinite;
+    }
+
+    .best-badge::before {
+      content: "✦";
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    @keyframes bestPop {
+      0%, 100% {
+        transform: translateY(-1px) scale(1);
+        box-shadow:
+          0 8px 18px rgba(255,111,168,0.34),
+          0 0 0 4px rgba(255,111,168,0.10);
+      }
+      50% {
+        transform: translateY(-2px) scale(1.07);
+        box-shadow:
+          0 12px 24px rgba(255,111,168,0.46),
+          0 0 0 7px rgba(255,111,168,0.15);
+      }
+    }
+.panel.debut .tag {
+      background: var(--lavender-soft);
+      color: var(--lavender-deep);
+    }
+
+    .price {
+      flex: 0 0 auto;
+      margin-top: 1px;
+      color: #262E30;
+      text-align: right;
+      white-space: nowrap;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.035em;
+    }
+
+    .price small {
+      display: inline-block;
+      margin-right: 5px;
+      color: #9EA8A8;
+      font-size: 12px;
+      font-weight: 700;
+      vertical-align: 2px;
+      letter-spacing: 0;
+    }
+
+    .open-sale {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 5px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #FF6FA8 0%, #FF9CC8 100%);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 6px 14px rgba(255,111,168,0.22);
+    }
+
+    .open-sale::before {
+      content: "✦";
+      font-size: 9px;
+    }
+
+    .original-price {
+      display: block;
+      margin-bottom: 4px;
+      color: #AEB7B8;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-decoration: line-through;
+      text-decoration-thickness: 1.5px;
+    }
+
+    .sale-price {
+      display: block;
+      color: #262E30;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.035em;
+      white-space: nowrap;
+    }
+
+    .panel.debut .price {
+      min-width: 142px;
+    }
+
+    .panel.starter .price {
+      min-width: 132px;
+    }
+
+
+    .items {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: #657273;
+      font-size: 13.3px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .items li {
+      position: relative;
+      padding-left: 17px;
+    }
+
+    .items li::before {
+      content: "+";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+
+    .panel.debut .items li::before {
+      color: var(--lavender-deep);
+    }
+
+    .panel.vrc .package-name {
+      color: var(--vrc-deep);
+    }
+
+    .panel.vrc .tag {
+      background: var(--vrc-soft);
+      color: var(--vrc-deep);
+    }
+
+    .panel.vrc .items li::before {
+      color: var(--vrc-deep);
+    }
+
+    .panel.vrc .price-card.recommend {
+      border-color: rgba(244,201,107,0.64);
+      background:
+        linear-gradient(135deg, rgba(255,244,216,0.78), rgba(255,255,255,0.94));
+    }
+
+    .panel.vrc .price-card.recommend::after {
+      content: none;
+      display: none;
+    }
+
+
+    .bottom-note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px dashed rgba(118,216,210,0.44);
+      background: linear-gradient(135deg, rgba(233,255,253,0.78), rgba(247,244,255,0.78));
+      color: #657273;
+      font-size: 13px;
+      line-height: 1.68;
+      word-break: keep-all;
+    }
+
+    .bottom-note b {
+      color: var(--mint-dark);
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 20px 12px 32px;
+      }
+
+      .price-section {
+        padding: 26px 18px 24px;
+        border-radius: 26px;
+      }
+
+      .price-title {
+        font-size: 24px;
+      }
+
+      .tab-btn {
+        padding: 11px 15px;
+        font-size: 14px;
+      }
+
+      .card-top {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .price {
+        text-align: left;
+        font-size: 19px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .tabs {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .tab-btn {
+        width: 100%;
+      }
+
+      .price-card {
+        padding: 17px 15px 16px 18px;
+      }
+
+      .package-name {
+        font-size: 16.5px;
+      }
+
+      .items {
+        font-size: 12.8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="price-section" aria-label="패키지 구성">
+    <div class="price-header">
+      <h1 class="price-title">패키지 구성</h1>
+    </div>
+
+    <div class="shader-note">
+      모든 작업물은 <b>lilToon 쉐이더 + 실시간 그림자</b>를 기준으로 제작됩니다.<br>
+      <b>NiloToon</b>은 현재 보유하고 있지 않아 관련 작업은 진행하지 않습니다.
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="패키지 메뉴">
+      <button class="tab-btn active" type="button" data-target="starter">입문 패키지</button>
+      <button class="tab-btn" type="button" data-target="debut">데뷔 패키지</button>
+      <button class="tab-btn" type="button" data-target="vrc">VRC 아바타</button>
+    </div>
+<div class="panel starter active" id="starter">
+      <div class="sub-title">입문 패키지</div>
+      <p class="sub-desc">아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.</p>
+
+      <div class="price-list">
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">Warudo 베이직 뚜따 패키지</h2>
+              <div class="tag-row">
+                <span class="tag">Warudo</span>
+                <span class="tag">입문</span>
+                <span class="tag">Spring Bone</span>
+              </div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 80,000원</span><span class="sale-price">70,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>기본금</li>
+            <li>전용의상 1종</li>
+            <li>전용헤어 1종</li>
+            <li>스프링본 물리 세팅</li>
+          </ul>
+        </article>
+
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">Warudo 프리미엄 물리 뚜따 패키지</h2>
+              <div class="tag-row">
+                <span class="tag">Warudo</span>
+                <span class="tag">프리미엄</span>
+                <span class="tag">Magica Cloth 2</span>
+              </div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 150,000원</span><span class="sale-price">140,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>기본금</li>
+            <li>전용의상 1종</li>
+            <li>전용헤어 1종</li>
+            <li>Magica Cloth 2 전신 콜라이더 세팅</li>
+            <li>Magica Cloth 2 물리 작업 세팅</li>
+          </ul>
+        </article>
+
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">VSF 베이직 뚜따 패키지</h2>
+              <div class="tag-row">
+                <span class="tag">VSF</span>
+                <span class="tag">입문</span>
+                <span class="tag">Spring Bone</span>
+              </div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 60,000원</span><span class="sale-price">50,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>기본금</li>
+            <li>전용의상 1종</li>
+            <li>전용헤어 1종</li>
+            <li>스프링본 물리 세팅</li>
+          </ul>
+        </article>
+
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">Meligo 프리미엄 물리 뚜따 패키지</h2>
+              <div class="tag-row">
+                <span class="tag">Meligo</span>
+                <span class="tag">프리미엄</span>
+                <span class="tag">Magica Cloth 2</span>
+              </div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 130,000원</span><span class="sale-price">120,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>기본금</li>
+            <li>전용의상 1종</li>
+            <li>전용헤어 1종</li>
+            <li>Magica Cloth 2 전신 콜라이더 세팅</li>
+            <li>Magica Cloth 2 물리 작업 세팅</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+
+    <div class="panel debut" id="debut">
+      <div class="sub-title">올인원 데뷔 패키지</div>
+      <p class="sub-desc">방송용 아바타 세팅, 페이셜, 기본 연동 등 데뷔에 필요한 구성을 한 번에 준비하는 메뉴입니다.</p>
+
+      <div class="price-list">
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">VSF 올인원 데뷔 패키지</h2>
+              <div class="tag-row">
+                <span class="tag">VSF</span>
+                <span class="tag">올인원</span>
+                <span class="tag">데뷔</span>
+              </div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 450,000원</span><span class="sale-price">400,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>맞춤형 오마카세 외형 커스터마이징</li>
+            <li>페이셜 + 뽀잉눈</li>
+            <li>특수 표현 리깅 4종 · 반짝이는 눈 / 하트눈 / 눈물 / 홍조</li>
+            <li>기본 피부톤 보정</li>
+            <li>의상 1종 + 헤어 1종 + 액세서리 최대 2종</li>
+            <li>실시간 그림자 적용</li>
+            <li>스프링본 물리 세팅</li>
+          </ul>
+        </article>
+
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">Warudo 올인원 데뷔 패키지</h2>
+              <div class="tag-row">
+                <span class="tag">Warudo</span>
+                <span class="tag">올인원</span>
+                <span class="tag">Scenes</span>
+              </div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 500,000원</span><span class="sale-price">450,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>맞춤형 오마카세 외형 커스터마이징</li>
+            <li>페이셜 + 뽀잉눈</li>
+            <li>특수 표현 리깅 4종 · 반짝이는 눈 / 하트눈 / 눈물 / 홍조</li>
+            <li>기본 피부톤 보정</li>
+            <li>의상 1종 + 헤어 1종 + 액세서리 최대 2종</li>
+            <li>실시간 그림자 적용</li>
+            <li>스프링본 물리 세팅</li>
+            <li>기본 세팅이 탑재된 Scenes 파일</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="sub-title">2D 원화 기반 데뷔 플랜</div>
+      <p class="sub-desc">2D 원화를 기반으로 성형, 페이셜, 뽀잉눈, 고급 물리 세팅까지 포함하는 플랜입니다.</p>
+
+      <div class="price-list">
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">2D 원화 기반 VSF 데뷔 플랜</h2>
+              <div class="tag-row">
+                <span class="tag">VSF</span>
+                <span class="tag">2D 원화 기반</span>
+              </div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 550,000원</span><span class="sale-price">500,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>실시간 그림자</li>
+            <li>2D 원화 기반 성형</li>
+            <li>페이셜 + 뽀잉눈</li>
+            <li>특수 표현 리깅 4종 · 반짝이는눈 / 하트눈 / 눈물 / 홍조</li>
+            <li>기본 피부톤 수정</li>
+            <li>의상 1종 + 헤어 1종 + 악세사리 최대 2개</li>
+            <li>Magica Cloth 2 전신 콜라이더 세팅</li>
+            <li>Magica Cloth 2 물리 작업 세트</li>
+          </ul>
+        </article>
+
+        <article class="price-card recommend">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">2D 원화 기반 Warudo 데뷔 플랜</h2>
+              <div class="tag-row">
+                <span class="tag">Warudo</span>
+                <span class="tag">2D 원화 기반</span>
+              
+                <span class="best-badge">BEST 인기</span></div>
+            </div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 600,000원</span><span class="sale-price">550,000원</span></div>
+          </div>
+          <ul class="items">
+            <li>실시간 그림자</li>
+            <li>2D 원화 기반 성형</li>
+            <li>페이셜 + 뽀잉눈</li>
+            <li>특수 표현 리깅 4종 · 반짝이는눈 / 하트눈 / 눈물 / 홍조</li>
+            <li>기본 피부톤 수정</li>
+            <li>의상 1종 + 헤어 1종 + 악세사리 최대 2개</li>
+            <li>Magica Cloth 2 전신 콜라이더 세팅</li>
+            <li>Magica Cloth 2 물리 작업 세트</li>
+            <li>기본 세팅이 탑재된 Scenes 파일</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="bottom-note">
+        <b>안내</b> · VSF 작업물은 VSeeFace 또는 Meligo 프로그램에서 사용 가능합니다.
+      </div>
+    </div>
+
+    <div class="panel vrc" id="vrc">
+      <div class="sub-title">VRC 옵션 패키지</div>
+      <p class="sub-desc">원하는 작업 범위에 따라 선택하는 기본 옵션형 메뉴입니다.</p>
+
+      <div class="price-list">
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">Basic Options</h2>
+              <div class="tag-row">
+                <span class="tag">VRchat</span>
+              </div>
+            </div>
+            <div class="price">+60,000원</div>
+          </div>
+          <ul class="items">
+            <li>헤어 1종</li>
+            <li>의상 1종</li>
+            <li>악세사리 · 없을 경우 적당한 무료 파츠로 구성</li>
+            <li>헤어 콜라이더 세팅 · 머리카락이 몸 앞으로 관통하지 않도록 작업</li>
+            <li>작가표 AFK 잠수 모션 세팅</li>
+            <li>썸네일 제작</li>
+          </ul>
+        </article>
+
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">Standard Options</h2>
+              <div class="tag-row">
+                <span class="tag">VRchat</span>
+              </div>
+            </div>
+            <div class="price">+120,000원</div>
+          </div>
+          <ul class="items">
+            <li>헤어 최대 4종 · 갯수 자유</li>
+            <li>의상 최대 4종 · 갯수 자유</li>
+            <li>헤어 콜라이더 세팅 · 머리카락이 몸 앞으로 관통하지 않도록 작업</li>
+            <li>작가표 AFK 잠수 모션 세팅</li>
+            <li>오마카세 표정 제작 · 갯수 랜덤</li>
+            <li>썸네일 제작</li>
+          </ul>
+        </article>
+
+        <article class="price-card recommend">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">Premium Options</h2>
+              <div class="tag-row">
+                <span class="tag">VRchat</span>
+                <span class="best-badge">BEST 인기</span>
+              </div>
+            </div>
+            <div class="price">+150,000원</div>
+          </div>
+          <ul class="items">
+            <li>헤어 최대 5종 · 갯수 자유</li>
+            <li>의상 최대 8종 · 갯수 자유</li>
+            <li>ALL 텍스처 세팅 · 피부 / 눈 / 헤어 기준 세팅</li>
+            <li>악세사리 · 복잡한 악세사리는 추가금 발생</li>
+            <li>오마카세 랜덤 컬러옷장 또는 오마카세 랜덤 탈부착 기능</li>
+            <li>캐릭터 색감이 확고할 경우 탈부착 기능으로 구성</li>
+            <li>헤어 콜라이더 세팅 · 머리카락이 몸 앞으로 관통하지 않도록 작업</li>
+            <li>작가표 AFK 잠수 모션 세팅</li>
+            <li>오마카세 표정 제작 · 갯수 랜덤</li>
+            <li>썸네일 제작</li>
+            <li>옷장 아이콘 제작 · 인게임에서 한눈에 찾기 쉽게 아이콘 그림 제작</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="sub-title">VRC 핵고퀄 풀옵션</div>
+      <p class="sub-desc">고급 성형, 텍스처, 표정 대응, 최적화까지 포함하는 풀옵션 메뉴입니다.</p>
+
+      <div class="price-list">
+        <article class="price-card">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">핵고퀄 A 풀옵션</h2>
+              <div class="tag-row">
+                <span class="tag">VRchat</span>
+                <span class="tag">Full Option</span>
+              </div>
+            </div>
+            <div class="price">+250,000원</div>
+          </div>
+          <ul class="items">
+            <li>전용 의상 1종</li>
+            <li>전용 헤어 1종</li>
+            <li>ALL 텍스처 세팅</li>
+            <li>블렌더 성형</li>
+            <li>MMD 월드에서 표정이 깨지지 않도록 대응</li>
+            <li>오마카세 표정 제작 · 갯수 랜덤</li>
+            <li>아바타 용량 최적화</li>
+            <li>작가표 AFK 잠수 모션 세팅</li>
+          </ul>
+        </article>
+
+        <article class="price-card recommend">
+          <div class="card-top">
+            <div class="name-area">
+              <h2 class="package-name">핵고퀄 B 풀옵션</h2>
+              <div class="tag-row">
+                <span class="tag">VRchat</span>
+                <span class="tag">Full Option</span>
+                <span class="best-badge">BEST 인기</span>
+              </div>
+            </div>
+            <div class="price">+300,000원</div>
+          </div>
+          <ul class="items">
+            <li>전용 의상 4종</li>
+            <li>전용 헤어 4종</li>
+            <li>헤어 콜라이더 세팅 · 머리카락이 몸 앞으로 관통하지 않도록 작업</li>
+            <li>ALL 텍스처 세팅</li>
+            <li>옷장 아이콘 세팅</li>
+            <li>블렌더 성형</li>
+            <li>MMD 월드에서 표정이 깨지지 않도록 대응</li>
+            <li>오마카세 표정 제작 · 갯수 랜덤</li>
+            <li>아바타 용량 최적화</li>
+            <li>작가표 AFK 잠수 모션 세팅</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="bottom-note">
+        <b>안내</b> · VRChat PhysBone, 예: 헤어 움직임은 적용 가능한 개수 제한이 있어, 헤어 구조에 따라 헤어 5종이라도 일부 제외해야 하는 경우가 있을 수 있습니다.
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const priceSection = document.querySelector('.price-section');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+function sendHeight() {
+      const height = Math.ceil(Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      ));
+
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'iroha-price-list-height',
+          height: height
+        }, '*');
+      }
+    }
+
+    tabButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        const target = button.getAttribute('data-target');
+
+        tabButtons.forEach(function(btn) {
+          btn.classList.toggle('active', btn === button);
+        });
+
+        panels.forEach(function(panel) {
+          panel.classList.toggle('active', panel.id === target);
+        });
+sendHeight();
+        setTimeout(sendHeight, 160);
+      });
+    });
+
+    window.addEventListener('load', function() {
+      sendHeight();
+      setTimeout(sendHeight, 250);
+      setTimeout(sendHeight, 800);
+    });
+
+    window.addEventListener('resize', sendHeight);
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(sendHeight);
+    }
+
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver(sendHeight);
+      observer.observe(document.body);
+    }
+  </script>
+</body>
+</html>

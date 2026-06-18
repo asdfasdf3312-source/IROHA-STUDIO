@@ -592,6 +592,7 @@
   - 아래 weekData 안의 날짜, 상태, 안내문구만 바꾸면 됩니다.
   - type 값은 available / closed / work / off 중 하나를 사용하면 됩니다.
   - TODAY 표시는 날짜가 지나면 자동으로 이동합니다.
+  - 오늘보다 지난 예약 가능 날짜는 자동으로 예약 마감 처리됩니다.
   - 첫 화면도 오늘 날짜가 포함된 주차로 자동 표시됩니다.
 */
 const weekData = {
@@ -662,6 +663,41 @@ function getTodayKey(){
   return month + '.' + day;
 }
 
+
+function dateKeyToNumber(dateKey){
+  const parts = String(dateKey).split('.');
+  const month = parseInt(parts[0], 10);
+  const day = parseInt(parts[1], 10);
+
+  if (isNaN(month) || isNaN(day)) {
+    return 0;
+  }
+
+  return month * 100 + day;
+}
+
+function getDisplayItem(item, todayKey){
+  const itemNumber = dateKeyToNumber(item.date);
+  const todayNumber = dateKeyToNumber(todayKey);
+
+  /*
+    예약 가능으로 등록해 둔 날짜가 오늘보다 이전이면 자동 예약 마감 처리합니다.
+    단, 수동으로 예약 마감 / 휴무일 / 진행중으로 설정한 날짜는 그대로 유지합니다.
+  */
+  if (itemNumber < todayNumber && item.type === 'available') {
+    return {
+      ...item,
+      type: 'closed',
+      status: '예약 마감',
+      text: '지난 날짜의 신규 예약 슬롯이 마감되었습니다.',
+      bottom: '예약 상태',
+      code: 'CLOSED'
+    };
+  }
+
+  return item;
+}
+
 function findCurrentWeek(){
   const todayKey = getTodayKey();
 
@@ -683,18 +719,19 @@ function renderWeek(week){
   document.getElementById('weekRange').textContent = data.range;
 
   grid.innerHTML = data.days.map((item, idx) => {
+    const displayItem = getDisplayItem(item, todayKey);
     const isToday = item.date === todayKey;
-    const cardClass = item.type + (isToday ? ' is-today' : '');
+    const cardClass = displayItem.type + (isToday ? ' is-today' : '');
 
     return `
       <article class="day-card ${cardClass}" style="animation-delay:${idx * 25}ms">
         <div class="day-head">
-          <div class="day-name">${item.day}<span class="day-date">${item.date}</span></div>
-          <span class="day-status">${item.status}</span>
+          <div class="day-name">${displayItem.day}<span class="day-date">${displayItem.date}</span></div>
+          <span class="day-status">${displayItem.status}</span>
         </div>
         <div class="day-line"></div>
-        <p class="day-text">${item.text}</p>
-        <div class="day-bottom"><span>${item.bottom}</span><b>${item.code}</b></div>
+        <p class="day-text">${displayItem.text}</p>
+        <div class="day-bottom"><span>${displayItem.bottom}</span><b>${displayItem.code}</b></div>
       </article>
     `;
   }).join('');
@@ -724,7 +761,7 @@ document.querySelectorAll('.week-tab').forEach(btn => {
 });
 
 window.addEventListener('load', function(){
-  renderWeek('3');
+  renderWeek(findCurrentWeek());
   sendHeight();
 });
 window.addEventListener('resize', sendHeight);

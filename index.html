@@ -293,6 +293,55 @@ body{
   color: inherit !important;
 }
 
+
+.copy-fallback-box {
+  grid-column: 1 / -1;
+  display: none;
+  margin-top: 4px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #F8FAFF;
+  border: 1px solid #C8D8FF;
+}
+.copy-fallback-box.show {
+  display: block;
+}
+.copy-fallback-title {
+  margin-bottom: 8px;
+  color: #4E60C9;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+  text-align: center;
+}
+#copyFallbackText {
+  width: 100%;
+  min-height: 180px;
+  padding: 12px;
+  border: 1px solid #DDE8FF;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #333333;
+  font-family: 'Paperozi', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+  box-sizing: border-box;
+  resize: vertical;
+}
+.manual-copy-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #EEF3FF 0%, #DDE8FF 100%);
+  color: #3F5DA8;
+  font-family: 'Paperozi', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>
@@ -432,6 +481,11 @@ body{
       <button class="nav-btn" type="button" onclick="moveStep(-1)">이전</button>
       <button class="copy-btn" type="button" onclick="handleNextOrCopy()" id="nextCopyBtn">다음</button>
       <div id="copyToast" class="copy-toast" aria-live="polite">양식이 복사되었습니다!</div>
+      <div id="copyFallbackBox" class="copy-fallback-box">
+        <div class="copy-fallback-title">자동 복사가 차단되면 아래 내용을 직접 복사해주세요.</div>
+        <textarea id="copyFallbackText" readonly></textarea>
+        <button class="manual-copy-btn" type="button" onclick="manualSelectCopy()">텍스트 다시 선택하기</button>
+      </div>
     </div>
   </div>
 </div>
@@ -659,17 +713,87 @@ function makeCopyHtml(text) {
   return textBlock(text) + colorImageHtml + designImageHtml;
 }
 
+function copySuccess(message) {
+  hideManualCopy();
+  showCopyToast(message || "✅ 양식이 복사되었습니다!");
+}
+
+function hideManualCopy() {
+  var box = document.getElementById("copyFallbackBox");
+  if (box) {
+    box.classList.remove("show");
+  }
+}
+
+function showManualCopy(text) {
+  var box = document.getElementById("copyFallbackBox");
+  var textarea = document.getElementById("copyFallbackText");
+
+  if (!box || !textarea) {
+    showCopyToast("⚠️ 자동 복사가 차단되었습니다. 브라우저에서 직접 복사해주세요.");
+    return;
+  }
+
+  textarea.value = text;
+  box.classList.add("show");
+
+  requestAnimationFrame(function() {
+    textarea.focus();
+    textarea.select();
+    try {
+      textarea.setSelectionRange(0, textarea.value.length);
+    } catch (e) {}
+    showCopyToast("⚠️ 자동 복사가 차단되어 아래 텍스트를 선택했어요. Ctrl+C로 복사해주세요.");
+  });
+}
+
+function manualSelectCopy() {
+  var textarea = document.getElementById("copyFallbackText");
+  if (!textarea) return;
+
+  textarea.focus();
+  textarea.select();
+
+  try {
+    textarea.setSelectionRange(0, textarea.value.length);
+  } catch (e) {}
+
+  try {
+    if (document.execCommand("copy")) {
+      showCopyToast("✅ 선택한 텍스트가 복사되었습니다!");
+    } else {
+      showCopyToast("텍스트가 선택되었습니다. Ctrl+C로 복사해주세요.");
+    }
+  } catch (e) {
+    showCopyToast("텍스트가 선택되었습니다. Ctrl+C로 복사해주세요.");
+  }
+}
+
 function copyRichForm(text) {
+  hideManualCopy();
+
   var html = makeCopyHtml(text);
 
-  if (navigator.clipboard && window.ClipboardItem) {
+  if (navigator.clipboard && window.ClipboardItem && window.isSecureContext) {
     navigator.clipboard.write([
       new ClipboardItem({
         "text/html": new Blob([html], { type: "text/html" }),
         "text/plain": new Blob([text], { type: "text/plain" })
       })
     ]).then(function() {
-      showCopyToast("✅ 양식이 복사되었습니다!");
+      copySuccess("✅ 양식이 복사되었습니다!");
+    }).catch(function() {
+      copyPlainText(text, html);
+    });
+  } else {
+    copyPlainText(text, html);
+  }
+}
+
+function copyPlainText(text, html) {
+  if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(function() {
+      copySuccess("✅ 양식이 복사되었습니다!");
     }).catch(function() {
       fallbackRichCopy(text, html);
     });
@@ -705,7 +829,7 @@ function fallbackRichCopy(text, html) {
     document.body.removeChild(temp);
 
     if (success) {
-      showCopyToast("✅ 양식이 복사되었습니다!");
+      copySuccess("✅ 양식이 복사되었습니다!");
     } else {
       fallbackCopy(text);
     }
@@ -718,12 +842,39 @@ function fallbackRichCopy(text, html) {
 
 function fallbackCopy(text) {
   var temp = document.createElement("textarea");
+
   temp.value = text;
+  temp.setAttribute("readonly", "readonly");
+  temp.style.position = "fixed";
+  temp.style.left = "-9999px";
+  temp.style.top = "0";
+  temp.style.width = "1px";
+  temp.style.height = "1px";
+  temp.style.opacity = "0";
+
   document.body.appendChild(temp);
+  temp.focus();
   temp.select();
-  document.execCommand("copy");
+
+  try {
+    temp.setSelectionRange(0, temp.value.length);
+  } catch (e) {}
+
+  var success = false;
+
+  try {
+    success = document.execCommand("copy");
+  } catch (e) {
+    success = false;
+  }
+
   document.body.removeChild(temp);
-  showCopyToast("✅ 양식이 복사되었습니다!");
+
+  if (success) {
+    copySuccess("✅ 양식이 복사되었습니다!");
+  } else {
+    showManualCopy(text);
+  }
 }
 
 function copyAeongForm() {

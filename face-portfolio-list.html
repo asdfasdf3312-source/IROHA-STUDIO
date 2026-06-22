@@ -1027,10 +1027,10 @@ let visibleItems = [];
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.18;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.22;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.18;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.22;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -1480,10 +1480,10 @@ let visibleItems = [];
           zoomVelocityY = -deltaY * velocityScale;
 
           zoomTargetScrollLeft =
-            zoomStartScrollLeft - distanceX;
+            zoomStartScrollLeft - (distanceX * 1.35);
 
           zoomTargetScrollTop =
-            zoomStartScrollTop - distanceY;
+            zoomStartScrollTop - (distanceY * 1.35);
 
           zoomTargetScrollLeft =
             zoomStartScrollLeft - distanceX;

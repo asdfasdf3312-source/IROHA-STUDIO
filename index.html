@@ -1,447 +1,436 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>이로하 작업 신청서</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>작업 신청서</title>
 <style>
-@font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-
-@font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-
-* {
-  box-sizing: border-box;
+@font-face{
+  font-family:'Paperozi';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+  font-weight:400;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Paperozi';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+  font-weight:700;
+  font-display:swap;
+}
+:root{
+  --main:#24C6BF;
+  --main-dark:#159A95;
+  --main-light:#E9FFFD;
+  --line:#D8F1EF;
+  --line2:#E8EEEE;
+  --text:#30383B;
+  --sub:#7A888C;
+  --red:#FF6657;
+  --lav:#EEE9FF;
+  --lav-line:#CFC3FF;
+  --lav-text:#5948C1;
+  --accent:#FF8F5A;
+  --accent-bg:#FFF1EA;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:30px 14px 42px;
+  background:linear-gradient(180deg,#F7FFFE 0,#fff 240px);
+  font-family:'Paperozi',sans-serif;
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.wrap{width:760px;max-width:100%;margin:0 auto}
+.form{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:28px;
+  box-shadow:0 14px 34px rgba(36,198,191,.12);
+  overflow:hidden;
+}
+.header{padding:24px 24px 18px;border-bottom:1px solid var(--line2)}
+.header h1{margin:0;font-size:28px;line-height:1.3}
+.header p{margin:8px 0 0;color:var(--sub);font-size:14px}
+.package-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.package-btn{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:15px;
+  padding:13px 10px;
+  font:700 14px 'Paperozi';
+  color:#5B686B;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.package-btn:hover{border-color:var(--main);color:var(--main-dark)}
+.package-btn.active{background:var(--main)!important;color:#fff!important;border-color:var(--main)!important}
+.guide{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:var(--main-light);
+  border:1px solid var(--line);
+  color:#536366;
+  font-size:13px;
+  line-height:1.65;
+}
+.step-tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line2)}
+.step-btn{
+  position:relative;
+  padding:15px 8px 13px;
+  border:0;
+  background:#fff;
+  font:700 13px 'Paperozi';
+  color:#8A9699;
+  cursor:pointer;
+}
+.step-btn.active{color:var(--main-dark);background:#FBFFFE}
+.step-btn.active::after{
+  content:"";position:absolute;left:18%;right:18%;bottom:0;height:3px;border-radius:10px 10px 0 0;background:var(--main);
+}
+.step-btn span{display:block;font-size:11px;color:#A0AAAD;margin-bottom:3px}
+.panel{display:none;padding:22px 24px 20px}
+.panel.active{display:block}
+.panel-title{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.num{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--main-light);color:var(--main-dark);font-size:13px;font-weight:700}
+.panel-title h2{margin:0;font-size:20px}
+.label{margin:15px 0 8px;font-size:14px;font-weight:700}
+.required{color:var(--red)}
+.tip{color:#999;font-size:12px;font-weight:400}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.choice{
+  border:1.5px solid var(--line2);
+  background:#fff;
+  border-radius:999px;
+  padding:10px 14px;
+  font:700 13.5px 'Paperozi';
+  color:#5E6B6E;
+  cursor:pointer;
+  transition:.16s ease;
+}
+.choice:hover{border-color:#BDDAD8}
+.choice.active{background:var(--main);border-color:var(--main);color:#fff}
+.choice.long{border-radius:14px;min-width:210px}
+#workTypeRow .choice{border-color:var(--lav-line);color:var(--lav-text)}
+#workTypeRow .choice.active{background:linear-gradient(180deg,#F1ECFF,#E6DFFF)!important;color:var(--lav-text)!important;border-color:var(--lav-line)!important;box-shadow:0 8px 18px rgba(116,101,216,.18)}
+.choice.cost-option{
+  border-color:#FFD0B8;
+  color:#C3622F;
+  background:#FFF9F4;
+}
+.choice.cost-option:hover{border-color:#FFB78D}
+.choice.cost-option.active{
+  background:linear-gradient(180deg,#FFA06B,#FF8A4B);
+  border-color:#FF8A4B;
+  color:#fff;
+  box-shadow:0 8px 18px rgba(255,138,75,.24);
+}
+.choice.cost-option::before{
+  content:'+';
+  margin-right:4px;
+  font-weight:700;
+}
+.input,.textarea{
+  width:100%;border:1px solid var(--line2);border-radius:14px;padding:13px 14px;font:400 14px 'Paperozi';color:var(--text);background:#fff;margin-bottom:8px;
+}
+.textarea{min-height:92px;resize:vertical;line-height:1.6}
+.input:focus,.textarea:focus{outline:none;border-color:var(--main);box-shadow:0 0 0 3px rgba(36,198,191,.14)}
+.grid-2,.grid-3{display:grid;gap:8px}
+.grid-2{grid-template-columns:1fr 1fr}
+.grid-3{grid-template-columns:1fr 1fr 1fr}
+.upload{display:block;margin-top:8px;padding:13px 14px;border:1.5px dashed var(--main);border-radius:14px;background:var(--main-light);color:#5A686B;font-size:13px;font-weight:700;cursor:pointer}
+.upload input{display:none}
+.preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.preview img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.warning{display:none;margin-top:10px;padding:12px 14px;border-radius:14px;background:#FFF7EA;border:1px solid #FFDDA8;color:#9C6236;font-size:13px;font-weight:700;line-height:1.65}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 24px 22px;border-top:1px solid var(--line2)}
+.nav-btn,.copy-btn{border:0;border-radius:15px;padding:14px;font:700 15px 'Paperozi';cursor:pointer}
+.nav-btn{background:#F4F8F8;color:#5B686B}
+.copy-btn{background:linear-gradient(135deg,#AFA3FF 0%,#76D8D2 100%);color:#fff;box-shadow:0 12px 24px rgba(118,216,210,.28)}
+.copy-btn:hover{background:linear-gradient(135deg,#9F91FF 0%,#5ECBC5 100%);transform:translateY(-1px)}
+@media(max-width:640px){
+  body{padding:16px 10px 32px}
+  .header,.panel{padding-left:18px;padding-right:18px}
+  .package-tabs,.step-tabs,.grid-2,.grid-3{grid-template-columns:1fr}
+  .step-tabs{border-top:1px solid var(--line2)}
+  .step-btn.active::after{left:0;right:0}
+  .choice.long{min-width:100%}
+  .actions{grid-template-columns:1fr;padding-left:18px;padding-right:18px}
 }
 
-:root {
-  --main: #24C6BF;
-  --main-dark: #159A95;
-  --main-light: #E9FFFD;
-  --line: #B9EFEA;
-  --text: #333333;
-  --sub: #888888;
-  --warning: #159A95;
-}
-
-body {
-  margin: 0;
-  padding: 40px 0;
-  background: #ffffff;
-  font-family: 'Paperozi', sans-serif;
-  color: var(--text);
-}
-
-.form-wrap {
-  width: 760px;
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(18px);
+  z-index: 9999;
+  min-width: 220px;
   max-width: calc(100% - 32px);
-  margin: 0 auto;
-  padding: 34px;
-  background: rgba(255,255,255,0.98);
-  border: 1px solid var(--line);
-  border-radius: 28px;
-  box-shadow: 0 16px 42px rgba(36,198,191,0.18);
-}
-
-.title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: 800;
-  font-family: 'Paperozi', sans-serif;
-}
-
-.title::before {
-  content: "";
-  width: 5px;
-  height: 22px;
-  background: var(--main);
-  border-radius: 10px;
-}
-
-.row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.choice {
-  padding: 9px 18px;
-  border-radius: 11px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: #666;
-  font-family: 'Paperozi', sans-serif;
+  padding: 14px 18px;
+  border-radius: 999px;
+  background: rgba(36, 198, 191, 0.96);
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
-  cursor: pointer;
-  transition: 0.18s;
+  text-align: center;
+  box-shadow: 0 12px 26px rgba(36,198,191,.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.copy-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
-.choice:hover {
-  transform: translateY(-1px);
-  background: var(--main-light);
+
+.label-guide {
+  display: inline;
+  margin-left: 6px;
+  color: #999999;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
-.choice.active {
-  background: var(--main);
-  color: #fff;
-  border-color: var(--main);
+
+.tip-accent {
+  color: #FF7A45;
+  background: #FFF1EA;
+  border: 1px solid #FFD8C7;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
-.choice.long {
-  min-width: 190px;
-}
+
+
+
 
 #workTypeRow .choice {
-  background: #FFFFFF;
-  border: 1.5px solid #DCD7FF;
-  color: #5E55B8;
-  border-radius: 14px;
-  transition: all 0.2s ease;
+  border-color: #C8D8FF !important;
+  color: #4968B8 !important;
+  background: #F8FAFF !important;
 }
-
 #workTypeRow .choice:hover {
-  background: #F7F4FF;
-  border-color: #B8AEF6;
-  color: #5E55B8;
-}
-
-#workTypeRow .choice.active {
-  background: linear-gradient(180deg, #EEE9FF 0%, #E4DDFF 100%);
-  border-color: #B8AEF6;
-  color: #5748B3;
-  box-shadow: 0 8px 18px rgba(116, 101, 216, 0.22);
-}
-
-
-#workTypeRow .choice.long {
-  min-width: 220px;
-}
-
-.guide {
-  background: var(--main-light);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 15px 18px;
-  margin-bottom: 22px;
-  font-size: 14px;
-  line-height: 1.7;
-  color: #666;
-  font-family: 'Paperozi', sans-serif;
-}
-
-.guide b {
-  color: var(--main-dark);
-}
-
-.label {
-  font-size: 15px;
-  font-weight: 800;
-  margin: 18px 0 8px;
-  font-family: 'Paperozi', sans-serif;
-}
-
-.required {
-  color: #FF573D;
-}
-
-.tip {
-  font-size: 13px;
-  color: #999;
-  font-weight: 500;
-}
-
-.input,
-.textarea {
-  width: 100%;
-  border: 1px solid #e6e6e6;
-  border-radius: 12px;
-  padding: 13px 15px;
-  font-family: 'Paperozi', sans-serif;
-  font-size: 14px;
-  color: #333;
-  background: #fff;
-  margin-bottom: 10px;
-}
-
-.textarea {
-  min-height: 70px;
-  resize: vertical;
-  overflow: hidden;
-  line-height: 1.6;
-}
-
-.input:focus,
-.textarea:focus {
-  outline: none;
-  border-color: var(--main);
-  box-shadow: 0 0 0 3px rgba(36,198,191,0.20);
-}
-
-.two {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.three {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
-}
-
-.upload {
-  display: block;
-  border: 1.5px dashed var(--main);
-  border-radius: 12px;
-  padding: 12px 15px;
-  color: #777;
-  font-size: 14px;
-  font-weight: 700;
-  background: var(--main-light);
-  cursor: pointer;
-  margin-bottom: 10px;
-  font-family: 'Paperozi', sans-serif;
-}
-
-.upload input {
-  display: none;
-}
-
-.preview {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.preview img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-}
-
-.portfolio-warning {
-  display: none;
-  margin: -4px 0 14px 0;
-  padding: 13px 15px;
-  background: var(--main-light);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  color: var(--warning);
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.7;
-  font-family: 'Paperozi', sans-serif;
-}
-
-.portfolio-warning b {
-  color: var(--main-dark);
-}
-
-.rush-warning {
-  display: none;
-  margin: -4px 0 14px 0;
-  padding: 13px 15px;
-  background: var(--main-light);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  color: var(--main-dark);
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.8;
-  font-family: 'Paperozi', sans-serif;
-}
-
-.rush-warning b {
-  color: #FF573D;
-}
-
-.copy-btn {
-  width: 100%;
-  margin-top: 18px;
-  padding: 16px 0;
-  border: none;
-  border-radius: 13px;
-  background: var(--main);
-  color: #fff;
-  font-family: 'Paperozi', sans-serif;
-  font-size: 16px;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 10px 22px rgba(36,198,191,0.30);
-  transition: 0.18s;
-}
-
-.copy-btn:hover {
-  background: var(--main-dark);
+  border-color: #AFC3FF !important;
+  color: #3F5DA8 !important;
+  background: #EEF3FF !important;
   transform: translateY(-1px);
 }
-
-@media (max-width: 600px) {
-  .form-wrap {
-    padding: 24px 18px;
-  }
-
-  .two,
-  .three {
-    grid-template-columns: 1fr;
-  }
-
-  .choice.long {
-    min-width: 100%;
-  }
+#workTypeRow .choice.active {
+  background: linear-gradient(135deg, #EEF3FF 0%, #DDE8FF 100%) !important;
+  color: #3F5DA8 !important;
+  border-color: #AFC3FF !important;
+  box-shadow: 0 8px 18px rgba(126, 151, 220, .25) !important;
 }
+
+
+
+
+
+
+
+
+.tip-accent {
+  color: #3F5DA8 !important;
+  background: #EEF3FF !important;
+  border: 1px solid #AFC3FF !important;
+  box-shadow: 0 4px 10px rgba(126, 151, 220, .14);
+}
+
+
+.tip-accent {
+  color: #3F5DA8 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+
+.tip-accent {
+  color: #6F7CFF !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-weight: 800 !important;
+}
+
+
+.choice.cost-option {
+  border-color: #C9B8FF !important;
+  color: #6D55D8 !important;
+  background: #F8F5FF !important;
+  font-weight: 800 !important;
+}
+.choice.cost-option:hover {
+  border-color: #B4A0FF !important;
+  color: #5D48C7 !important;
+  background: #F1ECFF !important;
+  transform: translateY(-1px);
+}
+.choice.cost-option.active {
+  background: linear-gradient(135deg, #B9A8FF 0%, #8FA2FF 100%) !important;
+  color: #ffffff !important;
+  border-color: #9C89FF !important;
+  box-shadow: 0 8px 18px rgba(143, 162, 255, .28) !important;
+}
+.choice.cost-option::before {
+  color: inherit !important;
+}
+
 </style>
 </head>
-
 <body>
+<div class="wrap">
+  <div class="form">
+    <div class="header">
+      <h1>작업 신청서</h1>
+      <p>단계별로 필요한 항목만 보이도록 정리된 신청서입니다.</p>
 
-<div class="form-wrap">
+      <div class="package-tabs" data-name="formType" id="formTypeRow">
+        <button class="package-btn active" type="button" data-value="입문" data-form="intro" onclick="selectPackage('intro', this)">입문</button>
+        <button class="package-btn" type="button" data-value="데뷔" data-form="debut" onclick="selectPackage('debut', this)">데뷔</button>
+        <button class="package-btn" type="button" data-value="VRC" data-form="vrc" onclick="selectPackage('vrc', this)">VRC</button>
+      </div>
 
-  <div class="title">작업 신청서</div>
+      <div class="guide" id="guideText"></div>
+    </div>
 
-  <div class="row" data-name="formType" id="formTypeRow">
-    <button class="choice active" type="button" data-value="입문 패키지" data-form="intro">입문 패키지</button>
-    <button class="choice" type="button" data-value="올인원 데뷔 패키지" data-form="allinone">올인원 데뷔 패키지</button>
-    <button class="choice" type="button" data-value="데뷔 플랜" data-form="debut">데뷔 플랜</button>
-    <button class="choice" type="button" data-value="VRC 아바타" data-form="vrc">VRC 아바타</button>
+    <div class="step-tabs">
+      <button class="step-btn active" type="button" data-step="0"><span>STEP 01</span>기본 선택</button>
+      <button class="step-btn" type="button" data-step="1"><span>STEP 02</span>작업 정보</button>
+      <button class="step-btn" type="button" data-step="2"><span>STEP 03</span>참고자료</button>
+      <button class="step-btn" type="button" data-step="3"><span>STEP 04</span>추가 요청</button>
+    </div>
+
+    <div class="panel active">
+      <div class="panel-title"><div class="num">01</div><h2>기본 선택</h2></div>
+
+      <div class="label">작업 타입 <span class="required">*</span></div>
+      <div class="row" data-name="workType" id="workTypeRow"></div>
+
+      <div class="label">작업 일정 확인 여부 <span class="required">*</span></div>
+      <div class="row" data-name="schedule">
+        <button class="choice active" type="button" data-value="O (확인했어요)">O 확인했어요</button>
+        <button class="choice" type="button" data-value="X">X</button>
+        <button class="choice" type="button" data-value="빠른마감신청">빠른마감신청</button>
+      </div>
+      <div class="warning rush-warning">
+        빠른 마감 신청 시 추가금이 발생합니다.<br>
+        순번 맨앞 이동 200,000원 / 24시간 내 100,000원 / 2~3일 내 50,000원
+      </div>
+
+      <div class="label">필독사항 확인 여부 <span class="required">*</span></div>
+      <div class="row" data-name="notice">
+        <button class="choice active" type="button" data-value="O (읽었어요)">O 읽었어요</button>
+        <button class="choice" type="button" data-value="X">X</button>
+      </div>
+
+      <div class="label">포트폴리오 공개 여부 <span class="required">*</span></div>
+      <div class="row" data-name="portfolioPrivate">
+        <button class="choice active" type="button" data-value="공개 가능">공개 가능</button>
+        <button class="choice" type="button" data-value="비공개 요청">비공개 요청</button>
+      </div>
+      <div class="warning portfolio-warning">
+        비공개 요청 시 총 결제금액의 2배로 진행됩니다.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><div class="num">02</div><h2>작업 정보</h2></div>
+
+      <div class="label">신청 작업 내용 <span class="required">*</span></div>
+      <textarea id="workContent" class="textarea" placeholder="EX) VSF 베이직 뚜따 패키지 + Magica Cloth2 콜라이더/물리 세팅 추가"></textarea>
+
+      <div class="label">방송 여부</div>
+      <div class="row" data-name="broadcast">
+        <button class="choice active" type="button" data-value="방송용 O">방송용 O</button>
+        <button class="choice" type="button" data-value="방송용 X">방송용 X</button>
+      </div>
+
+      <div class="grid-3" style="margin-top:10px;">
+        <input id="broadcastLink" class="input" type="text" placeholder="방송 플랫폼 링크">
+        <input id="broadcastName" class="input" type="text" placeholder="방송 닉네임">
+        <input id="avatarDate" class="input" type="text" placeholder="아바타 공개일">
+      </div>
+
+      <div class="label">Booth 아이템 링크 <span class="tip-accent">의상 헤어 갯수도 기입</span></div>
+      <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 메이크업 / 눈동자 / 네일 링크&#10;필요한 파츠만 기입하셔도 됩니다."></textarea>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><div class="num">03</div><h2>참고자료</h2></div>
+
+      <div class="label">컬러 정보 <span class="label-guide">※ 색상코드를 함께 기재해주시면 더욱 정확하게 반영할 수 있습니다.</span></div>
+      <div class="grid-3">
+        <input id="hairColor" class="input" type="text" placeholder="헤어 컬러">
+        <input id="eyeColor" class="input" type="text" placeholder="눈 컬러">
+        <input id="clothesColor" class="input" type="text" placeholder="의상 컬러">
+      </div>
+
+      <label class="upload">
+        📎 컬러 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
+        <input id="colorImages" type="file" accept="image/*" multiple>
+      </label>
+      <div id="previewArea" class="preview"></div>
+
+      <div class="label">캐릭터 디자인 방향 <span class="tip">※ 원화 기반 작업은 제작 기준 자료 첨부가 필요합니다.</span></div>
+      <textarea id="avatarDesc" class="textarea" placeholder="전체 분위기 : 걸크러쉬 / 귀여움 / 도도함 / 몽환적 / 아이돌 느낌&#10;입모양 : 웃는상 / 무표정 / 살짝 미소 / 고양이 3자 모양&#10;눈매 : 동글동글 / 고양이상 / 처진 눈매 / 살짝 올라간 눈"></textarea>
+
+      <label class="upload">
+        📎 캐릭터 디자인 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
+        <input id="designImages" type="file" accept="image/*" multiple>
+      </label>
+      <div id="designPreviewArea" class="preview"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><div class="num">04</div><h2>추가 요청</h2></div>
+
+      <div class="label">페이셜 요청사항</div>
+      <textarea id="facialRequest" class="textarea" placeholder="EX) 볼빵빵이 크지 않았으면 좋겠어요, 입 움직임이 컸으면 좋겠어요"></textarea>
+
+      <div class="label">유니티 파일 필요 여부 <span class="required">*</span></div>
+      <div class="row" data-name="unityNeed">
+        <button class="choice active" type="button" data-value="필요 없어요">필요 없어요</button>
+        <button class="choice cost-option" type="button" data-value="필요해요 (+5만원)">필요해요 (＋5만원)</button>
+      </div>
+
+      <div class="label">유니티 파일 용도</div>
+      <div class="row" data-name="unityUse">
+        <button class="choice active" type="button" data-value="A.파일 백업용">A.파일 백업용</button>
+        <button class="choice" type="button" data-value="B.타작가에게 작업 맡기는 용도">B.타작가에게 작업 맡기는 용도</button>
+        <button class="choice" type="button" data-value="C.해당없음">C.해당없음</button>
+      </div>
+
+      <div class="label">리뷰 작성 할인 선택 ｜참여시 10,000원 할인🩵 <span class="tip">(패키지 주문 1회당)</span></div>
+      <div class="row" data-name="reviewEvent">
+        <button class="choice active" type="button" data-value="O 참여할게요!!">O 참여할게요!!</button>
+        <button class="choice" type="button" data-value="X 참여하지 않아요..">X 참여하지 않아요..</button>
+      </div>
+
+      <div class="label">그 외 궁금한 점</div>
+      <textarea id="etcText" class="textarea" placeholder="자유롭게 적어주세요"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="nav-btn" type="button" onclick="moveStep(-1)">이전</button>
+      <button class="copy-btn" type="button" onclick="handleNextOrCopy()" id="nextCopyBtn">다음</button>
+    </div>
   </div>
-
-  <div class="guide" id="guideText">
-    <b>입문 패키지</b>는 입문 패키지는 아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.<br>
-    ❗ 사용하실 프로그램에 맞춰 Warudo / VSF / Meligo 중 원하는 작업 타입을 선택해주세요.
-  </div>
-
-  <div class="label">0. 작업 타입 <span class="required">*</span></div>
-  <div class="row" data-name="workType" id="workTypeRow"></div>
-
-  <div class="label">1. 작업 일정 확인 여부 <span class="required">*</span></div>
-  <div class="row" data-name="schedule">
-    <button class="choice active" type="button" data-value="O (확인했어요)">O 확인했어요!</button>
-    <button class="choice" type="button" data-value="X">X</button>
-    <button class="choice" type="button" data-value="빠른마감신청">빠른마감신청</button>
-  </div>
-
-  <div class="rush-warning">
-    ⚡ 빠른 마감 신청 시 아래 추가금이 발생합니다.<br>
-    대기 없이 순번 맨앞으로 이동합니다 <b>(200,000원)</b><br>
-    결제 후 24시간 내에 완성해드립니다 <b>(100,000원)</b><br>
-    결제 후 2일~3일 내에 완성해드립니다 <b>(50,000원)</b>
-  </div>
-
-  <div class="label">2. 필독사항 확인 여부 <span class="required">*</span></div>
-  <div class="row" data-name="notice">
-    <button class="choice active" type="button" data-value="O (읽었어요)">O 읽었어요!</button>
-    <button class="choice" type="button" data-value="X">X</button>
-  </div>
-
-  <div class="label">3. 포트폴리오 공개 여부 <span class="required">*</span></div>
-  <div class="row" data-name="portfolioPrivate">
-    <button class="choice active" type="button" data-value="공개 가능">공개 가능</button>
-    <button class="choice" type="button" data-value="비공개 요청">비공개 요청</button>
-  </div>
-
-  <div class="portfolio-warning">
-    ❗ 성형 작업이 포함된 작업물의 영구 비공개 요청 시 아래 사항을 필독해주세요.<br>
-    ⚠️ 작업물 비공개 추가금은 <b>총 결제금액의 2배</b>로 산정됩니다.<br>
-    ⚠️ 예: 주문 결제금액이 20,000원이라면, 비공개 요청 시 총 결제금액은 40,000원으로 진행됩니다.
-  </div>
-
-  <div class="label">4. 신청 작업 내용 <span class="required">*</span></div>
-  <textarea id="workContent" class="textarea" placeholder="EX) VSF 베이직 뚜따 패키지 + Magica Cloth2 콜라이더/물리 세팅 추가"></textarea>
-
-  <div class="label">5. 방송 정보</div>
-  <div class="row" data-name="broadcast">
-    <button class="choice active" type="button" data-value="방송용 O">방송용 O</button>
-    <button class="choice" type="button" data-value="방송용 X">방송용 X</button>
-  </div>
-
-  <input id="broadcastLink" class="input" type="text" placeholder="방송 플랫폼 링크">
-  <input id="broadcastName" class="input" type="text" placeholder="방송 닉네임">
-  <input id="avatarDate" class="input" type="text" placeholder="아바타 공개일">
-
-  <div class="label">6. Booth 아이템 링크 <span class="tip">의상·헤어 갯수도 기입</span></div>
-  <textarea id="boothLink" class="textarea" placeholder="아바타 / 의상 / 헤어 / 악세 / 메이크업 / 눈동자 / 네일 링크&#10;필요한 파츠만 기입하셔도 됩니다."></textarea>
-
-  <div class="label">
-    6-1. 컬러 정보
-    <span class="tip">※ 색상코드를 함께 기재해주시면 더욱 정확하게 반영할 수 있습니다.</span>
-  </div>
-
-  <div class="three">
-    <input id="hairColor" class="input" type="text" placeholder="헤어 컬러">
-    <input id="eyeColor" class="input" type="text" placeholder="눈 컬러">
-    <input id="clothesColor" class="input" type="text" placeholder="의상 컬러">
-  </div>
-
-  <label class="upload">
-    📎 컬러 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
-    <input id="colorImages" type="file" accept="image/*" multiple>
-  </label>
-
-  <div id="previewArea" class="preview"></div>
-
-  <div class="label">7. 캐릭터 디자인 방향 <span class="tip">※ 원화 기반 작업은 제작 기준 자료 첨부가 필요합니다.</span></div>
-
-  <textarea id="avatarDesc" class="textarea" placeholder="전체 분위기: 걸크러쉬 / 귀여움 / 도도함 / 몽환적 / 아이돌 느낌 &#10;입모양: 웃는상 / 무표정 / 살짝 미소 / 고양이 3자 모양 &#10;눈매: 동글동글 / 고양이상 / 처진 눈매 / 살짝 올라간 눈"></textarea>
-
-  <label class="upload">
-    📎 캐릭터 디자인 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
-    <input id="designImages" type="file" accept="image/*" multiple>
-  </label>
-
-  <div id="designPreviewArea" class="preview"></div>
-
-  <div class="label">8. 페이셜 요청사항</div>
-  <textarea id="facialRequest" class="textarea" placeholder="ex) 볼빵빵이 크지 않았으면 좋겠어요. 입 움직임이 컸으면 좋겠어요."></textarea>
-
-  <div class="label">9. 유니티 파일 필요 여부 <span class="tip">추가금 5만원</span></div>
-  <div class="row" data-name="unityNeed">
-    <button class="choice active" type="button" data-value="필요 없어요">필요 없어요</button>
-    <button class="choice" type="button" data-value="필요해요 (+5만원)">필요해요 (+5만원)</button>
-  </div>
-
-  <div class="label">10. 유니티 파일 용도</div>
-  <div class="row" data-name="unityUse">
-    <button class="choice active" type="button" data-value="1번 (파일 백업용)">1번 파일 백업용</button>
-    <button class="choice" type="button" data-value="2번 (타작가에게 작업 맡기는 용도)">2번 타작가에게 작업 맡기는 용도</button>
-    <button class="choice" type="button" data-value="해당없음">해당없음</button>
-  </div>
-
-  <div class="label">11. 리뷰 이벤트 참가 여부 <span class="tip">약속 시 10,000원 할인 (주문1회당) </span></div>
-  <div class="row" data-name="reviewEvent">
-    <button class="choice active" type="button" data-value="O (약속할게요!)">O 약속할게요!</button>
-    <button class="choice" type="button" data-value="X">X</button>
-  </div>
-
-  <div class="label">12. 그 외 궁금한 점</div>
-  <textarea id="etcText" class="textarea" placeholder="자유롭게 적어주세요!"></textarea>
-
-  <button class="copy-btn" type="button" onclick="copyAeongForm()">작성한 양식 복사하기 📋</button>
-
 </div>
 
 <script>
+var currentStep = 0;
 var workTypeMap = {
   intro: [
     "Warudo 베이직 뚜따 패키지",
@@ -449,11 +438,9 @@ var workTypeMap = {
     "VSF 베이직 뚜따 패키지",
     "Meligo 프리미엄 물리 뚜따 패키지"
   ],
-  allinone: [
-    "VSF 올인원 데뷔 패키지",
-    "Warudo 올인원 데뷔 패키지"
-  ],
   debut: [
+    "VSF 올인원 데뷔 패키지",
+    "Warudo 올인원 데뷔 패키지",
     "2D 원화 기반 VSF 데뷔 플랜",
     "2D 원화 기반 Warudo 데뷔 플랜"
   ],
@@ -465,141 +452,135 @@ var workTypeMap = {
     "핵고퀄 B 풀옵션"
   ]
 };
-
 var guideMap = {
-  intro: '<b>입문 패키지</b>는 입문 패키지는 아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.<br>❗ Warudo / VSF / Meligo 중 사용 목적에 맞는 작업 타입을 선택해주세요.',
-  allinone: '<b>올인원 데뷔 패키지</b>는 방송용 아바타 세팅, 페이셜, 기본 연동 등 데뷔에 필요한 구성을 한 번에 준비하는 메뉴입니다.<br>❗ VSF 작업물은 VSeeFace 또는 Meligo 프로그램에서 사용 가능합니다',
-  debut: '<b>데뷔 플랜</b>은 2D 원화를 기반으로 방송용 버츄얼 데뷔 구성을 준비하는 메뉴입니다.<br>',
-  vrc: '<b>VRC 아바타</b>는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 또는 핵고퀄 풀옵션 중 필요한 작업 범위를 선택해주세요.'
+  intro: "입문 패키지는 입문 패키지는 아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.<br>❗ Warudo / VSF / Meligo 중 사용 목적에 맞는 작업 타입을 선택해주세요.",
+  debut: "올인원 데뷔 패키지는 방송용 아바타 세팅, 페이셜, 기본 연동 등 데뷔에 필요한 구성을 한 번에 준비하는 메뉴입니다.<br>데뷔 플랜은 2D 원화를 기반으로 방송용 버츄얼 데뷔 구성을 준비하는 메뉴입니다.<br>❗ VSF 작업물은 VSeeFace 또는 Meligo 프로그램에서 사용 가능합니다",
+  vrc: "VRC 아바타는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 또는 핵고퀄 풀옵션 중 필요한 작업 범위를 선택해주세요."
 };
-
 var colorAttachedImages = [];
 var designAttachedImages = [];
 
-function renderWorkTypes(type) {
-  var row = document.getElementById("workTypeRow");
-  if (!row) return;
+function showStep(index) {
+  var panels = document.querySelectorAll('.panel');
+  var steps = document.querySelectorAll('.step-btn');
+  currentStep = Math.max(0, Math.min(index, panels.length - 1));
+  panels.forEach(function(panel, i){ panel.classList.toggle('active', i === currentStep); });
+  steps.forEach(function(step, i){ step.classList.toggle('active', i === currentStep); });
+  document.getElementById('nextCopyBtn').textContent = currentStep === panels.length - 1 ? '양식 복사하기 📋' : '다음';
+}
+function moveStep(delta){ showStep(currentStep + delta); }
+function handleNextOrCopy(){ currentStep < document.querySelectorAll('.panel').length - 1 ? moveStep(1) : copyAeongForm(); }
+document.querySelectorAll('.step-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){ showStep(Number(btn.getAttribute('data-step'))); });
+});
 
-  row.innerHTML = "";
+function renderWorkTypes(type) {
+  var row = document.getElementById('workTypeRow');
+  if (!row || !workTypeMap[type]) return;
+
+  row.innerHTML = '';
 
   workTypeMap[type].forEach(function(text, index) {
-    var btn = document.createElement("button");
-    btn.className = "choice long" + (index === 0 ? " active" : "");
-    btn.type = "button";
-    btn.setAttribute("data-value", text);
+    var btn = document.createElement('button');
+    btn.className = 'choice long' + (index === 0 ? ' active' : '');
+    btn.type = 'button';
+    btn.setAttribute('data-value', text);
     btn.textContent = text;
     row.appendChild(btn);
   });
 
-  var guide = document.getElementById("guideText");
+  var guide = document.getElementById('guideText');
   if (guide && guideMap[type]) {
     guide.innerHTML = guideMap[type];
   }
 }
 
-function getSelected(name) {
-  var row = document.querySelector('[data-name="' + name + '"]');
-  if (!row) return "";
-  var active = row.querySelector(".choice.active");
-  return active ? active.getAttribute("data-value") : "";
-}
-
-function emptyCheck(value) {
-  value = (value || "").trim();
-  return value ? value : "(미작성)";
-}
-
-function updatePortfolioWarning() {
-  var selected = getSelected("portfolioPrivate");
-  var warning = document.querySelector(".portfolio-warning");
-
-  if (!warning) return;
-
-  if (selected.indexOf("비공개") !== -1) {
-    warning.style.display = "block";
-  } else {
-    warning.style.display = "none";
-  }
-}
-
-function updateRushWarning() {
-  var selected = getSelected("schedule");
-  var warning = document.querySelector(".rush-warning");
-
-  if (!warning) return;
-
-  if (selected.indexOf("빠른마감신청") !== -1) {
-    warning.style.display = "block";
-  } else {
-    warning.style.display = "none";
-  }
-}
-
-document.querySelectorAll(".row").forEach(function(row) {
-  row.addEventListener("click", function(e) {
-    if (!e.target.classList.contains("choice")) return;
-
-    row.querySelectorAll(".choice").forEach(function(btn) {
-      btn.classList.remove("active");
+function selectPackage(type, button) {
+  var box = document.getElementById('formTypeRow');
+  if (box) {
+    box.querySelectorAll('.package-btn').forEach(function(el) {
+      el.classList.remove('active');
     });
+  }
 
-    e.target.classList.add("active");
+  if (button) {
+    button.classList.add('active');
+  }
 
-    if (row.getAttribute("data-name") === "formType") {
-      var type = e.target.getAttribute("data-form");
-      renderWorkTypes(type);
-    }
+  renderWorkTypes(type);
+  showStep(0);
+}
 
-    if (row.getAttribute("data-name") === "portfolioPrivate") {
-      updatePortfolioWarning();
-    }
+function getSelected(name){
+  var row = document.querySelector('[data-name="' + name + '"]');
+  if (!row) return '';
+  var active = row.querySelector('.active');
+  return active ? active.getAttribute('data-value') : '';
+}
+function emptyCheck(value){ value = (value || '').trim(); return value ? value : '(미작성)'; }
+function updatePortfolioWarning(){
+  var warning = document.querySelector('.portfolio-warning');
+  warning.style.display = getSelected('portfolioPrivate').indexOf('비공개') !== -1 ? 'block' : 'none';
+}
+function updateRushWarning(){
+  var warning = document.querySelector('.rush-warning');
+  warning.style.display = getSelected('schedule').indexOf('빠른마감신청') !== -1 ? 'block' : 'none';
+}
 
-    if (row.getAttribute("data-name") === "schedule") {
-      updateRushWarning();
-    }
-  });
+
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('.row .choice');
+  if (!btn) return;
+  var row = btn.parentElement;
+  row.querySelectorAll('.choice').forEach(function(el){ el.classList.remove('active'); });
+  btn.classList.add('active');
+  if (row.getAttribute('data-name') === 'portfolioPrivate') updatePortfolioWarning();
+  if (row.getAttribute('data-name') === 'schedule') updateRushWarning();
 });
 
-document.querySelectorAll(".textarea").forEach(function(textarea) {
-  textarea.addEventListener("input", function() {
-    this.style.height = "auto";
-    this.style.height = this.scrollHeight + "px";
-  });
+document.querySelectorAll('.textarea').forEach(function(textarea){
+  textarea.addEventListener('input', function(){ this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; });
 });
 
-function setupImageUpload(inputId, previewId, targetArray) {
+function setupImageUpload(inputId, previewId, targetArray){
   var input = document.getElementById(inputId);
   var preview = document.getElementById(previewId);
-
-  if (!input || !preview) return;
-
-  input.addEventListener("change", function() {
-    Array.from(this.files).forEach(function(file) {
+  input.addEventListener('change', function(){
+    Array.from(this.files).forEach(function(file){
       var reader = new FileReader();
-
-      reader.onload = function(e) {
-        var imageData = {
-          name: file.name,
-          src: e.target.result
-        };
-
+      reader.onload = function(e){
+        var imageData = { name:file.name, src:e.target.result };
         targetArray.push(imageData);
-
-        var img = document.createElement("img");
+        var img = document.createElement('img');
         img.src = imageData.src;
         img.alt = imageData.name;
         preview.appendChild(img);
       };
-
       reader.readAsDataURL(file);
     });
-
-    this.value = "";
+    this.value = '';
   });
 }
+setupImageUpload('colorImages','previewArea',colorAttachedImages);
+setupImageUpload('designImages','designPreviewArea',designAttachedImages);
 
-setupImageUpload("colorImages", "previewArea", colorAttachedImages);
-setupImageUpload("designImages", "designPreviewArea", designAttachedImages);
+
+
+function showCopyToast(message) {
+  var toast = document.getElementById("copyToast");
+  if (!toast) {
+    alert(message || "양식이 복사되었습니다!");
+    return;
+  }
+
+  toast.textContent = message || "양식이 복사되었습니다!";
+  toast.classList.add("show");
+
+  clearTimeout(window.__irohaCopyToastTimer);
+  window.__irohaCopyToastTimer = setTimeout(function() {
+    toast.classList.remove("show");
+  }, 1800);
+}
 
 function escapeHtml(value) {
   return String(value || "")
@@ -676,7 +657,7 @@ function copyRichForm(text) {
         "text/plain": new Blob([text], { type: "text/plain" })
       })
     ]).then(function() {
-      alert("양식이 복사되었습니다!");
+      showCopyToast("양식이 복사되었습니다!");
     }).catch(function() {
       fallbackRichCopy(text, html);
     });
@@ -712,7 +693,7 @@ function fallbackRichCopy(text, html) {
     document.body.removeChild(temp);
 
     if (success) {
-      alert("양식이 복사되었습니다!");
+      showCopyToast("양식이 복사되었습니다!");
     } else {
       fallbackCopy(text);
     }
@@ -723,8 +704,19 @@ function fallbackRichCopy(text, html) {
   }
 }
 
+function fallbackCopy(text) {
+  var temp = document.createElement("textarea");
+  temp.value = text;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
+  showCopyToast("양식이 복사되었습니다!");
+}
+
 function copyAeongForm() {
-  var formType = emptyCheck(getSelected("formType"));
+  var selectedForm = document.querySelector('#formTypeRow .package-btn.active');
+  var formType = selectedForm ? emptyCheck(selectedForm.getAttribute('data-value')) : emptyCheck(getSelected("formType"));
   var workType = emptyCheck(getSelected("workType"));
   var portfolio = emptyCheck(getSelected("portfolioPrivate"));
   var schedule = emptyCheck(getSelected("schedule"));
@@ -765,20 +757,25 @@ function copyAeongForm() {
   copyRichForm(text);
 }
 
-function fallbackCopy(text) {
-  var temp = document.createElement("textarea");
-  temp.value = text;
-  document.body.appendChild(temp);
-  temp.select();
-  document.execCommand("copy");
-  document.body.removeChild(temp);
-  alert("양식이 복사되었습니다!");
+
+function initPackageMenu() {
+  var menu = document.getElementById('formTypeRow');
+  if (!menu) return;
+
+  menu.querySelectorAll('.package-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      selectPackage(btn.getAttribute('data-form'), btn);
+    });
+  });
+
+  var introBtn = menu.querySelector('.package-btn[data-form="intro"]');
+  selectPackage('intro', introBtn);
 }
 
-renderWorkTypes("intro");
+initPackageMenu();
 updatePortfolioWarning();
 updateRushWarning();
 </script>
-
+<div id="copyToast" class="copy-toast">양식이 복사되었습니다!</div>
 </body>
 </html>

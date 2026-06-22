@@ -938,6 +938,64 @@ function initPackageMenu() {
 initPackageMenu();
 updatePortfolioWarning();
 updateRushWarning();
+
+function notifyIrohaFormHeight() {
+  try {
+    var height = Math.max(
+      document.body ? document.body.scrollHeight : 0,
+      document.documentElement ? document.documentElement.scrollHeight : 0
+    );
+
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: "iroha-form-height",
+        height: height
+      }, "https://www.artmug.kr");
+      window.parent.postMessage({
+        type: "iroha-form-height",
+        height: height
+      }, "*");
+    }
+  } catch (e) {}
+}
+
+window.addEventListener("load", function() {
+  notifyIrohaFormHeight();
+  setTimeout(notifyIrohaFormHeight, 150);
+  setTimeout(notifyIrohaFormHeight, 500);
+  setTimeout(notifyIrohaFormHeight, 1200);
+});
+
+window.addEventListener("resize", notifyIrohaFormHeight);
+
+if ("MutationObserver" in window) {
+  var __irohaFormHeightObserver = new MutationObserver(function() {
+    clearTimeout(window.__irohaFormHeightTimer);
+    window.__irohaFormHeightTimer = setTimeout(notifyIrohaFormHeight, 80);
+  });
+
+  if (document.body) {
+    __irohaFormHeightObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true
+    });
+  } else {
+    document.addEventListener("DOMContentLoaded", function() {
+      if (document.body) {
+        __irohaFormHeightObserver.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          characterData: true
+        });
+      }
+      notifyIrohaFormHeight();
+    });
+  }
+}
+
 </script>
 </body>
 </html>

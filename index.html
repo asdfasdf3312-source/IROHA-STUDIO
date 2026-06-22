@@ -342,13 +342,30 @@ body{
   cursor: pointer;
 }
 
+
+.form-title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.form-title::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 24px;
+  border-radius: 999px;
+  background: #24C6BF;
+  flex: 0 0 auto;
+}
+
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="form">
     <div class="header">
-      <h1>작업 신청서</h1>
+      <h1 class="form-title">작업 신청서</h1>
       <p>단계별로 필요한 항목만 보이도록 정리된 신청서입니다.</p>
 
       <div class="package-tabs" data-name="formType" id="formTypeRow">

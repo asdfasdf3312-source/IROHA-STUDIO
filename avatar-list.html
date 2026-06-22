@@ -241,7 +241,7 @@
       -webkit-user-drag: none;
       transition:
         opacity 0.24s ease,
-        transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.48s cubic-bezier(0.22, 0.76, 0.28, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
@@ -724,12 +724,55 @@
       let zoomStartY = 0;
       let zoomStartScrollLeft = 0;
       let zoomStartScrollTop = 0;
+      let zoomTargetScrollLeft = 0;
+      let zoomTargetScrollTop = 0;
+      let zoomScrollRaf = null;
       let zoomLastX = 0;
       let zoomLastY = 0;
       let zoomLastTime = 0;
       let zoomVelocityX = 0;
       let zoomVelocityY = 0;
       let zoomMomentumRaf = null;
+
+
+      function stopZoomSmoothScroll() {
+        if (zoomScrollRaf !== null) {
+          cancelAnimationFrame(zoomScrollRaf);
+          zoomScrollRaf = null;
+        }
+      }
+
+      function runZoomSmoothScroll() {
+        const currentLeft = lightbox.scrollLeft;
+        const currentTop = lightbox.scrollTop;
+
+        const nextLeft =
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.18;
+
+        const nextTop =
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.18;
+
+        lightbox.scrollLeft = nextLeft;
+        lightbox.scrollTop = nextTop;
+
+        if (
+          Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
+          Math.abs(zoomTargetScrollTop - nextTop) > 0.5
+        ) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        } else {
+          lightbox.scrollLeft = zoomTargetScrollLeft;
+          lightbox.scrollTop = zoomTargetScrollTop;
+          updateFixedOverlayPosition();
+          zoomScrollRaf = null;
+        }
+      }
+
+      function requestZoomSmoothScroll() {
+        if (zoomScrollRaf === null) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        }
+      }
 
       function stopZoomMomentum() {
         if (zoomMomentumRaf !== null) {
@@ -752,13 +795,14 @@
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.90;
-        zoomVelocityY *= 0.90;
+        zoomVelocityX *= 0.93;
+        zoomVelocityY *= 0.93;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
 
       function startZoomMomentum() {
+        stopZoomSmoothScroll();
         stopZoomMomentum();
 
         if (
@@ -772,6 +816,7 @@
       }
 
       function resetLightboxZoom() {
+        stopZoomSmoothScroll();
         stopZoomMomentum();
 
         lightboxImage.classList.remove(
@@ -934,6 +979,9 @@
               );
 
             updateFixedOverlayPosition();
+
+            zoomTargetScrollLeft = lightbox.scrollLeft;
+            zoomTargetScrollTop = lightbox.scrollTop;
           });
 
           return;
@@ -943,6 +991,7 @@
           return;
         }
 
+        stopZoomSmoothScroll();
         stopZoomMomentum();
 
         zoomDragging = true;
@@ -951,6 +1000,8 @@
         zoomStartY = event.clientY;
         zoomStartScrollLeft = lightbox.scrollLeft;
         zoomStartScrollTop = lightbox.scrollTop;
+        zoomTargetScrollLeft = zoomStartScrollLeft;
+        zoomTargetScrollTop = zoomStartScrollTop;
         zoomLastX = event.clientX;
         zoomLastY = event.clientY;
         zoomLastTime = performance.now();
@@ -990,18 +1041,18 @@
           const deltaX = event.clientX - zoomLastX;
           const deltaY = event.clientY - zoomLastY;
           const deltaTime = Math.max(8, now - zoomLastTime);
-          const velocityScale = Math.min(2.2, 16 / deltaTime) * 1.28;
+          const velocityScale = Math.min(1.05, 16 / deltaTime) * 0.38;
 
           zoomVelocityX = -deltaX * velocityScale;
           zoomVelocityY = -deltaY * velocityScale;
 
-          lightbox.scrollLeft =
+          zoomTargetScrollLeft =
             zoomStartScrollLeft - distanceX;
 
-          lightbox.scrollTop =
+          zoomTargetScrollTop =
             zoomStartScrollTop - distanceY;
 
-          updateFixedOverlayPosition();
+          requestZoomSmoothScroll();
 
           zoomLastX = event.clientX;
           zoomLastY = event.clientY;

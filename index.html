@@ -161,28 +161,34 @@ body{
 }
 
 .copy-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%) translateY(18px);
-  z-index: 9999;
-  min-width: 220px;
-  max-width: calc(100% - 32px);
-  padding: 14px 18px;
-  border-radius: 999px;
-  background: rgba(36, 198, 191, 0.96);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
+  grid-column: 1 / -1;
+  position: static;
+  min-width: auto;
+  max-width: none;
+  margin-top: 0;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: #EEF3FF;
+  border: 1px solid #C8D8FF;
+  color: #4E60C9;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
   text-align: center;
-  box-shadow: 0 12px 26px rgba(36,198,191,.28);
+  box-shadow: none;
   opacity: 0;
+  max-height: 0;
+  overflow: hidden;
   pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
+  transform: none;
+  transition: opacity .18s ease, max-height .18s ease, padding .18s ease, margin-top .18s ease;
 }
 .copy-toast.show {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  max-height: 48px;
+  margin-top: 2px;
+  padding: 10px 12px;
+  transform: none;
 }
 
 
@@ -425,6 +431,7 @@ body{
     <div class="actions">
       <button class="nav-btn" type="button" onclick="moveStep(-1)">이전</button>
       <button class="copy-btn" type="button" onclick="handleNextOrCopy()" id="nextCopyBtn">다음</button>
+      <div id="copyToast" class="copy-toast" aria-live="polite">양식이 복사되었습니다!</div>
     </div>
   </div>
 </div>
@@ -569,17 +576,22 @@ setupImageUpload('designImages','designPreviewArea',designAttachedImages);
 function showCopyToast(message) {
   var toast = document.getElementById("copyToast");
   if (!toast) {
-    alert(message || "양식이 복사되었습니다!");
     return;
   }
 
-  toast.textContent = message || "양식이 복사되었습니다!";
+  toast.textContent = message || "✅ 양식이 복사되었습니다!";
   toast.classList.add("show");
+
+  if (toast.scrollIntoView) {
+    requestAnimationFrame(function() {
+      toast.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }
 
   clearTimeout(window.__irohaCopyToastTimer);
   window.__irohaCopyToastTimer = setTimeout(function() {
     toast.classList.remove("show");
-  }, 1800);
+  }, 2200);
 }
 
 function escapeHtml(value) {
@@ -657,7 +669,7 @@ function copyRichForm(text) {
         "text/plain": new Blob([text], { type: "text/plain" })
       })
     ]).then(function() {
-      showCopyToast("양식이 복사되었습니다!");
+      showCopyToast("✅ 양식이 복사되었습니다!");
     }).catch(function() {
       fallbackRichCopy(text, html);
     });
@@ -693,7 +705,7 @@ function fallbackRichCopy(text, html) {
     document.body.removeChild(temp);
 
     if (success) {
-      showCopyToast("양식이 복사되었습니다!");
+      showCopyToast("✅ 양식이 복사되었습니다!");
     } else {
       fallbackCopy(text);
     }
@@ -711,7 +723,7 @@ function fallbackCopy(text) {
   temp.select();
   document.execCommand("copy");
   document.body.removeChild(temp);
-  showCopyToast("양식이 복사되었습니다!");
+  showCopyToast("✅ 양식이 복사되었습니다!");
 }
 
 function copyAeongForm() {
@@ -776,6 +788,5 @@ initPackageMenu();
 updatePortfolioWarning();
 updateRushWarning();
 </script>
-<div id="copyToast" class="copy-toast">양식이 복사되었습니다!</div>
 </body>
 </html>

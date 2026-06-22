@@ -172,14 +172,7 @@
       color: var(--mint-dark);
       font-weight: 700;
     }
-
-    .category-description {
-      margin-top: -8px;
-      margin-bottom: 18px;
-      background: linear-gradient(135deg, rgba(237,249,248,0.95), rgba(255,247,251,0.84));
-    }
-
-    .portfolio-grid {
+.portfolio-grid {
       display: flex;
       gap: 14px;
       width: 100%;
@@ -760,16 +753,7 @@
         성형디테일
       </button>
     </div>
-
-    <div id="category-description" class="portfolio-notice category-description" role="note" aria-label="선택 메뉴 안내">
-      <div class="portfolio-notice-icon">※</div>
-      <div>
-        <strong>전체 작업 예시</strong>를 한 번에 확인할 수 있습니다.<br>
-        원하는 메뉴를 선택하면 해당 작업 설명과 샘플만 확인할 수 있습니다.
-      </div>
-    </div>
-
-    <div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
+<div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
       <div class="portfolio-notice-icon">※</div>
       <div>
         <strong>Blender를 활용한 페이셜 성형·쉐이프키 디테일</strong> 작업 예시입니다.<br>
@@ -886,40 +870,7 @@
       const lightboxCount = lightbox.querySelector('.lightbox-count');
 
       let currentFilter = 'all';
-
-      const categoryDescription = document.getElementById('category-description');
-
-      const categoryDescriptionMap = {
-        all:
-          '<div class="portfolio-notice-icon">※</div>' +
-          '<div><strong>전체 작업 예시</strong>를 한 번에 확인할 수 있습니다.<br>' +
-          '원하는 메뉴를 선택하면 해당 작업 설명과 샘플만 확인할 수 있습니다.</div>',
-        'boing-eye':
-          '<div class="portfolio-notice-icon">※</div>' +
-          '<div><strong>뽀잉눈</strong> 움직임 작업 예시입니다.<br>' +
-          '눈동자, 하이라이트, 속눈썹 등의 움직임을 더 생동감 있게 세팅합니다.</div>',
-        'smile-eye':
-          '<div class="portfolio-notice-icon">※</div>' +
-          '<div><strong>웃는눈 연동</strong> 작업 예시입니다.<br>' +
-          '기본 감은눈이 자연스러운 웃는눈으로 전환되도록 세팅합니다.<br>' +
-          '(해당 세팅은 유니티패키지파일에 동봉 되지 않습니다)</div>',
-        facial:
-          '<div class="portfolio-notice-icon">※</div>' +
-          '<div><strong>페이셜</strong> 움직임 작업 예시입니다.<br>' +
-          '표정 변화와 얼굴 움직임을 아바타 구조에 맞춰 세팅합니다.</div>',
-        detail:
-          '<div class="portfolio-notice-icon">※</div>' +
-          '<div><strong>성형디테일</strong> 작업 예시입니다.<br>' +
-          'Blender를 활용한 페이셜 성형·쉐이프키 디테일 작업 예시입니다.</div>'
-      };
-
-      function updateCategoryDescription() {
-        if (!categoryDescription) return;
-        categoryDescription.innerHTML =
-          categoryDescriptionMap[currentFilter] || categoryDescriptionMap.all;
-      }
-
-      let visibleItems = [];
+let visibleItems = [];
       let currentImageIndex = 0;
       let isSwitching = false;
 
@@ -984,7 +935,6 @@
       }
 
       function renderPortfolio() {
-        updateCategoryDescription();
         visibleItems = portfolioItems.filter(function (item) {
           return currentFilter === 'all' ||
             item.category === currentFilter;

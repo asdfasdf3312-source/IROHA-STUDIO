@@ -396,7 +396,7 @@
       -webkit-user-drag: none;
       transition:
         opacity 0.24s ease,
-        transform 0.50s cubic-bezier(0.22, 0.76, 0.28, 1),
+        transform 0.48s cubic-bezier(0.22, 0.76, 0.28, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
@@ -1027,10 +1027,10 @@ let visibleItems = [];
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.20;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.18;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.20;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.18;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -1041,7 +1041,9 @@ let visibleItems = [];
         ) {
           zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
         } else {
-          requestZoomSmoothScroll();
+          lightbox.scrollLeft = zoomTargetScrollLeft;
+          lightbox.scrollTop = zoomTargetScrollTop;
+          updateFixedOverlayPosition();
           zoomScrollRaf = null;
         }
       }
@@ -1061,8 +1063,8 @@ let visibleItems = [];
 
       function runZoomMomentum() {
         if (
-          Math.abs(zoomVelocityX) < 0.06 &&
-          Math.abs(zoomVelocityY) < 0.06
+          Math.abs(zoomVelocityX) < 0.12 &&
+          Math.abs(zoomVelocityY) < 0.12
         ) {
           zoomMomentumRaf = null;
           return;
@@ -1073,8 +1075,8 @@ let visibleItems = [];
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.965;
-        zoomVelocityY *= 0.965;
+        zoomVelocityX *= 0.93;
+        zoomVelocityY *= 0.93;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -1422,6 +1424,7 @@ let visibleItems = [];
         }
 
         stopZoomSmoothScroll();
+        stopZoomSmoothScroll();
         stopZoomMomentum();
 
         zoomDragging = true;
@@ -1471,7 +1474,7 @@ let visibleItems = [];
           const deltaX = event.clientX - zoomLastX;
           const deltaY = event.clientY - zoomLastY;
           const deltaTime = Math.max(8, now - zoomLastTime);
-          const velocityScale = Math.min(1.18, 16 / deltaTime) * 0.52;
+          const velocityScale = Math.min(1.05, 16 / deltaTime) * 0.38;
 
           zoomVelocityX = -deltaX * velocityScale;
           zoomVelocityY = -deltaY * velocityScale;
@@ -1482,10 +1485,13 @@ let visibleItems = [];
           zoomTargetScrollTop =
             zoomStartScrollTop - distanceY;
 
-          lightbox.scrollLeft = zoomTargetScrollLeft;
-          lightbox.scrollTop = zoomTargetScrollTop;
+          zoomTargetScrollLeft =
+            zoomStartScrollLeft - distanceX;
 
-          updateFixedOverlayPosition();
+          zoomTargetScrollTop =
+            zoomStartScrollTop - distanceY;
+
+          requestZoomSmoothScroll();
 
           zoomLastX = event.clientX;
           zoomLastY = event.clientY;

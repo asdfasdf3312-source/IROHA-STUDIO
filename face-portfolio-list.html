@@ -396,7 +396,7 @@
       -webkit-user-drag: none;
       transition:
         opacity 0.24s ease,
-        transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.42s cubic-bezier(0.22, 0.8, 0.28, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
@@ -1027,10 +1027,10 @@ let visibleItems = [];
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.98;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.32;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.98;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.32;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -1041,10 +1041,7 @@ let visibleItems = [];
         ) {
           zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
         } else {
-          lightbox.scrollLeft = zoomTargetScrollLeft;
-          lightbox.scrollTop = zoomTargetScrollTop;
-
-          updateFixedOverlayPosition();
+          requestZoomSmoothScroll();
           zoomScrollRaf = null;
         }
       }
@@ -1076,8 +1073,8 @@ let visibleItems = [];
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.90;
-        zoomVelocityY *= 0.90;
+        zoomVelocityX *= 0.94;
+        zoomVelocityY *= 0.94;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -1474,7 +1471,7 @@ let visibleItems = [];
           const deltaX = event.clientX - zoomLastX;
           const deltaY = event.clientY - zoomLastY;
           const deltaTime = Math.max(8, now - zoomLastTime);
-          const velocityScale = Math.min(2.2, 16 / deltaTime) * 1.28;
+          const velocityScale = Math.min(1.45, 16 / deltaTime) * 0.72;
 
           zoomVelocityX = -deltaX * velocityScale;
           zoomVelocityY = -deltaY * velocityScale;

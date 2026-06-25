@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>작업 신청서</title>
+<title>작업 신청서 v37</title>
 <style>
 @font-face{
   font-family:'Paperozi';
@@ -418,9 +418,9 @@ body{
       <p>단계별로 필요한 항목만 보이도록 정리된 신청서입니다.</p>
 
       <div class="package-tabs" data-name="formType" id="formTypeRow">
-        <button class="package-btn active" type="button" data-value="입문" data-form="intro" onclick="selectPackage('intro', this)">입문</button>
-        <button class="package-btn" type="button" data-value="데뷔" data-form="debut" onclick="selectPackage('debut', this)">데뷔</button>
-        <button class="package-btn" type="button" data-value="VRC" data-form="vrc" onclick="selectPackage('vrc', this)">VRC</button>
+        <button class="package-btn active" type="button" data-value="입문 패키지" data-form="intro" onclick="selectPackage('intro', this)">입문 패키지</button>
+        <button class="package-btn" type="button" data-value="버츄얼 스타터 세트" data-form="debut" onclick="selectPackage('debut', this)">버츄얼 스타터 세트</button>
+        <button class="package-btn" type="button" data-value="VRC 아바타" data-form="vrc" onclick="selectPackage('vrc', this)">VRC 아바타</button>
       </div>
 
       <div class="guide" id="guideText"></div>
@@ -560,16 +560,16 @@ body{
 var currentStep = 0;
 var workTypeMap = {
   intro: [
-    "Warudo 베이직 뚜따 패키지",
-    "Warudo 프리미엄 물리 뚜따 패키지",
-    "VSF 베이직 뚜따 패키지",
-    "Meligo 프리미엄 물리 뚜따 패키지"
+    "Warudo 베이직",
+    "Warudo 프리미엄",
+    "VSF 베이직",
+    "Meligo 프리미엄"
   ],
   debut: [
-    "VSF 올인원 데뷔 패키지",
-    "Warudo 올인원 데뷔 패키지",
-    "2D 원화 기반 VSF 데뷔 플랜",
-    "2D 원화 기반 Warudo 데뷔 플랜"
+    "VSF",
+    "Warudo",
+    "2D 원화 기반 VSF",
+    "2D 원화 기반 Warudo"
   ],
   vrc: [
     "Basic Options",
@@ -580,8 +580,8 @@ var workTypeMap = {
   ]
 };
 var guideMap = {
-  intro: "입문 패키지는 입문 패키지는 아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.<br>❗ Warudo / VSF / Meligo 중 사용 목적에 맞는 작업 타입을 선택해주세요.",
-  debut: "올인원 데뷔 패키지는 방송용 아바타 세팅, 페이셜, 기본 연동 등 데뷔에 필요한 구성을 한 번에 준비하는 메뉴입니다.<br>데뷔 플랜은 2D 원화를 기반으로 방송용 버츄얼 데뷔 구성을 준비하는 메뉴입니다.<br>❗ VSF 작업물은 VSeeFace 프로그램에서 사용 가능합니다",
+  intro: "입문 패키지는 아바타 사용에 필요한 기본 구성을 중심으로, 부담 없이 세팅을 시작할 수 있는 실속형 패키지입니다.<br>❗ Warudo / VSF / Meligo 중 사용 목적에 맞는 작업 타입을 선택해주세요.",
+  debut: "버츄얼 스타터 세트는 방송용 아바타 세팅, 페이셜, 기본 연동 등 버츄얼 활동 시작에 필요한 구성을 한 번에 준비하는 메뉴입니다.<br>2D 원화 기반 세트는 원화를 기반으로 방송용 버츄얼 스타터 구성을 준비하는 메뉴입니다.<br>❗ VSF 작업물은 VSeeFace 프로그램에서 사용 가능합니다",
   vrc: "VRC 아바타는 원하는 옵션을 직접 선택해 신청하는 메뉴입니다.<br>❗ Basic / Standard / Premium 또는 핵고퀄 풀옵션 중 필요한 작업 범위를 선택해주세요."
 };
 var colorAttachedImages = [];

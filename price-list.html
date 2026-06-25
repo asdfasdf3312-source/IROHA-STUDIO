@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IROHA 패키지 구성</title>
+  <title>IROHA 패키지 구성 v16</title>
 
   <style>
     @font-face {
@@ -419,6 +419,20 @@
       font-size: 9px;
     }
 
+    .open-sale.sold-out {
+      background: linear-gradient(135deg, #B8BFC2 0%, #D4DADB 100%);
+      box-shadow: 0 6px 14px rgba(120,130,135,0.18);
+    }
+
+    .open-sale.sold-out::before {
+      content: "×";
+      font-size: 10px;
+    }
+
+    .sale-price.sold-out-price {
+      color: #9EA8A8;
+    }
+
     .original-price {
       display: block;
       margin-bottom: 4px;
@@ -445,6 +459,10 @@
     }
 
     .panel.starter .price {
+      min-width: 132px;
+    }
+
+    .panel.vrc .price {
       min-width: 132px;
     }
 
@@ -588,7 +606,7 @@
 
     <div class="tabs" role="tablist" aria-label="패키지 메뉴">
       <button class="tab-btn active" type="button" data-target="starter">입문 패키지</button>
-      <button class="tab-btn" type="button" data-target="debut">데뷔 패키지</button>
+      <button class="tab-btn" type="button" data-target="debut">버츄얼 스타터 세트</button>
       <button class="tab-btn" type="button" data-target="vrc">VRC 아바타</button>
     </div>
 <div class="panel starter active" id="starter">
@@ -599,7 +617,7 @@
         <article class="price-card">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">Warudo 베이직 뚜따 패키지</h2>
+              <h2 class="package-name">입문 세팅 │ Warudo 베이직</h2>
               <div class="tag-row">
                 <span class="tag">Warudo</span>
                 <span class="tag">입문</span>
@@ -619,20 +637,20 @@
         <article class="price-card">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">Warudo 프리미엄 물리 뚜따 패키지</h2>
+              <h2 class="package-name">입문 세팅 │ Warudo 프리미엄</h2>
               <div class="tag-row">
                 <span class="tag">Warudo</span>
                 <span class="tag">프리미엄</span>
                 <span class="tag">Magica Cloth 2</span>
               </div>
             </div>
-            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 150,000원</span><span class="sale-price">120,000원</span></div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 150,000원</span><span class="sale-price">100,000원</span></div>
           </div>
           <ul class="items">
             <li>기본금</li>
             <li>전용의상 1종</li>
             <li>전용헤어 1종</li>
-            <li>Magica Cloth 2 전신 콜라이더 세팅</li>
+            <li>Spring Bone 전신 콜라이더 세팅</li>
             <li>Magica Cloth 2 물리 작업 세팅</li>
           </ul>
         </article>
@@ -640,7 +658,7 @@
         <article class="price-card">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">VSF 베이직 뚜따 패키지</h2>
+              <h2 class="package-name">입문 세팅 │ VSF 베이직</h2>
               <div class="tag-row">
                 <span class="tag">VSF</span>
                 <span class="tag">입문</span>
@@ -660,20 +678,20 @@
         <article class="price-card">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">Meligo 프리미엄 물리 뚜따 패키지</h2>
+              <h2 class="package-name">입문 세팅 │ Meligo 프리미엄</h2>
               <div class="tag-row">
                 <span class="tag">Meligo</span>
                 <span class="tag">프리미엄</span>
                 <span class="tag">Magica Cloth 2</span>
               </div>
             </div>
-            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 130,000원</span><span class="sale-price">100,000원</span></div>
+            <div class="price"><span class="open-sale sold-out">품절</span><span class="original-price">기존가 130,000원</span><span class="sale-price sold-out-price">품절</span></div>
           </div>
           <ul class="items">
             <li>기본금</li>
             <li>전용의상 1종</li>
             <li>전용헤어 1종</li>
-            <li>Magica Cloth 2 전신 콜라이더 세팅</li>
+            <li>Spring Bone 전신 콜라이더 세팅</li>
             <li>Magica Cloth 2 물리 작업 세팅</li>
           </ul>
         </article>
@@ -681,21 +699,21 @@
     </div>
 
     <div class="panel debut" id="debut">
-      <div class="sub-title">올인원 데뷔 패키지</div>
-      <p class="sub-desc">방송용 아바타 세팅, 페이셜, 기본 연동 등 데뷔에 필요한 구성을 한 번에 준비하는 메뉴입니다.</p>
+      <div class="sub-title">버츄얼 스타터 세트</div>
+      <p class="sub-desc">방송용 아바타 세팅, 페이셜, 기본 연동 등 버츄얼 활동 시작에 필요한 구성을 한 번에 준비하는 메뉴입니다.</p>
 
       <div class="price-list">
         <article class="price-card">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">VSF 올인원 데뷔 패키지</h2>
+              <h2 class="package-name">버츄얼 스타터 │ VSF</h2>
               <div class="tag-row">
                 <span class="tag">VSF</span>
                 <span class="tag">올인원</span>
                 <span class="tag">데뷔</span>
               </div>
             </div>
-            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 450,000원</span><span class="sale-price">350,000원</span></div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 450,000원</span><span class="sale-price">300,000원</span></div>
           </div>
           <ul class="items">
             <li>맞춤형 오마카세 외형 커스터마이징</li>
@@ -711,14 +729,14 @@
         <article class="price-card">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">Warudo 올인원 데뷔 패키지</h2>
+              <h2 class="package-name">버츄얼 스타터 │ Warudo</h2>
               <div class="tag-row">
                 <span class="tag">Warudo</span>
                 <span class="tag">올인원</span>
                 <span class="tag">Scenes</span>
               </div>
             </div>
-            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 500,000원</span><span class="sale-price">400,000원</span></div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 500,000원</span><span class="sale-price">350,000원</span></div>
           </div>
           <ul class="items">
             <li>맞춤형 오마카세 외형 커스터마이징</li>
@@ -740,13 +758,13 @@
         <article class="price-card">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">2D 원화 기반 VSF 데뷔 플랜</h2>
+              <h2 class="package-name">버츄얼 스타터 │ 2D 원화 기반 VSF</h2>
               <div class="tag-row">
                 <span class="tag">VSF</span>
                 <span class="tag">2D 원화 기반</span>
               </div>
             </div>
-            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 550,000원</span><span class="sale-price">450,000원</span></div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 550,000원</span><span class="sale-price">400,000원</span></div>
           </div>
           <ul class="items">
             <li>실시간 그림자</li>
@@ -755,22 +773,22 @@
             <li>특수 표현 리깅 4종 · 반짝이는눈 / 하트눈 / 눈물 / 홍조</li>
             <li>기본 피부톤 수정</li>
             <li>의상 1종 + 헤어 1종 + 악세사리 최대 2개</li>
-            <li>Magica Cloth 2 전신 콜라이더 세팅</li>
-            <li>Magica Cloth 2 물리 작업 세트</li>
+            <li>Spring Bone 전신 콜라이더 세팅</li>
+            <li>Spring Bone 물리 작업 세트</li>
           </ul>
         </article>
 
         <article class="price-card recommend">
           <div class="card-top">
             <div class="name-area">
-              <h2 class="package-name">2D 원화 기반 Warudo 데뷔 플랜</h2>
+              <h2 class="package-name">버츄얼 스타터 │ 2D 원화 기반 Warudo</h2>
               <div class="tag-row">
                 <span class="tag">Warudo</span>
                 <span class="tag">2D 원화 기반</span>
               
                 <span class="best-badge">BEST 인기</span></div>
             </div>
-            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 600,000원</span><span class="sale-price">500,000원</span></div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 600,000원</span><span class="sale-price">450,000원</span></div>
           </div>
           <ul class="items">
             <li>실시간 그림자</li>
@@ -804,7 +822,7 @@
                 <span class="tag">VRchat</span>
               </div>
             </div>
-            <div class="price">+60,000원</div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 60,000원</span><span class="sale-price">30,000원</span></div>
           </div>
           <ul class="items">
             <li>헤어 1종</li>
@@ -824,7 +842,7 @@
                 <span class="tag">VRchat</span>
               </div>
             </div>
-            <div class="price">+120,000원</div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 120,000원</span><span class="sale-price">60,000원</span></div>
           </div>
           <ul class="items">
             <li>헤어 최대 4종 · 갯수 자유</li>
@@ -845,7 +863,7 @@
                 <span class="best-badge">BEST 인기</span>
               </div>
             </div>
-            <div class="price">+150,000원</div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 150,000원</span><span class="sale-price">120,000원</span></div>
           </div>
           <ul class="items">
             <li>헤어 최대 5종 · 갯수 자유</li>
@@ -876,7 +894,7 @@
                 <span class="tag">Full Option</span>
               </div>
             </div>
-            <div class="price">+250,000원</div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 250,000원</span><span class="sale-price">150,000원</span></div>
           </div>
           <ul class="items">
             <li>전용 의상 1종</li>
@@ -900,7 +918,7 @@
                 <span class="best-badge">BEST 인기</span>
               </div>
             </div>
-            <div class="price">+300,000원</div>
+            <div class="price"><span class="open-sale">오픈할인가</span><span class="original-price">기존가 300,000원</span><span class="sale-price">200,000원</span></div>
           </div>
           <ul class="items">
             <li>전용 의상 4종</li>

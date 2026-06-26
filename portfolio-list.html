@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v25</title>
+  <title>포트폴리오 v26</title>
 
   <style>
     @font-face {
@@ -917,10 +917,10 @@
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.18;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.42;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.18;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.42;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -965,8 +965,8 @@
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.93;
-        zoomVelocityY *= 0.93;
+        zoomVelocityX *= 0.88;
+        zoomVelocityY *= 0.88;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -1280,16 +1280,24 @@
         }
 
         if (zoomMoved) {
-          stopZoomSmoothScroll();
-          stopZoomMomentum();
+          const now = performance.now();
+          const deltaX = event.clientX - zoomLastX;
+          const deltaY = event.clientY - zoomLastY;
+          const deltaTime = Math.max(8, now - zoomLastTime);
+          const velocityScale = Math.min(1.1, 16 / deltaTime) * 0.16;
 
-          lightbox.scrollLeft = zoomStartScrollLeft - distanceX;
-          lightbox.scrollTop = zoomStartScrollTop - distanceY;
+          zoomVelocityX = -deltaX * velocityScale;
+          zoomVelocityY = -deltaY * velocityScale;
 
-          zoomVelocityX = 0;
-          zoomVelocityY = 0;
+          zoomTargetScrollLeft = zoomStartScrollLeft - distanceX;
+          zoomTargetScrollTop = zoomStartScrollTop - distanceY;
 
-          updateFixedOverlayPosition();
+          requestZoomSmoothScroll();
+
+          zoomLastX = event.clientX;
+          zoomLastY = event.clientY;
+          zoomLastTime = now;
+
           event.preventDefault();
         }
       });
@@ -1325,7 +1333,7 @@
             behavior: 'smooth'
           });
         } else if (zoomMoved) {
-          stopZoomMomentum();
+          startZoomMomentum();
         }
 
         zoomMoved = false;

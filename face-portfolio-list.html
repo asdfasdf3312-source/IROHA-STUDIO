@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v36</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v37</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -1080,8 +1080,8 @@ let visibleItems = [];
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.93;
-        zoomVelocityY *= 0.93;
+        zoomVelocityX *= 0.88;
+        zoomVelocityY *= 0.88;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -1475,16 +1475,24 @@ let visibleItems = [];
         }
 
         if (zoomMoved) {
-          stopZoomSmoothScroll();
-          stopZoomMomentum();
+          const now = performance.now();
+          const deltaX = event.clientX - zoomLastX;
+          const deltaY = event.clientY - zoomLastY;
+          const deltaTime = Math.max(8, now - zoomLastTime);
+          const velocityScale = Math.min(1.1, 16 / deltaTime) * 0.16;
 
-          lightbox.scrollLeft = zoomStartScrollLeft - distanceX;
-          lightbox.scrollTop = zoomStartScrollTop - distanceY;
+          zoomVelocityX = -deltaX * velocityScale;
+          zoomVelocityY = -deltaY * velocityScale;
 
-          zoomVelocityX = 0;
-          zoomVelocityY = 0;
+          zoomTargetScrollLeft = zoomStartScrollLeft - distanceX;
+          zoomTargetScrollTop = zoomStartScrollTop - distanceY;
 
-          updateFixedOverlayPosition();
+          requestZoomSmoothScroll();
+
+          zoomLastX = event.clientX;
+          zoomLastY = event.clientY;
+          zoomLastTime = now;
+
           event.preventDefault();
         }
       });
@@ -1521,7 +1529,7 @@ let visibleItems = [];
             behavior: 'smooth'
           });
         } else if (zoomMoved) {
-          stopZoomMomentum();
+          startZoomMomentum();
         }
 
         zoomMoved = false;

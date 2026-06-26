@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v35</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v36</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -1467,41 +1467,24 @@ let visibleItems = [];
         if (
           !zoomMoved &&
           (
-            Math.abs(distanceX) > 4 ||
-            Math.abs(distanceY) > 4
+            Math.abs(distanceX) > 3 ||
+            Math.abs(distanceY) > 3
           )
         ) {
           zoomMoved = true;
         }
 
         if (zoomMoved) {
-          const now = performance.now();
-          const deltaX = event.clientX - zoomLastX;
-          const deltaY = event.clientY - zoomLastY;
-          const deltaTime = Math.max(8, now - zoomLastTime);
-          const velocityScale = Math.min(1.05, 16 / deltaTime) * 0.38;
+          stopZoomSmoothScroll();
+          stopZoomMomentum();
 
-          zoomVelocityX = -deltaX * velocityScale;
-          zoomVelocityY = -deltaY * velocityScale;
+          lightbox.scrollLeft = zoomStartScrollLeft - distanceX;
+          lightbox.scrollTop = zoomStartScrollTop - distanceY;
 
-          zoomTargetScrollLeft =
-            zoomStartScrollLeft - (distanceX * 1.35);
+          zoomVelocityX = 0;
+          zoomVelocityY = 0;
 
-          zoomTargetScrollTop =
-            zoomStartScrollTop - (distanceY * 1.35);
-
-          zoomTargetScrollLeft =
-            zoomStartScrollLeft - distanceX;
-
-          zoomTargetScrollTop =
-            zoomStartScrollTop - distanceY;
-
-          requestZoomSmoothScroll();
-
-          zoomLastX = event.clientX;
-          zoomLastY = event.clientY;
-          zoomLastTime = now;
-
+          updateFixedOverlayPosition();
           event.preventDefault();
         }
       });
@@ -1538,7 +1521,7 @@ let visibleItems = [];
             behavior: 'smooth'
           });
         } else if (zoomMoved) {
-          startZoomMomentum();
+          stopZoomMomentum();
         }
 
         zoomMoved = false;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v37</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v38</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -1080,8 +1080,8 @@ let visibleItems = [];
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.88;
-        zoomVelocityY *= 0.88;
+        zoomVelocityX *= 0.84;
+        zoomVelocityY *= 0.84;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -1467,8 +1467,8 @@ let visibleItems = [];
         if (
           !zoomMoved &&
           (
-            Math.abs(distanceX) > 3 ||
-            Math.abs(distanceY) > 3
+            Math.abs(distanceX) > 2 ||
+            Math.abs(distanceY) > 2
           )
         ) {
           zoomMoved = true;

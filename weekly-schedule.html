@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IROHA 주간 작업 보드</title>
+<title>IROHA 주간 작업 보드 v19</title>
 <style>
   @font-face {
       font-family: 'Paperozi';
@@ -487,15 +487,15 @@
           </p>
         </div>
         <div class="board-period" aria-label="표시 기간">
-          <span class="label" id="weekLabel">3주차</span>
-          <span class="range" id="weekRange">06.15 - 06.21</span>
+          <span class="label" id="weekLabel">1주차</span>
+          <span class="range" id="weekRange">06.28 - 07.04</span>
         </div>
       </div>
 
       <div class="week-tabs" aria-label="주차 선택">
-        <button class="week-tab" type="button" data-week="1">1주차</button>
+        <button class="week-tab active" type="button" data-week="1">1주차</button>
         <button class="week-tab" type="button" data-week="2">2주차</button>
-        <button class="week-tab active" type="button" data-week="3">3주차</button>
+        <button class="week-tab" type="button" data-week="3">3주차</button>
         <button class="week-tab" type="button" data-week="4">4주차</button>
       </div>
 
@@ -508,76 +508,75 @@
       </div>
 
       <div class="week-grid" id="weekGrid">
-        <article class="day-card available is-today">
+        <article class="day-card work is-today">
           <div class="day-head">
-            <div class="day-name">월요일<span class="day-date">06.15</span></div>
-            <span class="day-status">예약 가능</span>
+            <div class="day-name">일요일<span class="day-date">06.28</span></div>
+            <span class="day-status">진행중</span>
           </div>
           <div class="day-line"></div>
-          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+          <p class="day-text">현재 확정된 작업을 진행 중인 일정입니다.</p>
+          <div class="day-bottom"><span>작업 상태</span><b>WORK</b></div>
         </article>
 
-        <article class="day-card available">
+        <article class="day-card closed">
           <div class="day-head">
-            <div class="day-name">화요일<span class="day-date">06.16</span></div>
-            <span class="day-status">예약 가능</span>
+            <div class="day-name">월요일<span class="day-date">06.29</span></div>
+            <span class="day-status">예약 마감</span>
           </div>
           <div class="day-line"></div>
-          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
         </article>
 
-        <article class="day-card available">
+        <article class="day-card closed">
           <div class="day-head">
-            <div class="day-name">수요일<span class="day-date">06.17</span></div>
-            <span class="day-status">예약 가능</span>
+            <div class="day-name">화요일<span class="day-date">06.30</span></div>
+            <span class="day-status">예약 마감</span>
           </div>
           <div class="day-line"></div>
-          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
         </article>
 
-        <article class="day-card available">
+        <article class="day-card closed">
           <div class="day-head">
-            <div class="day-name">목요일<span class="day-date">06.18</span></div>
-            <span class="day-status">예약 가능</span>
+            <div class="day-name">수요일<span class="day-date">07.01</span></div>
+            <span class="day-status">예약 마감</span>
           </div>
           <div class="day-line"></div>
-          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
         </article>
 
-        <article class="day-card available">
+        <article class="day-card closed">
           <div class="day-head">
-            <div class="day-name">금요일<span class="day-date">06.19</span></div>
-            <span class="day-status">예약 가능</span>
+            <div class="day-name">목요일<span class="day-date">07.02</span></div>
+            <span class="day-status">예약 마감</span>
           </div>
           <div class="day-line"></div>
-          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
         </article>
 
-        <article class="day-card available">
+        <article class="day-card closed">
           <div class="day-head">
-            <div class="day-name">토요일<span class="day-date">06.20</span></div>
-            <span class="day-status">예약 가능</span>
+            <div class="day-name">금요일<span class="day-date">07.03</span></div>
+            <span class="day-status">예약 마감</span>
           </div>
           <div class="day-line"></div>
-          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
         </article>
 
-        <article class="day-card available">
+        <article class="day-card closed">
           <div class="day-head">
-            <div class="day-name">일요일<span class="day-date">06.21</span></div>
-            <span class="day-status">예약 가능</span>
+            <div class="day-name">토요일<span class="day-date">07.04</span></div>
+            <span class="day-status">예약 마감</span>
           </div>
           <div class="day-line"></div>
-          <p class="day-text">신규 신청 및 상담 예약이 가능한 슬롯입니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>OPEN</b></div>
+          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
+          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
         </article>
-
       </div>
 
       <p class="board-note">
@@ -598,54 +597,54 @@
 const weekData = {
   1: {
     label: '1주차',
-    range: '06.01 - 06.07',
+    range: '06.28 - 07.04',
     days: [
-      {day:'월요일', date:'06.01', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'06.02', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'수요일', date:'06.03', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'목요일', date:'06.04', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'금요일', date:'06.05', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'토요일', date:'06.06', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'일요일', date:'06.07', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
+      {day:'일요일', date:'06.28', type:'work', status:'진행중', text:'현재 확정된 작업을 진행 중인 일정입니다.', bottom:'작업 상태', code:'WORK'},
+      {day:'월요일', date:'06.29', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'화요일', date:'06.30', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'수요일', date:'07.01', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'목요일', date:'07.02', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'금요일', date:'07.03', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'토요일', date:'07.04', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
     ]
   },
   2: {
     label: '2주차',
-    range: '06.08 - 06.14',
+    range: '07.05 - 07.11',
     days: [
-      {day:'월요일', date:'06.08', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'06.09', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'수요일', date:'06.10', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'목요일', date:'06.11', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'금요일', date:'06.12', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'토요일', date:'06.13', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'일요일', date:'06.14', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
+      {day:'일요일', date:'07.05', type:'off', status:'휴무일', text:'해당 날짜는 작업 및 상담을 진행하지 않는 휴무일입니다.', bottom:'운영 상태', code:'OFF'},
+      {day:'월요일', date:'07.06', type:'off', status:'휴무일', text:'해당 날짜는 작업 및 상담을 진행하지 않는 휴무일입니다.', bottom:'운영 상태', code:'OFF'},
+      {day:'화요일', date:'07.07', type:'off', status:'휴무일', text:'해당 날짜는 작업 및 상담을 진행하지 않는 휴무일입니다.', bottom:'운영 상태', code:'OFF'},
+      {day:'수요일', date:'07.08', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'목요일', date:'07.09', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'금요일', date:'07.10', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'토요일', date:'07.11', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'}
     ]
   },
   3: {
     label: '3주차',
-    range: '06.15 - 06.21',
+    range: '07.12 - 07.18',
     days: [
-      {day:'월요일', date:'06.15', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'화요일', date:'06.16', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'수요일', date:'06.17', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'목요일', date:'06.18', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'금요일', date:'06.19', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'토요일', date:'06.20', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'일요일', date:'06.21', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'}
+      {day:'일요일', date:'07.12', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'월요일', date:'07.13', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'화요일', date:'07.14', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'수요일', date:'07.15', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'목요일', date:'07.16', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'금요일', date:'07.17', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'토요일', date:'07.18', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'}
     ]
   },
   4: {
     label: '4주차',
-    range: '06.22 - 06.28',
+    range: '07.19 - 07.25',
     days: [
-      {day:'월요일', date:'06.22', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'화요일', date:'06.23', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'수요일', date:'06.24', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'목요일', date:'06.25', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'금요일', date:'06.26', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'토요일', date:'06.27', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
-      {day:'일요일', date:'06.28', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'}
+      {day:'일요일', date:'07.19', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'월요일', date:'07.20', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'화요일', date:'07.21', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'수요일', date:'07.22', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'목요일', date:'07.23', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'금요일', date:'07.24', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'},
+      {day:'토요일', date:'07.25', type:'available', status:'예약 가능', text:'신규 신청 및 상담 예약이 가능한 슬롯입니다.', bottom:'예약 상태', code:'OPEN'}
     ]
   }
 };
@@ -707,7 +706,7 @@ function findCurrentWeek(){
     }
   }
 
-  return '3';
+  return '1';
 }
 
 function renderWeek(week){

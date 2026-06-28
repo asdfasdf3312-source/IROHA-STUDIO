@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v40</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v41</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -1080,8 +1080,8 @@ let visibleItems = [];
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.82;
-        zoomVelocityY *= 0.82;
+        zoomVelocityX *= 0.90;
+        zoomVelocityY *= 0.90;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -1484,8 +1484,8 @@ let visibleItems = [];
           zoomVelocityX = -deltaX * velocityScale;
           zoomVelocityY = -deltaY * velocityScale;
 
-          zoomTargetScrollLeft = zoomStartScrollLeft - (distanceX * 1.65);
-          zoomTargetScrollTop = zoomStartScrollTop - (distanceY * 1.65);
+          zoomTargetScrollLeft = zoomStartScrollLeft - (distanceX * 1.45);
+          zoomTargetScrollTop = zoomStartScrollTop - (distanceY * 1.45);
 
           requestZoomSmoothScroll();
 

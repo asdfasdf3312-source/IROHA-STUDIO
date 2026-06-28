@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v30</title>
+  <title>포트폴리오 v31</title>
 
   <style>
     @font-face {
@@ -917,10 +917,10 @@
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.68;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.58;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.68;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.58;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
@@ -965,8 +965,8 @@
 
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.90;
-        zoomVelocityY *= 0.90;
+        zoomVelocityX *= 0.88;
+        zoomVelocityY *= 0.88;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -1289,8 +1289,8 @@
           zoomVelocityX = -deltaX * velocityScale;
           zoomVelocityY = -deltaY * velocityScale;
 
-          zoomTargetScrollLeft = zoomStartScrollLeft - (distanceX * 1.45);
-          zoomTargetScrollTop = zoomStartScrollTop - (distanceY * 1.45);
+          zoomTargetScrollLeft = zoomStartScrollLeft - (distanceX * 1.25);
+          zoomTargetScrollTop = zoomStartScrollTop - (distanceY * 1.25);
 
           requestZoomSmoothScroll();
 

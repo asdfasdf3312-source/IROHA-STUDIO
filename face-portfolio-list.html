@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v47</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v49</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -240,6 +240,11 @@
       object-position: center;
       pointer-events: none;
       -webkit-user-drag: none;
+    }
+
+    .portfolio-card img.fit-contain {
+      object-fit: contain;
+      background: #f8fafa;
     }
 
 
@@ -807,7 +812,7 @@
     (function () {
       const portfolioItems = [
         {
-          src: './images/portfolio/blender-shapekey-face-10.png?v=47',
+          src: './images/portfolio/blender-shapekey-face-10.png?v=49',
           category: 'detail',
           title: '성형 디테일 1'
         },
@@ -816,8 +821,7 @@
           category: 'detail',
           title: '성형 디테일 영상',
           type: 'youtube',
-          youtubeId: 'DUWNYzrZ6HQ',
-          hideInAll: true
+          youtubeId: 'DUWNYzrZ6HQ'
         },
         {
           src: './images/portfolio/blender-shapekey-face-09.png?v=45',
@@ -979,11 +983,8 @@ let visibleItems = [];
 
       function renderPortfolio() {
         visibleItems = portfolioItems.filter(function (item) {
-          if (currentFilter === 'all') {
-            return !item.hideInAll;
-          }
-
-          return item.category === currentFilter;
+          return currentFilter === 'all' ||
+            item.category === currentFilter;
         });
 
         grid.innerHTML = '';
@@ -1041,6 +1042,10 @@ let visibleItems = [];
           image.alt = item.title || '작업 이미지';
           image.loading = index < 2 ? 'eager' : 'lazy';
 
+          if (item.src.indexOf('blender-shapekey-face-10') !== -1) {
+            image.classList.add('fit-contain');
+          }
+
           image.addEventListener('error', function () {
             if (image.dataset.fallbackTried === '1') {
               return;
@@ -1049,7 +1054,7 @@ let visibleItems = [];
             image.dataset.fallbackTried = '1';
 
             if (image.src.indexOf('blender-shapekey-face-10.png') !== -1) {
-              image.src = './images/portfolio/blender-shapekey-face-10.PNG?v=47';
+              image.src = './images/portfolio/blender-shapekey-face-10.PNG?v=49';
             }
           });
 

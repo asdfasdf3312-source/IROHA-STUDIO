@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v45</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v46</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -786,7 +786,7 @@
       ></iframe>
       <a
         class="video-fallback-link"
-        href="https://youtu.be/dAcdmztELK0"
+        href="https://youtu.be/DUWNYzrZ6HQ"
         target="_blank"
         rel="noopener noreferrer"
         hidden
@@ -807,59 +807,72 @@
     (function () {
       const portfolioItems = [
         {
-          src: './images/portfolio/blender-shapekey-face-09.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-10.PNG?v=46',
           category: 'detail',
           title: '성형 디테일 1'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-08.png?v=45',
+          src: 'https://img.youtube.com/vi/DUWNYzrZ6HQ/hqdefault.jpg',
+          category: 'detail',
+          title: '성형 디테일 영상',
+          type: 'youtube',
+          youtubeId: 'DUWNYzrZ6HQ',
+          hideInAll: true
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-09.png?v=45',
           category: 'detail',
           title: '성형 디테일 2'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-07.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-08.png?v=45',
           category: 'detail',
           title: '성형 디테일 3'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-06-2.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-07.png?v=45',
           category: 'detail',
           title: '성형 디테일 4'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-06-1.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-06-2.png?v=45',
           category: 'detail',
           title: '성형 디테일 5'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-06.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-06-1.png?v=45',
           category: 'detail',
           title: '성형 디테일 6'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-05.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-06.png?v=45',
           category: 'detail',
           title: '성형 디테일 7'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-04.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-05.png?v=45',
           category: 'detail',
           title: '성형 디테일 8'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-03.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-04.png?v=45',
           category: 'detail',
           title: '성형 디테일 9'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-02.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-03.png?v=45',
           category: 'detail',
           title: '성형 디테일 10'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-01.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-02.png?v=45',
           category: 'detail',
           title: '성형 디테일 11'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-01.png?v=45',
+          category: 'detail',
+          title: '성형 디테일 12'
         },
         {
           src: 'https://img.youtube.com/vi/wY3I8bUxnUM/hqdefault.jpg',
@@ -966,8 +979,11 @@ let visibleItems = [];
 
       function renderPortfolio() {
         visibleItems = portfolioItems.filter(function (item) {
-          return currentFilter === 'all' ||
-            item.category === currentFilter;
+          if (currentFilter === 'all') {
+            return !item.hideInAll;
+          }
+
+          return item.category === currentFilter;
         });
 
         grid.innerHTML = '';

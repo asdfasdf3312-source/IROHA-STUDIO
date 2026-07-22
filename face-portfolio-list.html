@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v46</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v47</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -807,7 +807,7 @@
     (function () {
       const portfolioItems = [
         {
-          src: './images/portfolio/blender-shapekey-face-10.PNG?v=46',
+          src: './images/portfolio/blender-shapekey-face-10.png?v=47',
           category: 'detail',
           title: '성형 디테일 1'
         },
@@ -1040,6 +1040,18 @@ let visibleItems = [];
           image.src = item.src;
           image.alt = item.title || '작업 이미지';
           image.loading = index < 2 ? 'eager' : 'lazy';
+
+          image.addEventListener('error', function () {
+            if (image.dataset.fallbackTried === '1') {
+              return;
+            }
+
+            image.dataset.fallbackTried = '1';
+
+            if (image.src.indexOf('blender-shapekey-face-10.png') !== -1) {
+              image.src = './images/portfolio/blender-shapekey-face-10.PNG?v=47';
+            }
+          });
 
           const badge = document.createElement('div');
           badge.className = 'portfolio-badge';

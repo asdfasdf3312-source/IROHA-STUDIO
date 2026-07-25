@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v37</title>
+  <title>포트폴리오 v38</title>
 
   <style>
     @font-face {
@@ -777,6 +777,16 @@
       */
       const portfolioItems = [
         {
+          src: './images/portfolio/VSeeFace 02.PNG?v=38',
+          category: 'vseeface',
+          title: 'VSeeFace 포트폴리오 2'
+        },
+        {
+          src: './images/portfolio/VSeeFace 01.PNG?v=38',
+          category: 'vseeface',
+          title: 'VSeeFace 포트폴리오 1'
+        },
+        {
           src: './images/portfolio/imagesportfoliovrc-avatar 19.png?v=34',
           category: 'vrc-avatar',
           title: 'VRC 아바타 포트폴리오 19'
@@ -794,16 +804,6 @@
           title: 'MMD 월드 샘플 2',
           type: 'youtube',
           youtubeId: 'NEIlSnVj3Zk'
-        },
-        {
-          src: './images/portfolio/VSeeFace 02.PNG?v=37',
-          category: 'vseeface',
-          title: 'VSeeFace 포트폴리오 2'
-        },
-        {
-          src: './images/portfolio/VSeeFace 01.PNG?v=37',
-          category: 'vseeface',
-          title: 'VSeeFace 포트폴리오 1'
         },
         {
           src: './images/portfolio/imagesportfoliovrc-avatar 18.png',
@@ -1054,6 +1054,24 @@
           image.loading = index < 2 ? 'eager' : 'lazy';
           image.setAttribute('draggable', 'false');
           image.setAttribute('oncontextmenu', 'return false;');
+
+          image.addEventListener('error', function () {
+            if (image.dataset.fallbackTried === '1') {
+              return;
+            }
+
+            image.dataset.fallbackTried = '1';
+
+            if (item.src.indexOf('VSeeFace 02.PNG') !== -1) {
+              image.src = './images/portfolio/VSeeFace 02.png?v=38';
+              return;
+            }
+
+            if (item.src.indexOf('VSeeFace 01.PNG') !== -1) {
+              image.src = './images/portfolio/VSeeFace 01.png?v=38';
+              return;
+            }
+          });
 
           const badge = document.createElement('div');
           badge.className = 'portfolio-badge';

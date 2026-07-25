@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v39</title>
+  <title>포트폴리오 v40</title>
 
   <style>
     @font-face {
@@ -777,7 +777,7 @@
       */
       const portfolioItems = [
         {
-          src: './images/portfolio/VSeeFace 02.PNG?v=39',
+          src: './images/portfolio/VSeeFace%2002.PNG?v=40',
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 2'
         },
@@ -796,12 +796,12 @@
           youtubeId: 'NEIlSnVj3Zk'
         },
         {
-          src: './images/portfolio/imagesportfoliovrc-avatar 19.PNG?v=39',
+          src: './images/portfolio/imagesportfoliovrc-avatar 19.png?v=40',
           category: 'vrc-avatar',
           title: 'VRC 아바타 포트폴리오 19'
         },
         {
-          src: './images/portfolio/VSeeFace 01.PNG?v=39',
+          src: './images/portfolio/VSeeFace%2001.PNG?v=40',
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 1',
           hideInAll: true
@@ -993,6 +993,62 @@
         return '';
       }
 
+      function getImageFallbacks(src) {
+        const cleanSrc = String(src || '').split('?')[0];
+        const version = '?v=40';
+
+        if (
+          cleanSrc.indexOf('VSeeFace%2002') !== -1 ||
+          cleanSrc.indexOf('VSeeFace 02') !== -1
+        ) {
+          return [
+            './images/portfolio/VSeeFace%2002.PNG' + version,
+            './images/portfolio/VSeeFace%2002.png' + version,
+            './images/portfolio/VSeeFace 02.PNG' + version,
+            './images/portfolio/VSeeFace 02.png' + version,
+            './images/portfolio/vseeface-02.png' + version,
+            './images/portfolio/vseeface-02.PNG' + version
+          ];
+        }
+
+        if (
+          cleanSrc.indexOf('VSeeFace%2001') !== -1 ||
+          cleanSrc.indexOf('VSeeFace 01') !== -1
+        ) {
+          return [
+            './images/portfolio/VSeeFace%2001.PNG' + version,
+            './images/portfolio/VSeeFace%2001.png' + version,
+            './images/portfolio/VSeeFace 01.PNG' + version,
+            './images/portfolio/VSeeFace 01.png' + version,
+            './images/portfolio/vseeface-01.png' + version,
+            './images/portfolio/vseeface-01.PNG' + version
+          ];
+        }
+
+        if (cleanSrc.indexOf('imagesportfoliovrc-avatar 19') !== -1) {
+          return [
+            './images/portfolio/imagesportfoliovrc-avatar 19.png' + version,
+            './images/portfolio/imagesportfoliovrc-avatar 19.PNG' + version,
+            './images/portfolio/imagesportfoliovrc-avatar%2019.png' + version,
+            './images/portfolio/imagesportfoliovrc-avatar%2019.PNG' + version
+          ];
+        }
+
+        return [];
+      }
+
+      function applyNextImageFallback(image, originalSrc) {
+        const fallbacks = getImageFallbacks(originalSrc || image.src);
+        const currentIndex = parseInt(image.dataset.fallbackIndex || '0', 10);
+
+        if (!fallbacks.length || currentIndex >= fallbacks.length) {
+          return;
+        }
+
+        image.dataset.fallbackIndex = String(currentIndex + 1);
+        image.src = fallbacks[currentIndex];
+      }
+
       function renderPortfolio() {
         visibleItems = portfolioItems.filter(function (item) {
           if (currentFilter === 'all') {
@@ -1058,30 +1114,6 @@
           image.loading = index < 2 ? 'eager' : 'lazy';
           image.setAttribute('draggable', 'false');
           image.setAttribute('oncontextmenu', 'return false;');
-
-          image.addEventListener('error', function () {
-            if (image.dataset.fallbackTried === '1') {
-              return;
-            }
-
-            image.dataset.fallbackTried = '1';
-
-            if (item.src.indexOf('VSeeFace 02.PNG') !== -1) {
-              image.src = './images/portfolio/VSeeFace 02.png?v=39';
-              return;
-            }
-
-            if (item.src.indexOf('imagesportfoliovrc-avatar 19.PNG') !== -1) {
-              image.src = './images/portfolio/imagesportfoliovrc-avatar 19.png?v=39';
-              return;
-            }
-
-            if (item.src.indexOf('VSeeFace 01.PNG') !== -1) {
-              image.src = './images/portfolio/VSeeFace 01.png?v=39';
-              return;
-            }
-          });
-
           const badge = document.createElement('div');
           badge.className = 'portfolio-badge';
           badge.textContent = getCategoryLabel(item.category);
@@ -1265,6 +1297,8 @@
         }
 
         showImageMode();
+        lightboxImage.dataset.originalSrc = item.src;
+        lightboxImage.dataset.fallbackIndex = '0';
         lightboxImage.src = item.src;
         lightboxImage.alt = item.title || '포트폴리오 이미지';
       }
@@ -1470,6 +1504,10 @@
 
       lightboxNext.addEventListener('click', function () {
         moveLightbox(1);
+      });
+
+      lightboxImage.addEventListener('error', function () {
+        applyNextImageFallback(lightboxImage, lightboxImage.dataset.originalSrc);
       });
 
       lightboxImage.addEventListener('pointerdown', function (event) {

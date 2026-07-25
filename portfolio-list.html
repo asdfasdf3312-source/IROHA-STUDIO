@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v38</title>
+  <title>포트폴리오 v39</title>
 
   <style>
     @font-face {
@@ -777,19 +777,9 @@
       */
       const portfolioItems = [
         {
-          src: './images/portfolio/VSeeFace 02.PNG?v=38',
+          src: './images/portfolio/VSeeFace 02.PNG?v=39',
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 2'
-        },
-        {
-          src: './images/portfolio/VSeeFace 01.PNG?v=38',
-          category: 'vseeface',
-          title: 'VSeeFace 포트폴리오 1'
-        },
-        {
-          src: './images/portfolio/imagesportfoliovrc-avatar 19.png?v=34',
-          category: 'vrc-avatar',
-          title: 'VRC 아바타 포트폴리오 19'
         },
         {
           src: 'https://img.youtube.com/vi/0FOWVbwMidA/hqdefault.jpg',
@@ -804,6 +794,17 @@
           title: 'MMD 월드 샘플 2',
           type: 'youtube',
           youtubeId: 'NEIlSnVj3Zk'
+        },
+        {
+          src: './images/portfolio/imagesportfoliovrc-avatar 19.PNG?v=39',
+          category: 'vrc-avatar',
+          title: 'VRC 아바타 포트폴리오 19'
+        },
+        {
+          src: './images/portfolio/VSeeFace 01.PNG?v=39',
+          category: 'vseeface',
+          title: 'VSeeFace 포트폴리오 1',
+          hideInAll: true
         },
         {
           src: './images/portfolio/imagesportfoliovrc-avatar 18.png',
@@ -994,8 +995,11 @@
 
       function renderPortfolio() {
         visibleItems = portfolioItems.filter(function (item) {
-          return currentFilter === 'all' ||
-            item.category === currentFilter;
+          if (currentFilter === 'all') {
+            return !item.hideInAll;
+          }
+
+          return item.category === currentFilter;
         });
 
         grid.innerHTML = '';
@@ -1063,12 +1067,17 @@
             image.dataset.fallbackTried = '1';
 
             if (item.src.indexOf('VSeeFace 02.PNG') !== -1) {
-              image.src = './images/portfolio/VSeeFace 02.png?v=38';
+              image.src = './images/portfolio/VSeeFace 02.png?v=39';
+              return;
+            }
+
+            if (item.src.indexOf('imagesportfoliovrc-avatar 19.PNG') !== -1) {
+              image.src = './images/portfolio/imagesportfoliovrc-avatar 19.png?v=39';
               return;
             }
 
             if (item.src.indexOf('VSeeFace 01.PNG') !== -1) {
-              image.src = './images/portfolio/VSeeFace 01.png?v=38';
+              image.src = './images/portfolio/VSeeFace 01.png?v=39';
               return;
             }
           });

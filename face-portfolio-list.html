@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v49</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v50</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -240,11 +240,6 @@
       object-position: center;
       pointer-events: none;
       -webkit-user-drag: none;
-    }
-
-    .portfolio-card img.fit-contain {
-      object-fit: contain;
-      background: #f8fafa;
     }
 
 
@@ -791,7 +786,7 @@
       ></iframe>
       <a
         class="video-fallback-link"
-        href="https://youtu.be/DUWNYzrZ6HQ"
+        href="https://youtu.be/WXFuu_awOqw"
         target="_blank"
         rel="noopener noreferrer"
         hidden
@@ -812,9 +807,11 @@
     (function () {
       const portfolioItems = [
         {
-          src: './images/portfolio/blender-shapekey-face-10.png?v=49',
-          category: 'detail',
-          title: '성형 디테일 1'
+          src: 'https://img.youtube.com/vi/WXFuu_awOqw/hqdefault.jpg',
+          category: 'facial',
+          title: '페이셜 움직임 샘플 2',
+          type: 'youtube',
+          youtubeId: 'WXFuu_awOqw'
         },
         {
           src: 'https://img.youtube.com/vi/DUWNYzrZ6HQ/hqdefault.jpg',
@@ -824,59 +821,66 @@
           youtubeId: 'DUWNYzrZ6HQ'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-09.png?v=45',
+          src: 'https://img.youtube.com/vi/cAaJ3MnA8TY/hqdefault.jpg',
+          category: 'boing-eye',
+          title: '뽀잉눈 움직임 샘플 2',
+          type: 'youtube',
+          youtubeId: 'cAaJ3MnA8TY'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-09.png?v=50',
+          category: 'detail',
+          title: '성형 디테일 1'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-08.png?v=50',
           category: 'detail',
           title: '성형 디테일 2'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-08.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-07.png?v=50',
           category: 'detail',
           title: '성형 디테일 3'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-07.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-06-2.png?v=50',
           category: 'detail',
           title: '성형 디테일 4'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-06-2.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-06-1.png?v=50',
           category: 'detail',
           title: '성형 디테일 5'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-06-1.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-06.png?v=50',
           category: 'detail',
           title: '성형 디테일 6'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-06.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-05.png?v=50',
           category: 'detail',
           title: '성형 디테일 7'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-05.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-04.png?v=50',
           category: 'detail',
           title: '성형 디테일 8'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-04.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-03.png?v=50',
           category: 'detail',
           title: '성형 디테일 9'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-03.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-02.png?v=50',
           category: 'detail',
           title: '성형 디테일 10'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-02.png?v=45',
+          src: './images/portfolio/blender-shapekey-face-01.png?v=50',
           category: 'detail',
           title: '성형 디테일 11'
-        },
-        {
-          src: './images/portfolio/blender-shapekey-face-01.png?v=45',
-          category: 'detail',
-          title: '성형 디테일 12'
         },
         {
           src: 'https://img.youtube.com/vi/wY3I8bUxnUM/hqdefault.jpg',
@@ -1041,22 +1045,6 @@ let visibleItems = [];
           image.src = item.src;
           image.alt = item.title || '작업 이미지';
           image.loading = index < 2 ? 'eager' : 'lazy';
-
-          if (item.src.indexOf('blender-shapekey-face-10') !== -1) {
-            image.classList.add('fit-contain');
-          }
-
-          image.addEventListener('error', function () {
-            if (image.dataset.fallbackTried === '1') {
-              return;
-            }
-
-            image.dataset.fallbackTried = '1';
-
-            if (image.src.indexOf('blender-shapekey-face-10.png') !== -1) {
-              image.src = './images/portfolio/blender-shapekey-face-10.PNG?v=49';
-            }
-          });
 
           const badge = document.createElement('div');
           badge.className = 'portfolio-badge';

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v41</title>
+  <title>포트폴리오 v42</title>
 
   <style>
     @font-face {
@@ -777,7 +777,7 @@
       */
       const portfolioItems = [
         {
-          src: './images/portfolio/VSeeFace 02.PNG?v=41',
+          src: './images/portfolio/VSeeFace 02.PNG?v=42',
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 2'
         },
@@ -796,12 +796,12 @@
           youtubeId: 'NEIlSnVj3Zk'
         },
         {
-          src: './images/portfolio/imagesportfoliovrc-avatar 19.png?v=41',
+          src: './images/portfolio/imagesportfoliovrc-avatar 19.png?v=42',
           category: 'vrc-avatar',
           title: 'VRC 아바타 포트폴리오 19'
         },
         {
-          src: './images/portfolio/VSeeFace 01.PNG?v=41',
+          src: './images/portfolio/VSeeFace 01.PNG?v=42',
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 1',
           hideInAll: true
@@ -995,7 +995,7 @@
 
       function getImageFallbacks(src) {
         const cleanSrc = String(src || '').split('?')[0];
-        const version = '?v=41';
+        const version = '?v=42';
 
         if (
           cleanSrc.indexOf('VSeeFace%2002') !== -1 ||
@@ -1115,17 +1115,36 @@
           }
 
           const image = document.createElement('img');
-          image.src = item.src;
           image.alt = item.title || '포트폴리오 이미지';
           image.loading = index < 2 ? 'eager' : 'lazy';
           image.setAttribute('draggable', 'false');
           image.setAttribute('oncontextmenu', 'return false;');
+          image.dataset.originalSrc = item.src;
+          image.dataset.fallbackIndex = '0';
+
+          image.addEventListener('error', function () {
+            applyNextImageFallback(image, image.dataset.originalSrc);
+          });
+
+          image.src = item.src;
           const badge = document.createElement('div');
           badge.className = 'portfolio-badge';
           badge.textContent = getCategoryLabel(item.category);
 
           card.appendChild(image);
           card.appendChild(badge);
+
+          setTimeout(function () {
+            if (!image.complete || image.naturalWidth === 0) {
+              applyNextImageFallback(image, image.dataset.originalSrc);
+            }
+          }, 300);
+
+          setTimeout(function () {
+            if (!image.complete || image.naturalWidth === 0) {
+              applyNextImageFallback(image, image.dataset.originalSrc);
+            }
+          }, 900);
 
           card.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' || event.key === ' ') {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>작업 신청서 v37</title>
+<title>작업 신청서 v39</title>
 <style>
 @font-face{
   font-family:'Paperozi';
@@ -408,6 +408,28 @@ body{
   line-height: 1.6 !important;
 }
 
+.attachment-guide {
+  margin: 8px 0 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #FFF9F4;
+  border: 1px solid #FFD8C7;
+  color: #B46335;
+  font-size: 12.8px;
+  font-weight: 800;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.preview img{
+  width:76px!important;
+  height:76px!important;
+  object-fit:cover!important;
+  border-radius:10px!important;
+  border:1px solid var(--line)!important;
+  background:#fff!important;
+}
+
 </style>
 </head>
 <body>
@@ -502,6 +524,9 @@ body{
         📎 컬러 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
         <input id="colorImages" type="file" accept="image/*" multiple>
       </label>
+      <div class="attachment-guide">
+        ※ 이미지는 복사 양식 안에 함께 들어가도록 처리됩니다. 단, 브라우저/아트머그 환경에 따라 이미지가 빠질 경우 대화창에 별도로 첨부해주세요.
+      </div>
       <div id="previewArea" class="preview"></div>
 
       <div class="label">캐릭터 디자인 방향 <span class="tip">※ 원화 기반 작업은 제작 기준 자료 첨부가 필요합니다.</span></div>
@@ -511,6 +536,9 @@ body{
         📎 캐릭터 디자인 참고 자료 첨부 <span class="tip">여러 장 가능 / 다시 눌러 추가 첨부 가능</span>
         <input id="designImages" type="file" accept="image/*" multiple>
       </label>
+      <div class="attachment-guide">
+        ※ 이미지는 복사 양식 안에 함께 들어가도록 처리됩니다. 단, 브라우저/아트머그 환경에 따라 이미지가 빠질 경우 대화창에 별도로 첨부해주세요.
+      </div>
       <div id="designPreviewArea" class="preview"></div>
     </div>
 
@@ -548,7 +576,7 @@ body{
       <button class="copy-btn" type="button" onclick="handleNextOrCopy()" id="nextCopyBtn">다음</button>
       <div id="copyToast" class="copy-toast" aria-live="polite">양식이 복사되었습니다!</div>
       <div id="copyFallbackBox" class="copy-fallback-box">
-        <div class="copy-fallback-title">자동 복사가 차단되면 아래 내용을 직접 복사해주세요.</div>
+        <div class="copy-fallback-title">자동 복사가 차단되면 아래 내용을 직접 복사해주세요. 이미지가 빠진 경우에는 아트머그 대화창에 별도로 첨부해주세요.</div>
         <textarea id="copyFallbackText" readonly></textarea>
         <button class="manual-copy-btn" type="button" onclick="manualSelectCopy()">텍스트 다시 선택하기</button>
       </div>
@@ -645,6 +673,16 @@ function getSelected(name){
   return active ? active.getAttribute('data-value') : '';
 }
 function emptyCheck(value){ value = (value || '').trim(); return value ? value : '(미작성)'; }
+function imageNameText(images){
+  if (!images || images.length === 0) {
+    return "(첨부 없음)";
+  }
+
+  return images.map(function(image, index) {
+    return (index + 1) + ". " + image.name;
+  }).join("\n");
+}
+
 function updatePortfolioWarning(){
   var warning = document.querySelector('.portfolio-warning');
   warning.style.display = getSelected('portfolioPrivate').indexOf('비공개') !== -1 ? 'block' : 'none';
@@ -669,22 +707,75 @@ document.querySelectorAll('.textarea').forEach(function(textarea){
   textarea.addEventListener('input', function(){ this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; });
 });
 
+function resizeImageFile(file, callback) {
+  var reader = new FileReader();
+
+  reader.onload = function(event) {
+    var img = new Image();
+
+    img.onload = function() {
+      var maxSize = 1100;
+      var width = img.width;
+      var height = img.height;
+
+      if (width > height && width > maxSize) {
+        height = Math.round(height * maxSize / width);
+        width = maxSize;
+      } else if (height >= width && height > maxSize) {
+        width = Math.round(width * maxSize / height);
+        height = maxSize;
+      }
+
+      var canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+
+      var dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+
+      callback({
+        name: file.name,
+        src: dataUrl,
+        width: width,
+        height: height
+      });
+    };
+
+    img.onerror = function() {
+      callback({
+        name: file.name,
+        src: event.target.result,
+        width: 0,
+        height: 0
+      });
+    };
+
+    img.src = event.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
 function setupImageUpload(inputId, previewId, targetArray){
   var input = document.getElementById(inputId);
   var preview = document.getElementById(previewId);
+
   input.addEventListener('change', function(){
     Array.from(this.files).forEach(function(file){
-      var reader = new FileReader();
-      reader.onload = function(e){
-        var imageData = { name:file.name, src:e.target.result };
+      resizeImageFile(file, function(imageData) {
         targetArray.push(imageData);
+
         var img = document.createElement('img');
         img.src = imageData.src;
         img.alt = imageData.name;
         preview.appendChild(img);
-      };
-      reader.readAsDataURL(file);
+      });
     });
+
     this.value = '';
   });
 }
@@ -727,20 +818,20 @@ function makeImageHtml(title, images) {
     return "";
   }
 
-  var html = '<div style="margin:10px 0 16px 0;">';
-  html += '<div style="font-weight:700; margin:8px 0;">' + escapeHtml(title) + '</div>';
+  var html = '<table cellpadding="0" cellspacing="0" style="width:100%; margin:12px 0 18px 0; border-collapse:collapse;">';
+  html += '<tr><td style="font-family:Arial, sans-serif; font-size:14px; font-weight:bold; padding:8px 0;">' + escapeHtml(title) + '</td></tr>';
 
   images.forEach(function(image, index) {
     html +=
-      '<div style="margin:10px 0;">' +
-      '<div style="font-size:12px; color:#777; margin-bottom:4px;">' +
+      '<tr><td style="font-family:Arial, sans-serif; font-size:12px; color:#777; padding:8px 0 4px;">' +
       escapeHtml(index + 1 + ". " + image.name) +
-      '</div>' +
-      '<img src="' + image.src + '" alt="' + escapeHtml(image.name) + '" style="width:auto; max-width:100%; height:auto; display:block; border-radius:8px;">' +
-      '</div>';
+      '</td></tr>' +
+      '<tr><td style="padding:0 0 14px;">' +
+      '<img data-iroha-copy-image="1" src="' + image.src + '" alt="' + escapeHtml(image.name) + '" style="display:block; width:auto; max-width:780px; height:auto; border-radius:8px; border:1px solid #dddddd;">' +
+      '</td></tr>';
   });
 
-  html += '</div>';
+  html += '</table>';
   return html;
 }
 
@@ -840,6 +931,19 @@ function copyRichForm(text) {
 
   var html = makeCopyHtml(text);
 
+  /*
+    아트머그 입력창은 환경에 따라 ClipboardItem의 text/html보다
+    실제 DOM을 선택해서 복사한 HTML을 더 잘 받아들이는 경우가 있어
+    이미지가 있는 경우에는 fallbackRichCopy를 우선 시도합니다.
+  */
+  if (
+    (colorAttachedImages && colorAttachedImages.length) ||
+    (designAttachedImages && designAttachedImages.length)
+  ) {
+    fallbackRichCopy(text, html);
+    return;
+  }
+
   if (navigator.clipboard && window.ClipboardItem && window.isSecureContext) {
     navigator.clipboard.write([
       new ClipboardItem({
@@ -847,7 +951,7 @@ function copyRichForm(text) {
         "text/plain": new Blob([text], { type: "text/plain" })
       })
     ]).then(function() {
-      copySuccess("✅ 양식이 복사되었습니다!");
+      copySuccess("✅ 양식이 복사되었습니다! 이미지도 함께 붙여넣어지는지 확인해주세요.");
     }).catch(function() {
       copyPlainText(text, html);
     });
@@ -859,7 +963,7 @@ function copyRichForm(text) {
 function copyPlainText(text, html) {
   if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(function() {
-      copySuccess("✅ 양식이 복사되었습니다!");
+      copySuccess("✅ 양식이 복사되었습니다! 이미지도 함께 붙여넣어지는지 확인해주세요.");
     }).catch(function() {
       fallbackRichCopy(text, html);
     });
@@ -875,9 +979,9 @@ function fallbackRichCopy(text, html) {
   temp.style.position = "fixed";
   temp.style.left = "-9999px";
   temp.style.top = "0";
-  temp.style.width = "1px";
-  temp.style.height = "1px";
-  temp.style.overflow = "hidden";
+  temp.style.width = "900px";
+  temp.style.height = "auto";
+  temp.style.overflow = "visible";
   temp.innerHTML = html;
 
   document.body.appendChild(temp);
@@ -895,7 +999,7 @@ function fallbackRichCopy(text, html) {
     document.body.removeChild(temp);
 
     if (success) {
-      copySuccess("✅ 양식이 복사되었습니다!");
+      copySuccess("✅ 양식이 복사되었습니다! 이미지도 함께 붙여넣어지는지 확인해주세요.");
     } else {
       fallbackCopy(text);
     }
@@ -914,8 +1018,8 @@ function fallbackCopy(text) {
   temp.style.position = "fixed";
   temp.style.left = "-9999px";
   temp.style.top = "0";
-  temp.style.width = "1px";
-  temp.style.height = "1px";
+  temp.style.width = "900px";
+  temp.style.height = "auto";
   temp.style.opacity = "0";
 
   document.body.appendChild(temp);
@@ -937,7 +1041,7 @@ function fallbackCopy(text) {
   document.body.removeChild(temp);
 
   if (success) {
-    copySuccess("✅ 양식이 복사되었습니다!");
+    copySuccess("✅ 양식이 복사되었습니다! 이미지도 함께 붙여넣어지는지 확인해주세요.");
   } else {
     showManualCopy(text);
   }
@@ -975,8 +1079,10 @@ function copyAeongForm() {
 "6-1. 컬러 정보 :\n" +
 "  헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
 "  눈 컬러 : " + emptyCheck(document.getElementById("eyeColor").value) + "\n" +
-"  의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
+"  의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n" +
+"  컬러 참고 자료 파일명 :\n" + imageNameText(colorAttachedImages) + "\n\n" +
 "7. 캐릭터 디자인 방향 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
+"  캐릭터 디자인 참고 자료 파일명 :\n" + imageNameText(designAttachedImages) + "\n" +
 "8. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
 "9. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
 "10. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +

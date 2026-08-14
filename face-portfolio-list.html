@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v54</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v55</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -762,6 +762,9 @@
       <button class="filter-btn" type="button" data-filter="detail">
         성형디테일
       </button>
+      <button class="filter-btn" type="button" data-filter="before-after">
+        Befor / After
+      </button>
     </div>
 <div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
       <div class="portfolio-notice-icon">※</div>
@@ -824,6 +827,13 @@
           youtubeId: 'WXFuu_awOqw'
         },
         {
+          src: 'https://img.youtube.com/vi/lNLfSk6LjJQ/hqdefault.jpg',
+          category: 'detail',
+          title: '성형 디테일 영상 2',
+          type: 'youtube',
+          youtubeId: 'lNLfSk6LjJQ'
+        },
+        {
           src: 'https://img.youtube.com/vi/DUWNYzrZ6HQ/hqdefault.jpg',
           category: 'detail',
           title: '성형 디테일 영상',
@@ -831,16 +841,31 @@
           youtubeId: 'DUWNYzrZ6HQ'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-11.png?v=51',
-          category: 'detail',
-          title: '성형 디테일 1'
-        },
-        {
           src: 'https://img.youtube.com/vi/cAaJ3MnA8TY/hqdefault.jpg',
           category: 'boing-eye',
           title: '뽀잉눈 움직임 샘플 2',
           type: 'youtube',
           youtubeId: 'cAaJ3MnA8TY'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-13.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 1'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-11.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 2'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-07.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 3'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-06.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 4'
         },
         {
           src: './images/portfolio/blender-shapekey-face-09.png?v=51',
@@ -853,11 +878,6 @@
           title: '성형 디테일 3'
         },
         {
-          src: './images/portfolio/blender-shapekey-face-07.png?v=51',
-          category: 'detail',
-          title: '성형 디테일 4'
-        },
-        {
           src: './images/portfolio/blender-shapekey-face-06-2.png?v=51',
           category: 'detail',
           title: '성형 디테일 5'
@@ -866,11 +886,6 @@
           src: './images/portfolio/blender-shapekey-face-06-1.png?v=51',
           category: 'detail',
           title: '성형 디테일 6'
-        },
-        {
-          src: './images/portfolio/blender-shapekey-face-06.png?v=51',
-          category: 'detail',
-          title: '성형 디테일 7'
         },
         {
           src: './images/portfolio/blender-shapekey-face-04.png?v=51',
@@ -977,6 +992,7 @@ let visibleItems = [];
         if (category === 'smile-eye') return '웃는눈 연동';
         if (category === 'facial') return '페이셜';
         if (category === 'detail') return '성형디테일';
+        if (category === 'before-after') return 'Befor / After';
         return '';
       }
 

@@ -114,7 +114,7 @@
       overscroll-behavior-inline: contain;
       touch-action: pan-y;
       scrollbar-width: auto;
-      scrollbar-color: var(--mint-dark) var(--mint-pale);
+      scrollbar-color: var(--mint) transparent;
     }
 
     .scroll-grid.dragging {
@@ -127,22 +127,17 @@
     }
 
     .scroll-grid::-webkit-scrollbar-track {
-      border-radius: 999px;
-      background: var(--mint-pale);
-      box-shadow: inset 0 0 0 1px var(--border);
+      background: transparent;
     }
 
     .scroll-grid::-webkit-scrollbar-thumb {
       min-width: 140px;
-      border: 6px solid var(--mint-pale);
       border-radius: 999px;
-      background: var(--mint-dark);
-      background-clip: padding-box;
+      background: var(--mint);
     }
 
     .scroll-grid::-webkit-scrollbar-thumb:hover {
-      background: #3f9792;
-      background-clip: padding-box;
+      background: var(--mint);
     }
 
     .img-card {

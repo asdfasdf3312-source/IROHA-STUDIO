@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>패키지 구성 v20</title>
+  <title>패키지 구성 v21</title>
 
   <style>
     @font-face {
@@ -411,7 +411,27 @@
       font-size: 11px;
       font-weight: 700;
       line-height: 1;
-      box-shadow: 0 6px 14px rgba(255,111,168,0.22);
+      box-shadow:
+        0 8px 18px rgba(255,111,168,0.30),
+        0 0 0 3px rgba(255,111,168,0.09);
+      transform: translateY(-1px) scale(1);
+      animation: openSalePop 1.8s ease-in-out infinite;
+    }
+
+
+    @keyframes openSalePop {
+      0%, 100% {
+        transform: translateY(-1px) scale(1);
+        box-shadow:
+          0 8px 18px rgba(255,111,168,0.30),
+          0 0 0 3px rgba(255,111,168,0.09);
+      }
+      50% {
+        transform: translateY(-2px) scale(1.07);
+        box-shadow:
+          0 12px 24px rgba(255,111,168,0.42),
+          0 0 0 6px rgba(255,111,168,0.14);
+      }
     }
 
     .open-sale::before {
@@ -422,6 +442,8 @@
     .open-sale.sold-out {
       background: linear-gradient(135deg, #B8BFC2 0%, #D4DADB 100%);
       box-shadow: 0 6px 14px rgba(120,130,135,0.18);
+      animation: none;
+      transform: none;
     }
 
     .open-sale.sold-out::before {

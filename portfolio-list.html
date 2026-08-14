@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v51</title>
+  <title>포트폴리오 v52</title>
 
   <style>
     @font-face {
@@ -807,25 +807,6 @@
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 2'
         },
-        /* 전체 탭 전용 MMD Shorts */
-        {
-          src: 'https://img.youtube.com/vi/ZRZr8BhPxPI/maxresdefault.jpg',
-          category: 'all-mmd',
-          title: 'MMD 월드 샘플 4',
-          type: 'youtube',
-          youtubeId: 'ZRZr8BhPxPI',
-          shorts: true
-        },
-        {
-          src: 'https://img.youtube.com/vi/XEsTVwGMu6w/maxresdefault.jpg',
-          category: 'all-mmd',
-          title: 'MMD 월드 샘플 3',
-          type: 'youtube',
-          youtubeId: 'XEsTVwGMu6w',
-          shorts: true
-        },
-
-        /* MMD 월드 탭 전용 MMD Shorts */
         {
           src: 'https://img.youtube.com/vi/ZRZr8BhPxPI/maxresdefault.jpg',
           category: 'mmd-world',
@@ -833,7 +814,7 @@
           type: 'youtube',
           youtubeId: 'ZRZr8BhPxPI',
           shorts: true,
-          hideInAll: true
+          showInAll: true
         },
         {
           src: 'https://img.youtube.com/vi/XEsTVwGMu6w/maxresdefault.jpg',
@@ -842,7 +823,7 @@
           type: 'youtube',
           youtubeId: 'XEsTVwGMu6w',
           shorts: true,
-          hideInAll: true
+          showInAll: true
         },
         {
           src: 'https://img.youtube.com/vi/0FOWVbwMidA/hqdefault.jpg',
@@ -1139,6 +1120,10 @@
       function renderPortfolio() {
         visibleItems = portfolioItems.filter(function (item) {
           if (currentFilter === 'all') {
+            if (item.showInAll === true) {
+              return true;
+            }
+
             return !item.hideInAll;
           }
 

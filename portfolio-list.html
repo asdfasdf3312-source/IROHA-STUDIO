@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v44</title>
+  <title>포트폴리오 v45</title>
 
   <style>
     @font-face {
@@ -784,12 +784,14 @@
         {
           src: './images/portfolio/imagesportfoliovrc-avatar 21.png?v=44',
           category: 'vrc-avatar',
-          title: 'VRC 아바타 포트폴리오 21'
+          title: 'VRC 아바타 포트폴리오 21',
+          previewPosition: '50% 12%'
         },
         {
           src: './images/portfolio/imagesportfoliovrc-avatar 20.png?v=44',
           category: 'vrc-avatar',
-          title: 'VRC 아바타 포트폴리오 20'
+          title: 'VRC 아바타 포트폴리오 20',
+          previewPosition: '50% 12%'
         },
         {
           src: 'https://img.youtube.com/vi/0FOWVbwMidA/hqdefault.jpg',
@@ -1155,6 +1157,11 @@
           });
 
           image.src = item.src;
+
+          if (item.previewPosition) {
+            image.style.objectPosition = item.previewPosition;
+          }
+
           const badge = document.createElement('div');
           badge.className = 'portfolio-badge';
           badge.textContent = getCategoryLabel(item.category);

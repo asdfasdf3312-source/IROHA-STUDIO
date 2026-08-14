@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v52</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v53</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -186,7 +186,7 @@
       cursor: grab;
       user-select: none;
       scrollbar-width: auto;
-      scrollbar-color: var(--mint-dark) var(--mint-pale);
+      scrollbar-color: var(--mint) transparent;
     }
 
     .portfolio-grid.dragging {
@@ -199,22 +199,17 @@
     }
 
     .portfolio-grid::-webkit-scrollbar-track {
-      border-radius: 999px;
-      background: var(--mint-pale);
-      box-shadow: inset 0 0 0 1px var(--border);
+      background: transparent;
     }
 
     .portfolio-grid::-webkit-scrollbar-thumb {
       min-width: 140px;
-      border: 6px solid var(--mint-pale);
       border-radius: 999px;
-      background: var(--mint-dark);
-      background-clip: padding-box;
+      background: var(--mint);
     }
 
     .portfolio-grid::-webkit-scrollbar-thumb:hover {
-      background: #3f9792;
-      background-clip: padding-box;
+      background: var(--mint);
     }
 
     .portfolio-card {

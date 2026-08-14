@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v56</title>
+  <title>포트폴리오 v59</title>
 
   <style>
     @font-face {
@@ -177,13 +177,15 @@
       width: 100%;
       overflow-x: auto;
       overflow-y: hidden;
-      padding: 2px 0 12px;
+      padding: 2px 0 18px;
       scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-inline: contain;
       touch-action: pan-y;
       cursor: grab;
       user-select: none;
+      scrollbar-width: auto;
+      scrollbar-color: var(--mint) transparent;
     }
 
     .portfolio-grid.dragging {
@@ -192,16 +194,26 @@
     }
 
     .portfolio-grid::-webkit-scrollbar {
-      height: 6px;
+      height: 24px;
     }
 
     .portfolio-grid::-webkit-scrollbar-track {
-      background: transparent;
+      border-radius: 999px;
+      background: var(--mint-pale);
+      box-shadow: inset 0 0 0 1px var(--border);
     }
 
     .portfolio-grid::-webkit-scrollbar-thumb {
+      min-width: 90px;
+      border: 4px solid var(--mint-pale);
       border-radius: 999px;
-      background: var(--mint);
+      background: var(--mint-dark);
+      background-clip: padding-box;
+    }
+
+    .portfolio-grid::-webkit-scrollbar-thumb:hover {
+      background: #3f9792;
+      background-clip: padding-box;
     }
 
     .portfolio-card {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>협업 작가 소개 v6</title>
+<title>협업 작가 소개 v7</title>
 <style>
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700;font-display:swap}
@@ -101,7 +101,7 @@ body{padding:30px 14px 42px}
 .artist-card{
   position:relative;
   overflow:hidden;
-  min-height:255px;
+  min-height:330px;
   border:1px solid #DDEBEA;
   border-radius:22px;
   background:#fff;
@@ -116,7 +116,7 @@ body{padding:30px 14px 42px}
 
 .artist-thumb{
   position:relative;
-  height:150px;
+  height:142px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -180,7 +180,7 @@ body{padding:30px 14px 42px}
 }
 
 .artist-body{
-  padding:16px 16px 18px;
+  padding:17px 16px 18px;
 }
 
 .artist-name{
@@ -192,11 +192,40 @@ body{padding:30px 14px 42px}
 }
 
 .artist-meta{
+  margin:0 0 8px;
+  color:#7B8D8B;
+  font-size:12.8px;
+  font-weight:700;
+  line-height:1.55;
+  word-break:keep-all;
+}
+
+
+.artist-sub{
+  margin:0 0 8px;
+  color:var(--main-dark);
+  font-size:13px;
+  font-weight:900;
+  line-height:1.45;
+}
+
+.artist-desc{
   margin:0;
-  min-height:42px;
+  color:#7B8D8B;
+  font-size:12.8px;
+  line-height:1.62;
+  word-break:keep-all;
+}
+
+.artist-discount{
+  margin:10px 0 0;
+  padding:10px 11px;
+  border-radius:14px;
+  background:rgba(36,198,191,.10);
+  border:1px solid rgba(36,198,191,.24);
   color:#159A95;
-  font-size:13.5px;
-  font-weight:800;
+  font-size:13px;
+  font-weight:900;
   line-height:1.55;
   word-break:keep-all;
 }
@@ -283,10 +312,14 @@ body{padding:30px 14px 42px}
       </div>
       <div class="artist-body">
         <p class="artist-name">히루네 작가</p>
-        <p class="artist-meta">헤드 원화 1만원 할인 + 이로하 2D 원화 기반 패키지 신청 시 3만원 할인!</p>
+        <p class="artist-sub">버츄얼 헤드 / 원화 일러스트 협업 작가</p>
+        <p class="artist-desc">헤드 디자인과 원화 기반 자료가 필요한 경우 함께 확인하기 좋은 작가님입니다.</p>
+        <p class="artist-discount">헤드 원화 1만원 할인 + 이로하(IROHA) 2D 원화 기반 패키지 신청 시 3만원 할인!</p>
         <div class="artist-tags">
           <span class="artist-tag">#버츄얼헤드</span>
           <span class="artist-tag">#원화일러스트</span>
+          <span class="artist-tag">#캐릭터디자인</span>
+          <span class="artist-tag">#협업가능</span>
         </div>
         <div class="artist-line"></div>
       </div>
@@ -298,7 +331,7 @@ body{padding:30px 14px 42px}
       <div class="artist-thumb">COMING<br>SOON</div>
       <div class="artist-body">
         <p class="artist-name">협업 작가 02</p>
-        <p class="artist-meta">추후 협업 작가가 추가되면 이 영역에 표시됩니다.</p>
+        <p class="artist-meta">추후 협업 작가가 추가되면 이 영역에 같은 카드 형식으로 표시됩니다.</p>
         <div class="artist-tags">
           <span class="artist-tag">#추가예정</span>
           <span class="artist-tag">#협업문의</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v42</title>
+  <title>포트폴리오 v43</title>
 
   <style>
     @font-face {
@@ -777,7 +777,7 @@
       */
       const portfolioItems = [
         {
-          src: './images/portfolio/VSeeFace 02.PNG?v=42',
+          src: './images/portfolio/VSeeFace 02.png?v=43',
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 2'
         },
@@ -796,12 +796,12 @@
           youtubeId: 'NEIlSnVj3Zk'
         },
         {
-          src: './images/portfolio/imagesportfoliovrc-avatar 19.png?v=42',
+          src: './images/portfolio/imagesportfoliovrc-avatar 19.png?v=43',
           category: 'vrc-avatar',
           title: 'VRC 아바타 포트폴리오 19'
         },
         {
-          src: './images/portfolio/VSeeFace 01.PNG?v=42',
+          src: './images/portfolio/VSeeFace 01.png?v=43',
           category: 'vseeface',
           title: 'VSeeFace 포트폴리오 1',
           hideInAll: true
@@ -995,19 +995,19 @@
 
       function getImageFallbacks(src) {
         const cleanSrc = String(src || '').split('?')[0];
-        const version = '?v=42';
+        const version = '?v=43';
 
         if (
           cleanSrc.indexOf('VSeeFace%2002') !== -1 ||
           cleanSrc.indexOf('VSeeFace 02') !== -1
         ) {
           return [
-            './images/portfolio/VSeeFace 02.PNG' + version,
-            './images/portfolio/VSeeFace%2002.PNG' + version,
             './images/portfolio/VSeeFace 02.png' + version,
             './images/portfolio/VSeeFace%2002.png' + version,
-            './images/portfolio/vseeface-02.PNG' + version,
-            './images/portfolio/vseeface-02.png' + version
+            './images/portfolio/VSeeFace 02.PNG' + version,
+            './images/portfolio/VSeeFace%2002.PNG' + version,
+            './images/portfolio/vseeface-02.png' + version,
+            './images/portfolio/vseeface-02.PNG' + version
           ];
         }
 
@@ -1016,12 +1016,12 @@
           cleanSrc.indexOf('VSeeFace 01') !== -1
         ) {
           return [
-            './images/portfolio/VSeeFace 01.PNG' + version,
-            './images/portfolio/VSeeFace%2001.PNG' + version,
             './images/portfolio/VSeeFace 01.png' + version,
             './images/portfolio/VSeeFace%2001.png' + version,
-            './images/portfolio/vseeface-01.PNG' + version,
-            './images/portfolio/vseeface-01.png' + version
+            './images/portfolio/VSeeFace 01.PNG' + version,
+            './images/portfolio/VSeeFace%2001.PNG' + version,
+            './images/portfolio/vseeface-01.png' + version,
+            './images/portfolio/vseeface-01.PNG' + version
           ];
         }
 

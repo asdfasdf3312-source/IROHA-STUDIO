@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v43</title>
+  <title>포트폴리오 v44</title>
 
   <style>
     @font-face {
@@ -782,6 +782,16 @@
           title: 'VSeeFace 포트폴리오 2'
         },
         {
+          src: './images/portfolio/imagesportfoliovrc-avatar 21.png?v=44',
+          category: 'vrc-avatar',
+          title: 'VRC 아바타 포트폴리오 21'
+        },
+        {
+          src: './images/portfolio/imagesportfoliovrc-avatar 20.png?v=44',
+          category: 'vrc-avatar',
+          title: 'VRC 아바타 포트폴리오 20'
+        },
+        {
           src: 'https://img.youtube.com/vi/0FOWVbwMidA/hqdefault.jpg',
           category: 'mmd-world',
           title: 'MMD 월드 샘플 1',
@@ -1022,6 +1032,24 @@
             './images/portfolio/VSeeFace%2001.PNG' + version,
             './images/portfolio/vseeface-01.png' + version,
             './images/portfolio/vseeface-01.PNG' + version
+          ];
+        }
+
+        if (cleanSrc.indexOf('imagesportfoliovrc-avatar 21') !== -1) {
+          return [
+            './images/portfolio/imagesportfoliovrc-avatar 21.PNG?v=44',
+            './images/portfolio/imagesportfoliovrc-avatar 21.png?v=44',
+            './images/portfolio/imagesportfoliovrc-avatar%2021.PNG?v=44',
+            './images/portfolio/imagesportfoliovrc-avatar%2021.png?v=44'
+          ];
+        }
+
+        if (cleanSrc.indexOf('imagesportfoliovrc-avatar 20') !== -1) {
+          return [
+            './images/portfolio/imagesportfoliovrc-avatar 20.PNG?v=44',
+            './images/portfolio/imagesportfoliovrc-avatar 20.png?v=44',
+            './images/portfolio/imagesportfoliovrc-avatar%2020.PNG?v=44',
+            './images/portfolio/imagesportfoliovrc-avatar%2020.png?v=44'
           ];
         }
 

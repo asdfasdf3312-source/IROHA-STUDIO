@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>포트폴리오 v47</title>
+  <title>포트폴리오 v48</title>
 
   <style>
     @font-face {
@@ -254,6 +254,14 @@
       transform: translateY(-3px);
       border-color: var(--mint);
       box-shadow: 0 12px 26px rgba(78, 170, 165, 0.15);
+    }
+
+    /* 세로형 YouTube Shorts는 미리보기 카드도 9:16 비율로 표시 */
+    .portfolio-card.youtube-embed-card.youtube-shorts-card {
+      width: 214px;
+      height: 380px;
+      aspect-ratio: 9 / 16;
+      flex: 0 0 214px;
     }
 
     .portfolio-card.youtube-embed-card iframe {
@@ -642,6 +650,12 @@
         border-radius: 17px;
       }
 
+      .portfolio-card.youtube-embed-card.youtube-shorts-card {
+        width: 169px;
+        height: 300px;
+        flex-basis: 169px;
+      }
+
       .lightbox-nav {
         top: auto;
         bottom: 10px;
@@ -798,7 +812,8 @@
           category: 'mmd-world',
           title: 'MMD 월드 샘플 3',
           type: 'youtube',
-          youtubeId: 'XEsTVwGMu6w'
+          youtubeId: 'XEsTVwGMu6w',
+          shorts: true
         },
         {
           src: 'https://img.youtube.com/vi/0FOWVbwMidA/hqdefault.jpg',
@@ -1120,7 +1135,7 @@
         visibleItems.forEach(function (item, index) {
           const card = document.createElement('div');
           card.className = item.type === 'youtube'
-            ? 'portfolio-card youtube-embed-card'
+            ? 'portfolio-card youtube-embed-card' + (item.shorts ? ' youtube-shorts-card' : '')
             : 'portfolio-card';
           card.setAttribute('role', 'button');
           card.setAttribute('tabindex', '0');

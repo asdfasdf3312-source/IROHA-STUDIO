@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>협업 작가 소개 v10</title>
+<title>협업 작가 소개 v11</title>
 <style>
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700;font-display:swap}
@@ -317,6 +317,63 @@ body{padding:30px 14px 42px}
   padding:20px;
 }
 
+.artist-card.empty{
+  min-height:330px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1.5px dashed #BFE5F4;
+  background:
+    radial-gradient(circle at 16% 12%, rgba(36,198,191,.18), transparent 32%),
+    linear-gradient(135deg, rgba(244,255,254,.96), rgba(249,252,255,.92));
+}
+
+.artist-card.empty .artist-status,
+.artist-card.empty .artist-thumb,
+.artist-card.empty .artist-line{
+  display:none !important;
+}
+
+.artist-card.empty .artist-body{
+  width:100%;
+  padding:34px 24px;
+  text-align:center;
+}
+
+.empty-plus{
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 15px;
+  border-radius:18px;
+  background:linear-gradient(135deg, rgba(36,198,191,.16), rgba(111,124,255,.12));
+  color:#159A95;
+  font-size:31px;
+  font-weight:700;
+  line-height:1;
+}
+
+.artist-card.empty .artist-name{
+  margin:0 0 10px;
+  font-size:17px;
+  color:#30383A;
+}
+
+.artist-card.empty .artist-meta{
+  max-width:300px;
+  margin:0 auto 15px;
+  color:#8A989A;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.65;
+}
+
+.artist-card.empty .artist-tags{
+  justify-content:center;
+  margin:0;
+}
+
 .notice{
   margin:16px 0 0;
   color:var(--sub);
@@ -374,7 +431,8 @@ body{padding:30px 14px 42px}
       <span class="artist-status">추가예정</span>
       <div class="artist-thumb">COMING<br>SOON</div>
       <div class="artist-body">
-        <p class="artist-name">협업 작가 02</p>
+        <div class="empty-plus">＋</div>
+        <p class="artist-name">협업 작가 추가 예정</p>
         <p class="artist-meta">추후 협업 작가가 추가되면 이 영역에 같은 카드 형식으로 표시됩니다.</p>
         <div class="artist-tags">
           <span class="artist-tag">#추가예정</span>
@@ -385,11 +443,12 @@ body{padding:30px 14px 42px}
     </article>
 
     <article class="artist-card empty">
-      <span class="artist-status">확장가능</span>
-      <div class="artist-thumb">WIP<br>SPACE</div>
+      <span class="artist-status">추가예정</span>
+      <div class="artist-thumb">COMING<br>SOON</div>
       <div class="artist-body">
-        <p class="artist-name">협업 작가 03</p>
-        <p class="artist-meta">원화, 헤드, 배경, 세팅 등 분야별로 확장 가능합니다.</p>
+        <div class="empty-plus">＋</div>
+        <p class="artist-name">협업 작가 추가 예정</p>
+        <p class="artist-meta">원화, 헤드, 배경, 세팅 등 작업 분야별로 확장할 수 있습니다.</p>
         <div class="artist-tags">
           <span class="artist-tag">#확장가능</span>
           <span class="artist-tag">#작업분야</span>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>협업 작가 소개 v3</title>
+<title>협업 작가 소개 v4</title>
 <style>
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700;font-display:swap}
@@ -155,35 +155,11 @@ body{padding:30px 14px 42px}
   -webkit-backdrop-filter:blur(10px);
 }
 
-.image-strip{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:1px;
-  height:138px;
-  background:rgba(191,237,234,.65);
-  border-bottom:1px solid rgba(191,237,234,.9);
-}
+.image-strip{height:210px;background:rgba(191,237,234,.65);border-bottom:1px solid rgba(191,237,234,.9)}
 
-.strip-item{
-  position:relative;
-  overflow:hidden;
-  background:
-    linear-gradient(135deg,rgba(239,255,253,.96),rgba(243,240,255,.88));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+.strip-item{position:relative;overflow:hidden;width:100%;height:100%;background:linear-gradient(135deg,rgba(239,255,253,.96),rgba(243,240,255,.88));display:flex;align-items:center;justify-content:center}
 
-.strip-item img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:contain;
-  object-position:center;
-  background:#fff;
-  -webkit-user-drag:none;
-  user-select:none;
-}
+.strip-item img{width:100%;height:100%;display:block;object-fit:contain;object-position:center;background:#fff;-webkit-user-drag:none;user-select:none}
 
 .strip-item.placeholder::after{
   content:"이미지 준비중";
@@ -376,7 +352,7 @@ body{padding:30px 14px 42px}
   .collab-section{padding:26px 18px}
   .collab-head{flex-direction:column;align-items:flex-start}
   .artist-grid{grid-template-columns:1fr}
-  .image-strip{height:168px}
+  .image-strip{height:210px;background:rgba(191,237,234,.65);border-bottom:1px solid rgba(191,237,234,.9)}
   .artist-text{min-height:auto}
 }
 
@@ -385,7 +361,7 @@ body{padding:30px 14px 42px}
   .collab-section{border-radius:24px;padding:22px 14px}
   .collab-title{font-size:21px}
   .artist-card{border-radius:20px}
-  .image-strip{height:138px}
+  .image-strip{height:210px;background:rgba(191,237,234,.65);border-bottom:1px solid rgba(191,237,234,.9)}
   .card-body{padding:16px 15px}
   .action-row{align-items:flex-start;flex-direction:column}
   .small-note{text-align:left}
@@ -427,11 +403,7 @@ const artists = [
     text: '캐릭터의 얼굴 인상과 분위기를 섬세하게 잡아주는 작가님입니다. 원화 기반 디자인이나 헤드 이미지 참고자료가 필요한 경우 함께 확인하기 좋습니다.',
     tags: ['#버츄얼헤드', '#원화일러스트', '#캐릭터디자인', '#협업가능'],
     link: 'https://artmug.kr/index.php?channel=view&uid=60421',
-    images: [
-      './images/collab/hirune-01.png',
-      './images/collab/hirune-02.png',
-      './images/collab/hirune-03.png'
-    ]
+    images: ['./images/collab/hirune-01.png']
   }
 ];
 
@@ -440,11 +412,6 @@ const emptyArtistSlots = [
     title: '협업 작가 추가 예정',
     text: '추후 협업 작가가 추가되면 이 영역에 같은 카드 형식으로 표시됩니다.',
     tags: ['#추가예정', '#협업문의']
-  },
-  {
-    title: '협업 작가 추가 예정',
-    text: '원화, 헤드, 배경, 세팅 등 작업 분야별로 확장할 수 있습니다.',
-    tags: ['#확장가능', '#작업분야']
   }
 ];
 
@@ -460,7 +427,7 @@ function renderArtists(){
   const grid = document.getElementById('artistGrid');
 
   const artistCards = artists.map((artist) => {
-    const images = (artist.images || []).slice(0, 3);
+    const images = (artist.images || []).slice(0, 1);
 
     return `
       <article class="artist-card">

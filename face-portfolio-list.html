@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v51</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v52</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -172,19 +172,21 @@
       color: var(--mint-dark);
       font-weight: 700;
     }
-.portfolio-grid {
+    .portfolio-grid {
       display: flex;
       gap: 14px;
       width: 100%;
       overflow-x: auto;
       overflow-y: hidden;
-      padding: 2px 0 12px;
+      padding: 2px 0 26px;
       scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-inline: contain;
       touch-action: pan-y;
       cursor: grab;
       user-select: none;
+      scrollbar-width: auto;
+      scrollbar-color: var(--mint-dark) var(--mint-pale);
     }
 
     .portfolio-grid.dragging {
@@ -193,16 +195,26 @@
     }
 
     .portfolio-grid::-webkit-scrollbar {
-      height: 6px;
+      height: 40px;
     }
 
     .portfolio-grid::-webkit-scrollbar-track {
-      background: transparent;
+      border-radius: 999px;
+      background: var(--mint-pale);
+      box-shadow: inset 0 0 0 1px var(--border);
     }
 
     .portfolio-grid::-webkit-scrollbar-thumb {
+      min-width: 140px;
+      border: 6px solid var(--mint-pale);
       border-radius: 999px;
-      background: var(--mint);
+      background: var(--mint-dark);
+      background-clip: padding-box;
+    }
+
+    .portfolio-grid::-webkit-scrollbar-thumb:hover {
+      background: #3f9792;
+      background-clip: padding-box;
     }
 
     .portfolio-card {

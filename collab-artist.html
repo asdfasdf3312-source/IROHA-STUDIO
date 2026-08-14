@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>협업 작가 소개 v9</title>
+<title>협업 작가 소개 v10</title>
 <style>
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700;font-display:swap}
@@ -222,13 +222,31 @@ body{padding:30px 14px 42px}
   color:#299A94;
   background:rgba(36,198,191,.12);
   border:1px solid rgba(36,198,191,.32);
-  box-shadow:0 6px 14px rgba(36,198,191,.08);
+  box-shadow:0 8px 18px rgba(36,198,191,.14), 0 0 0 3px rgba(36,198,191,.08);
 }
 .artist-chip.lav{
   color:#7465D8;
   background:#F3F0FF;
   border:1px solid rgba(116,101,216,.25);
-  box-shadow:0 6px 14px rgba(116,101,216,.08);
+  box-shadow:0 8px 18px rgba(116,101,216,.14), 0 0 0 3px rgba(116,101,216,.08);
+}
+
+.artist-chip{
+  transform: translateY(-1px) scale(1);
+  animation: artistChipPop 1.8s ease-in-out infinite;
+}
+
+.artist-chip.lav{
+  animation-delay: .18s;
+}
+
+@keyframes artistChipPop {
+  0%, 100% {
+    transform: translateY(-1px) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.07);
+  }
 }
 
 .artist-sub{

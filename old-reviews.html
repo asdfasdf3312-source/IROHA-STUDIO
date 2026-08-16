@@ -36,18 +36,15 @@
       -webkit-user-drag: none;
     }
 
-    /*
-      두 번째 이미지는 grid 방식으로 접기/펼치기.
-      고정 max-height 값을 크게 잡지 않아도 자연스럽게 열립니다.
-    */
     .review-detail-wrap {
       display: grid;
       grid-template-rows: 0fr;
       opacity: 0;
+      overflow: hidden;
 
       transition:
-        grid-template-rows 0.55s cubic-bezier(.22,.75,.30,1),
-        opacity 0.35s ease;
+        grid-template-rows 0.62s cubic-bezier(.22,.75,.30,1),
+        opacity 0.34s ease;
     }
 
     .review-detail-wrap.is-open {
@@ -86,8 +83,8 @@
     <img
       id="reviewCover"
       class="review-cover"
-      src="./images/reviews/review-cover.png"
-      alt="아트머그 이전 후기모음 열기"
+      src="./images/reviews/reviews%201.png"
+      alt="아트머그 이전 후기모음"
       draggable="false"
     >
 
@@ -101,15 +98,14 @@
         <img
           id="reviewDetail"
           class="review-detail"
-          src="./images/reviews/review-open.png"
-          alt="아트머그 이전 후기"
+          src="./images/reviews/reviews%202.png"
+          alt="아트머그 이전 후기 상세"
           draggable="false"
         >
       </div>
     </div>
 
   </div>
-
 
   <script>
     (function () {
@@ -122,16 +118,11 @@
 
       var isOpen = false;
 
-
       function sendHeight() {
         var height = Math.ceil(
           document.documentElement.scrollHeight
         );
 
-        /*
-          아트머그 iframe으로 사용할 경우 부모 코드가
-          이 메시지를 받아 iframe 높이를 자동으로 바꿀 수 있습니다.
-        */
         window.parent.postMessage(
           {
             type: 'iroha-old-reviews-height',
@@ -141,6 +132,11 @@
         );
       }
 
+      function syncHeightDuringMotion() {
+        [0, 80, 160, 260, 380, 500, 650, 800].forEach(function (delay) {
+          setTimeout(sendHeight, delay);
+        });
+      }
 
       function toggleReviews() {
         isOpen = !isOpen;
@@ -155,38 +151,27 @@
           isOpen ? 'false' : 'true'
         );
 
-        /*
-          펼침 애니메이션 동안 부모 iframe 높이를
-          몇 번 갱신해서 아래쪽이 잘리지 않게 합니다.
-        */
-        sendHeight();
-
-        [80, 180, 320, 500, 650].forEach(function (delay) {
-          setTimeout(sendHeight, delay);
-        });
+        syncHeightDuringMotion();
       }
-
 
       cover.addEventListener(
         'click',
         toggleReviews
       );
 
-
       detailWrap.addEventListener(
         'transitionend',
         sendHeight
       );
-
 
       window.addEventListener(
         'load',
         function () {
           sendHeight();
           setTimeout(sendHeight, 300);
+          setTimeout(sendHeight, 700);
         }
       );
-
 
       window.addEventListener(
         'resize',

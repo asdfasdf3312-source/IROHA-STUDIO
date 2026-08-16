@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IROHA 주간 작업 보드 v27</title>
+<title>IROHA 주간 작업 보드 v28</title>
 <style>
   @font-face {
       font-family: 'Paperozi';
@@ -487,16 +487,16 @@
           </p>
         </div>
         <div class="board-period" aria-label="표시 기간">
-          <span class="label" id="weekLabel">8월 4주차</span>
+          <span class="label" id="weekLabel">4주차</span>
           <span class="range" id="weekRange">08.16 - 08.22</span>
         </div>
       </div>
 
       <div class="week-tabs" aria-label="주차 선택">
-        <button class="week-tab active" type="button" data-week="1">8월 4주차</button>
-        <button class="week-tab" type="button" data-week="2">8월 5주차</button>
-        <button class="week-tab" type="button" data-week="3">9월 1주차</button>
-        <button class="week-tab" type="button" data-week="4">9월 2주차</button>
+        <button class="week-tab active" type="button" data-week="1">4주차</button>
+        <button class="week-tab" type="button" data-week="2">5주차</button>
+        <button class="week-tab" type="button" data-week="3">1주차</button>
+        <button class="week-tab" type="button" data-week="4">2주차</button>
       </div>
 
       <div class="board-legend" aria-label="상태 안내">
@@ -597,7 +597,7 @@
 */
 const weekData = {
   1: {
-    label: '8월 4주차',
+    label: '4주차',
     range: '08.16 - 08.22',
     days: [
       {day:'일요일', date:'08.16', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
@@ -610,7 +610,7 @@ const weekData = {
     ]
   },
   2: {
-    label: '8월 5주차',
+    label: '5주차',
     range: '08.23 - 08.29',
     days: [
       {day:'일요일', date:'08.23', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
@@ -623,20 +623,20 @@ const weekData = {
     ]
   },
   3: {
-    label: '9월 1주차',
+    label: '1주차',
     range: '08.30 - 09.05',
     days: [
-      {day:'일요일', date:'08.30', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'월요일', date:'08.31', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'09.01', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'수요일', date:'09.02', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'목요일', date:'09.03', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'금요일', date:'09.04', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'토요일', date:'09.05', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
+      {day:'일요일', date:'08.30', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'월요일', date:'08.31', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'화요일', date:'09.01', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'수요일', date:'09.02', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'목요일', date:'09.03', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'금요일', date:'09.04', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'토요일', date:'09.05', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'}
     ]
   },
   4: {
-    label: '9월 2주차',
+    label: '2주차',
     range: '09.06 - 09.13',
     days: [
       {day:'일요일', date:'09.06', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},

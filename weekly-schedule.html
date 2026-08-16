@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IROHA 주간 작업 보드 v28</title>
+<title>IROHA 주간 작업 보드 v30</title>
 <style>
   @font-face {
       font-family: 'Paperozi';
@@ -219,7 +219,6 @@
   .legend-chip.today .dot{background:#ff8a45;box-shadow:0 0 0 4px rgba(255,138,69,.18)}
   .legend-chip.closed .dot{background:var(--pink-deep);box-shadow:0 0 0 4px rgba(237,148,187,.18)}
   .legend-chip.off .dot{background:#e6be55;box-shadow:0 0 0 4px rgba(230,190,85,.20)}
-  .legend-chip.work .dot{background:var(--violet-deep);box-shadow:0 0 0 4px rgba(116,101,216,.16)}
   .legend-chip.available .dot{background:var(--green-deep);box-shadow:0 0 0 4px rgba(75,184,212,.18)}
 
   .week-grid{
@@ -260,7 +259,6 @@
 
   .day-card.closed:after{background:rgba(255,153,195,.18)}
   .day-card.off:after{background:rgba(255,224,137,.28)}
-  .day-card.work:after{background:rgba(116,101,216,.15)}
   .day-card.available:after{background:rgba(75,184,212,.18)}
 
   .day-card.is-today{
@@ -347,11 +345,6 @@
     color:#a77a12;
   }
 
-  .day-card.work .day-status{
-    background:rgba(116,101,216,.16);
-    color:var(--violet-deep);
-  }
-
   .day-card.available .day-status{
     background:rgba(75,184,212,.20);
     color:var(--green-deep);
@@ -369,7 +362,6 @@
 
   .day-card.closed .day-line{background:rgba(237,148,187,.46)}
   .day-card.off .day-line{background:rgba(230,190,85,.46)}
-  .day-card.work .day-line{background:rgba(116,101,216,.34)}
   .day-card.available .day-line{background:rgba(75,184,212,.42)}
 
   .day-text{
@@ -403,7 +395,6 @@
 
   .day-card.closed .day-bottom b{color:#cf6893}
   .day-card.off .day-bottom b{color:#a77a12}
-  .day-card.work .day-bottom b{color:var(--violet-deep)}
   .day-card.available .day-bottom b{color:var(--green-deep)}
 
   /* TODAY 카드 안에서는 상태 표시도 오렌지 계열로 통일 */
@@ -504,7 +495,6 @@
         <div class="legend-chip available"><span class="dot"></span>예약 가능</div>
         <div class="legend-chip closed"><span class="dot"></span>예약 마감</div>
         <div class="legend-chip off"><span class="dot"></span>휴무일</div>
-        <div class="legend-chip work"><span class="dot"></span>진행중</div>
       </div>
 
       
@@ -590,7 +580,7 @@
 /*
   수정 방법:
   - 아래 weekData 안의 날짜, 상태, 안내문구만 바꾸면 됩니다.
-  - type 값은 available / closed / work / off 중 하나를 사용하면 됩니다.
+  - type 값은 available / closed / off 중 하나를 사용하면 됩니다.
   - TODAY 표시는 날짜가 지나면 자동으로 이동합니다.
   - 오늘보다 지난 예약 가능 날짜는 자동으로 예약 마감 처리됩니다.
   - 첫 화면도 오늘 날짜가 포함된 주차로 자동 표시됩니다.
@@ -639,9 +629,9 @@ const weekData = {
     label: '2주차',
     range: '09.06 - 09.13',
     days: [
-      {day:'일요일', date:'09.06', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'월요일', date:'09.07', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'09.08', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
+      {day:'일요일', date:'09.06', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'월요일', date:'09.07', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
+      {day:'화요일', date:'09.08', type:'available', status:'예약 가능', text:'해당 날짜는 신규 예약이 가능합니다.', bottom:'예약 상태', code:'AVAILABLE'},
       {day:'수요일', date:'09.09', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'},
       {day:'목요일', date:'09.10', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'},
       {day:'금요일', date:'09.11', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'},
@@ -683,7 +673,7 @@ function getDisplayItem(item, todayKey){
 
   /*
     예약 가능으로 등록해 둔 날짜가 오늘보다 이전이면 자동 예약 마감 처리합니다.
-    단, 수동으로 예약 마감 / 휴무일 / 진행중으로 설정한 날짜는 그대로 유지합니다.
+    단, 수동으로 예약 마감 / 휴무일로 설정한 날짜는 그대로 유지합니다.
   */
   if (itemNumber < todayNumber && item.type === 'available') {
     return {

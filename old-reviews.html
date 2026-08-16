@@ -17,13 +17,25 @@
       width: 100%;
       min-height: 0 !important;
       background: transparent;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .review-wrap {
       width: 100%;
       max-width: 1100px;
       margin: 0 auto;
+    }
+
+    /*
+      reviews 1.png 안에 들어있는 하단 흰 여백을
+      실제 레이아웃 공간에서도 제거하기 위한 클립 영역
+    */
+    .review-cover-clip {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      /* JS 감지 전에도 큰 흰 여백이 보이지 않도록 임시 높이 */
+      height: clamp(150px, 27vw, 290px);
     }
 
     .review-cover {
@@ -42,6 +54,7 @@
       grid-template-rows: 0fr;
       opacity: 0;
       overflow: hidden;
+
       transition:
         grid-template-rows 0.62s cubic-bezier(.22,.75,.30,1),
         opacity 0.34s ease;
@@ -79,13 +92,15 @@
 
   <div id="reviewWrap" class="review-wrap">
 
-    <img
-      id="reviewCover"
-      class="review-cover"
-      src="./images/reviews/reviews%201.png"
-      alt="아트머그 이전 후기모음"
-      draggable="false"
-    >
+    <div id="reviewCoverClip" class="review-cover-clip">
+      <img
+        id="reviewCover"
+        class="review-cover"
+        src="./images/reviews/reviews%201.png"
+        alt="아트머그 이전 후기모음"
+        draggable="false"
+      >
+    </div>
 
     <div
       id="reviewDetailWrap"
@@ -108,11 +123,12 @@
   <script>
     (function () {
       var reviewWrap = document.getElementById('reviewWrap');
+      var coverClip = document.getElementById('reviewCoverClip');
       var cover = document.getElementById('reviewCover');
       var detail = document.getElementById('reviewDetail');
       var detailWrap = document.getElementById('reviewDetailWrap');
 
-      if (!reviewWrap || !cover || !detailWrap) {
+      if (!reviewWrap || !coverClip || !cover || !detailWrap) {
         return;
       }
 
@@ -121,17 +137,19 @@
       var motionUntil = 0;
 
       /*
-        중요:
-        document.scrollHeight는 iframe 자체가 이미 길어진 뒤에는
-        줄어들지 않을 수 있으므로 사용하지 않습니다.
-        실제 후기 콘텐츠(.review-wrap)의 렌더링 높이만 부모에게 전달합니다.
+        1번 이미지에서 실제 내용이 끝나는 세로 비율.
+        이미지 로드 후 캔버스로 자동 계산합니다.
       */
+      var coverContentRatio = null;
+
+
       function getContentHeight() {
         return Math.max(
           1,
           Math.ceil(reviewWrap.getBoundingClientRect().height)
         );
       }
+
 
       function sendHeight() {
         window.parent.postMessage(
@@ -143,82 +161,295 @@
         );
       }
 
+
+      /*
+        reviews 1.png의 아래쪽부터 스캔해
+        흰색이 아닌 픽셀이 실제로 존재하는 마지막 지점을 찾습니다.
+
+        → 이미지 파일 자체에 큰 흰 여백이 있어도
+          화면에서는 그 여백이 공간을 차지하지 않습니다.
+      */
+      function detectCoverContentRatio() {
+        if (!cover.naturalWidth || !cover.naturalHeight) {
+          return;
+        }
+
+        try {
+          var naturalWidth = cover.naturalWidth;
+          var naturalHeight = cover.naturalHeight;
+
+          /* 너무 큰 원본도 가볍게 검사하도록 축소해서 스캔 */
+          var scanWidth = Math.min(520, naturalWidth);
+          var scale = scanWidth / naturalWidth;
+          var scanHeight = Math.max(1, Math.round(naturalHeight * scale));
+
+          var canvas = document.createElement('canvas');
+          canvas.width = scanWidth;
+          canvas.height = scanHeight;
+
+          var ctx = canvas.getContext('2d', {
+            willReadFrequently: true
+          });
+
+          if (!ctx) {
+            return;
+          }
+
+          ctx.drawImage(
+            cover,
+            0,
+            0,
+            scanWidth,
+            scanHeight
+          );
+
+          var imageData = ctx.getImageData(
+            0,
+            0,
+            scanWidth,
+            scanHeight
+          );
+
+          var pixels = imageData.data;
+          var foundBottom = -1;
+
+          /*
+            아주 연한 회색 글씨도 내용으로 잡히도록 248 기준.
+            한두 픽셀 노이즈 때문에 전체 높이가 잡히지 않도록
+            한 줄에 일정 수 이상의 유효 픽셀이 있을 때만 인정.
+          */
+          var minimumPixels = Math.max(
+            3,
+            Math.floor(scanWidth * 0.004)
+          );
+
+          for (var y = scanHeight - 1; y >= 0; y--) {
+            var valid = 0;
+
+            for (var x = 0; x < scanWidth; x += 2) {
+              var index = (y * scanWidth + x) * 4;
+
+              var r = pixels[index];
+              var g = pixels[index + 1];
+              var b = pixels[index + 2];
+              var a = pixels[index + 3];
+
+              if (
+                a > 20 &&
+                (
+                  r < 248 ||
+                  g < 248 ||
+                  b < 248
+                )
+              ) {
+                valid += 1;
+
+                if (valid >= minimumPixels) {
+                  foundBottom = y;
+                  break;
+                }
+              }
+            }
+
+            if (foundBottom >= 0) {
+              break;
+            }
+          }
+
+          if (foundBottom < 0) {
+            return;
+          }
+
+          /*
+            실제 내용 끝에서 약간의 여백만 남깁니다.
+          */
+          var extraPadding = Math.max(
+            10,
+            Math.round(scanHeight * 0.008)
+          );
+
+          var cropBottom = Math.min(
+            scanHeight,
+            foundBottom + extraPadding
+          );
+
+          coverContentRatio = Math.min(
+            1,
+            Math.max(
+              0.04,
+              cropBottom / scanHeight
+            )
+          );
+
+          updateCoverClipHeight();
+
+        } catch (error) {
+          /*
+            혹시 브라우저에서 픽셀 판독을 막더라도
+            페이지 전체 기능은 그대로 작동합니다.
+          */
+        }
+      }
+
+
+      function updateCoverClipHeight() {
+        if (
+          !coverContentRatio ||
+          !cover.naturalWidth ||
+          !cover.naturalHeight
+        ) {
+          return;
+        }
+
+        var renderedWidth =
+          coverClip.getBoundingClientRect().width;
+
+        if (!renderedWidth) {
+          return;
+        }
+
+        var fullRenderedHeight =
+          renderedWidth *
+          (cover.naturalHeight / cover.naturalWidth);
+
+        var croppedHeight = Math.max(
+          1,
+          Math.ceil(
+            fullRenderedHeight * coverContentRatio
+          )
+        );
+
+        coverClip.style.height =
+          croppedHeight + 'px';
+
+        sendHeight();
+
+        requestAnimationFrame(function () {
+          sendHeight();
+        });
+      }
+
+
       function syncDuringMotion(duration) {
         if (motionRaf) {
           cancelAnimationFrame(motionRaf);
         }
 
-        motionUntil = performance.now() + duration;
+        motionUntil =
+          performance.now() + duration;
 
         function tick(now) {
           sendHeight();
 
           if (now < motionUntil) {
-            motionRaf = requestAnimationFrame(tick);
+            motionRaf =
+              requestAnimationFrame(tick);
           } else {
             motionRaf = null;
             sendHeight();
           }
         }
 
-        motionRaf = requestAnimationFrame(tick);
+        motionRaf =
+          requestAnimationFrame(tick);
       }
+
 
       function toggleReviews() {
         isOpen = !isOpen;
 
-        detailWrap.classList.toggle('is-open', isOpen);
+        detailWrap.classList.toggle(
+          'is-open',
+          isOpen
+        );
+
         detailWrap.setAttribute(
           'aria-hidden',
           isOpen ? 'false' : 'true'
         );
 
-        /*
-          펼칠 때도, 접을 때도 애니메이션 진행 높이를
-          매 프레임 부모 iframe에 전달합니다.
-        */
         syncDuringMotion(760);
       }
 
-      cover.addEventListener('click', toggleReviews);
 
-      detailWrap.addEventListener('transitionend', function () {
-        sendHeight();
+      cover.addEventListener(
+        'click',
+        toggleReviews
+      );
 
-        /*
-          브라우저 레이아웃 확정 후 한 번 더 보내
-          접었을 때 남는 빈 공간을 제거합니다.
-        */
-        requestAnimationFrame(function () {
-          requestAnimationFrame(sendHeight);
-        });
-      });
 
-      cover.addEventListener('load', sendHeight);
+      detailWrap.addEventListener(
+        'transitionend',
+        function () {
+          sendHeight();
+
+          requestAnimationFrame(function () {
+            requestAnimationFrame(sendHeight);
+          });
+        }
+      );
+
+
+      cover.addEventListener(
+        'load',
+        function () {
+          detectCoverContentRatio();
+          sendHeight();
+
+          setTimeout(function () {
+            detectCoverContentRatio();
+            sendHeight();
+          }, 100);
+        }
+      );
+
 
       if (detail) {
-        detail.addEventListener('load', function () {
-          if (isOpen) {
-            sendHeight();
+        detail.addEventListener(
+          'load',
+          function () {
+            if (isOpen) {
+              sendHeight();
+            }
           }
-        });
+        );
       }
 
-      window.addEventListener('load', function () {
-        sendHeight();
-        requestAnimationFrame(sendHeight);
-        setTimeout(sendHeight, 150);
-        setTimeout(sendHeight, 500);
-      });
 
-      window.addEventListener('resize', sendHeight);
+      window.addEventListener(
+        'load',
+        function () {
+          detectCoverContentRatio();
+          updateCoverClipHeight();
+          sendHeight();
+
+          setTimeout(function () {
+            detectCoverContentRatio();
+            updateCoverClipHeight();
+            sendHeight();
+          }, 250);
+        }
+      );
+
+
+      window.addEventListener(
+        'resize',
+        function () {
+          updateCoverClipHeight();
+          sendHeight();
+        }
+      );
+
 
       if ('ResizeObserver' in window) {
-        var resizeObserver = new ResizeObserver(function () {
-          sendHeight();
-        });
+        var resizeObserver =
+          new ResizeObserver(function () {
+            sendHeight();
+          });
+
         resizeObserver.observe(reviewWrap);
       }
+
     })();
   </script>
 

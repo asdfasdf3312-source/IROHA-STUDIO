@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>아트머그 이전 후기모음</title>
 
   <style>
@@ -15,12 +14,9 @@
     body {
       margin: 0;
       padding: 0;
-      background: transparent;
-    }
-
-    body {
       width: 100%;
-      overflow: hidden;
+      background: transparent;
+      overflow-x: hidden;
     }
 
     .review-wrap {
@@ -29,36 +25,55 @@
       margin: 0 auto;
     }
 
-    .review-toggle {
-      position: relative;
-
-      width: 100%;
-      max-height: 190px;
-
-      overflow: hidden;
-
-      cursor: pointer;
-
-      transition:
-        max-height 0.65s cubic-bezier(0.22, 0.75, 0.30, 1);
-    }
-
-    .review-toggle img {
+    .review-cover {
       display: block;
-
       width: 100%;
       height: auto;
-
-      margin: 0 auto;
-
+      margin: 0;
       border: 0;
-
+      cursor: pointer;
       user-select: none;
       -webkit-user-drag: none;
     }
 
-    .review-toggle.is-open {
-      cursor: pointer;
+    /*
+      두 번째 이미지는 grid 방식으로 접기/펼치기.
+      고정 max-height 값을 크게 잡지 않아도 자연스럽게 열립니다.
+    */
+    .review-detail-wrap {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+
+      transition:
+        grid-template-rows 0.55s cubic-bezier(.22,.75,.30,1),
+        opacity 0.35s ease;
+    }
+
+    .review-detail-wrap.is-open {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+
+    .review-detail-inner {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .review-detail {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0;
+      border: 0;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .review-detail-wrap {
+        transition: none;
+      }
     }
   </style>
 </head>
@@ -67,21 +82,30 @@
 
   <div class="review-wrap">
 
-    <div
-      id="reviewToggle"
-      class="review-toggle"
-      role="button"
-      tabindex="0"
-      aria-expanded="false"
+    <!-- 처음부터 보이는 클릭용 이미지 -->
+    <img
+      id="reviewCover"
+      class="review-cover"
+      src="./images/reviews/review-cover.png"
+      alt="아트머그 이전 후기모음 열기"
+      draggable="false"
     >
 
-      <img
-        id="reviewImage"
-        src="https://artmugfile2.cafe24.com/image/up_img/detail/5/goods_59004/17824449100_Re.jpg"
-        alt="아트머그 이전 후기모음"
-        draggable="false"
-      >
-
+    <!-- 클릭하면 아래로 펼쳐지는 이미지 -->
+    <div
+      id="reviewDetailWrap"
+      class="review-detail-wrap"
+      aria-hidden="true"
+    >
+      <div class="review-detail-inner">
+        <img
+          id="reviewDetail"
+          class="review-detail"
+          src="./images/reviews/review-open.png"
+          alt="아트머그 이전 후기"
+          draggable="false"
+        >
+      </div>
     </div>
 
   </div>
@@ -89,184 +113,85 @@
 
   <script>
     (function () {
+      var cover = document.getElementById('reviewCover');
+      var detailWrap = document.getElementById('reviewDetailWrap');
 
-      const CLOSED_HEIGHT = 190;
-
-      const toggle = document.getElementById('reviewToggle');
-      const image = document.getElementById('reviewImage');
-
-      let isOpen = false;
-
-
-      function getFullHeight() {
-        return image.getBoundingClientRect().height;
+      if (!cover || !detailWrap) {
+        return;
       }
+
+      var isOpen = false;
 
 
       function sendHeight() {
-        const height = Math.ceil(
+        var height = Math.ceil(
           document.documentElement.scrollHeight
         );
 
+        /*
+          아트머그 iframe으로 사용할 경우 부모 코드가
+          이 메시지를 받아 iframe 높이를 자동으로 바꿀 수 있습니다.
+        */
         window.parent.postMessage(
           {
             type: 'iroha-old-reviews-height',
             height: height
           },
-          'https://artmug.kr'
+          '*'
         );
-      }
-
-
-      function openReviews() {
-
-        const fullHeight = getFullHeight();
-
-        toggle.style.maxHeight = fullHeight + 'px';
-
-        toggle.classList.add('is-open');
-
-        toggle.setAttribute(
-          'aria-expanded',
-          'true'
-        );
-
-        isOpen = true;
-      }
-
-
-      function closeReviews() {
-
-        const fullHeight = getFullHeight();
-
-        /*
-          현재 높이를 먼저 잡아준 다음
-          다음 프레임에서 접힌 높이로 변경해서
-          닫힐 때도 자연스럽게 애니메이션됩니다.
-        */
-        toggle.style.maxHeight = fullHeight + 'px';
-
-        requestAnimationFrame(function () {
-
-          requestAnimationFrame(function () {
-
-            toggle.style.maxHeight =
-              CLOSED_HEIGHT + 'px';
-
-          });
-
-        });
-
-        toggle.classList.remove('is-open');
-
-        toggle.setAttribute(
-          'aria-expanded',
-          'false'
-        );
-
-        isOpen = false;
       }
 
 
       function toggleReviews() {
+        isOpen = !isOpen;
 
-        if (isOpen) {
-          closeReviews();
-        } else {
-          openReviews();
-        }
+        detailWrap.classList.toggle(
+          'is-open',
+          isOpen
+        );
 
+        detailWrap.setAttribute(
+          'aria-hidden',
+          isOpen ? 'false' : 'true'
+        );
+
+        /*
+          펼침 애니메이션 동안 부모 iframe 높이를
+          몇 번 갱신해서 아래쪽이 잘리지 않게 합니다.
+        */
+        sendHeight();
+
+        [80, 180, 320, 500, 650].forEach(function (delay) {
+          setTimeout(sendHeight, delay);
+        });
       }
 
 
-      toggle.addEventListener(
+      cover.addEventListener(
         'click',
         toggleReviews
       );
 
 
-      toggle.addEventListener(
-        'keydown',
-        function (event) {
-
-          if (
-            event.key === 'Enter' ||
-            event.key === ' '
-          ) {
-
-            event.preventDefault();
-
-            toggleReviews();
-
-          }
-
-        }
+      detailWrap.addEventListener(
+        'transitionend',
+        sendHeight
       );
 
 
-      image.addEventListener(
+      window.addEventListener(
         'load',
         function () {
-
-          toggle.style.maxHeight =
-            CLOSED_HEIGHT + 'px';
-
           sendHeight();
-
-        }
-      );
-
-
-      /*
-        열리고 닫히는 동안 iframe 높이도
-        자동으로 부모 페이지에 전달합니다.
-      */
-      if ('ResizeObserver' in window) {
-
-        const observer =
-          new ResizeObserver(function () {
-
-            sendHeight();
-
-          });
-
-        observer.observe(document.body);
-        observer.observe(toggle);
-
-      }
-
-
-      toggle.addEventListener(
-        'transitionend',
-        function () {
-
-          sendHeight();
-
+          setTimeout(sendHeight, 300);
         }
       );
 
 
       window.addEventListener(
         'resize',
-        function () {
-
-          if (isOpen) {
-
-            toggle.style.maxHeight =
-              getFullHeight() + 'px';
-
-          }
-
-          sendHeight();
-
-        }
+        sendHeight
       );
-
-
-      setTimeout(sendHeight, 100);
-      setTimeout(sendHeight, 500);
-      setTimeout(sendHeight, 1000);
-
     })();
   </script>
 

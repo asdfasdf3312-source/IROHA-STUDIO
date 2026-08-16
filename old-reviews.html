@@ -15,6 +15,7 @@
       margin: 0;
       padding: 0;
       width: 100%;
+      min-height: 0 !important;
       background: transparent;
       overflow-x: hidden;
     }
@@ -41,7 +42,6 @@
       grid-template-rows: 0fr;
       opacity: 0;
       overflow: hidden;
-
       transition:
         grid-template-rows 0.62s cubic-bezier(.22,.75,.30,1),
         opacity 0.34s ease;
@@ -77,9 +77,8 @@
 
 <body>
 
-  <div class="review-wrap">
+  <div id="reviewWrap" class="review-wrap">
 
-    <!-- 처음부터 보이는 클릭용 이미지 -->
     <img
       id="reviewCover"
       class="review-cover"
@@ -88,7 +87,6 @@
       draggable="false"
     >
 
-    <!-- 클릭하면 아래로 펼쳐지는 이미지 -->
     <div
       id="reviewDetailWrap"
       class="review-detail-wrap"
@@ -109,74 +107,118 @@
 
   <script>
     (function () {
+      var reviewWrap = document.getElementById('reviewWrap');
       var cover = document.getElementById('reviewCover');
+      var detail = document.getElementById('reviewDetail');
       var detailWrap = document.getElementById('reviewDetailWrap');
 
-      if (!cover || !detailWrap) {
+      if (!reviewWrap || !cover || !detailWrap) {
         return;
       }
 
       var isOpen = false;
+      var motionRaf = null;
+      var motionUntil = 0;
+
+      /*
+        중요:
+        document.scrollHeight는 iframe 자체가 이미 길어진 뒤에는
+        줄어들지 않을 수 있으므로 사용하지 않습니다.
+        실제 후기 콘텐츠(.review-wrap)의 렌더링 높이만 부모에게 전달합니다.
+      */
+      function getContentHeight() {
+        return Math.max(
+          1,
+          Math.ceil(reviewWrap.getBoundingClientRect().height)
+        );
+      }
 
       function sendHeight() {
-        var height = Math.ceil(
-          document.documentElement.scrollHeight
-        );
-
         window.parent.postMessage(
           {
             type: 'iroha-old-reviews-height',
-            height: height
+            height: getContentHeight()
           },
           '*'
         );
       }
 
-      function syncHeightDuringMotion() {
-        [0, 80, 160, 260, 380, 500, 650, 800].forEach(function (delay) {
-          setTimeout(sendHeight, delay);
-        });
+      function syncDuringMotion(duration) {
+        if (motionRaf) {
+          cancelAnimationFrame(motionRaf);
+        }
+
+        motionUntil = performance.now() + duration;
+
+        function tick(now) {
+          sendHeight();
+
+          if (now < motionUntil) {
+            motionRaf = requestAnimationFrame(tick);
+          } else {
+            motionRaf = null;
+            sendHeight();
+          }
+        }
+
+        motionRaf = requestAnimationFrame(tick);
       }
 
       function toggleReviews() {
         isOpen = !isOpen;
 
-        detailWrap.classList.toggle(
-          'is-open',
-          isOpen
-        );
-
+        detailWrap.classList.toggle('is-open', isOpen);
         detailWrap.setAttribute(
           'aria-hidden',
           isOpen ? 'false' : 'true'
         );
 
-        syncHeightDuringMotion();
+        /*
+          펼칠 때도, 접을 때도 애니메이션 진행 높이를
+          매 프레임 부모 iframe에 전달합니다.
+        */
+        syncDuringMotion(760);
       }
 
-      cover.addEventListener(
-        'click',
-        toggleReviews
-      );
+      cover.addEventListener('click', toggleReviews);
 
-      detailWrap.addEventListener(
-        'transitionend',
-        sendHeight
-      );
+      detailWrap.addEventListener('transitionend', function () {
+        sendHeight();
 
-      window.addEventListener(
-        'load',
-        function () {
+        /*
+          브라우저 레이아웃 확정 후 한 번 더 보내
+          접었을 때 남는 빈 공간을 제거합니다.
+        */
+        requestAnimationFrame(function () {
+          requestAnimationFrame(sendHeight);
+        });
+      });
+
+      cover.addEventListener('load', sendHeight);
+
+      if (detail) {
+        detail.addEventListener('load', function () {
+          if (isOpen) {
+            sendHeight();
+          }
+        });
+      }
+
+      window.addEventListener('load', function () {
+        sendHeight();
+        requestAnimationFrame(sendHeight);
+        setTimeout(sendHeight, 150);
+        setTimeout(sendHeight, 500);
+      });
+
+      window.addEventListener('resize', sendHeight);
+
+      if ('ResizeObserver' in window) {
+        var resizeObserver = new ResizeObserver(function () {
           sendHeight();
-          setTimeout(sendHeight, 300);
-          setTimeout(sendHeight, 700);
-        }
-      );
-
-      window.addEventListener(
-        'resize',
-        sendHeight
-      );
+        });
+        resizeObserver.observe(reviewWrap);
+      }
     })();
   </script>
 

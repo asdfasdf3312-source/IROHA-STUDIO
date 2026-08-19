@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>작업 신청서 v77</title>
+<title>작업 신청서 v76</title>
 <style>
 @font-face{
   font-family:'Paperozi';
@@ -2509,35 +2509,6 @@ body{
   }
 }
 
-
-/* v77: 아트머그에서는 '따라오는 느낌' 없이 고정 사이드바처럼 유지 */
-.summary-side{
-  position:sticky !important;
-  top:18px !important;
-  align-self:start !important;
-  height:max-content !important;
-  z-index:5;
-}
-
-.summary-side.embedded-sticky-sync{
-  position:relative !important;
-  top:auto !important;
-  align-self:start !important;
-  transition:none !important;
-  animation:none !important;
-  will-change:transform;
-}
-
-@media(max-width:900px){
-  .summary-side,
-  .summary-side.embedded-sticky-sync{
-    position:relative !important;
-    top:auto !important;
-    transform:none !important;
-    will-change:auto !important;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -4161,78 +4132,52 @@ if ("MutationObserver" in window) {
 
 </script>
 
-<script id="iroha-estimate-sticky-child-v77">
+<script>
 (function(){
   var summary = document.querySelector('.summary-side');
   var layout = document.querySelector('.new-layout');
 
   if (!summary || !layout) return;
 
-  var TOP_GAP = 18;
-
-  function resetEmbeddedSticky(){
-    summary.classList.remove('embedded-sticky-sync');
-    summary.style.transform = '';
-  }
-
-  function syncEmbeddedSticky(frameTop){
-    /*
-      모바일/한 줄 배치에서는 견적 요약을 고정하지 않습니다.
-    */
-    if (window.innerWidth <= 900) {
-      resetEmbeddedSticky();
-      return;
-    }
-
-    var parentFrameTop = Number(frameTop);
-    if (!isFinite(parentFrameTop)) {
-      resetEmbeddedSticky();
-      return;
-    }
+  function applyParentScrollOffset(rawOffset){
+    var requested = Math.max(0, Number(rawOffset) || 0);
 
     /*
-      견적요약의 "원래 위치"를 iframe 상단 기준으로 계산합니다.
-      이 위치가 화면 상단 18px에 닿기 전까지는 전혀 움직이지 않습니다.
-    */
-    var layoutTop = layout.offsetTop;
-    var summaryNaturalTop = layoutTop + summary.offsetTop;
-    var naturalViewportTop = parentFrameTop + summaryNaturalTop;
-
-    var offset = Math.max(0, TOP_GAP - naturalViewportTop);
-
-    /*
-      작업신청서(.new-layout) 하단을 넘어가지 않도록 제한합니다.
+      오른쪽 견적 박스가 작업 신청서(.new-layout) 하단을 넘어가지 않도록
+      이동 가능 거리를 현재 실제 높이 기준으로 계산합니다.
     */
     var maxOffset = Math.max(
       0,
       layout.offsetHeight - summary.offsetHeight
     );
 
-    offset = Math.min(offset, maxOffset);
+    var offset = Math.min(requested, maxOffset);
 
-    summary.classList.add('embedded-sticky-sync');
-    summary.style.transform = offset > 0
-      ? 'translate3d(0,' + offset + 'px,0)'
-      : '';
+    if (offset > 0) {
+      summary.classList.add('parent-scroll-follow');
+      summary.style.transform = 'translateY(' + offset + 'px)';
+    } else {
+      summary.classList.remove('parent-scroll-follow');
+      summary.style.transform = '';
+    }
   }
 
   window.addEventListener('message', function(event){
-    if (event.origin !== 'https://artmug.kr' && event.origin !== window.location.origin) {
-      /*
-        아트머그가 www/다른 서브도메인으로 열릴 수 있어 데이터 타입까지 함께 검증합니다.
-      */
-    }
-
     var data = event.data || {};
-    if (data.type !== 'iroha-work-form-sticky-sync') return;
 
-    syncEmbeddedSticky(data.frameTop);
+    if (data.type !== 'iroha-work-form-parent-scroll') return;
+
+    applyParentScrollOffset(data.offset);
   });
 
+  /*
+    부모 연동이 없는 단독 GitHub 페이지에서는 기존 CSS sticky를 그대로 사용합니다.
+  */
   window.addEventListener('resize', function(){
-    if (window.innerWidth <= 900) {
-      resetEmbeddedSticky();
-    }
+    if (!summary.classList.contains('parent-scroll-follow')) return;
+
+    var current = summary.style.transform.match(/translateY\(([-0-9.]+)px\)/);
+    applyParentScrollOffset(current ? Number(current[1]) : 0);
   });
 })();
 </script>

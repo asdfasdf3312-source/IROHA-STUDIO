@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>작업 신청서 v86 MULTI PACKAGE - v84 WORK COPY</title>
+<title>작업 신청서 v90 VERTICAL WORK CARDS</title>
 <style>
 @font-face{
   font-family:'Paperozi';
@@ -2557,6 +2557,135 @@ body{
   }
 }
 
+
+/* v87: 복수 패키지 선택 시 마지막 클릭한 패키지 세부 작업만 표시 */
+.current-work-package{
+  margin-top:0 !important;
+}
+
+.current-work-package .work-package-group-head span{
+  max-width:48%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:right;
+}
+
+
+/* v90: 세부 작업 카드 레이아웃만 세로형으로 변경 */
+#workTypeRow,
+.work-package-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:12px !important;
+}
+
+#workTypeRow .choice.work-card,
+.work-package-grid .choice.work-card{
+  width:100% !important;
+  min-height:126px !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:18px !important;
+  padding:20px 22px !important;
+  border:1.5px solid #D6E2FF !important;
+  border-radius:24px !important;
+  background:#FFFFFF !important;
+  text-align:left !important;
+  box-sizing:border-box !important;
+}
+
+#workTypeRow .choice.work-card:hover,
+.work-package-grid .choice.work-card:hover{
+  border-color:#AFC4FF !important;
+  transform:translateY(-1px) !important;
+  box-shadow:0 8px 20px rgba(77,111,214,.08) !important;
+}
+
+#workTypeRow .choice.work-card.active,
+.work-package-grid .choice.work-card.active{
+  background:#F4F7FF !important;
+  border-color:#9EB6FF !important;
+  box-shadow:0 8px 22px rgba(77,111,214,.10) !important;
+}
+
+.work-card-left{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  min-width:0 !important;
+  flex:1 1 auto !important;
+}
+
+.work-card-name{
+  display:block !important;
+  margin:0 0 8px !important;
+  color:#4F6FD2 !important;
+  font-size:20px !important;
+  font-weight:900 !important;
+  line-height:1.25 !important;
+}
+
+.work-card-desc{
+  display:block !important;
+  color:#8A9AA7 !important;
+  font-size:12.5px !important;
+  font-weight:500 !important;
+  line-height:1.55 !important;
+  white-space:normal !important;
+}
+
+.work-card-price{
+  flex:0 0 auto !important;
+  margin-left:auto !important;
+  color:#5A75D8 !important;
+  font-size:20px !important;
+  font-weight:900 !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+  text-align:right !important;
+}
+
+#workTypeRow .choice.work-card.soldout,
+.work-package-grid .choice.work-card.soldout{
+  background:#FAFAFA !important;
+  border-color:#E8E8E8 !important;
+  opacity:.58 !important;
+  box-shadow:none !important;
+}
+
+#workTypeRow .choice.work-card.soldout .work-card-name,
+#workTypeRow .choice.work-card.soldout .work-card-price,
+.work-package-grid .choice.work-card.soldout .work-card-name,
+.work-package-grid .choice.work-card.soldout .work-card-price{
+  color:#AEB8BE !important;
+}
+
+#workTypeRow .choice.work-card.soldout .work-card-desc,
+.work-package-grid .choice.work-card.soldout .work-card-desc{
+  color:#BCC5CA !important;
+}
+
+@media(max-width:720px){
+  #workTypeRow .choice.work-card,
+  .work-package-grid .choice.work-card{
+    min-height:112px !important;
+    padding:17px 18px !important;
+    border-radius:20px !important;
+    gap:12px !important;
+  }
+
+  .work-card-name,
+  .work-card-price{
+    font-size:17px !important;
+  }
+
+  .work-card-desc{
+    font-size:11.5px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3053,6 +3182,9 @@ var selectedWorkByPackage = {
   vrc: ""
 };
 
+/* 세부 작업 영역에는 마지막으로 클릭한 패키지만 표시 */
+var currentWorkPackageView = "";
+
 function getActivePackageTypes(){
   var box = document.getElementById('formTypeRow');
   if (!box) return [];
@@ -3075,21 +3207,28 @@ function getSelectedPackageLabels(){
   return getActivePackageTypes().map(getPackageLabel);
 }
 
-function getSelectedWorkCards(){
-  return Array.prototype.slice.call(
-    document.querySelectorAll('#workTypeRow .choice.work-card.active')
-  );
+function getSelectedWorkEntries(){
+  return getActivePackageTypes().map(function(type){
+    var work = selectedWorkByPackage[type] || '';
+    var info = workTypeInfo[type] && workTypeInfo[type][work];
+
+    if (!work || !info) return null;
+
+    return {
+      type:type,
+      work:work,
+      info:info
+    };
+  }).filter(Boolean);
 }
 
 function getSelectedWorkSummary(){
-  var cards = getSelectedWorkCards();
+  var entries = getSelectedWorkEntries();
 
-  if (!cards.length) return '';
+  if (!entries.length) return '';
 
-  return cards.map(function(card){
-    var type = card.getAttribute('data-package') || '';
-    var work = card.getAttribute('data-value') || '';
-    return getPackageLabel(type) + ' - ' + work;
+  return entries.map(function(entry){
+    return getPackageLabel(entry.type) + ' - ' + entry.work;
   }).join(' / ');
 }
 
@@ -3143,6 +3282,8 @@ function renderWorkTypes() {
   row.innerHTML = '';
 
   if (!activeTypes.length) {
+    currentWorkPackageView = '';
+
     row.innerHTML =
       '<div class="work-empty-state">패키지를 먼저 선택하면 작업 항목이 표시됩니다.</div>';
 
@@ -3156,18 +3297,31 @@ function renderWorkTypes() {
     return;
   }
 
-  activeTypes.forEach(function(type) {
-    if (!workTypeMap[type]) return;
+  /*
+    현재 보고 있는 패키지가 선택 상태가 아니면
+    마지막으로 남아 있는 선택 패키지를 표시합니다.
+  */
+  if (activeTypes.indexOf(currentWorkPackageView) === -1) {
+    currentWorkPackageView = activeTypes[activeTypes.length - 1];
+  }
 
+  var type = currentWorkPackageView;
+
+  if (workTypeMap[type]) {
     var group = document.createElement('div');
-    group.className = 'work-package-group';
+    group.className = 'work-package-group current-work-package';
     group.setAttribute('data-package-group', type);
 
     var groupHead = document.createElement('div');
     groupHead.className = 'work-package-group-head';
+
+    var savedWork = selectedWorkByPackage[type] || '';
+
     groupHead.innerHTML =
       '<strong>' + getPackageLabel(type) + '</strong>' +
-      '<span>세부 작업 1개 선택</span>';
+      '<span>' +
+        (savedWork ? '선택됨 · ' + savedWork : '세부 작업 1개 선택') +
+      '</span>';
 
     var grid = document.createElement('div');
     grid.className = 'work-package-grid';
@@ -3218,18 +3372,28 @@ function renderWorkTypes() {
     group.appendChild(groupHead);
     group.appendChild(grid);
     row.appendChild(group);
-  });
+  }
 
   var guide = document.getElementById('guideText');
 
   if (guide) {
     if (activeTypes.length === 2) {
+      var otherType = activeTypes.filter(function(item){
+        return item !== currentWorkPackageView;
+      })[0];
+
+      var otherWork = otherType ? selectedWorkByPackage[otherType] : '';
+
       guide.innerHTML =
         '<strong>' +
         getPackageLabel(activeTypes[0]) +
         ' + ' +
         getPackageLabel(activeTypes[1]) +
-        '</strong>를 함께 선택했습니다. 각 패키지에서 세부 작업을 1개씩 선택해주세요.';
+        '</strong>를 함께 선택했습니다. ' +
+        '현재 <strong>' + getPackageLabel(currentWorkPackageView) + '</strong> 세부 작업을 표시하고 있습니다.' +
+        (otherWork
+          ? ' 다른 패키지 선택도 <strong>' + otherWork + '</strong>로 유지됩니다.'
+          : ' 다른 패키지 카드를 누르면 해당 세부 작업으로 전환됩니다.');
     } else {
       guide.innerHTML = guideMap[activeTypes[0]] || '';
     }
@@ -3244,12 +3408,31 @@ function selectPackage(type, button) {
   if (!box || !button) return;
 
   if (type === 'vrc') {
-    var willActivate = !button.classList.contains('active');
+    var isActive = button.classList.contains('active');
 
+    /*
+      VRC가 이미 선택되어 있지만 다른 패키지 목록을 보고 있었다면
+      VRC를 해제하지 않고 세부 작업 화면만 VRC로 전환합니다.
+      VRC 화면을 보고 있는 상태에서 다시 누르면 선택 해제합니다.
+    */
+    if (isActive && currentWorkPackageView !== 'vrc') {
+      currentWorkPackageView = 'vrc';
+      renderWorkTypes();
+      return;
+    }
+
+    var willActivate = !isActive;
     button.classList.toggle('active', willActivate);
 
-    if (!willActivate) {
+    if (willActivate) {
+      currentWorkPackageView = 'vrc';
+    } else {
       selectedWorkByPackage.vrc = '';
+
+      var remains = getActivePackageTypes();
+      currentWorkPackageView = remains.length
+        ? remains[remains.length - 1]
+        : '';
     }
   } else {
     /*
@@ -3257,7 +3440,9 @@ function selectPackage(type, button) {
       VRC 아바타 선택 상태는 그대로 유지합니다.
     */
     var otherType = type === 'intro' ? 'debut' : 'intro';
-    var otherBtn = box.querySelector('.package-btn[data-form="' + otherType + '"]');
+    var otherBtn = box.querySelector(
+      '.package-btn[data-form="' + otherType + '"]'
+    );
 
     if (otherBtn) {
       otherBtn.classList.remove('active');
@@ -3265,6 +3450,9 @@ function selectPackage(type, button) {
 
     selectedWorkByPackage[otherType] = '';
     button.classList.add('active');
+
+    /* 이미 선택된 패키지를 다시 눌러도 세부 작업 화면 전환 용도로 사용 */
+    currentWorkPackageView = type;
   }
 
   renderWorkTypes();
@@ -4037,8 +4225,8 @@ function formatMoney(value){
 }
 
 function getSelectedWorkPrice(){
-  return getSelectedWorkCards().reduce(function(sum, card){
-    return sum + parseMoney(card.getAttribute('data-price'));
+  return getSelectedWorkEntries().reduce(function(sum, entry){
+    return sum + parseMoney(entry.info.price);
   }, 0);
 }
 
@@ -4061,14 +4249,14 @@ function getEstimateSubtotal(){
 
 
 function getSelectedWorkType(){
-  return getSelectedWorkCards().map(function(card){
-    return card.getAttribute('data-value') || '';
-  }).filter(Boolean).join(' / ');
+  return getSelectedWorkEntries().map(function(entry){
+    return entry.work;
+  }).join(' / ');
 }
 
 function isTwoDOriginalWork(){
-  return getSelectedWorkCards().some(function(card){
-    return (card.getAttribute('data-value') || '').indexOf('2D 원화 기반') !== -1;
+  return getSelectedWorkEntries().some(function(entry){
+    return entry.work.indexOf('2D 원화 기반') !== -1;
   });
 }
 
@@ -4107,7 +4295,7 @@ function updateCollabDiscountWarning(){
 
 
 function hasSelectedWorkType(){
-  return getSelectedWorkCards().length > 0;
+  return getSelectedWorkEntries().length > 0;
 }
 
 function resetEstimateDisplay(){
@@ -4229,6 +4417,7 @@ function initPackageMenu() {
   selectedWorkByPackage.intro = '';
   selectedWorkByPackage.debut = '';
   selectedWorkByPackage.vrc = '';
+  currentWorkPackageView = '';
 
   var menu = document.getElementById('formTypeRow');
   var workRow = document.getElementById('workTypeRow');

@@ -3,761 +3,711 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IROHA 주간 작업 보드 v31</title>
+<title>IROHA 월간 일정 캘린더 v6</title>
+
 <style>
-  @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
+@font-face{
+  font-family:'Paperozi';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+  font-weight:400;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Paperozi';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+  font-weight:700;
+  font-display:swap;
+}
 
-  @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
+:root{
+  --mint:#76D8D2;
+  --mint-deep:#24C6BF;
+  --mint-dark:#159A95;
 
-  :root{
-    --mint:#76D8D2;
-    --mint-deep:#3db9b1;
-    --pink:#ffd9e9;
-    --pink-deep:#ed94bb;
-    --cream:#fff1c6;
-    --violet:#e7e1ff;
-    --violet-deep:#7465d8;
-    --green:#dff7ff;
-    --green-deep:#4bb8d4;
-    --ink:#344444;
-    --sub:#7d8b8b;
-    --line:rgba(118,216,210,.36);
-    --white:rgba(255,255,255,.82);
-  }
+  --pink:#FFD9E9;
+  --pink-deep:#ED94BB;
 
-  *{box-sizing:border-box}
-  html,body{
-    margin:0;
-    padding:0;
-    background:transparent;
-    color:var(--ink);
-    font-family:'Paperozi',sans-serif;
-  }
+  --available:#4BB8D4;
+  --available-soft:#EAF9FD;
 
-  .weekly-board{
-    width:100%;
-    max-width:980px;
-    margin:0 auto;
-    padding:24px 18px 28px;
-  }
+  --off:#F2C85B;
+  --off-soft:#FFF6D9;
 
-  .board-shell{
-    position:relative;
-    overflow:hidden;
-    border-radius:30px;
-    border:1px solid var(--line);
-    background:
-      radial-gradient(circle at 8% 0%, rgba(118,216,210,.30), transparent 34%),
-      radial-gradient(circle at 100% 12%, rgba(255,217,233,.48), transparent 36%),
-      linear-gradient(135deg,#f7fffe 0%,#fff7fb 100%);
-    box-shadow:
-      0 18px 46px rgba(61,185,177,.15),
-      inset 0 0 0 1px rgba(255,255,255,.7);
-    padding:26px;
-  }
+  --today:#FF8A45;
+  --today-soft:#FFF0E6;
 
-  .board-shell:before{
-    content:"";
-    position:absolute;
-    width:230px;
-    height:230px;
-    right:-120px;
-    bottom:-140px;
-    border-radius:50%;
-    background:rgba(118,216,210,.24);
-    filter:blur(4px);
-    pointer-events:none;
-  }
+  --ink:#344444;
+  --sub:#7D8B8B;
+  --line:rgba(118,216,210,.34);
+}
 
-  .board-top{
-    position:relative;
-    z-index:1;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    gap:18px;
-    margin-bottom:16px;
-  }
+*{box-sizing:border-box}
 
-  .board-kicker{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    padding:7px 12px;
-    border-radius:999px;
-    border:1px solid rgba(118,216,210,.44);
-    background:rgba(255,255,255,.66);
-    color:var(--mint-deep);
-    font-size:13px;
-    font-weight:900;
-    box-shadow:0 8px 18px rgba(61,185,177,.10);
-  }
+html,body{
+  margin:0;
+  padding:0;
+  background:transparent;
+  color:var(--ink);
+  font-family:'Paperozi',sans-serif;
+}
 
-  .board-title{
-    margin:10px 0 8px;
-    font-size:30px;
-    line-height:1.22;
-    letter-spacing:-.04em;
-    color:#263a3a;
-    font-weight:900;
-  }
+body{
+  padding:24px 14px 34px;
+}
 
-  .board-desc{
-    margin:0;
-    color:var(--sub);
-    font-size:14px;
-    line-height:1.65;
-    word-break:keep-all;
-  }
+.calendar-wrap{
+  width:100%;
+  max-width:980px;
+  margin:0 auto;
+}
 
-  .board-period{
-    flex:0 0 auto;
-    padding:13px 16px;
-    border-radius:20px;
-    border:1px solid rgba(255,255,255,.92);
-    background:rgba(255,255,255,.72);
-    box-shadow:0 10px 24px rgba(61,185,177,.11);
-    text-align:right;
-  }
+.calendar-shell{
+  position:relative;
+  overflow:hidden;
+  padding:28px 30px 30px;
+  border:1px solid var(--line);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 7% 0%,rgba(118,216,210,.25),transparent 32%),
+    radial-gradient(circle at 100% 12%,rgba(255,217,233,.42),transparent 35%),
+    linear-gradient(135deg,#F8FFFE 0%,#FFF8FB 100%);
+  box-shadow:
+    0 18px 44px rgba(61,185,177,.13),
+    inset 0 0 0 1px rgba(255,255,255,.72);
+}
 
-  .board-period .label{
-    display:block;
-    font-size:12px;
-    color:var(--sub);
-    font-weight:800;
-    margin-bottom:4px;
-  }
+.calendar-head{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:20px;
+}
 
-  .board-period .range{
-    display:block;
-    font-size:16px;
-    color:#314747;
-    font-weight:900;
-  }
+.calendar-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 12px;
+  border:1px solid rgba(118,216,210,.42);
+  border-radius:999px;
+  background:rgba(255,255,255,.68);
+  color:var(--mint-dark);
+  font-size:13px;
+  font-weight:700;
+}
 
-  .week-tabs{
-    position:relative;
-    z-index:1;
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:8px;
-    margin:0 0 14px;
-    padding:6px;
-    border-radius:22px;
-    background:rgba(255,255,255,.48);
-    border:1px solid rgba(255,255,255,.72);
-  }
+.calendar-title{
+  margin:10px 0 7px;
+  color:#263A3A;
+  font-size:30px;
+  font-weight:700;
+  line-height:1.22;
+  letter-spacing:-.04em;
+}
 
-  .week-tab{
-    appearance:none;
-    border:0;
-    cursor:pointer;
-    border-radius:17px;
-    padding:11px 10px;
-    background:transparent;
-    color:#6d7b7b;
-    font-family:inherit;
-    font-size:14px;
-    font-weight:900;
-    transition:transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
-  }
+.calendar-desc{
+  margin:0;
+  color:var(--sub);
+  font-size:14px;
+  line-height:1.65;
+  word-break:keep-all;
+}
 
-  .week-tab:hover{
-    transform:translateY(-1px);
-    background:rgba(255,255,255,.54);
-  }
+.today-btn{
+  flex:0 0 auto;
+  min-width:78px;
+  height:39px;
+  padding:0 14px;
+  border:1px solid rgba(118,216,210,.46);
+  border-radius:14px;
+  background:rgba(255,255,255,.78);
+  color:var(--mint-dark);
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
 
-  .week-tab.active{
-    color:#2f7470;
-    background:linear-gradient(135deg,rgba(118,216,210,.34),rgba(255,255,255,.82));
-    box-shadow:0 9px 20px rgba(61,185,177,.16), inset 0 0 0 1px rgba(255,255,255,.82);
-  }
+.month-nav{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:52px minmax(0,1fr) 52px;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
 
-  .board-legend{
-    position:relative;
-    z-index:1;
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:18px;
-  }
+.nav-btn{
+  width:52px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:16px;
+  background:rgba(255,255,255,.66);
+  color:#D291AB;
+  font-family:inherit;
+  font-size:24px;
+  font-weight:700;
+  cursor:pointer;
+}
 
-  .legend-chip{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    padding:8px 11px;
-    border-radius:999px;
-    background:rgba(255,255,255,.72);
-    border:1px solid rgba(255,255,255,.88);
-    color:#405454;
-    font-size:13px;
-    font-weight:900;
-    box-shadow:0 8px 18px rgba(61,185,177,.08);
-  }
+.month-label{
+  text-align:center;
+  color:#342E3B;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:-.03em;
+}
 
-  .dot{
-    width:9px;
-    height:9px;
-    border-radius:50%;
-    background:var(--mint);
-    box-shadow:0 0 0 4px rgba(118,216,210,.18);
-  }
+.legend{
+  position:relative;
+  z-index:1;
+  display:flex;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:14px;
+}
 
-  .legend-chip.today .dot{background:#ff8a45;box-shadow:0 0 0 4px rgba(255,138,69,.18)}
-  .legend-chip.closed .dot{background:var(--pink-deep);box-shadow:0 0 0 4px rgba(237,148,187,.18)}
-  .legend-chip.off .dot{background:#e6be55;box-shadow:0 0 0 4px rgba(230,190,85,.20)}
-  .legend-chip.available .dot{background:var(--green-deep);box-shadow:0 0 0 4px rgba(75,184,212,.18)}
+.legend-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  height:31px;
+  padding:0 11px;
+  border:1px solid rgba(255,255,255,.9);
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  color:#647171;
+  font-size:12px;
+  font-weight:700;
+}
 
-  .week-grid{
-    position:relative;
-    z-index:1;
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:14px;
-  }
+.legend-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
 
-  .day-card{
-    position:relative;
-    min-height:218px;
-    padding:16px 14px 52px;
-    border-radius:22px;
-    border:1px solid rgba(255,255,255,.90);
-    background:var(--white);
-    box-shadow:0 14px 26px rgba(61,185,177,.10);
-    overflow:hidden;
-    animation:fadeUp .22s ease both;
-  }
+.legend-dot.today{background:var(--today)}
+.legend-dot.available{background:var(--available)}
+.legend-dot.closed{background:var(--pink-deep)}
+.legend-dot.off{background:var(--off)}
 
-  @keyframes fadeUp{
-    from{opacity:.55;transform:translateY(5px)}
-    to{opacity:1;transform:translateY(0)}
-  }
+.calendar-box{
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+  border:1px solid rgba(118,216,210,.24);
+  border-radius:22px;
+  background:rgba(255,255,255,.63);
+}
 
-  .day-card:after{
-    content:"";
-    position:absolute;
-    inset:auto -32px -34px auto;
-    width:88px;
-    height:88px;
-    border-radius:28px;
-    transform:rotate(22deg);
-    background:rgba(118,216,210,.14);
-  }
+.weekday-row{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  border-bottom:1px solid rgba(118,216,210,.22);
+  background:rgba(255,255,255,.56);
+}
 
-  .day-card.closed:after{background:rgba(255,153,195,.18)}
-  .day-card.off:after{background:rgba(255,224,137,.28)}
-  .day-card.available:after{background:rgba(75,184,212,.18)}
+.weekday{
+  padding:13px 6px 11px;
+  text-align:center;
+  color:#91A09F;
+  font-size:12px;
+  font-weight:700;
+}
 
-  .day-card.is-today{
-    background:
-      radial-gradient(circle at 18% 0%, rgba(255,255,255,.96), transparent 34%),
-      linear-gradient(135deg, rgba(255,201,145,.82), rgba(255,246,236,.97) 48%, rgba(255,223,188,.86));
-    border-color:rgba(255,147,78,.96);
-    box-shadow:
-      0 18px 38px rgba(255,147,78,.20),
-      0 0 0 4px rgba(255,191,127,.28),
-      inset 0 0 0 1px rgba(255,255,255,.92);
-  }
+.weekday:first-child{color:#E67B8D}
+.weekday:last-child{color:#7583D8}
 
-  .day-card.is-today:after{
-    background:rgba(255,255,255,.46);
-  }
+.days-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+}
 
-  .day-card.is-today .day-name,
-  .day-card.is-today .day-text{
-    color:#5b3d2d;
-  }
+.day-cell{
+  position:relative;
+  min-height:96px;
+  padding:10px 9px 8px;
+  border-right:1px solid rgba(118,216,210,.15);
+  border-bottom:1px solid rgba(118,216,210,.15);
+  background:rgba(255,255,255,.36);
+}
 
-  .day-card.is-today .day-date{
-    color:#b06b41;
-  }
+.day-cell:nth-child(7n){
+  border-right:0;
+}
 
-  .day-card.is-today .day-line{
-    background:linear-gradient(90deg, #ff964f, #ffe7cf);
-    height:6px;
-  }
+.day-number{
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  margin:0 auto;
+  border-radius:10px;
+  color:#364848;
+  font-size:14px;
+  font-weight:700;
+  line-height:1;
+}
 
-  .today-ribbon{
-    display:none;
-  }
+.day-cell.sunday .day-number{color:#E35F72}
+.day-cell.saturday .day-number{color:#6575D8}
 
-  .day-head{
-    position:relative;
-    z-index:1;
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:8px;
-    margin-bottom:12px;
-  }
+.day-cell.outside{
+  background:rgba(255,255,255,.18);
+}
 
-  .day-name{
-    font-size:16px;
-    font-weight:900;
-    color:#2f4545;
-    white-space:nowrap;
-    word-break:keep-all;
-  }
+.day-cell.outside .day-number{
+  color:#C7CECE;
+}
 
-  .day-date{
-    display:block;
-    margin-top:4px;
-    color:var(--sub);
-    font-size:12px;
-    font-weight:800;
-  }
+.day-cell.today{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,255,255,.96),transparent 42%),
+    linear-gradient(135deg,rgba(255,236,219,.92),rgba(255,247,239,.92));
+  box-shadow:
+    inset 0 0 0 2px rgba(255,138,69,.45);
+}
 
-  .day-status{
-    flex:0 0 auto;
-    min-width:max-content;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:5px 8px;
-    border-radius:999px;
-    background:rgba(118,216,210,.20);
-    color:#2e9d96;
-    font-size:11px;
-    font-weight:900;
-    white-space:nowrap;
-  }
+.day-cell.today .day-number{
+  background:var(--today);
+  color:#fff !important;
+}
 
-  .day-card.closed .day-status{
-    background:rgba(255,153,195,.24);
-    color:#cf6893;
-  }
+.today-text{
+  display:block;
+  margin:3px 0 0;
+  color:var(--today);
+  text-align:center;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.06em;
+}
 
-  .day-card.off .day-status{
-    background:rgba(255,226,142,.44);
-    color:#a77a12;
-  }
+.day-status{
+  display:flex;
+  justify-content:center;
+  margin-top:7px;
+}
 
-  .day-card.available .day-status{
-    background:rgba(75,184,212,.20);
-    color:var(--green-deep);
-  }
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:44px;
+  height:23px;
+  padding:0 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:700;
+  white-space:nowrap;
+}
 
-  .day-line{
-    position:relative;
-    z-index:1;
-    width:100%;
-    height:5px;
-    border-radius:999px;
-    background:rgba(118,216,210,.42);
-    margin-bottom:12px;
-  }
+.status-pill.available{
+  background:rgba(75,184,212,.15);
+  color:#3B9DB5;
+  border:1px solid rgba(75,184,212,.30);
+}
 
-  .day-card.closed .day-line{background:rgba(237,148,187,.46)}
-  .day-card.off .day-line{background:rgba(230,190,85,.46)}
-  .day-card.available .day-line{background:rgba(75,184,212,.42)}
+.status-pill.closed{
+  background:rgba(237,148,187,.19);
+  color:#D96792;
+  border:1px solid rgba(237,148,187,.34);
+}
 
-  .day-text{
-    position:relative;
-    z-index:1;
-    margin:0 0 16px;
-    color:#556565;
-    font-size:13px;
-    line-height:1.62;
-    word-break:keep-all;
-  }
+.status-pill.off{
+  background:rgba(242,200,91,.22);
+  color:#A77A12;
+  border:1px solid rgba(230,190,85,.38);
+}
 
-  .day-bottom{
-    position:absolute;
-    z-index:1;
-    left:14px;
-    right:14px;
-    bottom:16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    color:#9aa5a5;
-    font-size:11px;
-    font-weight:900;
-  }
+.calendar-note{
+  position:relative;
+  z-index:1;
+  margin:16px 0 0;
+  padding:12px 14px;
+  border:1px dashed rgba(118,216,210,.42);
+  border-radius:17px;
+  background:rgba(255,255,255,.54);
+  color:#788585;
+  font-size:12.5px;
+  line-height:1.6;
+}
 
-  .day-bottom b{
-    color:var(--mint-deep);
-    font-weight:900;
-  }
+@media(max-width:720px){
+  .calendar-shell{padding:23px 18px 24px}
+  .calendar-title{font-size:26px}
+  .day-cell{min-height:82px;padding:8px 5px 6px}
+  .status-pill{min-width:0;height:21px;padding:0 6px;font-size:9px}
+}
 
-  .day-card.closed .day-bottom b{color:#cf6893}
-  .day-card.off .day-bottom b{color:#a77a12}
-  .day-card.available .day-bottom b{color:var(--green-deep)}
-
-  /* TODAY 카드 안에서는 상태 표시도 오렌지 계열로 통일 */
-  .day-card.is-today .day-status{
-    background:rgba(255,180,112,.28) !important;
-    color:#ff7a3d !important;
-  }
-
-  .day-card.is-today .day-date{
-    color:#ff7a3d !important;
-  }
-
-  .day-card.is-today .day-bottom b{
-    color:#ff7a3d !important;
-  }
-
-  .day-card.is-today .day-bottom span{
-    color:#c17b52 !important;
-  }
-
-  .day-card.is-today .day-line{
-    background:linear-gradient(90deg, #ff8f3f, #ffb066) !important;
-    height:6px !important;
-    box-shadow:0 1px 0 rgba(255,255,255,.55) inset;
-  }
-
-
-  .board-note{
-    position:relative;
-    z-index:1;
-    margin:16px 0 0;
-    padding:12px 14px;
-    border-radius:18px;
-    background:rgba(255,255,255,.58);
-    border:1px dashed rgba(118,216,210,.45);
-    color:#778585;
-    font-size:13px;
-    line-height:1.6;
-    word-break:keep-all;
-  }
-
-  @media(max-width:920px){
-    .week-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-  }
-
-  @media(max-width:700px){
-    .board-top{
-      align-items:flex-start;
-      flex-direction:column;
-    }
-    .board-period{
-      width:100%;
-      text-align:left;
-    }
-    .week-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  }
-
-  @media(max-width:520px){
-    .week-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
-  }
-
-  @media(max-width:460px){
-    .weekly-board{padding:18px 10px 22px}
-    .board-shell{padding:20px 14px;border-radius:24px}
-    .board-title{font-size:25px}
-    .week-grid{grid-template-columns:1fr}
-    .day-card{min-height:150px}
-  }
+@media(max-width:520px){
+  body{padding:18px 8px 28px}
+  .calendar-shell{padding:20px 10px 20px;border-radius:24px}
+  .calendar-head{display:block}
+  .today-btn{margin-top:13px}
+  .month-nav{grid-template-columns:44px minmax(0,1fr) 44px}
+  .nav-btn{width:44px;height:42px}
+  .month-label{font-size:19px}
+  .day-cell{min-height:70px;padding:6px 3px 5px}
+  .day-number{width:27px;height:27px;font-size:12px}
+  .today-text{font-size:8px}
+  .status-pill{padding:0 5px;font-size:8px}
+}
 </style>
 </head>
+
 <body>
-  <section class="weekly-board" aria-label="IROHA 주간 작업 보드">
-    <div class="board-shell">
-      <div class="board-top">
-        <div>
-          <div class="board-kicker">✦ WEEKLY SLOT</div>
-          <h1 class="board-title">IROHA 주간 작업 보드</h1>
-          <p class="board-desc">
-            주차별 예약 및 작업 진행 상태를 한눈에 확인할 수 있습니다.<br>
-            세부 일정은 상담 및 자료 확인 후 조정될 수 있습니다.
-          </p>
-        </div>
-        <div class="board-period" aria-label="표시 기간">
-          <span class="label" id="weekLabel">4주차</span>
-          <span class="range" id="weekRange">08.16 - 08.22</span>
-        </div>
+
+<section class="calendar-wrap" aria-label="IROHA 일정 캘린더">
+  <div class="calendar-shell">
+
+    <div class="calendar-head">
+      <div>
+        <div class="calendar-kicker">✦ MONTHLY SCHEDULE</div>
+        <h1 class="calendar-title">IROHA 일정 캘린더</h1>
+        <p class="calendar-desc">
+          월별 예약 및 작업 진행 상태를 한눈에 확인할 수 있습니다.<br>
+          세부 일정은 상담 및 자료 확인 후 조정될 수 있습니다.
+        </p>
       </div>
-
-      <div class="week-tabs" aria-label="주차 선택">
-        <button class="week-tab active" type="button" data-week="1">4주차</button>
-        <button class="week-tab" type="button" data-week="2">5주차</button>
-        <button class="week-tab" type="button" data-week="3">1주차</button>
-        <button class="week-tab" type="button" data-week="4">2주차</button>
-      </div>
-
-      <div class="board-legend" aria-label="상태 안내">
-        <div class="legend-chip today"><span class="dot"></span>TODAY</div>
-        <div class="legend-chip available"><span class="dot"></span>예약 가능</div>
-        <div class="legend-chip closed"><span class="dot"></span>예약 마감</div>
-        <div class="legend-chip off"><span class="dot"></span>휴무일</div>
-      </div>
-
-      
-      <div class="week-grid" id="weekGrid">
-        <article class="day-card closed">
-          <div class="day-head">
-            <div class="day-name">일요일<span class="day-date">08.16</span></div>
-            <span class="day-status">예약 마감</span>
-          </div>
-          <div class="day-line"></div>
-          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
-        </article>
-
-        <article class="day-card closed">
-          <div class="day-head">
-            <div class="day-name">월요일<span class="day-date">08.17</span></div>
-            <span class="day-status">예약 마감</span>
-          </div>
-          <div class="day-line"></div>
-          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
-        </article>
-
-        <article class="day-card closed">
-          <div class="day-head">
-            <div class="day-name">화요일<span class="day-date">08.18</span></div>
-            <span class="day-status">예약 마감</span>
-          </div>
-          <div class="day-line"></div>
-          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
-        </article>
-
-        <article class="day-card closed">
-          <div class="day-head">
-            <div class="day-name">수요일<span class="day-date">08.19</span></div>
-            <span class="day-status">예약 마감</span>
-          </div>
-          <div class="day-line"></div>
-          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
-        </article>
-
-        <article class="day-card closed">
-          <div class="day-head">
-            <div class="day-name">목요일<span class="day-date">08.20</span></div>
-            <span class="day-status">예약 마감</span>
-          </div>
-          <div class="day-line"></div>
-          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
-        </article>
-
-        <article class="day-card closed">
-          <div class="day-head">
-            <div class="day-name">금요일<span class="day-date">08.21</span></div>
-            <span class="day-status">예약 마감</span>
-          </div>
-          <div class="day-line"></div>
-          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
-        </article>
-
-        <article class="day-card closed">
-          <div class="day-head">
-            <div class="day-name">토요일<span class="day-date">08.22</span></div>
-            <span class="day-status">예약 마감</span>
-          </div>
-          <div class="day-line"></div>
-          <p class="day-text">해당 날짜의 신규 예약 슬롯이 마감되었습니다.</p>
-          <div class="day-bottom"><span>예약 상태</span><b>CLOSED</b></div>
-        </article>
-      </div>
-
-      <p class="board-note">
-        ※ 주간 작업 보드는 예약 가능 여부를 빠르게 확인하기 위한 안내용이며, 실제 일정은 신청 내용과 자료 전달 상황에 따라 달라질 수 있습니다.
-      </p>
     </div>
-  </section>
+
+    <div class="month-nav">
+      <button type="button" class="nav-btn" id="prevMonth" aria-label="이전 달">‹</button>
+      <div class="month-label" id="monthLabel"></div>
+      <button type="button" class="nav-btn" id="nextMonth" aria-label="다음 달">›</button>
+    </div>
+
+    <div class="legend" aria-label="상태 안내">
+      <div class="legend-chip">
+        <span class="legend-dot today"></span>
+        TODAY
+      </div>
+
+      <div class="legend-chip">
+        <span class="legend-dot available"></span>
+        예약 가능
+      </div>
+
+      <div class="legend-chip">
+        <span class="legend-dot closed"></span>
+        예약 마감
+      </div>
+
+      <div class="legend-chip">
+        <span class="legend-dot off"></span>
+        휴무일
+      </div>
+    </div>
+
+    <div class="calendar-box">
+      <div class="weekday-row">
+        <div class="weekday">일</div>
+        <div class="weekday">월</div>
+        <div class="weekday">화</div>
+        <div class="weekday">수</div>
+        <div class="weekday">목</div>
+        <div class="weekday">금</div>
+        <div class="weekday">토</div>
+      </div>
+
+      <div class="days-grid" id="daysGrid"></div>
+    </div>
+
+    <p class="calendar-note">
+      ※ 월별 일정 캘린더는 예약 가능 여부를 빠르게 확인하기 위한 안내용이며, 실제 일정은 신청 내용과 자료 전달 상황에 따라 달라질 수 있습니다.
+    </p>
+
+  </div>
+</section>
 
 <script>
-/*
-  수정 방법:
-  - 아래 weekData 안의 날짜, 상태, 안내문구만 바꾸면 됩니다.
-  - type 값은 available / closed / off 중 하나를 사용하면 됩니다.
-  - TODAY 표시는 날짜가 지나면 자동으로 이동합니다.
-  - 오늘보다 지난 예약 가능 날짜는 자동으로 예약 마감 처리됩니다.
-  - 첫 화면도 오늘 날짜가 포함된 주차로 자동 표시됩니다.
-*/
-const weekData = {
-  1: {
-    label: '4주차',
-    range: '08.16 - 08.22',
-    days: [
-      {day:'일요일', date:'08.16', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'월요일', date:'08.17', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'08.18', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'수요일', date:'08.19', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'목요일', date:'08.20', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'금요일', date:'08.21', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'토요일', date:'08.22', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
-    ]
-  },
-  2: {
-    label: '5주차',
-    range: '08.23 - 08.29',
-    days: [
-      {day:'일요일', date:'08.23', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'월요일', date:'08.24', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'08.25', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'수요일', date:'08.26', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'목요일', date:'08.27', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'금요일', date:'08.28', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'토요일', date:'08.29', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
-    ]
-  },
-  3: {
-    label: '1주차',
-    range: '08.30 - 09.05',
-    days: [
-      {day:'일요일', date:'08.30', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'월요일', date:'08.31', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'09.01', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'수요일', date:'09.02', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'목요일', date:'09.03', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'금요일', date:'09.04', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'토요일', date:'09.05', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'}
-    ]
-  },
-  4: {
-    label: '2주차',
-    range: '09.06 - 09.13',
-    days: [
-      {day:'일요일', date:'09.06', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'월요일', date:'09.07', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'화요일', date:'09.08', type:'closed', status:'예약 마감', text:'해당 날짜의 신규 예약 슬롯이 마감되었습니다.', bottom:'예약 상태', code:'CLOSED'},
-      {day:'수요일', date:'09.09', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'},
-      {day:'목요일', date:'09.10', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'},
-      {day:'금요일', date:'09.11', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'},
-      {day:'토요일', date:'09.12', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'},
-      {day:'일요일', date:'09.13', type:'off', status:'휴무일', text:'해당 날짜는 휴무일로 작업 및 신규 예약 상담이 어렵습니다.', bottom:'운영 상태', code:'OFF'}
-    ]
-  }
-};
-
-function getTodayKey(){
-  const formatter = new Intl.DateTimeFormat('ko-KR', {
-    timeZone: 'Asia/Seoul',
-    month: '2-digit',
-    day: '2-digit'
-  });
-
-  const parts = formatter.formatToParts(new Date());
-  const month = parts.find(part => part.type === 'month').value;
-  const day = parts.find(part => part.type === 'day').value;
-  return month + '.' + day;
-}
-
-
-function dateKeyToNumber(dateKey){
-  const parts = String(dateKey).split('.');
-  const month = parseInt(parts[0], 10);
-  const day = parseInt(parts[1], 10);
-
-  if (isNaN(month) || isNaN(day)) {
-    return 0;
-  }
-
-  return month * 100 + day;
-}
-
-function getDisplayItem(item, todayKey){
-  const itemNumber = dateKeyToNumber(item.date);
-  const todayNumber = dateKeyToNumber(todayKey);
+(function(){
 
   /*
-    예약 가능으로 등록해 둔 날짜가 오늘보다 이전이면 자동 예약 마감 처리합니다.
-    단, 수동으로 예약 마감 / 휴무일로 설정한 날짜는 그대로 유지합니다.
+    일정 상태
+    - 2026년 9월 30일까지: 예약 마감
+    - 2026년 10월 1일부터: 예약 가능
   */
-  if (itemNumber < todayNumber && item.type === 'available') {
+  var scheduleRanges = [
+    {
+      start:'2020-01-01',
+      end:'2026-09-30',
+      type:'closed',
+      label:'마감'
+    },
+    {
+      start:'2026-10-01',
+      end:'2035-12-31',
+      type:'available',
+      label:'예약 가능'
+    }
+  ];
+
+  function pad(value){
+    return String(value).padStart(2,'0');
+  }
+
+  function toKey(year,month,day){
+    return year + '-' + pad(month) + '-' + pad(day);
+  }
+
+  function keyToNumber(key){
+    return parseInt(key.replace(/-/g,''),10);
+  }
+
+  function getStatus(key){
+    var keyNumber = keyToNumber(key);
+
+    for(var i=0;i<scheduleRanges.length;i++){
+      var item = scheduleRanges[i];
+
+      if(
+        keyNumber >= keyToNumber(item.start) &&
+        keyNumber <= keyToNumber(item.end)
+      ){
+        return item;
+      }
+    }
+
+    return null;
+  }
+
+  function getTodayParts(){
+    var formatter = new Intl.DateTimeFormat(
+      'en-CA',
+      {
+        timeZone:'Asia/Seoul',
+        year:'numeric',
+        month:'2-digit',
+        day:'2-digit'
+      }
+    );
+
+    var parts = formatter.formatToParts(new Date());
+
     return {
-      ...item,
-      type: 'closed',
-      status: '예약 마감',
-      text: '지난 날짜의 신규 예약 슬롯이 마감되었습니다.',
-      bottom: '예약 상태',
-      code: 'CLOSED'
+      year:parseInt(parts.find(function(p){return p.type==='year';}).value,10),
+      month:parseInt(parts.find(function(p){return p.type==='month';}).value,10),
+      day:parseInt(parts.find(function(p){return p.type==='day';}).value,10)
     };
   }
 
-  return item;
-}
+  var today = getTodayParts();
+  var viewYear = today.year;
+  var viewMonth = today.month;
 
-function findCurrentWeek(){
-  const todayKey = getTodayKey();
+  var monthLabel = document.getElementById('monthLabel');
+  var daysGrid = document.getElementById('daysGrid');
 
-  for(const week in weekData){
-    if(weekData[week].days.some(item => item.date === todayKey)){
-      return week;
+  function buildCell(year,month,day,outside,weekdayIndex){
+
+    var key = toKey(year,month,day);
+    var status = getStatus(key);
+
+    var isToday =
+      year === today.year &&
+      month === today.month &&
+      day === today.day;
+
+    var classNames = ['day-cell'];
+
+    if(outside){classNames.push('outside')}
+    if(weekdayIndex === 0){classNames.push('sunday')}
+    if(weekdayIndex === 6){classNames.push('saturday')}
+    if(isToday){classNames.push('today')}
+
+    var html =
+      '<div class="' + classNames.join(' ') + '">' +
+        '<div class="day-number">' + day + '</div>';
+
+    if(isToday){
+      html += '<span class="today-text">TODAY</span>';
     }
+
+    if(status){
+      html +=
+        '<div class="day-status">' +
+          '<span class="status-pill ' + status.type + '">' +
+            status.label +
+          '</span>' +
+        '</div>';
+    }
+
+    html += '</div>';
+
+    return html;
   }
 
-  return '1';
-}
+  function renderCalendar(){
 
-function renderWeek(week){
-  const data = weekData[week];
-  const todayKey = getTodayKey();
-  const grid = document.getElementById('weekGrid');
+    monthLabel.textContent =
+      viewYear + '년 ' + viewMonth + '월';
 
-  document.getElementById('weekLabel').textContent = data.label;
-  document.getElementById('weekRange').textContent = data.range;
+    var firstDay =
+      new Date(viewYear,viewMonth - 1,1);
 
-  grid.innerHTML = data.days.map((item, idx) => {
-    const displayItem = getDisplayItem(item, todayKey);
-    const isToday = item.date === todayKey;
-    const cardClass = displayItem.type + (isToday ? ' is-today' : '');
+    var firstWeekday =
+      firstDay.getDay();
 
-    return `
-      <article class="day-card ${cardClass}" style="animation-delay:${idx * 25}ms">
-        <div class="day-head">
-          <div class="day-name">${displayItem.day}<span class="day-date">${displayItem.date}</span></div>
-          <span class="day-status">${displayItem.status}</span>
-        </div>
-        <div class="day-line"></div>
-        <p class="day-text">${displayItem.text}</p>
-        <div class="day-bottom"><span>${displayItem.bottom}</span><b>${displayItem.code}</b></div>
-      </article>
-    `;
-  }).join('');
+    var daysInMonth =
+      new Date(viewYear,viewMonth,0).getDate();
 
-  document.querySelectorAll('.week-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.week === String(week));
+    var prevMonthDate =
+      new Date(viewYear,viewMonth - 2,1);
+
+    var prevYear =
+      prevMonthDate.getFullYear();
+
+    var prevMonth =
+      prevMonthDate.getMonth() + 1;
+
+    var prevDays =
+      new Date(viewYear,viewMonth - 1,0).getDate();
+
+    var nextMonthDate =
+      new Date(viewYear,viewMonth,1);
+
+    var nextYear =
+      nextMonthDate.getFullYear();
+
+    var nextMonth =
+      nextMonthDate.getMonth() + 1;
+
+    var cells = [];
+
+    for(var index=0;index<42;index++){
+
+      var relative =
+        index - firstWeekday + 1;
+
+      if(relative < 1){
+
+        cells.push(
+          buildCell(
+            prevYear,
+            prevMonth,
+            prevDays + relative,
+            true,
+            index % 7
+          )
+        );
+
+      }else if(relative > daysInMonth){
+
+        cells.push(
+          buildCell(
+            nextYear,
+            nextMonth,
+            relative - daysInMonth,
+            true,
+            index % 7
+          )
+        );
+
+      }else{
+
+        cells.push(
+          buildCell(
+            viewYear,
+            viewMonth,
+            relative,
+            false,
+            index % 7
+          )
+        );
+      }
+    }
+
+    daysGrid.innerHTML = cells.join('');
+
+    sendHeight();
+    setTimeout(sendHeight,120);
+  }
+
+  document
+    .getElementById('prevMonth')
+    .addEventListener('click',function(){
+
+      viewMonth -= 1;
+
+      if(viewMonth < 1){
+        viewMonth = 12;
+        viewYear -= 1;
+      }
+
+      renderCalendar();
+    });
+
+  document
+    .getElementById('nextMonth')
+    .addEventListener('click',function(){
+
+      viewMonth += 1;
+
+      if(viewMonth > 12){
+        viewMonth = 1;
+        viewYear += 1;
+      }
+
+      renderCalendar();
+    });
+
+  function sendHeight(){
+
+    var height =
+      Math.max(
+        document.body ? document.body.scrollHeight : 0,
+        document.documentElement ? document.documentElement.scrollHeight : 0
+      );
+
+    try{
+      if(window.parent && window.parent !== window){
+        window.parent.postMessage(
+          {
+            type:'iroha-weekly-schedule-height',
+            height:height
+          },
+          '*'
+        );
+      }
+    }catch(error){}
+  }
+
+  window.addEventListener('load',function(){
+    renderCalendar();
+    sendHeight();
+    setTimeout(sendHeight,300);
+    setTimeout(sendHeight,800);
   });
 
-  sendHeight();
-  setTimeout(sendHeight, 180);
-}
+  window.addEventListener('resize',sendHeight);
 
-function sendHeight(){
-  var h = Math.max(
-    document.documentElement.scrollHeight,
-    document.body ? document.body.scrollHeight : 0
-  );
-  try{
-    parent.postMessage({type:'iroha-weekly-schedule-height', height:h}, '*');
-  }catch(e){}
-}
+  setInterval(function(){
 
-document.querySelectorAll('.week-tab').forEach(btn => {
-  btn.addEventListener('click', function(){
-    renderWeek(this.dataset.week);
-  });
-});
+    var newToday = getTodayParts();
 
-window.addEventListener('load', function(){
-  renderWeek(findCurrentWeek());
-  sendHeight();
-});
-window.addEventListener('resize', sendHeight);
-setTimeout(sendHeight, 120);
-setTimeout(sendHeight, 500);
+    if(
+      newToday.year !== today.year ||
+      newToday.month !== today.month ||
+      newToday.day !== today.day
+    ){
+      today = newToday;
+      renderCalendar();
+    }
+
+  },60000);
+
+})();
 </script>
+
 </body>
 </html>

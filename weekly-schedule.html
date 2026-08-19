@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IROHA 월간 일정 캘린더 v6</title>
+<title>IROHA 월간 일정 캘린더 v7</title>
 
 <style>
 @font-face{
@@ -434,12 +434,26 @@ body{
 
   /*
     일정 상태
-    - 2026년 9월 30일까지: 예약 마감
+    - 2026년 9월 8일까지: 마감
+    - 2026년 9월 9일 ~ 9월 14일: 휴무
+    - 2026년 9월 15일 ~ 9월 30일: 마감
     - 2026년 10월 1일부터: 예약 가능
   */
   var scheduleRanges = [
     {
       start:'2020-01-01',
+      end:'2026-09-08',
+      type:'closed',
+      label:'마감'
+    },
+    {
+      start:'2026-09-09',
+      end:'2026-09-14',
+      type:'off',
+      label:'휴무'
+    },
+    {
+      start:'2026-09-15',
       end:'2026-09-30',
       type:'closed',
       label:'마감'

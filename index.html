@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>작업 신청서 v67</title>
+<title>작업 신청서 v73</title>
 <style>
 @font-face{
   font-family:'Paperozi';
@@ -2275,6 +2275,240 @@ body{
   text-align:center;
 }
 
+
+/* v68: 상위 페이지와 자연스럽게 연결 + 견적 요약 영역 제한 스크롤 */
+html,
+body{
+  background:transparent !important;
+  background-color:transparent !important;
+}
+
+body{
+  /* 아트머그 부모 영역의 배경색이 그대로 비치도록 별도 배경 제거 */
+  background-image:none !important;
+}
+
+.new-shell,
+.new-layout{
+  background:transparent !important;
+  overflow:visible !important;
+}
+
+.new-hero{
+  /* 상단 카드 내부도 과한 민트 그라데이션 제거 */
+  background:#FFFFFF !important;
+}
+
+.summary-side{
+  position:sticky !important;
+  top:18px !important;
+  align-self:start !important;
+  height:max-content !important;
+  z-index:5;
+  will-change:transform;
+}
+
+/* 부모(아트머그) 스크롤 연동 시 사용하는 이동값 */
+.summary-side.parent-scroll-follow{
+  position:relative !important;
+  top:auto !important;
+}
+
+
+/* v69: 기존 IROHA 민트 포인트 복원 */
+.section-index{
+  background:linear-gradient(135deg,#24C6BF 0%,#55D7D2 100%) !important;
+  color:#FFFFFF !important;
+  box-shadow:0 7px 16px rgba(36,198,191,.18) !important;
+}
+
+.summary-copy{
+  background:linear-gradient(135deg,#24C6BF 0%,#4FD3CD 100%) !important;
+  color:#FFFFFF !important;
+  box-shadow:0 10px 20px rgba(36,198,191,.20) !important;
+}
+
+.summary-copy:hover{
+  background:linear-gradient(135deg,#20B9B3 0%,#45C9C3 100%) !important;
+}
+
+
+/* v70: 협업 작가 필수표시 + 작업일정 간격 조정 */
+.pink-required{
+  color:#F07FA5;
+  font-size:15px;
+  font-weight:900;
+  margin-right:2px;
+}
+
+.collab-field-block{
+  margin-bottom:28px !important;
+}
+
+.collab-field-label{
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+
+.collab-field-label .optional{
+  margin-left:4px;
+}
+
+
+/* v71: 참고 이미지 별도 첨부 안내 + 신청 동의 */
+.schedule-portfolio-grid{
+  grid-template-columns:1fr 1fr !important;
+}
+
+.image-copy-notice{
+  margin-top:10px;
+  padding:12px 14px;
+  border:1px solid #D9E6FF;
+  border-radius:14px;
+  background:#F6F8FF;
+  color:#6579B9;
+  font-size:12px;
+  font-weight:600;
+  line-height:1.65;
+}
+
+.image-copy-notice strong{
+  color:#536AB4;
+  font-weight:900;
+}
+
+.consent-check-wrap{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:18px 0 10px;
+  padding:13px 14px;
+  border:1px solid #DDE8E6;
+  border-radius:14px;
+  background:#F9FCFB;
+  cursor:pointer;
+}
+
+.consent-check-wrap input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.consent-box{
+  position:relative;
+  width:19px;
+  height:19px;
+  flex:0 0 19px;
+  margin-top:1px;
+  border:1.5px solid #AAB8B5;
+  border-radius:5px;
+  background:#fff;
+  transition:.16s ease;
+}
+
+.consent-check-wrap input:checked + .consent-box{
+  border-color:#24C6BF;
+  background:#24C6BF;
+}
+
+.consent-check-wrap input:checked + .consent-box::after{
+  content:"✓";
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-54%);
+  color:#fff;
+  font-family:Arial,sans-serif;
+  font-size:13px;
+  font-weight:900;
+}
+
+.consent-text{
+  color:#526267;
+  font-size:12.5px;
+  font-weight:700;
+  line-height:1.55;
+}
+
+.consent-warning{
+  display:none;
+  margin:-2px 0 10px;
+  padding:9px 11px;
+  border:1px solid #F5C0D4;
+  border-radius:11px;
+  background:#FFF4F8;
+  color:#D05A8E;
+  font-size:11.5px;
+  font-weight:800;
+  line-height:1.5;
+}
+
+.consent-warning.show{
+  display:block;
+}
+
+.summary-copy.is-disabled,
+.summary-copy:disabled{
+  opacity:.45 !important;
+  cursor:not-allowed !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+@media(max-width:720px){
+  .schedule-portfolio-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* v73: 전체 배경 흰색 + 기존 스타일 느낌의 민트 외곽선 */
+html,
+body{
+  background:#FFFFFF !important;
+  background-color:#FFFFFF !important;
+  background-image:none !important;
+}
+
+body{
+  padding:24px 14px 48px !important;
+}
+
+.new-shell{
+  padding:18px !important;
+  border:1px solid #BDEBE7 !important;
+  border-radius:32px !important;
+  background:#FFFFFF !important;
+  box-shadow:
+    0 20px 42px rgba(36,198,191,.08),
+    0 0 0 1px rgba(36,198,191,.02) !important;
+}
+
+.new-layout,
+.new-main,
+.summary-side{
+  background:transparent !important;
+}
+
+.new-hero{
+  background:#FFFFFF !important;
+  border-color:#DCEBE9 !important;
+}
+
+@media(max-width:720px){
+  body{
+    padding:10px 8px 24px !important;
+  }
+
+  .new-shell{
+    padding:10px !important;
+    border-radius:24px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2347,8 +2581,8 @@ body{
           </div>
         </div>
 
-        <div class="field-block">
-          <div class="field-label">협업 작가님 선택 <span class="optional">(선택사항)</span></div>
+        <div class="field-block collab-field-block">
+          <div class="field-label collab-field-label"><span class="pink-required">*</span> 협업 작가님 선택 <span class="optional">(선택사항)</span></div>
 
           <div class="collab-picker" id="collabPicker">
             <button type="button" class="collab-picker-btn" id="collabPickerBtn" aria-expanded="false" onclick="toggleCollabPicker()">
@@ -2399,21 +2633,13 @@ body{
           </div>
         </div>
 
-        <div class="field-grid three">
+        <div class="field-grid two schedule-portfolio-grid">
           <div class="field-block">
             <div class="field-label">작업 일정</div>
             <div class="option-stack" data-name="schedule">
-              <button class="choice active" type="button" data-value="O (확인했어요)">일정 확인 완료</button>
-              <button class="choice" type="button" data-value="X">일정 미확인</button>
-              <button class="choice rush-choice" type="button" data-value="빠른마감신청">빠른 마감</button>
-            </div>
-          </div>
-
-          <div class="field-block">
-            <div class="field-label">필독사항</div>
-            <div class="option-stack" data-name="notice">
-              <button class="choice active" type="button" data-value="O (읽었어요)">확인했어요</button>
-              <button class="choice" type="button" data-value="X">아직이에요</button>
+              <button class="choice active" type="button" data-value="O (일정 확인했어요)">일정 확인했어요</button>
+              <button class="choice" type="button" data-value="X (일정 확인 전)">아직 확인 전이에요</button>
+              <button class="choice rush-choice" type="button" data-value="빠른마감신청">빠른 마감 신청</button>
             </div>
           </div>
 
@@ -2541,6 +2767,10 @@ body{
           <span>여러 장 첨부 가능 · 다시 눌러 추가 가능</span>
           <input id="designImages" type="file" accept="image/*" multiple>
         </label>
+        <div class="image-copy-notice">
+          ※ 참고 이미지는 신청양식 복사 시 함께 복사되지 않습니다.<br>
+          복사한 신청양식을 아트머그 문의창에 붙여넣은 후, <strong>이미지는 문의창에서 별도로 첨부해주세요.</strong>
+        </div>
         <div id="designPreviewArea" class="preview"></div>
       </section>
 
@@ -2649,13 +2879,17 @@ body{
           </p>
         </div>
 
-        <div class="summary-check">
-          <div>✓ 선택 내용 확인</div>
-          <div>✓ 공지사항 확인</div>
-          <div>✓ 최종 견적 확인</div>
+        <label class="consent-check-wrap" for="applicationConsent">
+          <input type="checkbox" id="applicationConsent">
+          <span class="consent-box"></span>
+          <span class="consent-text">필독사항을 모두 숙지하였으며, 신청에 동의합니다.</span>
+        </label>
+
+        <div class="consent-warning" id="consentWarning">
+          ※ 위 내용에 동의해야 신청양식을 복사할 수 있습니다.
         </div>
 
-        <button class="copy-btn summary-copy" type="button" onclick="handleNextOrCopy()" id="nextCopyBtn">
+        <button class="copy-btn summary-copy is-disabled" type="button" onclick="handleNextOrCopy()" id="nextCopyBtn" disabled>
           신청양식 복사하기
         </button>
         <button class="reset-btn" type="button" onclick="location.reload()">초기화</button>
@@ -2768,7 +3002,43 @@ var designAttachedImages = [];
 
 function showStep(index){ currentStep = 0; }
 function moveStep(delta){}
-function handleNextOrCopy(){ copyAeongForm(); }
+
+function syncConsentState(){
+  var consent = document.getElementById('applicationConsent');
+  var copyBtn = document.getElementById('nextCopyBtn');
+  var warning = document.getElementById('consentWarning');
+
+  if (!consent || !copyBtn) return;
+
+  var checked = consent.checked;
+
+  copyBtn.disabled = !checked;
+  copyBtn.classList.toggle('is-disabled', !checked);
+
+  if (checked && warning) {
+    warning.classList.remove('show');
+  }
+}
+
+document.addEventListener('change', function(e){
+  if (e.target && e.target.id === 'applicationConsent') {
+    syncConsentState();
+  }
+});
+
+function handleNextOrCopy(){
+  var consent = document.getElementById('applicationConsent');
+  var warning = document.getElementById('consentWarning');
+
+  if (!consent || !consent.checked) {
+    if (warning) warning.classList.add('show');
+    showCopyToast('필독사항 동의 체크 후 신청양식을 복사해주세요.');
+    return;
+  }
+
+  if (warning) warning.classList.remove('show');
+  copyAeongForm();
+}
 
 function renderWorkTypes(type) {
   var row = document.getElementById('workTypeRow');
@@ -3451,6 +3721,12 @@ function fallbackCopy(text) {
 }
 
 function copyAeongForm() {
+  var consent = document.getElementById('applicationConsent');
+  if (!consent || !consent.checked) {
+    showCopyToast('필독사항 동의 체크 후 신청양식을 복사해주세요.');
+    return;
+  }
+
   var selectedForm = document.querySelector('#formTypeRow .package-btn.active');
   var formType = selectedForm ? emptyCheck(selectedForm.getAttribute('data-value')) : emptyCheck(getSelected("formType"));
   var workType = emptyCheck(getSelected("workType"));
@@ -3474,29 +3750,30 @@ function copyAeongForm() {
 "[이로하 " + formType + " 신청 양식]\n" +
 "0. 작업 타입 : " + workType + "\n" +
 "0-1. 협업 작가 : " + emptyCheck(document.getElementById("collabArtist").value) + "\n" +
-"1. 작업 일정 확인 여부 : " + schedule + rushNotice + "\n" +
-"2. 필독사항 확인 여부 : " + emptyCheck(getSelected("notice")) + "\n" +
-"3. 포트폴리오 공개 여부 : " + portfolio + portfolioNotice + "\n" +
-"4. 신청 작업 내용 : " + emptyCheck(document.getElementById("workContent").value) + "\n" +
-"5. 방송 여부 : " + emptyCheck(getSelected("broadcast")) + "\n" +
+"1. 작업 일정 : " + schedule + rushNotice + "\n" +
+"2. 포트폴리오 공개 여부 : " + portfolio + portfolioNotice + "\n" +
+"3. 신청 작업 내용 : " + emptyCheck(document.getElementById("workContent").value) + "\n" +
+"4. 방송 여부 : " + emptyCheck(getSelected("broadcast")) + "\n" +
 "  방송 플랫폼(링크) : " + emptyCheck(document.getElementById("broadcastLink").value) + "\n" +
 "  방송 닉네임 : " + emptyCheck(document.getElementById("broadcastName").value) + "\n" +
 "  아바타 공개일 : " + emptyCheck(document.getElementById("avatarDate").value) + "\n" +
-"6. Booth 아이템 링크 :\n" + emptyCheck(document.getElementById("boothLink").value) + "\n\n" +
-"6-1. 컬러 정보 :\n" +
+"5. Booth 아이템 링크 :\n" + emptyCheck(document.getElementById("boothLink").value) + "\n\n" +
+"5-1. 컬러 정보 :\n" +
 "  헤어 컬러 : " + emptyCheck(document.getElementById("hairColor").value) + "\n" +
 "  눈 컬러 : " + emptyCheck(document.getElementById("eyeColor").value) + "\n" +
 "  의상 컬러 : " + emptyCheck(document.getElementById("clothesColor").value) + "\n\n" +
-"7. 캐릭터 디자인 방향 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
+"6. 캐릭터 디자인 방향 :\n" + emptyCheck(document.getElementById("avatarDesc").value) + "\n" +
 "  캐릭터 디자인 참고 자료 파일명 :\n" + imageNameText(designAttachedImages) + "\n" +
-"8. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
-"9. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
-"10. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +
-"11. 이벤트 할인 : " + emptyCheck(getSelected("eventDiscount")) + "\n" +
-"11-1. 비공개 요청 추가금 : " + (getPrivateExtra() > 0 ? "+100,000원" : "적용 없음") + "\n" +
-"11-2. 협업 작가 할인 : " + (getCollabDiscount() > 0 ? "-40,000원" : "적용 없음") + "\n" +
-"11-3. 예상 견적 : " + emptyCheck(document.getElementById("estimateTotal").textContent) + "\n" +
-"12. 그 외 : " + emptyCheck(document.getElementById("etcText").value);
+"  ※ 참고 이미지는 아트머그 문의창에서 별도로 첨부해주세요.\n" +
+"7. 페이셜 요청사항 : " + emptyCheck(document.getElementById("facialRequest").value) + "\n" +
+"8. 유니티 파일 : " + emptyCheck(getSelected("unityNeed")) + "\n" +
+"9. 유니티 파일 용도 : " + emptyCheck(getSelected("unityUse")) + "\n" +
+"10. 이벤트 할인 : " + emptyCheck(getSelected("eventDiscount")) + "\n" +
+"10-1. 비공개 요청 추가금 : " + (getPrivateExtra() > 0 ? "+100,000원" : "적용 없음") + "\n" +
+"10-2. 협업 작가 할인 : " + (getCollabDiscount() > 0 ? "-40,000원" : "적용 없음") + "\n" +
+"10-3. 예상 견적 : " + emptyCheck(document.getElementById("estimateTotal").textContent) + "\n" +
+"11. 그 외 : " + emptyCheck(document.getElementById("etcText").value) + "\n" +
+"12. 필독사항 동의 : 동의함";
 
   copyRichForm(text);
 }
@@ -3785,6 +4062,7 @@ function initPackageMenu() {
 }
 
 initPackageMenu();
+syncConsentState();
 updatePortfolioWarning();
 updateRushWarning();
 updateCollabDiscountWarning();
@@ -3854,5 +4132,56 @@ if ("MutationObserver" in window) {
 }
 
 </script>
+
+<script>
+(function(){
+  var summary = document.querySelector('.summary-side');
+  var layout = document.querySelector('.new-layout');
+
+  if (!summary || !layout) return;
+
+  function applyParentScrollOffset(rawOffset){
+    var requested = Math.max(0, Number(rawOffset) || 0);
+
+    /*
+      오른쪽 견적 박스가 작업 신청서(.new-layout) 하단을 넘어가지 않도록
+      이동 가능 거리를 현재 실제 높이 기준으로 계산합니다.
+    */
+    var maxOffset = Math.max(
+      0,
+      layout.offsetHeight - summary.offsetHeight
+    );
+
+    var offset = Math.min(requested, maxOffset);
+
+    if (offset > 0) {
+      summary.classList.add('parent-scroll-follow');
+      summary.style.transform = 'translateY(' + offset + 'px)';
+    } else {
+      summary.classList.remove('parent-scroll-follow');
+      summary.style.transform = '';
+    }
+  }
+
+  window.addEventListener('message', function(event){
+    var data = event.data || {};
+
+    if (data.type !== 'iroha-work-form-parent-scroll') return;
+
+    applyParentScrollOffset(data.offset);
+  });
+
+  /*
+    부모 연동이 없는 단독 GitHub 페이지에서는 기존 CSS sticky를 그대로 사용합니다.
+  */
+  window.addEventListener('resize', function(){
+    if (!summary.classList.contains('parent-scroll-follow')) return;
+
+    var current = summary.style.transform.match(/translateY\(([-0-9.]+)px\)/);
+    applyParentScrollOffset(current ? Number(current[1]) : 0);
+  });
+})();
+</script>
+
 </body>
 </html>

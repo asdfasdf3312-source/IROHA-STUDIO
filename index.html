@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>작업 신청서 v80 FOLLOW</title>
+<title>작업 신청서 v86 MULTI PACKAGE - v84 WORK COPY</title>
 <style>
 @font-face{
   font-family:'Paperozi';
@@ -2509,6 +2509,54 @@ body{
   }
 }
 
+
+/* v86: 스타터 계열 1개 + VRC 아바타 복수 선택 */
+.work-package-group{
+  grid-column:1 / -1;
+  min-width:0;
+  padding:13px;
+  border:1px solid #E4EBF5;
+  border-radius:18px;
+  background:#FCFDFE;
+}
+
+.work-package-group + .work-package-group{
+  margin-top:5px;
+}
+
+.work-package-group-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+  padding:0 2px;
+}
+
+.work-package-group-head strong{
+  color:#344B58;
+  font-size:13.5px;
+  font-weight:900;
+}
+
+.work-package-group-head span{
+  color:#99A4AA;
+  font-size:10.5px;
+  font-weight:700;
+}
+
+.work-package-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+@media(max-width:720px){
+  .work-package-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2958,46 +3006,93 @@ var workTypeInfo = {
   debut: {
     "VSF": {
       price:"300,000원",
-      desc:"외형 커스터마이징 · 페이셜/뽀잉눈 · 특수표현 · 기본 물리"
+      desc:"오마카세 성형 · 페이셜 · 특수표현 · 기본 물리 세팅 (Spring Bone)"
     },
     "Warudo": {
       price:"350,000원",
-      desc:"외형 커스터마이징 · 페이셜/뽀잉눈 · 특수표현 · Scenes 포함"
+      desc:"오마카세 성형 · 페이셜 · 특수표현 · 기본 물리세팅 (Spring Bone) · Scenes 파일 포함"
     },
     "2D 원화 기반 VSF": {
       price:"400,000원",
-      desc:"2D 원화 기반 성형 · 페이셜 · 특수표현 · Spring Bone 세팅"
+      desc:"2D 원화 기반 성형 · 페이셜 · 특수표현 · 기본 물리 세팅 (Spring Bone)"
     },
     "2D 원화 기반 Warudo": {
       price:"450,000원",
-      desc:"2D 원화 기반 성형 · 페이셜 · Magica Cloth 2 · Scenes 포함"
+      desc:"2D 원화 기반 성형 · 페이셜 · 특수표현 · Warudo 전용 고급 물리 세팅 (Magica Cloth 2) · Scenes 포함"
     }
   },
   vrc: {
     "Basic Options": {
       price:"30,000원",
-      desc:"헤어 1종 · 의상 1종 · 헤어 콜라이더 · AFK · 썸네일"
+      desc:"헤어 1종 · 의상 1종 · 무료 악세사리 구성 · 헤어 콜라이더 · AFK 모션 · 썸네일"
     },
     "Standard Options": {
       price:"60,000원",
-      desc:"헤어/의상 최대 4종 · 콜라이더 · AFK · 오마카세 표정 · 썸네일"
+      desc:"헤어/의상 최대 4종 · 헤어 콜라이더 · AFK 모션 · 오마카세 표정 · 썸네일"
     },
     "Premium Options": {
       price:"120,000원",
-      desc:"헤어 최대 5종 · 의상 최대 8종 · ALL 텍스처 · 옷장 기능"
+      desc:"헤어 최대 5종 · 의상 최대 8종 · ALL 텍스처 · 옷장 기능 · 오마카세 표정"
     },
     "핵고퀄 A 풀옵션": {
       price:"150,000원",
-      desc:"전용 의상/헤어 · ALL 텍스처 · 블렌더 성형 · 최적화"
+      desc:"전용 의상/헤어 1종 · ALL 텍스처 · 블렌더 성형 · MMD 대응 · 최적화"
     },
     "핵고퀄 B 풀옵션": {
       price:"200,000원",
-      desc:"전용 의상/헤어 각 4종 · 블렌더 성형 · 옷장 아이콘 · 최적화"
+      desc:"전용 의상/헤어 각 4종 · 블렌더 성형 · 옷장 아이콘 · MMD 대응 · 최적화"
     }
   }
 };
 
 var designAttachedImages = [];
+
+var selectedWorkByPackage = {
+  intro: "",
+  debut: "",
+  vrc: ""
+};
+
+function getActivePackageTypes(){
+  var box = document.getElementById('formTypeRow');
+  if (!box) return [];
+
+  return Array.prototype.slice.call(
+    box.querySelectorAll('.package-btn.active')
+  ).map(function(btn){
+    return btn.getAttribute('data-form');
+  }).filter(Boolean);
+}
+
+function getPackageLabel(type){
+  if (type === 'intro') return '입문 패키지';
+  if (type === 'debut') return '버츄얼 스타터 세트';
+  if (type === 'vrc') return 'VRC 아바타';
+  return type || '';
+}
+
+function getSelectedPackageLabels(){
+  return getActivePackageTypes().map(getPackageLabel);
+}
+
+function getSelectedWorkCards(){
+  return Array.prototype.slice.call(
+    document.querySelectorAll('#workTypeRow .choice.work-card.active')
+  );
+}
+
+function getSelectedWorkSummary(){
+  var cards = getSelectedWorkCards();
+
+  if (!cards.length) return '';
+
+  return cards.map(function(card){
+    var type = card.getAttribute('data-package') || '';
+    var work = card.getAttribute('data-value') || '';
+    return getPackageLabel(type) + ' - ' + work;
+  }).join(' / ');
+}
+
 
 function showStep(index){ currentStep = 0; }
 function moveStep(delta){}
@@ -3039,53 +3134,105 @@ function handleNextOrCopy(){
   copyAeongForm();
 }
 
-function renderWorkTypes(type) {
+function renderWorkTypes() {
   var row = document.getElementById('workTypeRow');
-  if (!row || !workTypeMap[type]) return;
+  var activeTypes = getActivePackageTypes();
+
+  if (!row) return;
 
   row.innerHTML = '';
 
-  workTypeMap[type].forEach(function(text) {
-    var info = (workTypeInfo[type] && workTypeInfo[type][text]) || {};
-    var btn = document.createElement('button');
+  if (!activeTypes.length) {
+    row.innerHTML =
+      '<div class="work-empty-state">패키지를 먼저 선택하면 작업 항목이 표시됩니다.</div>';
 
-    btn.className = 'choice work-card';
-    btn.type = 'button';
-    btn.setAttribute('data-value', text);
-    btn.setAttribute('data-price', info.price || '');
-
-    if (info.soldout) {
-      btn.classList.add('soldout');
-      btn.disabled = true;
+    var emptyGuide = document.getElementById('guideText');
+    if (emptyGuide) {
+      emptyGuide.innerHTML = '먼저 위에서 원하는 패키지를 선택해주세요.';
     }
 
-    var left = document.createElement('span');
-    left.className = 'work-card-left';
+    updateEstimate();
+    updateCollabDiscountWarning();
+    return;
+  }
 
-    var name = document.createElement('span');
-    name.className = 'work-card-name';
-    name.textContent = text;
+  activeTypes.forEach(function(type) {
+    if (!workTypeMap[type]) return;
 
-    var desc = document.createElement('span');
-    desc.className = 'work-card-desc';
-    desc.textContent = info.desc || '';
+    var group = document.createElement('div');
+    group.className = 'work-package-group';
+    group.setAttribute('data-package-group', type);
 
-    var price = document.createElement('span');
-    price.className = 'work-card-price';
-    price.textContent = info.price || '상담 후 안내';
+    var groupHead = document.createElement('div');
+    groupHead.className = 'work-package-group-head';
+    groupHead.innerHTML =
+      '<strong>' + getPackageLabel(type) + '</strong>' +
+      '<span>세부 작업 1개 선택</span>';
 
-    left.appendChild(name);
-    left.appendChild(desc);
+    var grid = document.createElement('div');
+    grid.className = 'work-package-grid';
 
-    btn.appendChild(left);
-    btn.appendChild(price);
+    workTypeMap[type].forEach(function(workText) {
+      var info = (workTypeInfo[type] && workTypeInfo[type][workText]) || {};
+      var btn = document.createElement('button');
 
-    row.appendChild(btn);
+      btn.className = 'choice work-card';
+      btn.type = 'button';
+      btn.setAttribute('data-value', workText);
+      btn.setAttribute('data-price', info.price || '');
+      btn.setAttribute('data-package', type);
+
+      if (selectedWorkByPackage[type] === workText) {
+        btn.classList.add('active');
+      }
+
+      if (info.soldout) {
+        btn.classList.add('soldout');
+        btn.disabled = true;
+      }
+
+      var left = document.createElement('span');
+      left.className = 'work-card-left';
+
+      var name = document.createElement('span');
+      name.className = 'work-card-name';
+      name.textContent = workText;
+
+      var desc = document.createElement('span');
+      desc.className = 'work-card-desc';
+      desc.textContent = info.desc || '';
+
+      var price = document.createElement('span');
+      price.className = 'work-card-price';
+      price.textContent = info.price || '상담 후 안내';
+
+      left.appendChild(name);
+      left.appendChild(desc);
+
+      btn.appendChild(left);
+      btn.appendChild(price);
+
+      grid.appendChild(btn);
+    });
+
+    group.appendChild(groupHead);
+    group.appendChild(grid);
+    row.appendChild(group);
   });
 
   var guide = document.getElementById('guideText');
-  if (guide && guideMap[type]) {
-    guide.innerHTML = guideMap[type];
+
+  if (guide) {
+    if (activeTypes.length === 2) {
+      guide.innerHTML =
+        '<strong>' +
+        getPackageLabel(activeTypes[0]) +
+        ' + ' +
+        getPackageLabel(activeTypes[1]) +
+        '</strong>를 함께 선택했습니다. 각 패키지에서 세부 작업을 1개씩 선택해주세요.';
+    } else {
+      guide.innerHTML = guideMap[activeTypes[0]] || '';
+    }
   }
 
   updateEstimate();
@@ -3094,17 +3241,33 @@ function renderWorkTypes(type) {
 
 function selectPackage(type, button) {
   var box = document.getElementById('formTypeRow');
-  if (box) {
-    box.querySelectorAll('.package-btn').forEach(function(el) {
-      el.classList.remove('active');
-    });
-  }
+  if (!box || !button) return;
 
-  if (button) {
+  if (type === 'vrc') {
+    var willActivate = !button.classList.contains('active');
+
+    button.classList.toggle('active', willActivate);
+
+    if (!willActivate) {
+      selectedWorkByPackage.vrc = '';
+    }
+  } else {
+    /*
+      입문 패키지와 버츄얼 스타터 세트는 서로 중복 선택 불가.
+      VRC 아바타 선택 상태는 그대로 유지합니다.
+    */
+    var otherType = type === 'intro' ? 'debut' : 'intro';
+    var otherBtn = box.querySelector('.package-btn[data-form="' + otherType + '"]');
+
+    if (otherBtn) {
+      otherBtn.classList.remove('active');
+    }
+
+    selectedWorkByPackage[otherType] = '';
     button.classList.add('active');
   }
 
-  renderWorkTypes(type);
+  renderWorkTypes();
   updateEstimate();
   updateCollabDiscountWarning();
 }
@@ -3150,6 +3313,27 @@ document.addEventListener('click', function(e){
   var groupName = group.getAttribute('data-name');
 
   if (groupName === 'eventDiscount' || groupName === 'formType') {
+    return;
+  }
+
+  if (groupName === 'workType') {
+    var packageType = btn.getAttribute('data-package');
+
+    group.querySelectorAll('.choice.work-card').forEach(function(el){
+      if (el.getAttribute('data-package') === packageType) {
+        el.classList.remove('active');
+      }
+    });
+
+    btn.classList.add('active');
+
+    if (packageType) {
+      selectedWorkByPackage[packageType] =
+        btn.getAttribute('data-value') || '';
+    }
+
+    updateEstimate();
+    updateCollabDiscountWarning();
     return;
   }
 
@@ -3726,9 +3910,9 @@ function copyAeongForm() {
     return;
   }
 
-  var selectedForm = document.querySelector('#formTypeRow .package-btn.active');
-  var formType = selectedForm ? emptyCheck(selectedForm.getAttribute('data-value')) : emptyCheck(getSelected("formType"));
-  var workType = emptyCheck(getSelected("workType"));
+  var packageLabels = getSelectedPackageLabels();
+  var formType = emptyCheck(packageLabels.join(' + '));
+  var workType = emptyCheck(getSelectedWorkSummary());
   var portfolio = emptyCheck(getSelected("portfolioPrivate"));
   var schedule = emptyCheck(getSelected("schedule"));
 
@@ -3853,9 +4037,9 @@ function formatMoney(value){
 }
 
 function getSelectedWorkPrice(){
-  var active = document.querySelector('#workTypeRow .choice.active');
-  if (!active) return 0;
-  return parseMoney(active.getAttribute('data-price'));
+  return getSelectedWorkCards().reduce(function(sum, card){
+    return sum + parseMoney(card.getAttribute('data-price'));
+  }, 0);
 }
 
 function getUnityExtra(){
@@ -3877,11 +4061,15 @@ function getEstimateSubtotal(){
 
 
 function getSelectedWorkType(){
-  return getSelected('workType') || '';
+  return getSelectedWorkCards().map(function(card){
+    return card.getAttribute('data-value') || '';
+  }).filter(Boolean).join(' / ');
 }
 
 function isTwoDOriginalWork(){
-  return getSelectedWorkType().indexOf('2D 원화 기반') !== -1;
+  return getSelectedWorkCards().some(function(card){
+    return (card.getAttribute('data-value') || '').indexOf('2D 원화 기반') !== -1;
+  });
 }
 
 function hasSelectedCollabArtist(){
@@ -3919,7 +4107,7 @@ function updateCollabDiscountWarning(){
 
 
 function hasSelectedWorkType(){
-  return !!document.querySelector('#workTypeRow .choice.work-card.active');
+  return getSelectedWorkCards().length > 0;
 }
 
 function resetEstimateDisplay(){
@@ -4033,11 +4221,15 @@ function updateEstimate(){
 
   if (noteEl) {
     noteEl.textContent =
-      '※ 선택한 옵션만 견적에 반영됩니다. 빠른 마감 추가금 등 상담 후 확정되는 비용은 포함되지 않습니다.';
+      '※ 복수 패키지 선택 시 각 세부 작업 금액이 합산됩니다. 빠른 마감 추가금 등 상담 후 확정되는 비용은 포함되지 않습니다.';
   }
 }
 
 function initPackageMenu() {
+  selectedWorkByPackage.intro = '';
+  selectedWorkByPackage.debut = '';
+  selectedWorkByPackage.vrc = '';
+
   var menu = document.getElementById('formTypeRow');
   var workRow = document.getElementById('workTypeRow');
   var guide = document.getElementById('guideText');

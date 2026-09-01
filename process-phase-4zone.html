@@ -57,6 +57,10 @@ body{padding:18px;}
   background:#fff;
   box-shadow:0 18px 42px rgba(203,135,159,.10);
 }
+.process-shell{
+  scroll-margin-top:22vh;
+}
+
 
 .process-head{
   padding:26px 24px 22px;
@@ -744,7 +748,7 @@ body{padding:18px;}
 </head>
 
 <body>
-<section class="process-shell">
+<section class="process-shell" id="processGuideSection" data-nav-label="진행 방식">
   <header class="process-head">
     <div class="kicker">✦ PROCESS GUIDE</div>
     <h1>제작 과정 한눈에 보기</h1>
@@ -1001,6 +1005,88 @@ body{padding:18px;}
 
   window.sendHeight=sendHeight;
 
+
+  function scrollProcessGuideIntoView(){
+    const shell=document.getElementById('processGuideSection') || document.querySelector('.process-shell');
+    if(!shell){
+      return;
+    }
+
+    const rect=shell.getBoundingClientRect();
+    const absoluteTop=rect.top + window.pageYOffset;
+    const viewportHeight=window.innerHeight || document.documentElement.clientHeight || 0;
+    const desiredTop=Math.max(72, Math.round(viewportHeight * 0.22));
+    const targetTop=Math.max(0, absoluteTop - desiredTop);
+
+    window.scrollTo({
+      top:targetTop,
+      behavior:'smooth'
+    });
+  }
+
+  function isProcessNavTarget(el){
+    if(!el){
+      return false;
+    }
+
+    const href=(el.getAttribute('href') || '').trim();
+    const text=(el.textContent || '').replace(/\s+/g,' ').trim();
+    const controls=(el.getAttribute('aria-controls') || '').trim();
+
+    if(
+      href==='#processGuideSection' ||
+      href==='#process-guide' ||
+      href==='#process' ||
+      href==='#guide-process' ||
+      controls==='processGuideSection'
+    ){
+      return true;
+    }
+
+    return text==='진행 방식' || text==='진행방식';
+  }
+
+  function bindProcessNavLinks(root){
+    const scope=root && root.querySelectorAll ? root : document;
+    const nodes=[...scope.querySelectorAll('a, button, [role="button"]')];
+
+    nodes.forEach(function(node){
+      if(node.dataset.processGuideBound==='1' || !isProcessNavTarget(node)){
+        return;
+      }
+
+      node.dataset.processGuideBound='1';
+      node.addEventListener('click',function(event){
+        if(!isProcessNavTarget(node)){
+          return;
+        }
+
+        event.preventDefault();
+        scrollProcessGuideIntoView();
+      });
+    });
+  }
+
+  bindProcessNavLinks(document);
+
+  if(document.body && 'MutationObserver' in window){
+    const navObserver=new MutationObserver(function(mutations){
+      mutations.forEach(function(mutation){
+        mutation.addedNodes.forEach(function(added){
+          if(added && added.nodeType===1){
+            if(added.matches && added.matches('a, button, [role="button"]')){
+              bindProcessNavLinks(added.parentNode || document);
+            }else if(added.querySelectorAll){
+              bindProcessNavLinks(added);
+            }
+          }
+        });
+      });
+    });
+
+    navObserver.observe(document.body,{childList:true,subtree:true});
+  }
+
   fillDetail(0);
 
   window.addEventListener('load',function(){
@@ -1010,6 +1096,20 @@ body{padding:18px;}
   });
 
   window.addEventListener('resize',sendHeight);
+
+  window.addEventListener('hashchange',function(){
+    const hash=(location.hash || '').toLowerCase();
+    if(hash==='#processguidesection' || hash==='#process-guide' || hash==='#process' || hash==='#guide-process'){
+      setTimeout(scrollProcessGuideIntoView,40);
+    }
+  });
+
+  if(location.hash){
+    const initialHash=location.hash.toLowerCase();
+    if(initialHash==='#processguidesection' || initialHash==='#process-guide' || initialHash==='#process' || initialHash==='#guide-process'){
+      setTimeout(scrollProcessGuideIntoView,120);
+    }
+  }
 })();
 </script>
 </body>

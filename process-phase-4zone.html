@@ -974,8 +974,24 @@ body{padding:18px;}
   });
 
   function sendHeight(){
-    const height=document.documentElement.scrollHeight;
-    if(window.parent!==window){
+    const shell=document.querySelector('.process-shell');
+    let height=0;
+
+    if(shell){
+      const rect=shell.getBoundingClientRect();
+      const bodyStyle=window.getComputedStyle(document.body);
+      const bottomPadding=parseFloat(bodyStyle.paddingBottom) || 0;
+
+      height=Math.ceil(
+        rect.bottom +
+        window.pageYOffset +
+        bottomPadding
+      );
+    }else{
+      height=document.body ? document.body.scrollHeight : 0;
+    }
+
+    if(window.parent!==window && height>0){
       window.parent.postMessage({
         type:'iroha-process-phase-4zone-height',
         height:height

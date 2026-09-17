@@ -144,9 +144,9 @@ body{
 .upload input{display:none}
 .preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .preview img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
-.warning{display:none;margin-top:10px;padding:12px 14px;border-radius:14px;background:#FFF7EA;border:1px solid #FFDDA8;color:#9C6236;font-size:13px;font-weight:700;line-height:1.65}
-.rush-warning{padding:10px 14px}
-.rush-item{color:#333;font-size:13px;font-weight:500;line-height:1.75;margin:2px 0}
+.warning{display:none;margin-top:10px;padding:12px 14px;border-radius:18px;background:#FFF4F8;border:1px solid #F6C2D6;color:#CC5C89;font-size:13px;font-weight:700;line-height:1.65}
+.rush-warning{padding:12px 16px;background:#FFF8FB;border-color:#F3C6D8}
+.rush-item{color:#B85684;font-size:13px;font-weight:600;line-height:1.9;margin:2px 0}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 24px 22px;border-top:1px solid var(--line2)}
 .nav-btn,.copy-btn{border:0;border-radius:15px;padding:14px;font:700 15px 'Paperozi';cursor:pointer}
 .nav-btn{background:#F4F8F8;color:#5B686B}
@@ -831,7 +831,7 @@ body{
 
 .portfolio-event-warning{
   display:none;
-  margin-top:10px;
+  margin-top:7px;
   padding:11px 13px;
   border:1px solid #FFD6E0;
   border-radius:13px;
@@ -1114,8 +1114,10 @@ body{
 
 .field-color-popover{
   display:none;
+  width:min(100%, 300px);
+  max-width:100%;
   margin-top:10px;
-  padding:14px;
+  padding:10px;
   border:1px solid #C8D8FF;
   border-radius:16px;
   background:#fff;
@@ -1131,7 +1133,7 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  margin-bottom:11px;
+  margin-bottom:8px;
 }
 
 .field-color-popover-head strong{
@@ -1156,21 +1158,54 @@ body{
 }
 
 .field-color-picker-box{
+  position:relative;
   width:100%;
-  height:72px;
+  height:46px;
   overflow:hidden;
-  border:1px solid #E2E8F2;
-  border-radius:13px;
+  border:1px dashed #CFDBE8;
+  border-radius:11px;
+  background:
+    linear-gradient(45deg,#F4F6F8 25%,transparent 25%,transparent 75%,#F4F6F8 75%),
+    linear-gradient(45deg,#F4F6F8 25%,#FFFFFF 25%,#FFFFFF 75%,#F4F6F8 75%);
+  background-size:12px 12px;
+  background-position:0 0,6px 6px;
 }
 
 .field-native-color{
-  width:calc(100% + 20px);
-  height:92px;
-  margin:-10px;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  margin:0;
   padding:0;
   border:0;
-  background:transparent;
+  opacity:0;
   cursor:pointer;
+  z-index:2;
+}
+
+
+.field-color-picker-placeholder{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1;
+  color:#8D9AA3;
+  font-size:12px;
+  font-weight:800;
+  pointer-events:none;
+}
+
+.field-color-picker-box.has-color{
+  border-style:solid;
+  background:none;
+}
+
+.field-color-picker-box.has-color .field-color-picker-placeholder{
+  color:rgba(255,255,255,.92);
+  text-shadow:0 1px 3px rgba(0,0,0,.18);
 }
 
 .field-color-hex-row{
@@ -1179,7 +1214,7 @@ body{
   gap:5px;
   margin-top:10px;
   padding:0 11px;
-  height:42px;
+  height:36px;
   border:1px solid #DDE8FF;
   border-radius:12px;
   background:#F8FAFF;
@@ -1205,8 +1240,8 @@ body{
 
 .field-color-confirm{
   width:100%;
-  height:42px;
-  margin-top:9px;
+  height:36px;
+  margin-top:7px;
   border:0;
   border-radius:12px;
   background:linear-gradient(135deg,#24C6BF 0%,#6F7CFF 100%);
@@ -1507,10 +1542,17 @@ body{
   color:#B76532 !important;
 }
 
+.rush-choice{
+  border-color:#F7D5E2 !important;
+  background:#FFFDFE !important;
+  color:#C96C94 !important;
+}
+
 .rush-choice.active{
-  border-color:#F3B37D !important;
-  background:#FFF8F1 !important;
-  color:#A86436 !important;
+  border-color:#F2B6CC !important;
+  background:#FFF4F8 !important;
+  color:#C65A89 !important;
+  box-shadow:0 6px 16px rgba(242,123,167,.14) !important;
 }
 
 .package-selector{
@@ -2686,6 +2728,49 @@ body{
   }
 }
 
+
+
+/* v93: 색상 선택 팝오버 컴팩트 + 빠른마감 핑크 박스 */
+.field-color-popover{
+  width:min(100%, 430px) !important;
+  max-width:100% !important;
+  padding:12px !important;
+}
+
+.field-color-popover-head{
+  margin-bottom:8px !important;
+}
+
+.field-color-picker-box{
+  height:58px !important;
+  border-radius:11px !important;
+}
+
+.field-native-color{
+  height:78px !important;
+}
+
+.field-color-hex-row{
+  height:38px !important;
+  margin-top:8px !important;
+  border-radius:10px !important;
+}
+
+.field-color-confirm{
+  height:38px !important;
+  margin-top:8px !important;
+  border-radius:10px !important;
+}
+
+.warning.rush-warning{
+  background:#FFF4F8 !important;
+  border:1px solid #F5BCD3 !important;
+  color:#C95F8C !important;
+}
+
+.warning.rush-warning .rush-item{
+  color:#C95F8C !important;
+}
 </style>
 </head>
 <body>
@@ -2830,9 +2915,9 @@ body{
         </div>
 
         <div class="warning rush-warning">
-          <div class="rush-item">대기없이 순번 맨앞으로 이동합니다 ( 200,000원 )</div>
-          <div class="rush-item">결제후 48시간내에 완성 해드립니다 ( 100,000원 )</div>
-          <div class="rush-item">결제후 72시간내에 완성 해드립니다 ( 50,000원 )</div>
+          <div class="rush-item">최우선마감 | 대기없이 순번 맨앞으로 이동합니다 (200,000원)</div>
+          <div class="rush-item">결제후 5일내 완성 해드립니다 (100,000원)</div>
+          <div class="rush-item">결제후 10일내 완성 해드립니다 (50,000원)</div>
         </div>
 
         <div class="warning portfolio-warning">
@@ -2926,6 +3011,7 @@ body{
           </div>
           <div class="field-color-picker-box">
             <input id="fieldColorPicker" class="field-native-color" type="color" value="#24C6BF">
+            <span class="field-color-picker-placeholder" id="fieldColorPickerPlaceholder">여기를 클릭하세요</span>
           </div>
           <div class="field-color-hex-row">
             <span>#</span>
@@ -3708,6 +3794,16 @@ function openFieldColorPicker(targetId){
   hexInput.value = current.replace("#","");
   title.textContent = getColorTargetLabel(targetId);
 
+  var pickerBox = picker.closest('.field-color-picker-box');
+  var placeholder = document.getElementById('fieldColorPickerPlaceholder');
+  if (pickerBox) {
+    pickerBox.classList.remove('has-color');
+    pickerBox.style.backgroundColor = '';
+  }
+  if (placeholder) {
+    placeholder.textContent = '여기를 클릭하세요';
+  }
+
   popover.classList.add("open");
   popover.setAttribute("aria-hidden","false");
 
@@ -3761,6 +3857,20 @@ document.querySelectorAll(".field-color-btn").forEach(function(button){
 });
 
 var fieldColorPicker = document.getElementById("fieldColorPicker");
+if (fieldColorPicker) {
+  fieldColorPicker.addEventListener('input', function(){
+    var pickerBox = this.closest('.field-color-picker-box');
+    var placeholder = document.getElementById('fieldColorPickerPlaceholder');
+    if (pickerBox) {
+      pickerBox.classList.add('has-color');
+      pickerBox.style.backgroundColor = this.value;
+    }
+    if (placeholder) {
+      placeholder.textContent = '선택한 색상';
+    }
+  });
+}
+
 var fieldColorHex = document.getElementById("fieldColorHex");
 var fieldColorConfirm = document.getElementById("fieldColorConfirm");
 var fieldColorClose = document.getElementById("fieldColorClose");

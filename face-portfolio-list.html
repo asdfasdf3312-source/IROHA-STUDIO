@@ -1108,6 +1108,27 @@
       }
     }
 
+  
+    /* v61 — Before / After 원본 아바타 표기 */
+    .showcase-original-label{
+      color:#55484e;
+      font-size:12.5px;
+      font-weight:700;
+    }
+
+    .showcase-avatar-name{
+      color:#e0779f;
+      font-size:12.5px;
+      font-weight:800;
+    }
+
+    @media(max-width:640px){
+      .showcase-original-label,
+      .showcase-avatar-name{
+        font-size:11.5px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1158,7 +1179,7 @@
       </div>
 
       <div class="showcase-info">
-        <div class="showcase-meta-line">
+        <div class="showcase-meta-line" id="showcaseMetaLine">
           <span class="showcase-credit">Modified by IROHA</span>
           <span class="showcase-sep">·</span>
           <span class="showcase-category" id="showcaseCategory"></span>
@@ -1317,6 +1338,7 @@
       const prevBtn = document.getElementById('showcasePrev');
       const nextBtn = document.getElementById('showcaseNext');
       const categoryEl = document.getElementById('showcaseCategory');
+      const metaLineEl = document.getElementById('showcaseMetaLine');
       const countEl = document.getElementById('showcaseCount');
       const dotsEl = document.getElementById('showcaseDots');
       const thumbsEl = document.getElementById('showcaseThumbs');
@@ -1330,6 +1352,13 @@
       const lightboxPrev = lightbox.querySelector('.lightbox-prev');
       const lightboxNext = lightbox.querySelector('.lightbox-next');
       const lightboxCount = lightbox.querySelector('.lightbox-count');
+
+      const beforeAfterAvatarNames = [
+        'Hanka',
+        'Komano',
+        'Mayo',
+        'Airi'
+      ];
 
       let currentFilter = 'all';
       let visibleItems = [];
@@ -1449,8 +1478,32 @@
       }
 
       function updateInfo(item) {
-        categoryEl.textContent = getCategoryLabel(item.category);
-        countEl.textContent = (currentIndex + 1) + '/' + visibleItems.length;
+        if (item.category === 'before-after') {
+          const beforeAfterIndex = visibleItems
+            .slice(0, currentIndex + 1)
+            .filter(function(entry) {
+              return entry.category === 'before-after';
+            }).length - 1;
+
+          const avatarName =
+            beforeAfterAvatarNames[beforeAfterIndex] || '';
+
+          metaLineEl.innerHTML =
+            '<span class="showcase-original-label">Original Avatar :</span>' +
+            '<span class="showcase-avatar-name">' + avatarName + '</span>';
+        } else {
+          metaLineEl.innerHTML =
+            '<span class="showcase-credit">Modified by IROHA</span>' +
+            '<span class="showcase-sep">·</span>' +
+            '<span class="showcase-category" id="showcaseCategory">' +
+              getCategoryLabel(item.category) +
+            '</span>' +
+            '<span class="showcase-sep">·</span>' +
+            '<span class="showcase-type">Virtual 3D</span>';
+        }
+
+        countEl.textContent =
+          (currentIndex + 1) + '/' + visibleItems.length;
       }
 
       function mountMedia(item) {
@@ -1514,7 +1567,10 @@
               '<div class="empty-title">등록된 작업물이 없습니다.</div>' +
               '<div class="empty-text">준비되는 대로 이 카테고리에 추가됩니다.</div>' +
             '</div>';
-          categoryEl.textContent = getCategoryLabel(currentFilter);
+          metaLineEl.innerHTML =
+            '<span class="showcase-category">' +
+              getCategoryLabel(currentFilter) +
+            '</span>';
           countEl.textContent = '';
           dotsEl.innerHTML = '';
           thumbsEl.innerHTML = '';

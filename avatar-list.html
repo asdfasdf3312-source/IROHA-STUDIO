@@ -3,8 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>보유 중인 아바타</title>
+  <title>✨ 나만의 이미지를 완성하는 페이스 커스텀</title>
+  <link rel="preconnect" href="https://www.youtube.com">
+  <link rel="preconnect" href="https://www.youtube-nocookie.com">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <link rel="preconnect" href="https://www.google.com">
 
   <style>
     @font-face {
@@ -29,9 +32,9 @@
       --mint-pale: #edf9f8;
       --border: #b4e5e1;
       --text: #333333;
-      --text-light: #8a9a9a;
-      --white-glass: rgba(255, 255, 255, 0.96);
-      --shadow-sm: 0 4px 14px rgba(78, 170, 165, 0.10);
+      --text-light: #819392;
+      --white: rgba(255, 255, 255, 0.97);
+      --shadow-sm: 0 5px 16px rgba(78, 170, 165, 0.10);
       --shadow-md: 0 16px 42px rgba(78, 170, 165, 0.14);
     }
 
@@ -63,7 +66,7 @@
       padding: 40px;
       border: 1.5px solid var(--border);
       border-radius: 32px;
-      background: var(--white-glass);
+      background: var(--white);
       box-shadow: var(--shadow-md);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -73,7 +76,8 @@
       display: flex;
       align-items: center;
       gap: 11px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
     }
 
     .sec-bar {
@@ -85,10 +89,11 @@
     }
 
     .sec-title {
+      margin: 0;
+      color: var(--text);
       font-size: 23px;
       font-weight: 700;
       line-height: 1.3;
-      color: var(--text);
     }
 
     .sec-subtitle {
@@ -97,59 +102,127 @@
       font-size: 12.5px;
       font-weight: 400;
       line-height: 1.55;
-      white-space: normal;
     }
 
-    .scroll-grid {
+    .filter-bar {
       display: flex;
-      gap: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .filter-btn {
+      min-width: 88px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--text-light);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--mint);
+      color: var(--mint-dark);
+    }
+
+    .filter-btn.active {
+      border-color: var(--mint);
+      background: var(--mint);
+      color: #ffffff;
+      box-shadow: 0 7px 18px rgba(78, 170, 165, 0.18);
+    }
+
+    .portfolio-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: -4px 0 22px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-left: 5px solid var(--mint);
+      border-radius: 16px;
+      background: var(--mint-pale);
+      color: var(--text-light);
+      font-size: 12.8px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .portfolio-notice-icon {
+      flex: 0 0 auto;
+      margin-top: 1px;
+      color: var(--mint-dark);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .portfolio-notice strong {
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+    .portfolio-grid {
+      display: flex;
+      gap: 14px;
       width: 100%;
       overflow-x: auto;
       overflow-y: hidden;
-      padding: 2px 0 34px;
+      padding: 2px 0 26px;
       scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
-      cursor: grab;
-      user-select: none;
       overscroll-behavior-inline: contain;
       touch-action: pan-y;
+      cursor: grab;
+      user-select: none;
       scrollbar-width: auto;
       scrollbar-color: var(--mint) transparent;
     }
 
-    .scroll-grid.dragging {
+    .portfolio-grid.dragging {
       cursor: grabbing;
       scroll-snap-type: none;
     }
 
-    .scroll-grid::-webkit-scrollbar {
-      height: 60px;
+    .portfolio-grid::-webkit-scrollbar {
+      height: 40px;
     }
 
-    .scroll-grid::-webkit-scrollbar-track {
+    .portfolio-grid::-webkit-scrollbar-track {
       background: transparent;
     }
 
-    .scroll-grid::-webkit-scrollbar-thumb {
+    .portfolio-grid::-webkit-scrollbar-thumb {
       min-width: 140px;
       border-radius: 999px;
       background: var(--mint);
     }
 
-    .scroll-grid::-webkit-scrollbar-thumb:hover {
+    .portfolio-grid::-webkit-scrollbar-thumb:hover {
       background: var(--mint);
     }
 
-    .img-card {
+    .portfolio-card {
       position: relative;
-      height: 430px;
       flex: 0 0 auto;
+      width: min(78vw, 560px);
+      height: 380px;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 2px solid var(--border);
-      border-radius: 20px;
+      border-radius: 22px;
       background: var(--mint-pale);
       box-shadow: var(--shadow-sm);
       scroll-snap-align: start;
@@ -160,51 +233,136 @@
         border-color 0.25s ease;
     }
 
-    .img-card:hover {
+    .portfolio-card:hover {
       transform: translateY(-3px);
       border-color: var(--mint);
-      box-shadow: 0 10px 24px rgba(78, 170, 165, 0.15);
+      box-shadow: 0 12px 26px rgba(78, 170, 165, 0.15);
     }
 
-    .img-card img {
+    .portfolio-card img {
       display: block;
-      width: auto;
+      width: 100%;
       height: 100%;
-      max-width: none;
       object-fit: cover;
       object-position: center;
       pointer-events: none;
       -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
 
-    .card-skeleton {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background:
-        linear-gradient(
-          90deg,
-          rgba(226, 249, 247, 0.75) 25%,
-          rgba(255, 255, 255, 0.92) 50%,
-          rgba(226, 249, 247, 0.75) 75%
-        );
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
+
+    .portfolio-card.youtube-embed-card {
+      cursor: default;
+      background: #000000;
+      border-color: rgba(118, 216, 210, 0.88);
     }
 
-    .card-skeleton.hide {
+    .portfolio-card.youtube-embed-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--mint);
+      box-shadow: 0 12px 26px rgba(78, 170, 165, 0.15);
+    }
+
+    .portfolio-card.youtube-embed-card iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000000;
+    }
+
+    .portfolio-card.youtube-embed-card .portfolio-badge {
       display: none;
     }
 
-    .notice {
-      margin: 15px 0 0;
-      color: var(--text-light);
-      font-size: 13.5px;
+    .portfolio-card.video-card:not(.youtube-embed-card)::after {
+      content: '▶';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 3;
+      width: 62px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.20);
+      font-size: 24px;
+      line-height: 1;
+      padding-left: 4px;
+      pointer-events: none;
+    }
+
+    .portfolio-card.video-card:not(.youtube-embed-card)::before {
+      content: 'VIDEO';
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      z-index: 3;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: var(--mint-dark);
+      background: rgba(255, 255, 255, 0.90);
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.10);
+      font-size: 11px;
       font-weight: 700;
-      line-height: 1.6;
+      letter-spacing: 0.5px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .portfolio-badge {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 2;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .empty-state {
+      width: 100%;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 34px 20px;
+      border: 1.5px dashed var(--border);
+      border-radius: 22px;
+      background: var(--mint-pale);
       text-align: center;
     }
 
+    .empty-icon {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .empty-title {
+      color: var(--mint-dark);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .empty-text {
+      color: var(--text-light);
+      font-size: 13px;
+      line-height: 1.6;
+    }
 
     .lightbox[hidden] {
       display: none !important;
@@ -221,9 +379,9 @@
       overflow: auto;
       scroll-behavior: auto;
       overscroll-behavior: contain;
-      background: rgba(240, 250, 249, 0.94);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(7, 10, 14, 0.78);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
       opacity: 1;
       transition: opacity 0.18s ease;
     }
@@ -234,21 +392,21 @@
 
     .lightbox-image {
       display: block;
-      max-width: min(97vw, 1500px);
-      max-height: 93vh;
+      max-width: min(calc(100vw - 48px), 1500px);
+      max-height: calc(100vh - 86px);
       width: auto;
       height: auto;
       object-fit: contain;
-      border: 2px solid rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.95);
       border-radius: 20px;
       background: #ffffff;
-      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
       cursor: zoom-in;
       user-select: none;
       -webkit-user-drag: none;
       transition:
         opacity 0.24s ease,
-        transform 0.39s cubic-bezier(0.20, 0.82, 0.27, 1),
+        transform 0.48s cubic-bezier(0.22, 0.76, 0.28, 1),
         width 0.28s ease,
         max-width 0.28s ease,
         max-height 0.28s ease;
@@ -274,22 +432,24 @@
       touch-action: none;
       transform: none !important;
       opacity: 1 !important;
+      filter: none !important;
       will-change: scroll-position;
+    }
+
+    .lightbox.zoom-active {
+      display: block;
+      text-align: center;
+      align-items: initial;
+      justify-content: initial;
+    }
+
+    .lightbox.zoom-active .lightbox-image.zoomed {
+      display: block;
+      margin: 72px auto 120px;
     }
 
     .lightbox-image.zoomed.dragging {
       cursor: grabbing;
-    }
-
-    .lightbox.zoom-mode {
-      align-items: flex-start;
-      justify-content: flex-start;
-      overflow: auto;
-      padding: 70px 28px 110px;
-    }
-
-    .lightbox.zoom-mode .lightbox-image {
-      margin: 0 auto;
     }
 
     .lightbox.zoom-active .lightbox-nav {
@@ -300,26 +460,20 @@
 
     .lightbox-close,
     .lightbox-nav {
-      position: absolute;
+      position: fixed;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 0;
       color: #ffffff;
-      background: rgba(118, 216, 210, 0.94);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      background: rgba(118, 216, 210, 0.95);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
       cursor: pointer;
       transition:
-        transform 0.2s ease,
         opacity 0.2s ease,
         visibility 0.2s ease,
         background-color 0.2s ease;
-    }
-
-    .lightbox-close:hover,
-    .lightbox-nav:hover {
-      transform: scale(1.06);
-      background: var(--mint-dark);
     }
 
     .lightbox-close {
@@ -329,7 +483,6 @@
       height: 44px;
       border-radius: 50%;
       font-size: 26px;
-      line-height: 1;
     }
 
     .lightbox-nav {
@@ -337,12 +490,8 @@
       width: 48px;
       height: 64px;
       border-radius: 16px;
-      font-size: 30px;
       transform: translateY(-50%);
-    }
-
-    .lightbox-nav:hover {
-      transform: translateY(-50%) scale(1.06);
+      font-size: 30px;
     }
 
     .lightbox-prev {
@@ -357,7 +506,7 @@
       position: fixed;
       left: 50%;
       bottom: 52px;
-      z-index: 3;
+      z-index: 2;
       transform: translateX(-50%);
       max-width: calc(100vw - 40px);
       padding: 9px 14px;
@@ -374,10 +523,78 @@
       pointer-events: none;
     }
 
-    .lightbox-count {
+
+    .lightbox.video-mode {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .lightbox-video-wrap {
+      position: relative;
+      z-index: 5;
+      width: min(94vw, 1180px);
+      aspect-ratio: 16 / 9;
+      display: block;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000000;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
+    }
+
+    .lightbox-video-wrap[hidden] {
+      display: none !important;
+    }
+
+    .lightbox.video-mode .lightbox-video-wrap {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .lightbox-video-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000000;
+    }
+
+    .video-fallback-link {
       position: absolute;
       left: 50%;
+      bottom: -46px;
+      transform: translateX(-50%);
+      z-index: 6;
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.95);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    }
+
+    .video-fallback-link[hidden] {
+      display: none !important;
+    }
+
+    .lightbox.video-mode .lightbox-image,
+    .lightbox.video-mode .lightbox-guide {
+      display: none !important;
+    }
+
+    .lightbox-count {
+      position: fixed;
+      left: 50%;
       bottom: 17px;
+      z-index: 2;
       transform: translateX(-50%);
       padding: 7px 13px;
       border-radius: 999px;
@@ -390,16 +607,6 @@
 
     body.lightbox-open {
       overflow: hidden;
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: 200% 0;
-      }
-
-      100% {
-        background-position: -200% 0;
-      }
     }
 
 
@@ -460,11 +667,6 @@
         border-radius: 22px;
       }
 
-      .sec-header {
-        margin-bottom: 18px;
-        flex-wrap: wrap;
-      }
-
       .sec-title {
         font-size: 20px;
       }
@@ -474,35 +676,24 @@
         margin-left: 16px;
         margin-top: -4px;
         font-size: 12px;
-        white-space: normal;
       }
 
-      .img-card {
-        height: 280px;
-        border-radius: 16px;
+      .filter-btn {
+        min-width: auto;
+        padding: 9px 14px;
+        font-size: 13px;
       }
 
-      .lightbox {
-        padding: 64px 14px 52px;
+      .portfolio-notice {
+        margin-bottom: 18px;
+        padding: 12px 13px;
+        font-size: 12px;
       }
 
-      .lightbox-image {
-        max-width: 96vw;
-        max-height: 86vh;
-        border-radius: 14px;
-      }
-
-      .lightbox-image.zoomed {
-        width: 180vw;
-      }
-
-      .lightbox.zoom-mode {
-        padding: 64px 12px 128px;
-      }
-
-      .lightbox-close {
-        top: 12px;
-        right: 12px;
+      .portfolio-card {
+        width: 84vw;
+        height: 300px;
+        border-radius: 17px;
       }
 
       .lightbox-nav {
@@ -511,10 +702,6 @@
         width: 46px;
         height: 42px;
         transform: none;
-      }
-
-      .lightbox-nav:hover {
-        transform: scale(1.06);
       }
 
       .lightbox-prev {
@@ -537,193 +724,1040 @@
       .lightbox-count {
         bottom: 58px;
       }
-    }
 
-    @media (prefers-reduced-motion: reduce) {
-      .img-card,
-      .card-skeleton {
-        transition: none !important;
-        animation: none !important;
+      .lightbox-image.zoomed {
+        width: 180vw;
+      }
+
+      .lightbox.zoom-active .lightbox-image.zoomed {
+        margin: 70px auto 118px;
       }
     }
+  
+    /* v56 — 메인 샘플 + 썸네일 쇼케이스 */
+    .showcase-wrap{
+      width:100%;
+      margin-top:2px;
+    }
+
+    .showcase-stage{
+      position:relative;
+      width:100%;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      border:2px solid var(--border);
+      border-radius:24px;
+      background:#f5fbfa;
+      box-shadow:var(--shadow-sm);
+    }
+
+    .showcase-media{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background:#f5fbfa;
+      opacity:1;
+      transform:scale(1);
+      transition:opacity .18s ease, transform .24s ease;
+    }
+
+    .showcase-stage.switching .showcase-media{
+      opacity:.18;
+      transform:scale(.992);
+    }
+
+    .showcase-media img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:contain;
+      object-position:center;
+      background:#f7fbfb;
+      cursor:zoom-in;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .showcase-media iframe{
+      width:100%;
+      height:100%;
+      display:block;
+      border:0;
+      background:#000;
+    }
+
+    .showcase-nav{
+      position:absolute;
+      top:50%;
+      z-index:8;
+      width:48px;
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+      border:0;
+      border-radius:50%;
+      transform:translateY(-50%) scale(.94);
+      background:rgba(255,255,255,.94);
+      color:var(--mint-dark);
+      box-shadow:0 8px 22px rgba(0,0,0,.14);
+      font-family:Arial,sans-serif;
+      font-size:31px;
+      line-height:1;
+      cursor:pointer;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .2s ease, visibility .2s ease, transform .2s ease, background-color .2s ease;
+    }
+
+    .showcase-prev{left:16px;}
+    .showcase-next{right:16px;}
+
+    .showcase-stage:hover .showcase-nav,
+    .showcase-stage:focus-within .showcase-nav{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(-50%) scale(1);
+    }
+
+    .showcase-nav:hover{
+      background:#fff;
+      transform:translateY(-50%) scale(1.08);
+    }
+
+    .showcase-info{
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      padding:12px 8px 5px;
+      text-align:center;
+    }
+
+    .showcase-title-line{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
+      flex-wrap:wrap;
+    }
+
+    .showcase-category{
+      color:#9b8290;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .showcase-category::after{
+      content:' · ';
+      color:#c6afb9;
+    }
+
+    .showcase-title{
+      color:#4b3d43;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .showcase-count{
+      flex:0 0 auto;
+      color:#a5b2b1;
+      font-size:11.5px;
+      font-weight:700;
+    }
+
+    .showcase-dots{
+      min-height:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      margin:0 0 9px;
+    }
+
+    .showcase-dot{
+      width:7px;
+      height:7px;
+      padding:0;
+      border:0;
+      border-radius:999px;
+      background:#dff3f1;
+      cursor:pointer;
+      transition:width .2s ease, background-color .2s ease;
+    }
+
+    .showcase-dot.active{
+      width:22px;
+      background:var(--mint);
+    }
+
+    .showcase-thumbs{
+      display:flex;
+      gap:10px;
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      padding:3px 2px 16px;
+      scroll-behavior:smooth;
+      scrollbar-width:auto;
+      scrollbar-color:var(--mint) transparent;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar{
+      height:13px;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-track{
+      background:transparent;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-thumb{
+      min-width:140px;
+      border-radius:999px;
+      background:var(--mint);
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-thumb:hover{
+      background:var(--mint-dark);
+    }
+
+    .showcase-thumb{
+      position:relative;
+      flex:0 0 150px;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      padding:0;
+      border:1.5px solid #d7e9e7;
+      border-radius:13px;
+      background:#f7fbfb;
+      cursor:pointer;
+      opacity:.75;
+      transition:opacity .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .showcase-thumb:hover{
+      opacity:1;
+      transform:translateY(-2px);
+      border-color:var(--mint);
+    }
+
+    .showcase-thumb.active{
+      opacity:1;
+      border-color:var(--mint-dark);
+      box-shadow:0 5px 14px rgba(78,170,165,.16);
+    }
+
+    .showcase-thumb img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      pointer-events:none;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .showcase-thumb-badge{
+      position:absolute;
+      left:6px;
+      top:6px;
+      z-index:2;
+      padding:4px 6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.92);
+      color:var(--mint-dark);
+      font-size:9px;
+      font-weight:700;
+      line-height:1;
+      box-shadow:0 3px 8px rgba(0,0,0,.08);
+      pointer-events:none;
+    }
+
+    @media (hover:none), (pointer:coarse){
+      .showcase-nav{
+        opacity:1;
+        visibility:visible;
+        transform:translateY(-50%) scale(1);
+      }
+    }
+
+    @media (max-width:640px){
+      .showcase-stage{border-radius:18px;}
+      .showcase-nav{
+        width:40px;
+        height:40px;
+        font-size:26px;
+      }
+      .showcase-prev{left:9px;}
+      .showcase-next{right:9px;}
+      .showcase-info{
+        min-height:44px;
+        padding-top:10px;
+      }
+      .showcase-category{font-size:11px;}
+      .showcase-title{font-size:12.5px;}
+      .showcase-count{display:none;}
+      .showcase-thumb{
+        flex-basis:118px;
+        border-radius:11px;
+      }
+    }
+
+  
+    /* v58 — 원본 확대/드래그 감도 복원 */
+    .lightbox-image.zoomed{
+      width:min(180vw, 2400px) !important;
+      max-width:none !important;
+      max-height:none !important;
+      cursor:grab !important;
+      touch-action:none !important;
+      transform:none !important;
+      opacity:1 !important;
+      filter:none !important;
+      will-change:scroll-position;
+    }
+
+    .lightbox.zoom-active .lightbox-image.zoomed{
+      display:block !important;
+      margin:72px auto 120px !important;
+    }
+
+    .lightbox-image.zoomed.dragging{
+      cursor:grabbing !important;
+    }
+
+    @media (max-width:640px){
+      .lightbox-image.zoomed{
+        width:195vw !important;
+      }
+
+      .lightbox.zoom-active .lightbox-image.zoomed{
+        margin:70px auto 118px !important;
+      }
+    }
+
+  
+    /* v60 — 샘플 하단 메타 정보 표기 */
+    .showcase-info{
+      min-height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      padding:11px 8px 5px;
+      text-align:center;
+    }
+
+    .showcase-meta-line{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      flex-wrap:wrap;
+      color:#55484e;
+      font-size:12.5px;
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .showcase-credit,
+    .showcase-type{
+      color:#55484e;
+    }
+
+    .showcase-sep{
+      color:#c9b7be;
+      font-weight:600;
+    }
+
+    .showcase-category{
+      color:#e0779f !important;
+      font-size:12.5px !important;
+      font-weight:800 !important;
+    }
+
+    .showcase-category::after{
+      content:none !important;
+      display:none !important;
+    }
+
+    .showcase-count{
+      flex:0 0 auto;
+      color:#aab4b5;
+      font-size:11.5px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    @media(max-width:640px){
+      .showcase-info{
+        gap:7px;
+        padding-top:9px;
+      }
+
+      .showcase-meta-line{
+        gap:5px;
+        font-size:11.5px;
+      }
+
+      .showcase-category{
+        font-size:11.5px !important;
+      }
+
+      .showcase-count{
+        display:inline !important;
+        font-size:10.5px;
+      }
+    }
+
+  
+    /* v61 — Before / After 원본 아바타 표기 */
+    .showcase-original-label{
+      color:#55484e;
+      font-size:12.5px;
+      font-weight:700;
+    }
+
+    .showcase-avatar-name{
+      color:#e0779f;
+      font-size:12.5px;
+      font-weight:800;
+    }
+
+    @media(max-width:640px){
+      .showcase-original-label,
+      .showcase-avatar-name{
+        font-size:11.5px;
+      }
+    }
+
+  
+    /* =========================================================
+       v62 — CATEGORY INDEX RAIL / MINT
+       ========================================================= */
+    .category-index-wrap{
+      margin:0 0 34px;
+    }
+
+    .category-index-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:17px;
+    }
+
+    .category-index-kicker{
+      color:#9aa7a6;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.13em;
+      line-height:1;
+    }
+
+    .category-index-viewing{
+      color:#b0baba;
+      font-size:10.5px;
+      font-weight:700;
+      line-height:1;
+    }
+
+    .category-index-scroll{
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .category-index-scroll::-webkit-scrollbar{
+      display:none;
+    }
+
+    .category-index-list{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(6,minmax(112px,1fr));
+      min-width:730px;
+    }
+
+    .filter-btn.category-index-btn{
+      position:relative;
+      min-width:0 !important;
+      display:flex !important;
+      flex-direction:column !important;
+      align-items:center !important;
+      justify-content:center !important;
+      gap:0 !important;
+      padding:6px 14px 18px !important;
+      border:0 !important;
+      border-radius:0 !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      color:inherit !important;
+      text-align:center !important;
+      transform:none !important;
+      cursor:pointer;
+    }
+
+    .filter-btn.category-index-btn.before-after-tab{
+      align-items:flex-start !important;
+      text-align:left !important;
+    }
+
+    .filter-btn.category-index-btn:hover{
+      border:0 !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      transform:none !important;
+    }
+
+    .category-index-no{
+      color:#c1cbca;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.06em;
+      line-height:1;
+      transition:color .22s ease;
+    }
+
+    .category-index-en{
+      color:#7f8c8d;
+      font-size:17px;
+      font-weight:700;
+      letter-spacing:.02em;
+      line-height:1.15;
+      transition:color .22s ease;
+    }
+
+    .filter-btn.category-index-btn:hover .category-index-no,
+    .filter-btn.category-index-btn:hover .category-index-en{
+      color:var(--mint-dark);
+    }
+
+    .filter-btn.category-index-btn.active .category-index-no{
+      color:var(--mint-dark);
+    }
+
+    .filter-btn.category-index-btn.active .category-index-en{
+      color:#364746;
+    }
+
+    .category-index-track{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:7px;
+      height:1px;
+      background:#e5efee;
+      pointer-events:none;
+    }
+
+    .category-index-active-line{
+      position:absolute;
+      left:0;
+      bottom:5px;
+      width:0;
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--mint),var(--mint-dark));
+      box-shadow:0 3px 10px rgba(78,170,165,.18);
+      pointer-events:none;
+      transition:
+        transform .38s cubic-bezier(.22,.8,.3,1),
+        width .38s cubic-bezier(.22,.8,.3,1);
+    }
+
+    .category-index-current{
+      min-height:47px;
+      display:flex;
+      align-items:flex-end;
+      gap:11px;
+      padding:15px 14px 0;
+    }
+
+    .category-index-current-label{
+      color:#bcc6c5;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.1em;
+      line-height:1.1;
+    }
+
+    .category-index-current-name{
+      color:var(--mint-dark);
+      font-size:24px;
+      font-weight:700;
+      line-height:1;
+      letter-spacing:-.035em;
+      opacity:1;
+      transform:translateY(0);
+      transition:
+        opacity .18s ease,
+        transform .18s ease;
+    }
+
+    .category-index-current-name.changing{
+      opacity:0;
+      transform:translateY(5px);
+    }
+
+    @media(max-width:640px){
+      .category-index-wrap{
+        margin-bottom:18px;
+      }
+
+      .category-index-top{
+        margin-bottom:14px;
+      }
+
+      .category-index-list{
+        min-width:660px;
+      }
+
+      .filter-btn.category-index-btn{
+        padding-left:10px !important;
+        padding-right:10px !important;
+      }
+
+      .category-index-current{
+        padding-left:10px;
+        min-height:43px;
+      }
+
+      .category-index-current-name{
+        font-size:21px;
+      }
+    }
+
+  
+    @media(max-width:640px){
+      .category-index-no{
+        font-size:11.5px;
+      }
+
+      .category-index-en{
+        font-size:15px;
+      }
+    }
+
+  
+    .category-index-no{
+      display:none !important;
+    }
+
+  
+    /* v68 — category / notice spacing fix */
+    .category-index-wrap + .portfolio-notice{
+      margin-top:0 !important;
+    }
+
+    @media(max-width:640px){
+      .category-index-wrap{
+        margin-bottom:26px !important;
+      }
+    }
+
+  
+    /* v75 — dark transparent lightbox overlay */
+    .lightbox-close{
+      top:16px !important;
+      left:16px !important;
+      right:auto !important;
+      width:auto !important;
+      min-width:106px !important;
+      height:42px !important;
+      padding:0 16px !important;
+      border:1px solid rgba(255,255,255,.14) !important;
+      border-radius:999px !important;
+      color:#fff !important;
+      background:rgba(42,47,54,.86) !important;
+      box-shadow:0 10px 26px rgba(0,0,0,.24) !important;
+      font-size:15px !important;
+      font-weight:800 !important;
+      letter-spacing:-.02em !important;
+      white-space:nowrap !important;
+    }
+
+    .lightbox-close:hover{
+      background:rgba(58,64,72,.94) !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox-close{
+        top:12px !important;
+        left:12px !important;
+        min-width:100px !important;
+        height:40px !important;
+        padding:0 14px !important;
+        font-size:14px !important;
+      }
+    }
+
+
+
+    /* v76 — white glass overlay + repositioned back button */
+    .lightbox{
+      background: rgba(255,255,255,0.32) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+    }
+
+    .lightbox-close{
+      top: clamp(86px, 13vh, 128px) !important;
+      left: clamp(22px, 3.6vw, 34px) !important;
+      right: auto !important;
+      color: #2f3a40 !important;
+      background: rgba(255,255,255,0.74) !important;
+      border: 1px solid rgba(255,255,255,0.92) !important;
+      box-shadow: 0 10px 26px rgba(20, 32, 40, 0.14) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+
+    .lightbox-close:hover{
+      background: rgba(255,255,255,0.88) !important;
+      color: #1f2a31 !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox{
+        background: rgba(255,255,255,0.28) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+      }
+
+      .lightbox-close{
+        top: 86px !important;
+        left: 12px !important;
+        min-width: 96px !important;
+        height: 38px !important;
+        padding: 0 13px !important;
+        font-size: 13.5px !important;
+      }
+    }
+
+
+
+    /* v77 — solid white overlay + restore X close button */
+    .lightbox{
+      background: rgba(255,255,255,0.42) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+    }
+
+    .lightbox-close{
+      top: 18px !important;
+      left: auto !important;
+      right: 18px !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      border: 0 !important;
+      font-size: 28px !important;
+      line-height: 1 !important;
+      font-weight: 700 !important;
+      color: #ffffff !important;
+      background: rgba(118, 216, 210, 0.95) !important;
+      box-shadow: 0 10px 24px rgba(37, 64, 68, 0.18) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      white-space: nowrap !important;
+    }
+
+    .lightbox-close:hover{
+      background: rgba(94, 206, 199, 1) !important;
+      color: #ffffff !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox{
+        background: rgba(255,255,255,0.46) !important;
+        backdrop-filter: blur(7px) !important;
+        -webkit-backdrop-filter: blur(7px) !important;
+      }
+
+      .lightbox-close{
+        top: 12px !important;
+        right: 12px !important;
+        left: auto !important;
+        width: 40px !important;
+        min-width: 40px !important;
+        height: 40px !important;
+        font-size: 24px !important;
+      }
+    }
+
   </style>
 </head>
 
 <body>
-  <section class="section" aria-label="보유 중인 아바타">
+  <section class="section" aria-label="✨ 나만의 이미지를 완성하는 페이스 커스텀">
     <div class="sec-header">
       <div class="sec-bar" aria-hidden="true"></div>
-      <h1 class="sec-title">보유 중인 아바타</h1>
-      <span class="sec-subtitle">🔎 이미지를 두 번 클릭해 확대해보세요!<br>확인한 아바타 영문명을 BOOTH에 검색하면 빠르게 찾을 수 있습니다.</span>
+      <h1 class="sec-title">✨ 나만의 이미지를 완성하는 페이스 커스텀</h1>
+      <span class="sec-subtitle">
+        🔎 이미지는 두 번 클릭해 확대하고, 영상은 바로 재생할 수 있어요!
+      </span>
     </div>
 
-    <div
-      id="owned-chars-grid"
-      class="scroll-grid"
-      aria-label="보유 아바타 이미지 목록"
-    >
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-01.png"
-          alt="보유 아바타 1"
-          loading="eager"
-        >
+    <div class="category-index-wrap">
+      <div class="category-index-top">
+        <span class="category-index-kicker">FACE CUSTOM MENU</span>
+        <span class="category-index-viewing" id="categoryIndexViewing">VIEWING 01 / 06</span>
       </div>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-02.png"
-          alt="보유 아바타 2"
-          loading="eager"
-        >
-      </div>
+      <div class="category-index-scroll">
+        <div class="category-index-list" id="categoryIndexList" role="tablist" aria-label="작업 분류">
+          <button class="filter-btn category-index-btn active" type="button" data-filter="all">
+            <span class="category-index-en">ALL</span>
+          </button>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-03.png"
-          alt="보유 아바타 3"
-          loading="lazy"
-        >
-      </div>
+          <button class="filter-btn category-index-btn" type="button" data-filter="boing-eye">
+            <span class="category-index-en">뽀잉눈</span>
+          </button>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-04.png"
-          alt="보유 아바타 4"
-          loading="lazy"
-        >
-      </div>
+          <button class="filter-btn category-index-btn" type="button" data-filter="smile-eye">
+            <span class="category-index-en">웃는눈 연동</span>
+          </button>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-05.png"
-          alt="보유 아바타 5"
-          loading="lazy"
-        >
-      </div>
+          <button class="filter-btn category-index-btn" type="button" data-filter="facial">
+            <span class="category-index-en">페이셜</span>
+          </button>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-06.png"
-          alt="보유 아바타 6"
-          loading="lazy"
-        >
-      </div>
+          <button class="filter-btn category-index-btn" type="button" data-filter="detail">
+            <span class="category-index-en">성형 디테일</span>
+          </button>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-07.png"
-          alt="보유 아바타 7"
-          loading="lazy"
-        >
-      </div>
+          <button class="filter-btn category-index-btn before-after-tab" type="button" data-filter="before-after">
+            <span class="category-index-en">Before / After</span>
+          </button>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-08.png"
-          alt="보유 아바타 8"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-09.png"
-          alt="보유 아바타 9"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-10.png"
-          alt="보유 아바타 10"
-          loading="lazy"
-        >
+          <div class="category-index-track" aria-hidden="true"></div>
+          <div class="category-index-active-line" id="categoryIndexActiveLine" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
 
-    <p class="notice">
-      ※ 일부 아바타는 방송 및 수익 활동이 제한될 수 있으므로, 구매 전 반드시 해당 상품의 이용 약관을 확인해주세요.
-    </p>
+    <div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
+      <div class="portfolio-notice-icon">※</div>
+      <div>
+        <strong>Blender를 활용한 페이셜 성형·쉐이프키 디테일</strong> 작업 예시입니다.<br>
+        아바타 구조에 따라 작업 가능 범위가 달라질 수 있으며, 세부 내용은 상담 후 안내드립니다.
+      </div>
+    </div>
+
+    
+    <div class="showcase-wrap">
+      <div class="showcase-stage" id="showcaseStage">
+        <div class="showcase-media" id="showcaseMedia"></div>
+        <button class="showcase-nav showcase-prev" id="showcasePrev" type="button" aria-label="이전 샘플">‹</button>
+        <button class="showcase-nav showcase-next" id="showcaseNext" type="button" aria-label="다음 샘플">›</button>
+      </div>
+
+      <div class="showcase-info">
+        <div class="showcase-meta-line" id="showcaseMetaLine">
+          <span class="showcase-credit">Modified by IROHA</span>
+          <span class="showcase-sep">·</span>
+          <span class="showcase-category" id="showcaseCategory"></span>
+          <span class="showcase-sep">·</span>
+          <span class="showcase-type">Virtual 3D</span>
+        </div>
+        <span class="showcase-count" id="showcaseCount"></span>
+      </div>
+
+      <div class="showcase-dots" id="showcaseDots"></div>
+      <div class="showcase-thumbs" id="showcaseThumbs"></div>
+    </div>
+
   </section>
 
-
   <div
-    id="avatar-lightbox"
+    id="face-portfolio-lightbox"
     class="lightbox"
     role="dialog"
     aria-modal="true"
-    aria-label="아바타 이미지 크게 보기"
+    aria-label="작업 이미지 크게 보기"
     hidden
   >
-    <button
-      class="lightbox-close"
-      type="button"
-      aria-label="닫기"
-    >
-      ×
-    </button>
+    <button class="lightbox-close" type="button" aria-label="닫기">×</button>
+    <button class="lightbox-nav lightbox-prev" type="button" aria-label="이전 이미지">‹</button>
+    <img class="lightbox-image" src="" alt="">
 
-    <button
-      class="lightbox-nav lightbox-prev"
-      type="button"
-      aria-label="이전 이미지"
-    >
-      ‹
-    </button>
-
-    <img
-      class="lightbox-image"
-      src=""
-      alt=""
-    >
-
-    <button
-      class="lightbox-nav lightbox-next"
-      type="button"
-      aria-label="다음 이미지"
-    >
-      ›
-    </button>
+    <div class="lightbox-video-wrap" hidden>
+      <iframe
+        class="lightbox-video"
+        src=""
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+      <a
+        class="video-fallback-link"
+        href="https://youtu.be/WXFuu_awOqw"
+        target="_blank"
+        rel="noopener noreferrer"
+        hidden
+      >
+        YouTube에서 보기
+      </a>
+    </div>
+    <button class="lightbox-nav lightbox-next" type="button" aria-label="다음 이미지">›</button>
 
     <div class="lightbox-guide">
-      🖱️ 추가 확대 후 이미지를 누른 채 드래그하면 원하는 부분을 볼 수 있습니다.
+      🖱️ 확대 후 이미지를 누른 채 드래그하면 원하는 부분을 볼 수 있습니다.
     </div>
 
     <div class="lightbox-count" aria-live="polite"></div>
   </div>
-
   <script>
     (function () {
-      const grid = document.getElementById('owned-chars-grid');
-      const images = Array.from(grid.querySelectorAll('img'));
-      const cards = Array.from(grid.querySelectorAll('.img-card'));
-      const lightbox = document.getElementById('avatar-lightbox');
+      const portfolioItems = [
+        {
+          src: 'https://img.youtube.com/vi/WXFuu_awOqw/hqdefault.jpg',
+          category: 'facial',
+          title: '페이셜 움직임 샘플 2',
+          type: 'youtube',
+          youtubeId: 'WXFuu_awOqw'
+        },
+        {
+          src: 'https://img.youtube.com/vi/lNLfSk6LjJQ/hqdefault.jpg',
+          category: 'detail',
+          title: '성형 디테일 영상 2',
+          type: 'youtube',
+          youtubeId: 'lNLfSk6LjJQ'
+        },
+        {
+          src: 'https://img.youtube.com/vi/DUWNYzrZ6HQ/hqdefault.jpg',
+          category: 'detail',
+          title: '성형 디테일 영상',
+          type: 'youtube',
+          youtubeId: 'DUWNYzrZ6HQ'
+        },
+        {
+          src: 'https://img.youtube.com/vi/cAaJ3MnA8TY/hqdefault.jpg',
+          category: 'boing-eye',
+          title: '뽀잉눈 움직임 샘플 2',
+          type: 'youtube',
+          youtubeId: 'cAaJ3MnA8TY'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-13.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 1'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-11.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 2'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-07.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 3'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-06.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 4'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-09.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 2'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-08.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 3'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-06-2.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 5'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-06-1.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 6'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-04.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 9'
+        },
+        {
+          src: 'https://img.youtube.com/vi/wY3I8bUxnUM/hqdefault.jpg',
+          category: 'smile-eye',
+          title: '웃는눈 연동 샘플',
+          type: 'youtube',
+          youtubeId: 'wY3I8bUxnUM'
+        },
+        {
+          src: 'https://img.youtube.com/vi/dAcdmztELK0/hqdefault.jpg',
+          category: 'boing-eye',
+          title: '뽀잉눈 움직임 샘플',
+          type: 'youtube',
+          youtubeId: 'dAcdmztELK0'
+        },
+        {
+          src: 'https://img.youtube.com/vi/pFfbLfAzeqQ/hqdefault.jpg',
+          category: 'facial',
+          title: '페이셜 움직임 샘플',
+          type: 'youtube',
+          youtubeId: 'pFfbLfAzeqQ'
+        }
+      ];
+
+      const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+      const categoryIndexList = document.getElementById('categoryIndexList');
+      const categoryIndexActiveLine = document.getElementById('categoryIndexActiveLine');
+      const categoryIndexViewing = document.getElementById('categoryIndexViewing');
+      const categoryIndexCurrentName = document.getElementById('categoryIndexCurrentName');
+
+      const stage = document.getElementById('showcaseStage');
+      const media = document.getElementById('showcaseMedia');
+      const prevBtn = document.getElementById('showcasePrev');
+      const nextBtn = document.getElementById('showcaseNext');
+      const categoryEl = document.getElementById('showcaseCategory');
+      const metaLineEl = document.getElementById('showcaseMetaLine');
+      const countEl = document.getElementById('showcaseCount');
+      const dotsEl = document.getElementById('showcaseDots');
+      const thumbsEl = document.getElementById('showcaseThumbs');
+
+      const lightbox = document.getElementById('face-portfolio-lightbox');
       const lightboxImage = lightbox.querySelector('.lightbox-image');
+      const lightboxVideoWrap = lightbox.querySelector('.lightbox-video-wrap');
+      const lightboxVideo = lightbox.querySelector('.lightbox-video');
+      const videoFallbackLink = lightbox.querySelector('.video-fallback-link');
       const lightboxClose = lightbox.querySelector('.lightbox-close');
       const lightboxPrev = lightbox.querySelector('.lightbox-prev');
       const lightboxNext = lightbox.querySelector('.lightbox-next');
       const lightboxCount = lightbox.querySelector('.lightbox-count');
 
-      let isDragging = false;
-      let startX = 0;
-      let startScrollLeft = 0;
-      let moved = false;
-      let pressedCard = null;
-      let currentImageIndex = 0;
-      let lastFocusedCard = null;
-      let isSwitching = false;
+      const beforeAfterAvatarNames = [
+        'Hanka',
+        'Komano',
+        'Mayo',
+        'Airi'
+      ];
+
+      let currentFilter = 'all';
+      let visibleItems = [];
+      let currentIndex = 0;
+      let lightboxIndex = 0;
+      let switchTimer = null;
 
       let zoomDragging = false;
       let zoomMoved = false;
@@ -741,6 +1775,267 @@
       let zoomVelocityY = 0;
       let zoomMomentumRaf = null;
 
+      function getCategoryLabel(category) {
+        if (category === 'boing-eye') return '뽀잉눈';
+        if (category === 'smile-eye') return '웃는눈 연동';
+        if (category === 'facial') return '페이셜';
+        if (category === 'detail') return '성형디테일';
+        if (category === 'before-after') return 'Before / After';
+        return '전체';
+      }
+
+      function moveCategoryIndexLine(button) {
+        if (!button || !categoryIndexActiveLine) return;
+
+        categoryIndexActiveLine.style.width = button.offsetWidth + 'px';
+        categoryIndexActiveLine.style.transform =
+          'translateX(' + button.offsetLeft + 'px)';
+      }
+
+      function updateCategoryIndexUI(button, index) {
+        if (!button) return;
+
+        if (categoryIndexViewing) {
+          categoryIndexViewing.textContent =
+            'VIEWING ' + String(index + 1).padStart(2, '0') + ' / 06';
+        }
+
+        if (categoryIndexCurrentName) {
+          categoryIndexCurrentName.classList.add('changing');
+
+          setTimeout(function() {
+            categoryIndexCurrentName.textContent =
+              getCategoryLabel(button.dataset.filter);
+
+            categoryIndexCurrentName.classList.remove('changing');
+          }, 130);
+        }
+
+        moveCategoryIndexLine(button);
+      }
+
+      function sendHeight() {
+        const height = Math.ceil(Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        ));
+        window.parent.postMessage({
+          type:'iroha-face-portfolio-height',
+          height:height
+        }, '*');
+      }
+
+      function thumbSrc(item) {
+        if (item.type === 'youtube' && item.youtubeId) {
+          return 'https://img.youtube.com/vi/' + item.youtubeId + '/hqdefault.jpg';
+        }
+        return item.src;
+      }
+
+      function renderDots() {
+        dotsEl.innerHTML = '';
+
+        if (visibleItems.length > 10) {
+          dotsEl.style.display = 'none';
+          return;
+        }
+
+        dotsEl.style.display = 'flex';
+
+        visibleItems.forEach(function(item, index) {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'showcase-dot' + (index === currentIndex ? ' active' : '');
+          dot.setAttribute('aria-label', (index + 1) + '번째 샘플 보기');
+          dot.addEventListener('click', function() {
+            showItem(index, 0);
+          });
+          dotsEl.appendChild(dot);
+        });
+      }
+
+      function renderThumbs() {
+        thumbsEl.innerHTML = '';
+
+        visibleItems.forEach(function(item, index) {
+          const thumb = document.createElement('button');
+          thumb.type = 'button';
+          thumb.className = 'showcase-thumb' + (index === currentIndex ? ' active' : '');
+          thumb.setAttribute('aria-label', (item.title || '샘플') + ' 보기');
+
+          const img = document.createElement('img');
+          img.src = thumbSrc(item);
+          img.alt = '';
+          img.loading = index < 6 ? 'eager' : 'lazy';
+          img.draggable = false;
+          thumb.appendChild(img);
+
+          if (item.type === 'youtube') {
+            const badge = document.createElement('span');
+            badge.className = 'showcase-thumb-badge';
+            badge.textContent = 'VIDEO';
+            thumb.appendChild(badge);
+          }
+
+          thumb.addEventListener('click', function() {
+            showItem(index, 0);
+          });
+
+          thumbsEl.appendChild(thumb);
+        });
+      }
+
+      function updateThumbActive() {
+        Array.from(thumbsEl.querySelectorAll('.showcase-thumb')).forEach(function(thumb, i) {
+          thumb.classList.toggle('active', i === currentIndex);
+        });
+
+        const active = thumbsEl.querySelector('.showcase-thumb.active');
+        if (active) {
+          active.scrollIntoView({
+            behavior:'smooth',
+            block:'nearest',
+            inline:'center'
+          });
+        }
+      }
+
+      function updateInfo(item) {
+        if (item.category === 'before-after') {
+          const beforeAfterIndex = visibleItems
+            .slice(0, currentIndex + 1)
+            .filter(function(entry) {
+              return entry.category === 'before-after';
+            }).length - 1;
+
+          const avatarName =
+            beforeAfterAvatarNames[beforeAfterIndex] || '';
+
+          metaLineEl.innerHTML =
+            '<span class="showcase-original-label">Original Avatar :</span>' +
+            '<span class="showcase-avatar-name">' + avatarName + '</span>';
+        } else {
+          metaLineEl.innerHTML =
+            '<span class="showcase-credit">Modified by IROHA</span>' +
+            '<span class="showcase-sep">·</span>' +
+            '<span class="showcase-category" id="showcaseCategory">' +
+              getCategoryLabel(item.category) +
+            '</span>' +
+            '<span class="showcase-sep">·</span>' +
+            '<span class="showcase-type">Virtual 3D</span>';
+        }
+
+        countEl.textContent =
+          (currentIndex + 1) + '/' + visibleItems.length;
+      }
+
+      function mountMedia(item) {
+        media.innerHTML = '';
+
+        if (item.type === 'youtube' && item.youtubeId) {
+          const iframe = document.createElement('iframe');
+          iframe.src =
+            'https://www.youtube.com/embed/' +
+            item.youtubeId +
+            '?rel=0&modestbranding=1&playsinline=1';
+          iframe.title = item.title || 'YouTube video player';
+          iframe.loading = 'eager';
+          iframe.allow =
+            'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+          iframe.allowFullscreen = true;
+          media.appendChild(iframe);
+          return;
+        }
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.title || '작업 이미지';
+        img.draggable = false;
+        img.addEventListener('click', function() {
+          openLightbox(currentIndex);
+        });
+        media.appendChild(img);
+      }
+
+      function showItem(index, direction) {
+        if (!visibleItems.length) return;
+
+        currentIndex = (index + visibleItems.length) % visibleItems.length;
+        const item = visibleItems[currentIndex];
+
+        stage.classList.add('switching');
+        clearTimeout(switchTimer);
+
+        switchTimer = setTimeout(function() {
+          mountMedia(item);
+          updateInfo(item);
+          renderDots();
+          updateThumbActive();
+          stage.classList.remove('switching');
+          sendHeight();
+        }, direction === 0 ? 70 : 120);
+      }
+
+      function renderShowcase() {
+        visibleItems = portfolioItems.filter(function(item) {
+          return currentFilter === 'all' || item.category === currentFilter;
+        });
+
+        currentIndex = 0;
+
+        if (!visibleItems.length) {
+          media.innerHTML =
+            '<div class="empty-state">' +
+              '<div class="empty-icon">🖼️</div>' +
+              '<div class="empty-title">등록된 작업물이 없습니다.</div>' +
+              '<div class="empty-text">준비되는 대로 이 카테고리에 추가됩니다.</div>' +
+            '</div>';
+          metaLineEl.innerHTML =
+            '<span class="showcase-category">' +
+              getCategoryLabel(currentFilter) +
+            '</span>';
+          countEl.textContent = '';
+          dotsEl.innerHTML = '';
+          thumbsEl.innerHTML = '';
+          sendHeight();
+          return;
+        }
+
+        renderThumbs();
+        showItem(0, 0);
+      }
+
+      function move(step) {
+        showItem(currentIndex + step, step);
+      }
+
+      prevBtn.addEventListener('click', function() { move(-1); });
+      nextBtn.addEventListener('click', function() { move(1); });
+
+      filterButtons.forEach(function(button, buttonIndex) {
+        button.addEventListener('click', function() {
+          currentFilter = button.dataset.filter;
+
+          filterButtons.forEach(function(otherButton) {
+            otherButton.classList.toggle('active', otherButton === button);
+          });
+
+          updateCategoryIndexUI(button, buttonIndex);
+          renderShowcase();
+        });
+      });
+
+      function updateFixedOverlayPosition() {
+        const isZoomed =
+          lightbox.classList.contains('zoom-active') ||
+          lightbox.classList.contains('zoom-mode');
+
+        const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
+        const scrollTop = isZoomed ? lightbox.scrollTop : 0;
+
+        lightbox.style.setProperty('--iroha-scroll-left', scrollLeft + 'px');
+        lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
+      }
 
       function stopZoomSmoothScroll() {
         if (zoomScrollRaf !== null) {
@@ -754,13 +2049,14 @@
         const currentTop = lightbox.scrollTop;
 
         const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.30;
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.22;
 
         const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.30;
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.22;
 
         lightbox.scrollLeft = nextLeft;
         lightbox.scrollTop = nextTop;
+        updateFixedOverlayPosition();
 
         if (
           Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
@@ -799,11 +2095,10 @@
 
         lightbox.scrollLeft += zoomVelocityX;
         lightbox.scrollTop += zoomVelocityY;
-
         updateFixedOverlayPosition();
 
-        zoomVelocityX *= 0.91;
-        zoomVelocityY *= 0.91;
+        zoomVelocityX *= 0.82;
+        zoomVelocityY *= 0.82;
 
         zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
       }
@@ -833,146 +2128,95 @@
           'slide-enter-right'
         );
 
-        lightbox.classList.remove('zoom-mode', 'zoom-active');
+        lightbox.classList.remove('zoom-active');
         lightbox.scrollTop = 0;
         lightbox.scrollLeft = 0;
         updateFixedOverlayPosition();
+
         zoomDragging = false;
         zoomMoved = false;
       }
 
+      function stopLightboxVideo() {
+        if (lightboxVideo) lightboxVideo.src = '';
+      }
+
       function updateLightbox(index) {
-        currentImageIndex =
-          (index + images.length) % images.length;
+        if (!visibleItems.length) return;
 
-        const image = images[currentImageIndex];
-        lightboxImage.src = image.currentSrc || image.src;
-        lightboxImage.alt = image.alt || '보유 아바타 이미지';
+        resetLightboxZoom();
+        lightboxIndex = (index + visibleItems.length) % visibleItems.length;
+        const item = visibleItems[lightboxIndex];
+
         lightboxCount.textContent =
-          (currentImageIndex + 1) + ' / ' + images.length;
+          (lightboxIndex + 1) + ' / ' + visibleItems.length;
+
+        if (item.type === 'youtube' && item.youtubeId) {
+          lightbox.classList.add('video-mode');
+          lightboxImage.hidden = true;
+          lightboxVideoWrap.removeAttribute('hidden');
+          videoFallbackLink.href = 'https://youtu.be/' + item.youtubeId;
+          videoFallbackLink.removeAttribute('hidden');
+          lightboxVideo.src =
+            'https://www.youtube.com/embed/' +
+            item.youtubeId +
+            '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+        } else {
+          lightbox.classList.remove('video-mode');
+          stopLightboxVideo();
+          lightboxVideoWrap.setAttribute('hidden','');
+          videoFallbackLink.setAttribute('hidden','');
+          lightboxImage.hidden = false;
+          lightboxImage.src = item.src;
+          lightboxImage.alt = item.title || '작업 이미지';
+        }
       }
 
-      function moveLightbox(step) {
-        if (!images.length || isSwitching) {
-          return;
-        }
-
-        isSwitching = true;
-
-        const nextIndex =
-          (currentImageIndex + step + images.length) %
-          images.length;
-
-        resetLightboxZoom();
-
-        const nextImage = images[nextIndex];
-        const nextSrc = nextImage.currentSrc || nextImage.src;
-        const preload = new Image();
-        let changed = false;
-
-        function changeImage() {
-          if (changed) {
-            return;
-          }
-
-          changed = true;
-
-          const enterClass = step > 0
-            ? 'slide-enter-right'
-            : 'slide-enter-left';
-
-          updateLightbox(nextIndex);
-          lightboxImage.classList.add(enterClass);
-
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              lightboxImage.classList.remove(enterClass);
-
-              setTimeout(function () {
-                isSwitching = false;
-              }, 340);
-            });
-          });
-        }
-
-        preload.onload = changeImage;
-        preload.onerror = changeImage;
-        preload.src = nextSrc;
-
-        setTimeout(changeImage, 700);
-      }
-
-      function openLightbox(index, card) {
-        lastFocusedCard = card || null;
+      function openLightbox(index) {
         updateLightbox(index);
-        resetLightboxZoom();
-        lightbox.classList.add('is-opening');
         lightbox.hidden = false;
         document.body.classList.add('lightbox-open');
-
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            lightbox.classList.remove('is-opening');
-          });
-        });
-
-        lightboxClose.focus();
       }
 
       function closeLightbox() {
         lightbox.hidden = true;
         lightboxImage.src = '';
+        stopLightboxVideo();
         resetLightboxZoom();
-        lightbox.classList.remove('is-opening');
-        isSwitching = false;
+        lightbox.classList.remove('video-mode');
+        lightboxVideoWrap.setAttribute('hidden','');
+        videoFallbackLink.setAttribute('hidden','');
+        lightboxImage.hidden = false;
         document.body.classList.remove('lightbox-open');
-
-        if (lastFocusedCard) {
-          lastFocusedCard.focus();
-        }
       }
 
-      cards.forEach(function (card, index) {
-        card.setAttribute('role', 'button');
-        card.setAttribute('tabindex', '0');
-        card.setAttribute(
-          'aria-label',
-          '보유 아바타 ' + (index + 1) + ' 크게 보기'
-        );
-
-        card.addEventListener('keydown', function (event) {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openLightbox(index, card);
-          }
-        });
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxPrev.addEventListener('click', function() {
+        updateLightbox(lightboxIndex - 1);
       });
-
+      lightboxNext.addEventListener('click', function() {
+        updateLightbox(lightboxIndex + 1);
+      });
 
       lightbox.addEventListener(
         'scroll',
         updateFixedOverlayPosition,
-        { passive: true }
+        { passive:true }
       );
 
-      lightboxClose.addEventListener('click', closeLightbox);
-
-      lightboxPrev.addEventListener('click', function () {
-        moveLightbox(-1);
-      });
-
-      lightboxNext.addEventListener('click', function () {
-        moveLightbox(1);
-      });
-
-      lightboxImage.addEventListener('pointerdown', function (event) {
+      lightboxImage.addEventListener('pointerdown', function(event) {
         event.stopPropagation();
 
+        if (lightboxImage.hidden || lightbox.classList.contains('video-mode')) {
+          return;
+        }
+
+        /* 원래 설정: 한 번 더 클릭하면 165vw까지 확대 */
         if (!lightboxImage.classList.contains('zoomed')) {
           lightboxImage.classList.add('zoomed');
-          lightbox.classList.add('zoom-mode', 'zoom-active');
+          lightbox.classList.add('zoom-active');
 
-          requestAnimationFrame(function () {
+          requestAnimationFrame(function() {
             lightbox.scrollLeft =
               Math.max(
                 0,
@@ -1025,7 +2269,7 @@
         }
       });
 
-      lightboxImage.addEventListener('pointermove', function (event) {
+      lightboxImage.addEventListener('pointermove', function(event) {
         if (!zoomDragging) {
           return;
         }
@@ -1036,8 +2280,8 @@
         if (
           !zoomMoved &&
           (
-            Math.abs(distanceX) > 4 ||
-            Math.abs(distanceY) > 4
+            Math.abs(distanceX) > 1 ||
+            Math.abs(distanceY) > 1
           )
         ) {
           zoomMoved = true;
@@ -1048,16 +2292,16 @@
           const deltaX = event.clientX - zoomLastX;
           const deltaY = event.clientY - zoomLastY;
           const deltaTime = Math.max(8, now - zoomLastTime);
-          const velocityScale = Math.min(1.40, 16 / deltaTime) * 0.54;
+          const velocityScale = Math.min(1.1, 16 / deltaTime) * 0.16;
 
           zoomVelocityX = -deltaX * velocityScale;
           zoomVelocityY = -deltaY * velocityScale;
 
           zoomTargetScrollLeft =
-            zoomStartScrollLeft - distanceX;
+            zoomStartScrollLeft - (distanceX * 1.65);
 
           zoomTargetScrollTop =
-            zoomStartScrollTop - distanceY;
+            zoomStartScrollTop - (distanceY * 1.65);
 
           requestZoomSmoothScroll();
 
@@ -1090,14 +2334,16 @@
         }
 
         if (shouldZoomOut) {
+          stopZoomSmoothScroll();
           stopZoomMomentum();
+
           lightboxImage.classList.remove('zoomed');
-          lightbox.classList.remove('zoom-mode', 'zoom-active');
+          lightbox.classList.remove('zoom-active');
 
           lightbox.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
+            top:0,
+            left:0,
+            behavior:'smooth'
           });
         } else if (zoomMoved) {
           startZoomMomentum();
@@ -1106,203 +2352,86 @@
         zoomMoved = false;
       }
 
-      lightboxImage.addEventListener('pointerup', function (event) {
+      lightboxImage.addEventListener('pointerup', function(event) {
         finishZoomDrag(event, true);
       });
 
-      lightboxImage.addEventListener('pointercancel', function (event) {
+      lightboxImage.addEventListener('pointercancel', function(event) {
         finishZoomDrag(event, false);
       });
 
       lightboxImage.addEventListener(
         'lostpointercapture',
-        function (event) {
+        function(event) {
           finishZoomDrag(event, false);
         }
       );
 
-      lightbox.addEventListener('click', function (event) {
-        if (event.target === lightbox) {
-          closeLightbox();
-        }
+      lightbox.addEventListener('click', function(event) {
+        if (event.target === lightbox) closeLightbox();
       });
 
-      document.addEventListener('keydown', function (event) {
-        if (lightbox.hidden) {
+      document.addEventListener('keydown', function(event) {
+        if (!lightbox.hidden) {
+          if (event.key === 'Escape') closeLightbox();
+          else if (event.key === 'ArrowLeft') updateLightbox(lightboxIndex - 1);
+          else if (event.key === 'ArrowRight') updateLightbox(lightboxIndex + 1);
           return;
         }
 
-        if (event.key === 'Escape') {
-          closeLightbox();
-        } else if (event.key === 'ArrowLeft') {
-          moveLightbox(-1);
-        } else if (event.key === 'ArrowRight') {
-          moveLightbox(1);
-        }
+        if (event.key === 'ArrowLeft') move(-1);
+        else if (event.key === 'ArrowRight') move(1);
       });
 
-      function sendHeight() {
-        const height = Math.ceil(
-          Math.max(
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight
+      document.addEventListener('contextmenu', function(event) {
+        if (
+          event.target &&
+          (
+            event.target.tagName === 'IMG' ||
+            event.target.closest('.showcase-wrap') ||
+            event.target.closest('.lightbox')
           )
-        );
-
-        window.parent.postMessage(
-          {
-            type: 'iroha-avatar-height',
-            height: height
-          },
-          '*'
-        );
-      }
-
-
-      function updateFixedOverlayPosition() {
-        const isZoomed =
-          lightbox.classList.contains('zoom-active') ||
-          lightbox.classList.contains('zoom-mode');
-
-        const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
-        const scrollTop = isZoomed ? lightbox.scrollTop : 0;
-
-        lightbox.style.setProperty('--iroha-scroll-left', scrollLeft + 'px');
-        lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
-      }
-
-      images.forEach(function (image) {
-        const skeleton =
-          image.parentElement.querySelector('.card-skeleton');
-
-        function finishLoading() {
-          image.classList.add('loaded');
-
-          if (skeleton) {
-            skeleton.classList.add('hide');
-          }
-
-          sendHeight();
-        }
-
-        if (image.complete) {
-          finishLoading();
-        } else {
-          image.addEventListener('load', finishLoading, { once: true });
-          image.addEventListener(
-            'error',
-            function () {
-              if (skeleton) {
-                skeleton.classList.add('hide');
-              }
-            },
-            { once: true }
-          );
-        }
-      });
-
-      grid.addEventListener('pointerdown', function (event) {
-        if (event.pointerType === 'mouse' && event.button !== 0) {
-          return;
-        }
-
-        isDragging = true;
-        moved = false;
-        pressedCard = event.target.closest('.img-card');
-        startX = event.clientX;
-        startScrollLeft = grid.scrollLeft;
-      });
-
-      grid.addEventListener('pointermove', function (event) {
-        if (!isDragging) {
-          return;
-        }
-
-        const distance = event.clientX - startX;
-
-        if (!moved && Math.abs(distance) > 5) {
-          moved = true;
-          grid.classList.add('dragging');
-
-          if (
-            event.pointerId !== undefined &&
-            !grid.hasPointerCapture(event.pointerId)
-          ) {
-            grid.setPointerCapture(event.pointerId);
-          }
-        }
-
-        if (moved) {
-          grid.scrollLeft = startScrollLeft - distance;
+        ) {
           event.preventDefault();
         }
       });
 
-      function stopDragging(event, openWhenClicked) {
-        if (!isDragging) {
-          return;
+      document.addEventListener('dragstart', function(event) {
+        if (event.target && event.target.tagName === 'IMG') {
+          event.preventDefault();
+        }
+      });
+
+      window.addEventListener('load', function() {
+        renderShowcase();
+
+        const activeCategoryButton =
+          categoryIndexList &&
+          categoryIndexList.querySelector('.category-index-btn.active');
+
+        if (activeCategoryButton) {
+          moveCategoryIndexLine(activeCategoryButton);
         }
 
-        const cardToOpen = !moved && openWhenClicked
-          ? pressedCard
-          : null;
-
-        isDragging = false;
-        grid.classList.remove('dragging');
-
-        if (
-          event &&
-          event.pointerId !== undefined &&
-          grid.hasPointerCapture(event.pointerId)
-        ) {
-          grid.releasePointerCapture(event.pointerId);
-        }
-
-        pressedCard = null;
-
-        if (cardToOpen) {
-          const index = cards.indexOf(cardToOpen);
-
-          if (index !== -1) {
-            openLightbox(index, cardToOpen);
-          }
-        }
-
-        moved = false;
-      }
-
-      grid.addEventListener('pointerup', function (event) {
-        stopDragging(event, true);
-      });
-
-      grid.addEventListener('pointercancel', function (event) {
-        stopDragging(event, false);
-      });
-
-      grid.addEventListener('lostpointercapture', function (event) {
-        stopDragging(event, false);
-      });
-
-
-      grid.addEventListener('dragstart', function (event) {
-        event.preventDefault();
-      });
-
-      window.addEventListener('load', function () {
         sendHeight();
-        setTimeout(sendHeight, 250);
-        setTimeout(sendHeight, 800);
+        setTimeout(sendHeight,250);
+        setTimeout(sendHeight,800);
       });
 
-      window.addEventListener('resize', sendHeight);
+      window.addEventListener('resize', function() {
+        const activeCategoryButton =
+          categoryIndexList &&
+          categoryIndexList.querySelector('.category-index-btn.active');
+
+        if (activeCategoryButton) {
+          moveCategoryIndexLine(activeCategoryButton);
+        }
+
+        sendHeight();
+      });
 
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(sendHeight);
-      }
-
-      if ('ResizeObserver' in window) {
-        const observer = new ResizeObserver(sendHeight);
-        observer.observe(document.body);
       }
     })();
   </script>

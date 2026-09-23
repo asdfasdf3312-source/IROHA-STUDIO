@@ -1000,6 +1000,39 @@
       }
     }
 
+  
+    /* v58 — 원본 확대/드래그 감도 복원 */
+    .lightbox-image.zoomed{
+      width:min(165vw, 2200px) !important;
+      max-width:none !important;
+      max-height:none !important;
+      cursor:grab !important;
+      touch-action:none !important;
+      transform:none !important;
+      opacity:1 !important;
+      filter:none !important;
+      will-change:scroll-position;
+    }
+
+    .lightbox.zoom-active .lightbox-image.zoomed{
+      display:block !important;
+      margin:72px auto 120px !important;
+    }
+
+    .lightbox-image.zoomed.dragging{
+      cursor:grabbing !important;
+    }
+
+    @media (max-width:640px){
+      .lightbox-image.zoomed{
+        width:180vw !important;
+      }
+
+      .lightbox.zoom-active .lightbox-image.zoomed{
+        margin:70px auto 118px !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -1233,6 +1266,15 @@
       let zoomStartY = 0;
       let zoomStartScrollLeft = 0;
       let zoomStartScrollTop = 0;
+      let zoomTargetScrollLeft = 0;
+      let zoomTargetScrollTop = 0;
+      let zoomScrollRaf = null;
+      let zoomLastX = 0;
+      let zoomLastY = 0;
+      let zoomLastTime = 0;
+      let zoomVelocityX = 0;
+      let zoomVelocityY = 0;
+      let zoomMomentumRaf = null;
 
       function getCategoryLabel(category) {
         if (category === 'boing-eye') return '뽀잉눈';
@@ -1427,7 +1469,10 @@
       });
 
       function updateFixedOverlayPosition() {
-        const isZoomed = lightbox.classList.contains('zoom-active');
+        const isZoomed =
+          lightbox.classList.contains('zoom-active') ||
+          lightbox.classList.contains('zoom-mode');
+
         const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
         const scrollTop = isZoomed ? lightbox.scrollTop : 0;
 
@@ -1435,16 +1480,104 @@
         lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
       }
 
+      function stopZoomSmoothScroll() {
+        if (zoomScrollRaf !== null) {
+          cancelAnimationFrame(zoomScrollRaf);
+          zoomScrollRaf = null;
+        }
+      }
+
+      function runZoomSmoothScroll() {
+        const currentLeft = lightbox.scrollLeft;
+        const currentTop = lightbox.scrollTop;
+
+        const nextLeft =
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.22;
+
+        const nextTop =
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.22;
+
+        lightbox.scrollLeft = nextLeft;
+        lightbox.scrollTop = nextTop;
+        updateFixedOverlayPosition();
+
+        if (
+          Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
+          Math.abs(zoomTargetScrollTop - nextTop) > 0.5
+        ) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        } else {
+          lightbox.scrollLeft = zoomTargetScrollLeft;
+          lightbox.scrollTop = zoomTargetScrollTop;
+          updateFixedOverlayPosition();
+          zoomScrollRaf = null;
+        }
+      }
+
+      function requestZoomSmoothScroll() {
+        if (zoomScrollRaf === null) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        }
+      }
+
+      function stopZoomMomentum() {
+        if (zoomMomentumRaf !== null) {
+          cancelAnimationFrame(zoomMomentumRaf);
+          zoomMomentumRaf = null;
+        }
+      }
+
+      function runZoomMomentum() {
+        if (
+          Math.abs(zoomVelocityX) < 0.12 &&
+          Math.abs(zoomVelocityY) < 0.12
+        ) {
+          zoomMomentumRaf = null;
+          return;
+        }
+
+        lightbox.scrollLeft += zoomVelocityX;
+        lightbox.scrollTop += zoomVelocityY;
+        updateFixedOverlayPosition();
+
+        zoomVelocityX *= 0.82;
+        zoomVelocityY *= 0.82;
+
+        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+      }
+
+      function startZoomMomentum() {
+        stopZoomSmoothScroll();
+        stopZoomMomentum();
+
+        if (
+          Math.abs(zoomVelocityX) < 0.8 &&
+          Math.abs(zoomVelocityY) < 0.8
+        ) {
+          return;
+        }
+
+        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+      }
+
       function resetLightboxZoom() {
+        stopZoomSmoothScroll();
+        stopZoomMomentum();
+
+        lightboxImage.classList.remove(
+          'zoomed',
+          'dragging',
+          'slide-enter-left',
+          'slide-enter-right'
+        );
+
+        lightbox.classList.remove('zoom-active');
+        lightbox.scrollTop = 0;
+        lightbox.scrollLeft = 0;
+        updateFixedOverlayPosition();
+
         zoomDragging = false;
         zoomMoved = false;
-
-        lightboxImage.classList.remove('zoomed', 'dragging');
-        lightbox.classList.remove('zoom-active');
-
-        lightbox.scrollLeft = 0;
-        lightbox.scrollTop = 0;
-        updateFixedOverlayPosition();
       }
 
       function stopLightboxVideo() {
@@ -1508,7 +1641,11 @@
         updateLightbox(lightboxIndex + 1);
       });
 
-      lightbox.addEventListener('scroll', updateFixedOverlayPosition, { passive:true });
+      lightbox.addEventListener(
+        'scroll',
+        updateFixedOverlayPosition,
+        { passive:true }
+      );
 
       lightboxImage.addEventListener('pointerdown', function(event) {
         event.stopPropagation();
@@ -1517,21 +1654,28 @@
           return;
         }
 
-        /* 크게 보기 상태에서 이미지를 한 번 더 누르면 추가 확대 */
+        /* 원래 설정: 한 번 더 클릭하면 165vw까지 확대 */
         if (!lightboxImage.classList.contains('zoomed')) {
           lightboxImage.classList.add('zoomed');
           lightbox.classList.add('zoom-active');
 
           requestAnimationFrame(function() {
-            lightbox.scrollLeft = Math.max(
-              0,
-              (lightbox.scrollWidth - lightbox.clientWidth) / 2
-            );
-            lightbox.scrollTop = Math.max(
-              0,
-              (lightbox.scrollHeight - lightbox.clientHeight) / 2
-            );
+            lightbox.scrollLeft =
+              Math.max(
+                0,
+                (lightbox.scrollWidth - lightbox.clientWidth) / 2
+              );
+
+            lightbox.scrollTop =
+              Math.max(
+                0,
+                (lightbox.scrollHeight - lightbox.clientHeight) / 2
+              );
+
             updateFixedOverlayPosition();
+
+            zoomTargetScrollLeft = lightbox.scrollLeft;
+            zoomTargetScrollTop = lightbox.scrollTop;
           });
 
           return;
@@ -1541,12 +1685,22 @@
           return;
         }
 
+        stopZoomSmoothScroll();
+        stopZoomMomentum();
+
         zoomDragging = true;
         zoomMoved = false;
         zoomStartX = event.clientX;
         zoomStartY = event.clientY;
         zoomStartScrollLeft = lightbox.scrollLeft;
         zoomStartScrollTop = lightbox.scrollTop;
+        zoomTargetScrollLeft = zoomStartScrollLeft;
+        zoomTargetScrollTop = zoomStartScrollTop;
+        zoomLastX = event.clientX;
+        zoomLastY = event.clientY;
+        zoomLastTime = performance.now();
+        zoomVelocityX = 0;
+        zoomVelocityY = 0;
 
         lightboxImage.classList.add('dragging');
 
@@ -1559,30 +1713,57 @@
       });
 
       lightboxImage.addEventListener('pointermove', function(event) {
-        if (!zoomDragging) return;
+        if (!zoomDragging) {
+          return;
+        }
 
         const distanceX = event.clientX - zoomStartX;
         const distanceY = event.clientY - zoomStartY;
 
         if (
           !zoomMoved &&
-          (Math.abs(distanceX) > 3 || Math.abs(distanceY) > 3)
+          (
+            Math.abs(distanceX) > 1 ||
+            Math.abs(distanceY) > 1
+          )
         ) {
           zoomMoved = true;
         }
 
         if (zoomMoved) {
-          lightbox.scrollLeft = zoomStartScrollLeft - distanceX;
-          lightbox.scrollTop = zoomStartScrollTop - distanceY;
-          updateFixedOverlayPosition();
+          const now = performance.now();
+          const deltaX = event.clientX - zoomLastX;
+          const deltaY = event.clientY - zoomLastY;
+          const deltaTime = Math.max(8, now - zoomLastTime);
+          const velocityScale = Math.min(1.1, 16 / deltaTime) * 0.16;
+
+          zoomVelocityX = -deltaX * velocityScale;
+          zoomVelocityY = -deltaY * velocityScale;
+
+          zoomTargetScrollLeft =
+            zoomStartScrollLeft - (distanceX * 1.65);
+
+          zoomTargetScrollTop =
+            zoomStartScrollTop - (distanceY * 1.65);
+
+          requestZoomSmoothScroll();
+
+          zoomLastX = event.clientX;
+          zoomLastY = event.clientY;
+          zoomLastTime = now;
+
           event.preventDefault();
         }
       });
 
       function finishZoomDrag(event, allowClickToggle) {
-        if (!zoomDragging) return;
+        if (!zoomDragging) {
+          return;
+        }
 
-        const shouldZoomOut = allowClickToggle && !zoomMoved;
+        const shouldZoomOut =
+          allowClickToggle &&
+          !zoomMoved;
 
         zoomDragging = false;
         lightboxImage.classList.remove('dragging');
@@ -1596,7 +1777,19 @@
         }
 
         if (shouldZoomOut) {
-          resetLightboxZoom();
+          stopZoomSmoothScroll();
+          stopZoomMomentum();
+
+          lightboxImage.classList.remove('zoomed');
+          lightbox.classList.remove('zoom-active');
+
+          lightbox.scrollTo({
+            top:0,
+            left:0,
+            behavior:'smooth'
+          });
+        } else if (zoomMoved) {
+          startZoomMomentum();
         }
 
         zoomMoved = false;
@@ -1610,9 +1803,12 @@
         finishZoomDrag(event, false);
       });
 
-      lightboxImage.addEventListener('lostpointercapture', function(event) {
-        finishZoomDrag(event, false);
-      });
+      lightboxImage.addEventListener(
+        'lostpointercapture',
+        function(event) {
+          finishZoomDrag(event, false);
+        }
+      );
 
       lightbox.addEventListener('click', function(event) {
         if (event.target === lightbox) closeLightbox();

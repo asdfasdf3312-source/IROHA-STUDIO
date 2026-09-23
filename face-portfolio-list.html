@@ -904,18 +904,29 @@
       width:100%;
       overflow-x:auto;
       overflow-y:hidden;
-      padding:3px 2px 8px;
+      padding:3px 2px 16px;
       scroll-behavior:smooth;
-      scrollbar-width:thin;
+      scrollbar-width:auto;
       scrollbar-color:var(--mint) transparent;
       -webkit-overflow-scrolling:touch;
     }
 
-    .showcase-thumbs::-webkit-scrollbar{height:7px;}
-    .showcase-thumbs::-webkit-scrollbar-track{background:transparent;}
+    .showcase-thumbs::-webkit-scrollbar{
+      height:13px;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-track{
+      background:transparent;
+    }
+
     .showcase-thumbs::-webkit-scrollbar-thumb{
+      min-width:140px;
       border-radius:999px;
-      background:rgba(118,216,210,.74);
+      background:var(--mint);
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-thumb:hover{
+      background:var(--mint-dark);
     }
 
     .showcase-thumb{

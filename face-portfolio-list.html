@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v55</title>
+  <title>뽀잉눈｜웃는눈 연동｜페이셜｜성형 v56 Showcase</title>
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
   <link rel="preconnect" href="https://i.ytimg.com">
@@ -733,6 +733,273 @@
         margin: 70px auto 118px;
       }
     }
+  
+    /* v56 — 메인 샘플 + 썸네일 쇼케이스 */
+    .showcase-wrap{
+      width:100%;
+      margin-top:2px;
+    }
+
+    .showcase-stage{
+      position:relative;
+      width:100%;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      border:2px solid var(--border);
+      border-radius:24px;
+      background:#f5fbfa;
+      box-shadow:var(--shadow-sm);
+    }
+
+    .showcase-media{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background:#f5fbfa;
+      opacity:1;
+      transform:scale(1);
+      transition:opacity .18s ease, transform .24s ease;
+    }
+
+    .showcase-stage.switching .showcase-media{
+      opacity:.18;
+      transform:scale(.992);
+    }
+
+    .showcase-media img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:contain;
+      object-position:center;
+      background:#f7fbfb;
+      cursor:zoom-in;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .showcase-media iframe{
+      width:100%;
+      height:100%;
+      display:block;
+      border:0;
+      background:#000;
+    }
+
+    .showcase-nav{
+      position:absolute;
+      top:50%;
+      z-index:8;
+      width:48px;
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+      border:0;
+      border-radius:50%;
+      transform:translateY(-50%) scale(.94);
+      background:rgba(255,255,255,.94);
+      color:var(--mint-dark);
+      box-shadow:0 8px 22px rgba(0,0,0,.14);
+      font-family:Arial,sans-serif;
+      font-size:31px;
+      line-height:1;
+      cursor:pointer;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .2s ease, visibility .2s ease, transform .2s ease, background-color .2s ease;
+    }
+
+    .showcase-prev{left:16px;}
+    .showcase-next{right:16px;}
+
+    .showcase-stage:hover .showcase-nav,
+    .showcase-stage:focus-within .showcase-nav{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(-50%) scale(1);
+    }
+
+    .showcase-nav:hover{
+      background:#fff;
+      transform:translateY(-50%) scale(1.08);
+    }
+
+    .showcase-info{
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      padding:12px 8px 5px;
+      text-align:center;
+    }
+
+    .showcase-title-line{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
+      flex-wrap:wrap;
+    }
+
+    .showcase-category{
+      color:#9b8290;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .showcase-category::after{
+      content:' · ';
+      color:#c6afb9;
+    }
+
+    .showcase-title{
+      color:#4b3d43;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .showcase-count{
+      flex:0 0 auto;
+      color:#a5b2b1;
+      font-size:11.5px;
+      font-weight:700;
+    }
+
+    .showcase-dots{
+      min-height:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      margin:0 0 9px;
+    }
+
+    .showcase-dot{
+      width:7px;
+      height:7px;
+      padding:0;
+      border:0;
+      border-radius:999px;
+      background:#dff3f1;
+      cursor:pointer;
+      transition:width .2s ease, background-color .2s ease;
+    }
+
+    .showcase-dot.active{
+      width:22px;
+      background:var(--mint);
+    }
+
+    .showcase-thumbs{
+      display:flex;
+      gap:10px;
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      padding:3px 2px 8px;
+      scroll-behavior:smooth;
+      scrollbar-width:thin;
+      scrollbar-color:var(--mint) transparent;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar{height:7px;}
+    .showcase-thumbs::-webkit-scrollbar-track{background:transparent;}
+    .showcase-thumbs::-webkit-scrollbar-thumb{
+      border-radius:999px;
+      background:rgba(118,216,210,.74);
+    }
+
+    .showcase-thumb{
+      position:relative;
+      flex:0 0 150px;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      padding:0;
+      border:1.5px solid #d7e9e7;
+      border-radius:13px;
+      background:#f7fbfb;
+      cursor:pointer;
+      opacity:.75;
+      transition:opacity .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .showcase-thumb:hover{
+      opacity:1;
+      transform:translateY(-2px);
+      border-color:var(--mint);
+    }
+
+    .showcase-thumb.active{
+      opacity:1;
+      border-color:var(--mint-dark);
+      box-shadow:0 5px 14px rgba(78,170,165,.16);
+    }
+
+    .showcase-thumb img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      pointer-events:none;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .showcase-thumb-badge{
+      position:absolute;
+      left:6px;
+      top:6px;
+      z-index:2;
+      padding:4px 6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.92);
+      color:var(--mint-dark);
+      font-size:9px;
+      font-weight:700;
+      line-height:1;
+      box-shadow:0 3px 8px rgba(0,0,0,.08);
+      pointer-events:none;
+    }
+
+    @media (hover:none), (pointer:coarse){
+      .showcase-nav{
+        opacity:1;
+        visibility:visible;
+        transform:translateY(-50%) scale(1);
+      }
+    }
+
+    @media (max-width:640px){
+      .showcase-stage{border-radius:18px;}
+      .showcase-nav{
+        width:40px;
+        height:40px;
+        font-size:26px;
+      }
+      .showcase-prev{left:9px;}
+      .showcase-next{right:9px;}
+      .showcase-info{
+        min-height:44px;
+        padding-top:10px;
+      }
+      .showcase-category{font-size:11px;}
+      .showcase-title{font-size:12.5px;}
+      .showcase-count{display:none;}
+      .showcase-thumb{
+        flex-basis:118px;
+        border-radius:11px;
+      }
+    }
+
   </style>
 </head>
 
@@ -774,7 +1041,26 @@
       </div>
     </div>
 
-    <div id="face-portfolio-grid" class="portfolio-grid"></div>
+    
+    <div class="showcase-wrap">
+      <div class="showcase-stage" id="showcaseStage">
+        <div class="showcase-media" id="showcaseMedia"></div>
+        <button class="showcase-nav showcase-prev" id="showcasePrev" type="button" aria-label="이전 샘플">‹</button>
+        <button class="showcase-nav showcase-next" id="showcaseNext" type="button" aria-label="다음 샘플">›</button>
+      </div>
+
+      <div class="showcase-info">
+        <div class="showcase-title-line">
+          <span class="showcase-category" id="showcaseCategory"></span>
+          <strong class="showcase-title" id="showcaseTitle"></strong>
+        </div>
+        <span class="showcase-count" id="showcaseCount"></span>
+      </div>
+
+      <div class="showcase-dots" id="showcaseDots"></div>
+      <div class="showcase-thumbs" id="showcaseThumbs"></div>
+    </div>
+
   </section>
 
   <div
@@ -815,7 +1101,6 @@
 
     <div class="lightbox-count" aria-live="polite"></div>
   </div>
-
   <script>
     (function () {
       const portfolioItems = [
@@ -915,10 +1200,16 @@
         }
       ];
 
-      const grid = document.getElementById('face-portfolio-grid');
-      const filterButtons = Array.from(
-        document.querySelectorAll('.filter-btn')
-      );
+      const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+      const stage = document.getElementById('showcaseStage');
+      const media = document.getElementById('showcaseMedia');
+      const prevBtn = document.getElementById('showcasePrev');
+      const nextBtn = document.getElementById('showcaseNext');
+      const titleEl = document.getElementById('showcaseTitle');
+      const categoryEl = document.getElementById('showcaseCategory');
+      const countEl = document.getElementById('showcaseCount');
+      const dotsEl = document.getElementById('showcaseDots');
+      const thumbsEl = document.getElementById('showcaseThumbs');
 
       const lightbox = document.getElementById('face-portfolio-lightbox');
       const lightboxImage = lightbox.querySelector('.lightbox-image');
@@ -931,740 +1222,308 @@
       const lightboxCount = lightbox.querySelector('.lightbox-count');
 
       let currentFilter = 'all';
-let visibleItems = [];
-      let currentImageIndex = 0;
-      let isSwitching = false;
-
-      let isDragging = false;
-      let moved = false;
-      let startX = 0;
-      let startScrollLeft = 0;
-      let pressedCard = null;
-
-      let zoomDragging = false;
-      let zoomMoved = false;
-      let zoomStartX = 0;
-      let zoomStartY = 0;
-      let zoomStartScrollLeft = 0;
-      let zoomStartScrollTop = 0;
-      let zoomTargetScrollLeft = 0;
-      let zoomTargetScrollTop = 0;
-      let zoomScrollRaf = null;
-      let zoomLastX = 0;
-      let zoomLastY = 0;
-      let zoomLastTime = 0;
-      let zoomVelocityX = 0;
-      let zoomVelocityY = 0;
-      let zoomMomentumRaf = null;
-
-      function sendHeight() {
-        const height = Math.ceil(
-          Math.max(
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight
-          )
-        );
-
-        window.parent.postMessage(
-          {
-            type: 'iroha-face-portfolio-height',
-            height: height
-          },
-          '*'
-        );
-      }
-
-
-      function updateFixedOverlayPosition() {
-        const isZoomed =
-          lightbox.classList.contains('zoom-active') ||
-          lightbox.classList.contains('zoom-mode');
-
-        const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
-        const scrollTop = isZoomed ? lightbox.scrollTop : 0;
-
-        lightbox.style.setProperty('--iroha-scroll-left', scrollLeft + 'px');
-        lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
-      }
+      let visibleItems = [];
+      let currentIndex = 0;
+      let lightboxIndex = 0;
+      let switchTimer = null;
 
       function getCategoryLabel(category) {
         if (category === 'boing-eye') return '뽀잉눈';
         if (category === 'smile-eye') return '웃는눈 연동';
         if (category === 'facial') return '페이셜';
         if (category === 'detail') return '성형디테일';
-        if (category === 'before-after') return 'Befor / After';
-        return '';
+        if (category === 'before-after') return 'Before / After';
+        return '전체';
       }
 
-      function renderPortfolio() {
-        visibleItems = portfolioItems.filter(function (item) {
-          return currentFilter === 'all' ||
-            item.category === currentFilter;
+      function sendHeight() {
+        const height = Math.ceil(Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        ));
+        window.parent.postMessage({
+          type:'iroha-face-portfolio-height',
+          height:height
+        }, '*');
+      }
+
+      function thumbSrc(item) {
+        if (item.type === 'youtube' && item.youtubeId) {
+          return 'https://img.youtube.com/vi/' + item.youtubeId + '/hqdefault.jpg';
+        }
+        return item.src;
+      }
+
+      function renderDots() {
+        dotsEl.innerHTML = '';
+
+        if (visibleItems.length > 10) {
+          dotsEl.style.display = 'none';
+          return;
+        }
+
+        dotsEl.style.display = 'flex';
+
+        visibleItems.forEach(function(item, index) {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'showcase-dot' + (index === currentIndex ? ' active' : '');
+          dot.setAttribute('aria-label', (index + 1) + '번째 샘플 보기');
+          dot.addEventListener('click', function() {
+            showItem(index, 0);
+          });
+          dotsEl.appendChild(dot);
+        });
+      }
+
+      function renderThumbs() {
+        thumbsEl.innerHTML = '';
+
+        visibleItems.forEach(function(item, index) {
+          const thumb = document.createElement('button');
+          thumb.type = 'button';
+          thumb.className = 'showcase-thumb' + (index === currentIndex ? ' active' : '');
+          thumb.setAttribute('aria-label', (item.title || '샘플') + ' 보기');
+
+          const img = document.createElement('img');
+          img.src = thumbSrc(item);
+          img.alt = '';
+          img.loading = index < 6 ? 'eager' : 'lazy';
+          img.draggable = false;
+          thumb.appendChild(img);
+
+          if (item.type === 'youtube') {
+            const badge = document.createElement('span');
+            badge.className = 'showcase-thumb-badge';
+            badge.textContent = 'VIDEO';
+            thumb.appendChild(badge);
+          }
+
+          thumb.addEventListener('click', function() {
+            showItem(index, 0);
+          });
+
+          thumbsEl.appendChild(thumb);
+        });
+      }
+
+      function updateThumbActive() {
+        Array.from(thumbsEl.querySelectorAll('.showcase-thumb')).forEach(function(thumb, i) {
+          thumb.classList.toggle('active', i === currentIndex);
         });
 
-        grid.innerHTML = '';
+        const active = thumbsEl.querySelector('.showcase-thumb.active');
+        if (active) {
+          active.scrollIntoView({
+            behavior:'smooth',
+            block:'nearest',
+            inline:'center'
+          });
+        }
+      }
 
-        if (visibleItems.length === 0) {
-          grid.innerHTML =
+      function updateInfo(item) {
+        categoryEl.textContent = getCategoryLabel(item.category);
+        titleEl.textContent = item.title || '작업 샘플';
+        countEl.textContent = (currentIndex + 1) + ' / ' + visibleItems.length;
+      }
+
+      function mountMedia(item) {
+        media.innerHTML = '';
+
+        if (item.type === 'youtube' && item.youtubeId) {
+          const iframe = document.createElement('iframe');
+          iframe.src =
+            'https://www.youtube.com/embed/' +
+            item.youtubeId +
+            '?rel=0&modestbranding=1&playsinline=1';
+          iframe.title = item.title || 'YouTube video player';
+          iframe.loading = 'eager';
+          iframe.allow =
+            'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+          iframe.allowFullscreen = true;
+          media.appendChild(iframe);
+          return;
+        }
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.title || '작업 이미지';
+        img.draggable = false;
+        img.addEventListener('click', function() {
+          openLightbox(currentIndex);
+        });
+        media.appendChild(img);
+      }
+
+      function showItem(index, direction) {
+        if (!visibleItems.length) return;
+
+        currentIndex = (index + visibleItems.length) % visibleItems.length;
+        const item = visibleItems[currentIndex];
+
+        stage.classList.add('switching');
+        clearTimeout(switchTimer);
+
+        switchTimer = setTimeout(function() {
+          mountMedia(item);
+          updateInfo(item);
+          renderDots();
+          updateThumbActive();
+          stage.classList.remove('switching');
+          sendHeight();
+        }, direction === 0 ? 70 : 120);
+      }
+
+      function renderShowcase() {
+        visibleItems = portfolioItems.filter(function(item) {
+          return currentFilter === 'all' || item.category === currentFilter;
+        });
+
+        currentIndex = 0;
+
+        if (!visibleItems.length) {
+          media.innerHTML =
             '<div class="empty-state">' +
               '<div class="empty-icon">🖼️</div>' +
               '<div class="empty-title">등록된 작업물이 없습니다.</div>' +
-              '<div class="empty-text">' +
-                '사진이 준비되면 이 메뉴에 작업물이 표시됩니다.' +
-              '</div>' +
+              '<div class="empty-text">준비되는 대로 이 카테고리에 추가됩니다.</div>' +
             '</div>';
-
+          titleEl.textContent = '등록된 작업물이 없습니다.';
+          categoryEl.textContent = getCategoryLabel(currentFilter);
+          countEl.textContent = '';
+          dotsEl.innerHTML = '';
+          thumbsEl.innerHTML = '';
           sendHeight();
           return;
         }
 
-        visibleItems.forEach(function (item, index) {
-          const card = document.createElement('div');
-          card.className = item.type === 'youtube'
-            ? 'portfolio-card video-card youtube-embed-card'
-            : 'portfolio-card';
-          card.setAttribute('role', 'button');
-          card.setAttribute('tabindex', '0');
-          card.setAttribute(
-            'aria-label',
-            (item.title || '작업 이미지') + ' 크게 보기'
-          );
+        renderThumbs();
+        showItem(0, 0);
+      }
 
-          if (item.type === 'youtube') {
-            const iframe = document.createElement('iframe');
-            iframe.src =
-              'https://www.youtube.com/embed/' +
-              item.youtubeId +
-              '?rel=0&modestbranding=1&playsinline=1';
-            iframe.title = item.title || 'YouTube video player';
-            iframe.loading = 'eager';
-            iframe.allow =
-              'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-            iframe.allowFullscreen = true;
+      function move(step) {
+        showItem(currentIndex + step, step);
+      }
 
-            card.appendChild(iframe);
-            card.setAttribute(
-              'aria-label',
-              (item.title || '유튜브 영상') + ' 재생'
-            );
+      prevBtn.addEventListener('click', function() { move(-1); });
+      nextBtn.addEventListener('click', function() { move(1); });
 
-            grid.appendChild(card);
-            return;
-          }
-
-          const image = document.createElement('img');
-          image.src = item.src;
-          image.alt = item.title || '작업 이미지';
-          image.loading = index < 2 ? 'eager' : 'lazy';
-          image.setAttribute('draggable', 'false');
-          image.setAttribute('oncontextmenu', 'return false;');
-
-          const badge = document.createElement('div');
-          badge.className = 'portfolio-badge';
-          badge.textContent = getCategoryLabel(item.category);
-
-          card.appendChild(image);
-          card.appendChild(badge);
-
-          card.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              openLightbox(index);
-            }
+      filterButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          currentFilter = button.dataset.filter;
+          filterButtons.forEach(function(otherButton) {
+            otherButton.classList.toggle('active', otherButton === button);
           });
-
-          grid.appendChild(card);
+          renderShowcase();
         });
+      });
 
-        sendHeight();
+      function stopLightboxVideo() {
+        if (lightboxVideo) lightboxVideo.src = '';
       }
 
-      function stopZoomSmoothScroll() {
-        if (zoomScrollRaf !== null) {
-          cancelAnimationFrame(zoomScrollRaf);
-          zoomScrollRaf = null;
-        }
-      }
+      function updateLightbox(index) {
+        if (!visibleItems.length) return;
 
-      function runZoomSmoothScroll() {
-        const currentLeft = lightbox.scrollLeft;
-        const currentTop = lightbox.scrollTop;
+        lightboxIndex = (index + visibleItems.length) % visibleItems.length;
+        const item = visibleItems[lightboxIndex];
 
-        const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.22;
+        lightboxCount.textContent =
+          (lightboxIndex + 1) + ' / ' + visibleItems.length;
 
-        const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.22;
-
-        lightbox.scrollLeft = nextLeft;
-        lightbox.scrollTop = nextTop;
-
-        if (
-          Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
-          Math.abs(zoomTargetScrollTop - nextTop) > 0.5
-        ) {
-          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
-        } else {
-          lightbox.scrollLeft = zoomTargetScrollLeft;
-          lightbox.scrollTop = zoomTargetScrollTop;
-          updateFixedOverlayPosition();
-          zoomScrollRaf = null;
-        }
-      }
-
-      function requestZoomSmoothScroll() {
-        if (zoomScrollRaf === null) {
-          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
-        }
-      }
-
-      function stopZoomMomentum() {
-        if (zoomMomentumRaf !== null) {
-          cancelAnimationFrame(zoomMomentumRaf);
-          zoomMomentumRaf = null;
-        }
-      }
-
-      function runZoomMomentum() {
-        if (
-          Math.abs(zoomVelocityX) < 0.12 &&
-          Math.abs(zoomVelocityY) < 0.12
-        ) {
-          zoomMomentumRaf = null;
-          return;
-        }
-
-        lightbox.scrollLeft += zoomVelocityX;
-        lightbox.scrollTop += zoomVelocityY;
-
-        updateFixedOverlayPosition();
-
-        zoomVelocityX *= 0.82;
-        zoomVelocityY *= 0.82;
-
-        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
-      }
-
-      function startZoomMomentum() {
-        stopZoomSmoothScroll();
-        stopZoomMomentum();
-
-        if (
-          Math.abs(zoomVelocityX) < 0.8 &&
-          Math.abs(zoomVelocityY) < 0.8
-        ) {
-          return;
-        }
-
-        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
-      }
-
-      function isVideoItem(item) {
-        return item && item.type === 'youtube' && item.youtubeId;
-      }
-
-      function stopVideo() {
-        if (lightboxVideo) {
-          lightboxVideo.src = '';
-        }
-      }
-
-      function showImageMode() {
-        lightbox.classList.remove('video-mode');
-
-        if (lightboxVideoWrap) {
-          lightboxVideoWrap.setAttribute('hidden', '');
-        }
-
-        if (videoFallbackLink) {
-          videoFallbackLink.setAttribute('hidden', '');
-        }
-
-        stopVideo();
-        lightboxImage.hidden = false;
-      }
-
-      function showVideoMode(item) {
-        resetLightboxZoom();
-        lightbox.classList.add('video-mode');
-
-        if (lightboxVideoWrap) {
+        if (item.type === 'youtube' && item.youtubeId) {
+          lightbox.classList.add('video-mode');
+          lightboxImage.hidden = true;
           lightboxVideoWrap.removeAttribute('hidden');
-        }
-
-        lightboxImage.hidden = true;
-
-        if (videoFallbackLink) {
           videoFallbackLink.href = 'https://youtu.be/' + item.youtubeId;
           videoFallbackLink.removeAttribute('hidden');
-        }
-
-        if (lightboxVideo) {
           lightboxVideo.src =
             'https://www.youtube.com/embed/' +
             item.youtubeId +
             '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+        } else {
+          lightbox.classList.remove('video-mode');
+          stopLightboxVideo();
+          lightboxVideoWrap.setAttribute('hidden','');
+          videoFallbackLink.setAttribute('hidden','');
+          lightboxImage.hidden = false;
+          lightboxImage.src = item.src;
+          lightboxImage.alt = item.title || '작업 이미지';
         }
-      }
-
-      function resetLightboxZoom() {
-        stopZoomSmoothScroll();
-        stopZoomMomentum();
-
-        lightboxImage.classList.remove(
-          'zoomed',
-          'dragging',
-          'slide-enter-left',
-          'slide-enter-right'
-        );
-
-        lightbox.classList.remove('zoom-active');
-        lightbox.scrollTop = 0;
-        lightbox.scrollLeft = 0;
-        updateFixedOverlayPosition();
-        zoomDragging = false;
-        zoomMoved = false;
-      }
-
-      function updateLightbox(index) {
-        currentImageIndex =
-          (index + visibleItems.length) % visibleItems.length;
-
-        const item = visibleItems[currentImageIndex];
-
-        lightboxCount.textContent =
-          (currentImageIndex + 1) + ' / ' + visibleItems.length;
-
-        if (isVideoItem(item)) {
-          showVideoMode(item);
-          return;
-        }
-
-        showImageMode();
-        lightboxImage.src = item.src;
-        lightboxImage.alt = item.title || '작업 이미지';
-      }
-
-      function moveLightbox(step) {
-        if (!visibleItems.length || isSwitching) {
-          return;
-        }
-
-        isSwitching = true;
-
-        const nextIndex =
-          (currentImageIndex + step + visibleItems.length) %
-          visibleItems.length;
-
-        resetLightboxZoom();
-
-        const nextItem = visibleItems[nextIndex];
-        const preload = new Image();
-        let changed = false;
-
-        function changeImage() {
-          if (changed) {
-            return;
-          }
-
-          changed = true;
-
-          const enterClass = step > 0
-            ? 'slide-enter-right'
-            : 'slide-enter-left';
-
-          updateLightbox(nextIndex);
-          lightboxImage.classList.add(enterClass);
-
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              lightboxImage.classList.remove(enterClass);
-
-              setTimeout(function () {
-                isSwitching = false;
-              }, 340);
-            });
-          });
-        }
-
-        preload.onload = changeImage;
-        preload.onerror = changeImage;
-        preload.src = nextItem.src;
-
-        /*
-          다음 이미지를 미리 불러온 뒤 전환합니다.
-          잔상처럼 남는 이전 사진 복제본은 사용하지 않습니다.
-        */
-        setTimeout(changeImage, 700);
       }
 
       function openLightbox(index) {
-        if (!visibleItems.length) return;
-
-        resetLightboxZoom();
         updateLightbox(index);
-        lightbox.classList.add('is-opening');
         lightbox.hidden = false;
         document.body.classList.add('lightbox-open');
-
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            lightbox.classList.remove('is-opening');
-          });
-        });
-
-        lightboxClose.focus();
       }
 
       function closeLightbox() {
         lightbox.hidden = true;
         lightboxImage.src = '';
-        stopVideo();
-        resetLightboxZoom();
-        lightbox.classList.remove('is-opening', 'video-mode');
-
-        if (lightboxVideoWrap) {
-          lightboxVideoWrap.setAttribute('hidden', '');
-        }
-
-        if (videoFallbackLink) {
-          videoFallbackLink.setAttribute('hidden', '');
-        }
-
+        stopLightboxVideo();
+        lightbox.classList.remove('video-mode');
+        lightboxVideoWrap.setAttribute('hidden','');
+        videoFallbackLink.setAttribute('hidden','');
         lightboxImage.hidden = false;
-        isSwitching = false;
-        lightbox.scrollTop = 0;
-        lightbox.scrollLeft = 0;
-        updateFixedOverlayPosition();
         document.body.classList.remove('lightbox-open');
       }
 
-      filterButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-          currentFilter = button.dataset.filter;
-
-          filterButtons.forEach(function (otherButton) {
-            otherButton.classList.toggle(
-              'active',
-              otherButton === button
-            );
-          });
-
-          renderPortfolio();
-        });
-      });
-
-      grid.addEventListener('pointerdown', function (event) {
-        if (event.pointerType === 'mouse' && event.button !== 0) {
-          return;
-        }
-
-        isDragging = true;
-        moved = false;
-        pressedCard = event.target.closest('.portfolio-card');
-        startX = event.clientX;
-        startScrollLeft = grid.scrollLeft;
-      });
-
-      grid.addEventListener('pointermove', function (event) {
-        if (!isDragging) return;
-
-        const distance = event.clientX - startX;
-
-        if (!moved && Math.abs(distance) > 5) {
-          moved = true;
-          grid.classList.add('dragging');
-
-          if (
-            event.pointerId !== undefined &&
-            !grid.hasPointerCapture(event.pointerId)
-          ) {
-            grid.setPointerCapture(event.pointerId);
-          }
-        }
-
-        if (moved) {
-          grid.scrollLeft = startScrollLeft - distance;
-          event.preventDefault();
-        }
-      });
-
-      function finishPointer(event, openWhenClicked) {
-        if (!isDragging) return;
-
-        const cardToOpen = !moved && openWhenClicked
-          ? pressedCard
-          : null;
-
-        isDragging = false;
-        moved = false;
-        pressedCard = null;
-        grid.classList.remove('dragging');
-
-        if (
-          event &&
-          event.pointerId !== undefined &&
-          grid.hasPointerCapture(event.pointerId)
-        ) {
-          grid.releasePointerCapture(event.pointerId);
-        }
-
-        if (cardToOpen) {
-          if (cardToOpen.classList.contains('youtube-embed-card')) {
-            return;
-          }
-
-          const cards = Array.from(
-            grid.querySelectorAll('.portfolio-card')
-          );
-          const index = cards.indexOf(cardToOpen);
-
-          if (index !== -1) {
-            openLightbox(index);
-          }
-        }
-      }
-
-      grid.addEventListener('pointerup', function (event) {
-        finishPointer(event, true);
-      });
-
-      grid.addEventListener('pointercancel', function (event) {
-        finishPointer(event, false);
-      });
-
-      grid.addEventListener('lostpointercapture', function (event) {
-        finishPointer(event, false);
-      });
-
-
-      lightbox.addEventListener(
-        'scroll',
-        updateFixedOverlayPosition,
-        { passive: true }
-      );
-
       lightboxClose.addEventListener('click', closeLightbox);
-
-      lightboxPrev.addEventListener('click', function () {
-        moveLightbox(-1);
+      lightboxPrev.addEventListener('click', function() {
+        updateLightbox(lightboxIndex - 1);
+      });
+      lightboxNext.addEventListener('click', function() {
+        updateLightbox(lightboxIndex + 1);
       });
 
-      lightboxNext.addEventListener('click', function () {
-        moveLightbox(1);
+      lightbox.addEventListener('click', function(event) {
+        if (event.target === lightbox) closeLightbox();
       });
 
-      lightboxImage.addEventListener('pointerdown', function (event) {
-        event.stopPropagation();
-
-        if (!lightboxImage.classList.contains('zoomed')) {
-          lightboxImage.classList.add('zoomed');
-          lightbox.classList.add('zoom-active');
-
-          requestAnimationFrame(function () {
-            lightbox.scrollLeft =
-              Math.max(
-                0,
-                (lightbox.scrollWidth - lightbox.clientWidth) / 2
-              );
-
-            lightbox.scrollTop =
-              Math.max(
-                0,
-                (lightbox.scrollHeight - lightbox.clientHeight) / 2
-              );
-
-            updateFixedOverlayPosition();
-
-            zoomTargetScrollLeft = lightbox.scrollLeft;
-            zoomTargetScrollTop = lightbox.scrollTop;
-          });
-
+      document.addEventListener('keydown', function(event) {
+        if (!lightbox.hidden) {
+          if (event.key === 'Escape') closeLightbox();
+          else if (event.key === 'ArrowLeft') updateLightbox(lightboxIndex - 1);
+          else if (event.key === 'ArrowRight') updateLightbox(lightboxIndex + 1);
           return;
         }
 
-        if (event.pointerType === 'mouse' && event.button !== 0) {
-          return;
-        }
+        if (event.key === 'ArrowLeft') move(-1);
+        else if (event.key === 'ArrowRight') move(1);
+      });
 
-        stopZoomSmoothScroll();
-        stopZoomSmoothScroll();
-        stopZoomMomentum();
-
-        zoomDragging = true;
-        zoomMoved = false;
-        zoomStartX = event.clientX;
-        zoomStartY = event.clientY;
-        zoomStartScrollLeft = lightbox.scrollLeft;
-        zoomStartScrollTop = lightbox.scrollTop;
-        zoomTargetScrollLeft = zoomStartScrollLeft;
-        zoomTargetScrollTop = zoomStartScrollTop;
-        zoomLastX = event.clientX;
-        zoomLastY = event.clientY;
-        zoomLastTime = performance.now();
-        zoomVelocityX = 0;
-        zoomVelocityY = 0;
-
-        lightboxImage.classList.add('dragging');
-
+      document.addEventListener('contextmenu', function(event) {
         if (
-          event.pointerId !== undefined &&
-          !lightboxImage.hasPointerCapture(event.pointerId)
-        ) {
-          lightboxImage.setPointerCapture(event.pointerId);
-        }
-      });
-
-      lightboxImage.addEventListener('pointermove', function (event) {
-        if (!zoomDragging) {
-          return;
-        }
-
-        const distanceX = event.clientX - zoomStartX;
-        const distanceY = event.clientY - zoomStartY;
-
-        if (
-          !zoomMoved &&
+          event.target &&
           (
-            Math.abs(distanceX) > 1 ||
-            Math.abs(distanceY) > 1
-          )
-        ) {
-          zoomMoved = true;
-        }
-
-        if (zoomMoved) {
-          const now = performance.now();
-          const deltaX = event.clientX - zoomLastX;
-          const deltaY = event.clientY - zoomLastY;
-          const deltaTime = Math.max(8, now - zoomLastTime);
-          const velocityScale = Math.min(1.1, 16 / deltaTime) * 0.16;
-
-          zoomVelocityX = -deltaX * velocityScale;
-          zoomVelocityY = -deltaY * velocityScale;
-
-          zoomTargetScrollLeft = zoomStartScrollLeft - (distanceX * 1.65);
-          zoomTargetScrollTop = zoomStartScrollTop - (distanceY * 1.65);
-
-          requestZoomSmoothScroll();
-
-          zoomLastX = event.clientX;
-          zoomLastY = event.clientY;
-          zoomLastTime = now;
-
-          event.preventDefault();
-        }
-      });
-
-      function finishZoomDrag(event, allowClickToggle) {
-        if (!zoomDragging) {
-          return;
-        }
-
-        const shouldZoomOut =
-          allowClickToggle &&
-          !zoomMoved;
-
-        zoomDragging = false;
-        lightboxImage.classList.remove('dragging');
-
-        if (
-          event &&
-          event.pointerId !== undefined &&
-          lightboxImage.hasPointerCapture(event.pointerId)
-        ) {
-          lightboxImage.releasePointerCapture(event.pointerId);
-        }
-
-        if (shouldZoomOut) {
-          stopZoomSmoothScroll();
-          stopZoomMomentum();
-          lightboxImage.classList.remove('zoomed');
-          lightbox.classList.remove('zoom-active');
-
-          lightbox.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-          });
-        } else if (zoomMoved) {
-          startZoomMomentum();
-        }
-
-        zoomMoved = false;
-      }
-
-      lightboxImage.addEventListener('pointerup', function (event) {
-        finishZoomDrag(event, true);
-      });
-
-      lightboxImage.addEventListener('pointercancel', function (event) {
-        finishZoomDrag(event, false);
-      });
-
-      lightboxImage.addEventListener(
-        'lostpointercapture',
-        function (event) {
-          finishZoomDrag(event, false);
-        }
-      );
-
-      lightbox.addEventListener('click', function (event) {
-        if (event.target === lightbox) {
-          closeLightbox();
-        }
-      });
-
-      document.addEventListener('keydown', function (event) {
-        if (lightbox.hidden) return;
-
-        if (event.key === 'Escape') {
-          closeLightbox();
-        } else if (event.key === 'ArrowLeft') {
-          moveLightbox(-1);
-        } else if (event.key === 'ArrowRight') {
-          moveLightbox(1);
-        }
-      });
-
-      function blockContextMenu(event) {
-        const target = event.target;
-
-        if (
-          target &&
-          (
-            target.tagName === 'IMG' ||
-            target.closest('.portfolio-card') ||
-            target.closest('.lightbox')
+            event.target.tagName === 'IMG' ||
+            event.target.closest('.showcase-wrap') ||
+            event.target.closest('.lightbox')
           )
         ) {
           event.preventDefault();
         }
-      }
+      });
 
-      document.addEventListener('contextmenu', blockContextMenu);
-      document.addEventListener('dragstart', function (event) {
+      document.addEventListener('dragstart', function(event) {
         if (event.target && event.target.tagName === 'IMG') {
           event.preventDefault();
         }
       });
 
-      window.addEventListener('load', function () {
-        renderPortfolio();
+      window.addEventListener('load', function() {
+        renderShowcase();
         sendHeight();
-        setTimeout(sendHeight, 250);
-        setTimeout(sendHeight, 800);
+        setTimeout(sendHeight,250);
+        setTimeout(sendHeight,800);
       });
 
       window.addEventListener('resize', sendHeight);
 
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(sendHeight);
-      }
-
-      if ('ResizeObserver' in window) {
-        const observer = new ResizeObserver(sendHeight);
-        observer.observe(document.body);
       }
     })();
   </script>

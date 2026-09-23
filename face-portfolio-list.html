@@ -1033,6 +1033,81 @@
       }
     }
 
+  
+    /* v60 — 샘플 하단 메타 정보 표기 */
+    .showcase-info{
+      min-height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      padding:11px 8px 5px;
+      text-align:center;
+    }
+
+    .showcase-meta-line{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      flex-wrap:wrap;
+      color:#55484e;
+      font-size:12.5px;
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .showcase-credit,
+    .showcase-type{
+      color:#55484e;
+    }
+
+    .showcase-sep{
+      color:#c9b7be;
+      font-weight:600;
+    }
+
+    .showcase-category{
+      color:#e0779f !important;
+      font-size:12.5px !important;
+      font-weight:800 !important;
+    }
+
+    .showcase-category::after{
+      content:none !important;
+      display:none !important;
+    }
+
+    .showcase-count{
+      flex:0 0 auto;
+      color:#aab4b5;
+      font-size:11.5px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    @media(max-width:640px){
+      .showcase-info{
+        gap:7px;
+        padding-top:9px;
+      }
+
+      .showcase-meta-line{
+        gap:5px;
+        font-size:11.5px;
+      }
+
+      .showcase-category{
+        font-size:11.5px !important;
+      }
+
+      .showcase-count{
+        display:inline !important;
+        font-size:10.5px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1083,9 +1158,12 @@
       </div>
 
       <div class="showcase-info">
-        <div class="showcase-title-line">
+        <div class="showcase-meta-line">
+          <span class="showcase-credit">Modified by IROHA</span>
+          <span class="showcase-sep">·</span>
           <span class="showcase-category" id="showcaseCategory"></span>
-          <strong class="showcase-title" id="showcaseTitle"></strong>
+          <span class="showcase-sep">·</span>
+          <span class="showcase-type">Virtual 3D</span>
         </div>
         <span class="showcase-count" id="showcaseCount"></span>
       </div>
@@ -1238,7 +1316,6 @@
       const media = document.getElementById('showcaseMedia');
       const prevBtn = document.getElementById('showcasePrev');
       const nextBtn = document.getElementById('showcaseNext');
-      const titleEl = document.getElementById('showcaseTitle');
       const categoryEl = document.getElementById('showcaseCategory');
       const countEl = document.getElementById('showcaseCount');
       const dotsEl = document.getElementById('showcaseDots');
@@ -1373,8 +1450,7 @@
 
       function updateInfo(item) {
         categoryEl.textContent = getCategoryLabel(item.category);
-        titleEl.textContent = item.title || '작업 샘플';
-        countEl.textContent = (currentIndex + 1) + ' / ' + visibleItems.length;
+        countEl.textContent = (currentIndex + 1) + '/' + visibleItems.length;
       }
 
       function mountMedia(item) {
@@ -1438,7 +1514,6 @@
               '<div class="empty-title">등록된 작업물이 없습니다.</div>' +
               '<div class="empty-text">준비되는 대로 이 카테고리에 추가됩니다.</div>' +
             '</div>';
-          titleEl.textContent = '등록된 작업물이 없습니다.';
           categoryEl.textContent = getCategoryLabel(currentFilter);
           countEl.textContent = '';
           dotsEl.innerHTML = '';

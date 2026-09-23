@@ -1577,6 +1577,78 @@
       }
     }
 
+  
+    /* v83 — compact mint guide + Before/After X anchor fix */
+    .lightbox-close{
+      top:18px !important;
+      left:auto !important;
+      right:18px !important;
+    }
+
+    .lightbox.before-after-mode .lightbox-close{
+      top:var(--lightbox-close-top,18px) !important;
+      left:var(--lightbox-close-left,calc(100vw - 62px)) !important;
+      right:auto !important;
+    }
+
+    .lightbox .lightbox-guide{
+      position:fixed !important;
+      top:var(--lightbox-guide-top,auto) !important;
+      left:var(--lightbox-guide-left,50vw) !important;
+      right:auto !important;
+      bottom:auto !important;
+
+      width:auto !important;
+      min-width:0 !important;
+      height:auto !important;
+      min-height:0 !important;
+      max-width:min(calc(100vw - 36px),520px) !important;
+
+      margin:0 !important;
+      padding:9px 14px !important;
+
+      border:1px solid rgba(180,229,225,.95) !important;
+      border-radius:999px !important;
+
+      color:var(--mint-dark) !important;
+      background:rgba(255,255,255,.92) !important;
+      box-shadow:0 7px 20px rgba(78,170,165,.14) !important;
+
+      font-size:12.5px !important;
+      font-weight:700 !important;
+      line-height:1.4 !important;
+      text-align:center !important;
+      white-space:nowrap !important;
+
+      transform:translateX(-50%) !important;
+      pointer-events:none !important;
+      z-index:10025 !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox-close{
+        top:12px !important;
+        right:12px !important;
+        left:auto !important;
+      }
+
+      .lightbox.before-after-mode .lightbox-close{
+        top:var(--lightbox-close-top,12px) !important;
+        left:var(--lightbox-close-left,calc(100vw - 52px)) !important;
+        right:auto !important;
+      }
+
+      .lightbox .lightbox-guide{
+        width:auto !important;
+        min-width:0 !important;
+        max-width:calc(100vw - 28px) !important;
+        padding:8px 12px !important;
+        border-radius:14px !important;
+        font-size:11.5px !important;
+        white-space:normal !important;
+      }
+    }
+
   </style>
 </head>
 

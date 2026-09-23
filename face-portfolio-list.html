@@ -379,9 +379,9 @@
       overflow: auto;
       scroll-behavior: auto;
       overscroll-behavior: contain;
-      background: rgba(240, 250, 249, 0.94);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(7, 10, 14, 0.78);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
       opacity: 1;
       transition: opacity 0.18s ease;
     }
@@ -1356,6 +1356,42 @@
       }
     }
 
+  
+    /* v75 — dark transparent lightbox overlay */
+    .lightbox-close{
+      top:16px !important;
+      left:16px !important;
+      right:auto !important;
+      width:auto !important;
+      min-width:106px !important;
+      height:42px !important;
+      padding:0 16px !important;
+      border:1px solid rgba(255,255,255,.14) !important;
+      border-radius:999px !important;
+      color:#fff !important;
+      background:rgba(42,47,54,.86) !important;
+      box-shadow:0 10px 26px rgba(0,0,0,.24) !important;
+      font-size:15px !important;
+      font-weight:800 !important;
+      letter-spacing:-.02em !important;
+      white-space:nowrap !important;
+    }
+
+    .lightbox-close:hover{
+      background:rgba(58,64,72,.94) !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox-close{
+        top:12px !important;
+        left:12px !important;
+        min-width:100px !important;
+        height:40px !important;
+        padding:0 14px !important;
+        font-size:14px !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -1448,7 +1484,7 @@
     aria-label="작업 이미지 크게 보기"
     hidden
   >
-    <button class="lightbox-close" type="button" aria-label="닫기">×</button>
+    <button class="lightbox-close" type="button" aria-label="뒤로가기">‹ 뒤로가기</button>
     <button class="lightbox-nav lightbox-prev" type="button" aria-label="이전 이미지">‹</button>
     <img class="lightbox-image" src="" alt="">
 

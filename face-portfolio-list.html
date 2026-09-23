@@ -1129,6 +1129,199 @@
       }
     }
 
+  
+    /* =========================================================
+       v62 — CATEGORY INDEX RAIL / MINT
+       ========================================================= */
+    .category-index-wrap{
+      margin:0 0 22px;
+    }
+
+    .category-index-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:17px;
+    }
+
+    .category-index-kicker{
+      color:#9aa7a6;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.13em;
+      line-height:1;
+    }
+
+    .category-index-viewing{
+      color:#b0baba;
+      font-size:10.5px;
+      font-weight:700;
+      line-height:1;
+    }
+
+    .category-index-scroll{
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .category-index-scroll::-webkit-scrollbar{
+      display:none;
+    }
+
+    .category-index-list{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(6,minmax(112px,1fr));
+      min-width:730px;
+    }
+
+    .filter-btn.category-index-btn{
+      position:relative;
+      min-width:0 !important;
+      display:flex !important;
+      flex-direction:column !important;
+      align-items:flex-start !important;
+      gap:5px !important;
+      padding:3px 14px 17px !important;
+      border:0 !important;
+      border-radius:0 !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      color:inherit !important;
+      text-align:left !important;
+      transform:none !important;
+      cursor:pointer;
+    }
+
+    .filter-btn.category-index-btn:hover{
+      border:0 !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      transform:none !important;
+    }
+
+    .category-index-no{
+      color:#c1cbca;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.06em;
+      line-height:1;
+      transition:color .22s ease;
+    }
+
+    .category-index-en{
+      color:#7f8c8d;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.02em;
+      line-height:1.15;
+      transition:color .22s ease;
+    }
+
+    .filter-btn.category-index-btn:hover .category-index-no,
+    .filter-btn.category-index-btn:hover .category-index-en{
+      color:var(--mint-dark);
+    }
+
+    .filter-btn.category-index-btn.active .category-index-no{
+      color:var(--mint-dark);
+    }
+
+    .filter-btn.category-index-btn.active .category-index-en{
+      color:#364746;
+    }
+
+    .category-index-track{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:7px;
+      height:1px;
+      background:#e5efee;
+      pointer-events:none;
+    }
+
+    .category-index-active-line{
+      position:absolute;
+      left:0;
+      bottom:5px;
+      width:0;
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--mint),var(--mint-dark));
+      box-shadow:0 3px 10px rgba(78,170,165,.18);
+      pointer-events:none;
+      transition:
+        transform .38s cubic-bezier(.22,.8,.3,1),
+        width .38s cubic-bezier(.22,.8,.3,1);
+    }
+
+    .category-index-current{
+      min-height:47px;
+      display:flex;
+      align-items:flex-end;
+      gap:11px;
+      padding:15px 14px 0;
+    }
+
+    .category-index-current-label{
+      color:#bcc6c5;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.1em;
+      line-height:1.1;
+    }
+
+    .category-index-current-name{
+      color:var(--mint-dark);
+      font-size:24px;
+      font-weight:700;
+      line-height:1;
+      letter-spacing:-.035em;
+      opacity:1;
+      transform:translateY(0);
+      transition:
+        opacity .18s ease,
+        transform .18s ease;
+    }
+
+    .category-index-current-name.changing{
+      opacity:0;
+      transform:translateY(5px);
+    }
+
+    @media(max-width:640px){
+      .category-index-wrap{
+        margin-bottom:18px;
+      }
+
+      .category-index-top{
+        margin-bottom:14px;
+      }
+
+      .category-index-list{
+        min-width:660px;
+      }
+
+      .filter-btn.category-index-btn{
+        padding-left:10px !important;
+        padding-right:10px !important;
+      }
+
+      .category-index-current{
+        padding-left:10px;
+        min-height:43px;
+      }
+
+      .category-index-current-name{
+        font-size:21px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1142,27 +1335,56 @@
       </span>
     </div>
 
-    <div class="filter-bar" role="tablist" aria-label="작업 분류">
-      <button class="filter-btn active" type="button" data-filter="all">
-        전체
-      </button>
-      <button class="filter-btn" type="button" data-filter="boing-eye">
-        뽀잉눈
-      </button>
-      <button class="filter-btn" type="button" data-filter="smile-eye">
-        웃는눈 연동
-      </button>
-      <button class="filter-btn" type="button" data-filter="facial">
-        페이셜
-      </button>
-      <button class="filter-btn" type="button" data-filter="detail">
-        성형디테일
-      </button>
-      <button class="filter-btn" type="button" data-filter="before-after">
-        Befor / After
-      </button>
+    <div class="category-index-wrap">
+      <div class="category-index-top">
+        <span class="category-index-kicker">PORTFOLIO CATEGORY INDEX</span>
+        <span class="category-index-viewing" id="categoryIndexViewing">VIEWING 01 / 06</span>
+      </div>
+
+      <div class="category-index-scroll">
+        <div class="category-index-list" id="categoryIndexList" role="tablist" aria-label="작업 분류">
+          <button class="filter-btn category-index-btn active" type="button" data-filter="all">
+            <span class="category-index-no">01</span>
+            <span class="category-index-en">ALL</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="boing-eye">
+            <span class="category-index-no">02</span>
+            <span class="category-index-en">뽀잉눈</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="smile-eye">
+            <span class="category-index-no">03</span>
+            <span class="category-index-en">웃는눈 연동</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="facial">
+            <span class="category-index-no">04</span>
+            <span class="category-index-en">페이셜</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="detail">
+            <span class="category-index-no">05</span>
+            <span class="category-index-en">성형 디테일</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="before-after">
+            <span class="category-index-no">06</span>
+            <span class="category-index-en">Before / After</span>
+          </button>
+
+          <div class="category-index-track" aria-hidden="true"></div>
+          <div class="category-index-active-line" id="categoryIndexActiveLine" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="category-index-current">
+        <span class="category-index-current-label">CURRENT</span>
+        <strong class="category-index-current-name" id="categoryIndexCurrentName">전체</strong>
+      </div>
     </div>
-<div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
+
+    <div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
       <div class="portfolio-notice-icon">※</div>
       <div>
         <strong>Blender를 활용한 페이셜 성형·쉐이프키 디테일</strong> 작업 예시입니다.<br>
@@ -1333,6 +1555,11 @@
       ];
 
       const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+      const categoryIndexList = document.getElementById('categoryIndexList');
+      const categoryIndexActiveLine = document.getElementById('categoryIndexActiveLine');
+      const categoryIndexViewing = document.getElementById('categoryIndexViewing');
+      const categoryIndexCurrentName = document.getElementById('categoryIndexCurrentName');
+
       const stage = document.getElementById('showcaseStage');
       const media = document.getElementById('showcaseMedia');
       const prevBtn = document.getElementById('showcasePrev');
@@ -1389,6 +1616,36 @@
         if (category === 'detail') return '성형디테일';
         if (category === 'before-after') return 'Before / After';
         return '전체';
+      }
+
+      function moveCategoryIndexLine(button) {
+        if (!button || !categoryIndexActiveLine) return;
+
+        categoryIndexActiveLine.style.width = button.offsetWidth + 'px';
+        categoryIndexActiveLine.style.transform =
+          'translateX(' + button.offsetLeft + 'px)';
+      }
+
+      function updateCategoryIndexUI(button, index) {
+        if (!button) return;
+
+        if (categoryIndexViewing) {
+          categoryIndexViewing.textContent =
+            'VIEWING ' + String(index + 1).padStart(2, '0') + ' / 06';
+        }
+
+        if (categoryIndexCurrentName) {
+          categoryIndexCurrentName.classList.add('changing');
+
+          setTimeout(function() {
+            categoryIndexCurrentName.textContent =
+              getCategoryLabel(button.dataset.filter);
+
+            categoryIndexCurrentName.classList.remove('changing');
+          }, 130);
+        }
+
+        moveCategoryIndexLine(button);
       }
 
       function sendHeight() {
@@ -1589,12 +1846,15 @@
       prevBtn.addEventListener('click', function() { move(-1); });
       nextBtn.addEventListener('click', function() { move(1); });
 
-      filterButtons.forEach(function(button) {
+      filterButtons.forEach(function(button, buttonIndex) {
         button.addEventListener('click', function() {
           currentFilter = button.dataset.filter;
+
           filterButtons.forEach(function(otherButton) {
             otherButton.classList.toggle('active', otherButton === button);
           });
+
+          updateCategoryIndexUI(button, buttonIndex);
           renderShowcase();
         });
       });
@@ -1978,12 +2238,31 @@
 
       window.addEventListener('load', function() {
         renderShowcase();
+
+        const activeCategoryButton =
+          categoryIndexList &&
+          categoryIndexList.querySelector('.category-index-btn.active');
+
+        if (activeCategoryButton) {
+          moveCategoryIndexLine(activeCategoryButton);
+        }
+
         sendHeight();
         setTimeout(sendHeight,250);
         setTimeout(sendHeight,800);
       });
 
-      window.addEventListener('resize', sendHeight);
+      window.addEventListener('resize', function() {
+        const activeCategoryButton =
+          categoryIndexList &&
+          categoryIndexList.querySelector('.category-index-btn.active');
+
+        if (activeCategoryButton) {
+          moveCategoryIndexLine(activeCategoryButton);
+        }
+
+        sendHeight();
+      });
 
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(sendHeight);

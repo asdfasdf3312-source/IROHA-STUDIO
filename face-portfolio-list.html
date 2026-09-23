@@ -1134,7 +1134,7 @@
        v62 — CATEGORY INDEX RAIL / MINT
        ========================================================= */
     .category-index-wrap{
-      margin:0 0 22px;
+      margin:0 0 16px;
     }
 
     .category-index-top{
@@ -1186,7 +1186,7 @@
       flex-direction:column !important;
       align-items:flex-start !important;
       gap:5px !important;
-      padding:3px 14px 17px !important;
+      padding:4px 14px 18px !important;
       border:0 !important;
       border-radius:0 !important;
       background:transparent !important;
@@ -1206,7 +1206,7 @@
 
     .category-index-no{
       color:#c1cbca;
-      font-size:10px;
+      font-size:11px;
       font-weight:700;
       letter-spacing:.06em;
       line-height:1;
@@ -1215,7 +1215,7 @@
 
     .category-index-en{
       color:#7f8c8d;
-      font-size:12px;
+      font-size:14px;
       font-weight:700;
       letter-spacing:.02em;
       line-height:1.15;
@@ -1322,6 +1322,17 @@
       }
     }
 
+  
+    @media(max-width:640px){
+      .category-index-no{
+        font-size:10.5px;
+      }
+
+      .category-index-en{
+        font-size:13px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1377,12 +1388,6 @@
           <div class="category-index-active-line" id="categoryIndexActiveLine" aria-hidden="true"></div>
         </div>
       </div>
-
-      <div class="category-index-current">
-        <span class="category-index-current-label">CURRENT</span>
-        <strong class="category-index-current-name" id="categoryIndexCurrentName">전체</strong>
-      </div>
-    </div>
 
     <div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
       <div class="portfolio-notice-icon">※</div>

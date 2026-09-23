@@ -1134,7 +1134,7 @@
        v62 — CATEGORY INDEX RAIL / MINT
        ========================================================= */
     .category-index-wrap{
-      margin:0 0 16px;
+      margin:0 0 30px;
     }
 
     .category-index-top{
@@ -1185,8 +1185,8 @@
       display:flex !important;
       flex-direction:column !important;
       align-items:flex-start !important;
-      gap:5px !important;
-      padding:4px 14px 18px !important;
+      gap:0 !important;
+      padding:6px 14px 18px !important;
       border:0 !important;
       border-radius:0 !important;
       background:transparent !important;
@@ -1206,7 +1206,7 @@
 
     .category-index-no{
       color:#c1cbca;
-      font-size:11px;
+      font-size:12px;
       font-weight:700;
       letter-spacing:.06em;
       line-height:1;
@@ -1215,7 +1215,7 @@
 
     .category-index-en{
       color:#7f8c8d;
-      font-size:14px;
+      font-size:18px;
       font-weight:700;
       letter-spacing:.02em;
       line-height:1.15;
@@ -1325,12 +1325,17 @@
   
     @media(max-width:640px){
       .category-index-no{
-        font-size:10.5px;
+        font-size:11.5px;
       }
 
       .category-index-en{
-        font-size:13px;
+        font-size:16px;
       }
+    }
+
+  
+    .category-index-no{
+      display:none !important;
     }
 
   </style>
@@ -1355,32 +1360,26 @@
       <div class="category-index-scroll">
         <div class="category-index-list" id="categoryIndexList" role="tablist" aria-label="작업 분류">
           <button class="filter-btn category-index-btn active" type="button" data-filter="all">
-            <span class="category-index-no">01</span>
             <span class="category-index-en">ALL</span>
           </button>
 
           <button class="filter-btn category-index-btn" type="button" data-filter="boing-eye">
-            <span class="category-index-no">02</span>
             <span class="category-index-en">뽀잉눈</span>
           </button>
 
           <button class="filter-btn category-index-btn" type="button" data-filter="smile-eye">
-            <span class="category-index-no">03</span>
             <span class="category-index-en">웃는눈 연동</span>
           </button>
 
           <button class="filter-btn category-index-btn" type="button" data-filter="facial">
-            <span class="category-index-no">04</span>
             <span class="category-index-en">페이셜</span>
           </button>
 
           <button class="filter-btn category-index-btn" type="button" data-filter="detail">
-            <span class="category-index-no">05</span>
             <span class="category-index-en">성형 디테일</span>
           </button>
 
           <button class="filter-btn category-index-btn" type="button" data-filter="before-after">
-            <span class="category-index-no">06</span>
             <span class="category-index-en">Before / After</span>
           </button>
 

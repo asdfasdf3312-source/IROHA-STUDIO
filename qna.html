@@ -446,19 +446,38 @@
 
 <style id="iroha-qna-chapter-final">
   /* IROHA Q&A - CHAPTER FINAL */
+  html,
   body{
-    background:#f7fbfa;
+    background:#ffffff !important;
   }
 
   .qna-card{
+    position:relative;
     width:910px;
     max-width:calc(100% - 36px);
     padding:42px;
-    border:0;
+    border:1px solid rgba(174,239,233,.98);
     border-radius:22px;
     background:#ffffff;
-    box-shadow:0 18px 50px rgba(51,96,93,.08);
+    box-shadow:
+      0 0 0 1px rgba(211,249,246,.92),
+      0 0 10px rgba(36,198,191,.11),
+      0 0 22px rgba(36,198,191,.08),
+      0 12px 30px rgba(36,198,191,.055);
     counter-reset:faq;
+    isolation:isolate;
+  }
+
+  .qna-card::before{
+    content:'';
+    position:absolute;
+    inset:-1px;
+    border-radius:23px;
+    pointer-events:none;
+    box-shadow:
+      0 0 0 1px rgba(210,249,246,.94),
+      0 0 8px rgba(83,222,213,.08),
+      0 0 16px rgba(83,222,213,.05);
   }
 
   .qna-title{
@@ -585,6 +604,13 @@
       font-size:15px;
     }
   }
+</style>
+
+
+<style id="iroha-qna-white-outside-guard">
+html, body {
+  background:#ffffff !important;
+}
 </style>
 
 </head>

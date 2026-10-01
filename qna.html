@@ -607,9 +607,36 @@
 </style>
 
 
-<style id="iroha-qna-white-outside-guard">
-html, body {
-  background:#ffffff !important;
+
+<style id="iroha-qna-uploaded-border-final">
+html,
+body{
+  background:#FFFFFF !important;
+  background-color:#FFFFFF !important;
+  background-image:none !important;
+}
+
+.qna-card{
+  position:relative !important;
+  background:#FFFFFF !important;
+  border:1px solid #BDEBE7 !important;
+  border-radius:32px !important;
+  box-shadow:
+    0 20px 42px rgba(36,198,191,.08),
+    0 0 0 1px rgba(36,198,191,.02) !important;
+}
+
+/* 이전 네온용 가상 요소는 사용하지 않음 */
+.qna-card::before{
+  content:none !important;
+  display:none !important;
+  box-shadow:none !important;
+}
+
+@media (max-width:560px){
+  .qna-card{
+    border-radius:24px !important;
+  }
 }
 </style>
 

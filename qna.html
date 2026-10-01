@@ -76,14 +76,34 @@
     }
 
     .qna-card {
+      position: relative;
       width: 760px;
       max-width: calc(100% - 32px);
       margin: 0 auto;
       padding: 34px;
-      background: rgba(255,255,255,0.98);
-      border: 1px solid #B9EFEA;
+      background: #ffffff;
+      border: 1px solid rgba(171, 239, 232, 0.95);
       border-radius: 28px;
-      box-shadow: 0 16px 42px rgba(36,198,191,0.18);
+      box-shadow:
+        0 0 0 1px rgba(197, 246, 241, 0.9),
+        0 0 18px rgba(133, 234, 226, 0.18),
+        0 0 34px rgba(133, 234, 226, 0.14),
+        0 14px 34px rgba(36, 198, 191, 0.10);
+      isolation: isolate;
+    }
+
+    .qna-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 29px;
+      pointer-events: none;
+      box-shadow:
+        0 0 0 1px rgba(198, 247, 243, 0.95),
+        0 0 14px rgba(125, 234, 226, 0.18),
+        0 0 28px rgba(125, 234, 226, 0.12),
+        0 0 46px rgba(125, 234, 226, 0.08);
+      opacity: 1;
     }
 
     .qna-title {

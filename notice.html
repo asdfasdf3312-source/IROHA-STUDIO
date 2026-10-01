@@ -1,15 +1,14 @@
 <!doctype html>
-
 <html lang="ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>커미션 Q&A</title>
+  <title>이로하 필독사항</title>
 
   <style>
     @font-face {
-      font-family: 'Paperozi';
+      font-family: 'Paperlogy';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
       font-weight: 300;
       font-style: normal;
@@ -17,15 +16,7 @@
     }
 
     @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'Paperozi';
+      font-family: 'Paperlogy';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');
       font-weight: 500;
       font-style: normal;
@@ -33,7 +24,7 @@
     }
 
     @font-face {
-      font-family: 'Paperozi';
+      font-family: 'Paperlogy';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
       font-weight: 700;
       font-style: normal;
@@ -43,11 +34,18 @@
     :root {
       --mint: #24c6bf;
       --mint-dark: #159a95;
-      --mint-pale: #e2f9f7;
-      --border: #ddf6f4;
-      --answer-border: #edf9f8;
-      --text: #333333;
-      --sub-text: #555555;
+      --mint-pale: #effdfc;
+      --mint-line: #d7f5f2;
+
+      --pink: #f05b7d;
+      --pink-dark: #d83d62;
+      --pink-pale: #fff7f9;
+      --pink-line: #ffc8d4;
+
+      --text: #2d2d2d;
+      --sub-text: #5c5c5c;
+      --white: #ffffff;
+      --line: #e7f7f5;
     }
 
     * {
@@ -57,7 +55,6 @@
     html,
     body {
       width: 100%;
-      overflow-anchor: none;
       margin: 0;
       padding: 0;
       background: #ffffff;
@@ -65,51 +62,31 @@
 
     body {
       padding: 40px 0 58px;
-      font-family: 'Paperozi', sans-serif;
       color: var(--text);
+      font-family: 'Paperlogy', 'Noto Sans KR', sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
 
     button {
-      font-family: 'Paperozi', sans-serif;
+      font: inherit;
     }
 
-    .qna-card {
-      position: relative;
+    .notice-card {
       width: 760px;
       max-width: calc(100% - 32px);
       margin: 0 auto;
       padding: 34px;
-      background: #ffffff;
-      border: 1px solid rgba(171, 239, 232, 0.95);
+      border: 1px solid #b9efea;
       border-radius: 28px;
-      box-shadow:
-        0 0 0 1px rgba(197, 246, 241, 0.9),
-        0 0 18px rgba(133, 234, 226, 0.18),
-        0 0 34px rgba(133, 234, 226, 0.14),
-        0 14px 34px rgba(36, 198, 191, 0.10);
-      isolation: isolate;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 16px 42px rgba(36, 198, 191, 0.18);
     }
 
-    .qna-card::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 29px;
-      pointer-events: none;
-      box-shadow:
-        0 0 0 1px rgba(198, 247, 243, 0.95),
-        0 0 14px rgba(125, 234, 226, 0.18),
-        0 0 28px rgba(125, 234, 226, 0.12),
-        0 0 46px rgba(125, 234, 226, 0.08);
-      opacity: 1;
-    }
-
-    .qna-title {
+    .notice-title {
       display: flex;
       align-items: center;
-      min-height: 26px;
+      min-height: 28px;
       margin: 0 0 16px;
       color: var(--text);
       font-size: 23px;
@@ -117,36 +94,66 @@
       line-height: 1.3;
     }
 
-    .qna-title::before {
+    .notice-title::before {
       content: '';
       width: 5px;
-      height: 20px;
+      height: 21px;
       margin-right: 10px;
       border-radius: 3px;
       background: var(--mint);
       flex: 0 0 5px;
     }
 
-    .faq-list {
+    .notice-guide {
+      margin-bottom: 14px;
+      padding: 15px 17px;
+      border: 1px solid var(--mint-line);
+      border-radius: 13px;
+      background: var(--mint-pale);
+      color: var(--mint-dark);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.75;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    .notice-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 9px;
     }
 
-    .faq-item {
+    .notice-item {
       overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
       transition:
-        border-color 0.45s ease,
-        box-shadow 0.45s ease;
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        background-color 0.35s ease;
     }
 
-    .faq-question {
+    .notice-item.open {
+      border-color: var(--mint);
+      box-shadow: 0 6px 18px rgba(36, 198, 191, 0.09);
+    }
+
+    .notice-item.danger {
+      border-color: var(--pink-line);
+      background: var(--pink-pale);
+    }
+
+    .notice-item.danger.open {
+      border-color: var(--pink);
+      box-shadow: 0 6px 18px rgba(240, 91, 125, 0.10);
+    }
+
+    .notice-button {
       width: 100%;
-      min-height: 60px;
-      padding: 0 18px;
+      min-height: 62px;
+      padding: 10px 16px;
       border: 0;
       outline: none;
       background: transparent;
@@ -155,247 +162,169 @@
       justify-content: space-between;
       gap: 14px;
       color: var(--text);
-      font-size: 16.5px;
-      font-weight: 700;
-      line-height: 1.5;
       text-align: left;
-      word-break: keep-all;
-      overflow-wrap: break-word;
       cursor: pointer;
-      transition:
-        color 0.4s ease,
-        background-color 0.4s ease;
     }
 
-    .faq-question:hover {
-      background: rgba(226,249,247,0.22);
+    .notice-button:hover {
+      background: rgba(239, 253, 252, 0.58);
     }
 
-    .faq-question-text {
+    .danger .notice-button:hover {
+      background: rgba(255, 240, 244, 0.65);
+    }
+
+    .notice-left {
       min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       flex: 1;
     }
 
-    .faq-icon {
+    .notice-icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 11px;
+      background: var(--mint-pale);
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .danger .notice-icon {
+      background: #ffeaf0;
+    }
+
+    .notice-label {
+      min-width: 0;
+      color: var(--text);
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.45;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    .danger .notice-label {
+      color: var(--pink-dark);
+    }
+
+    .notice-chevron {
       width: 24px;
       height: 24px;
-      border-radius: 50%;
+      flex: 0 0 24px;
+      border-radius: 8px;
       background: var(--mint-pale);
       color: var(--mint);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex: 0 0 24px;
-      font-size: 17px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 700;
       line-height: 1;
       transition:
-        transform 0.85s cubic-bezier(0.16,1,0.3,1),
-        background-color 0.45s ease,
-        color 0.45s ease;
+        transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.35s ease,
+        color 0.35s ease;
     }
 
-    .faq-answer {
+    .danger .notice-chevron {
+      background: #ffeaf0;
+      color: var(--pink);
+    }
+
+    .notice-item.open .notice-chevron {
+      transform: rotate(180deg);
+      background: var(--mint);
+      color: #ffffff;
+    }
+
+    .notice-item.danger.open .notice-chevron {
+      background: var(--pink);
+      color: #ffffff;
+    }
+
+    .notice-answer {
       display: grid;
       grid-template-rows: 0fr;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-7px);
+      transform: translateY(-6px);
       transition:
-        grid-template-rows 0.95s cubic-bezier(0.16,1,0.3,1),
-        opacity 0.55s ease,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1),
-        visibility 0s linear 0.95s;
+        grid-template-rows 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.45s ease,
+        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s linear 0.85s;
     }
 
-    .faq-answer-clip {
+    .notice-item.open .notice-answer {
+      grid-template-rows: 1fr;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition:
+        grid-template-rows 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.5s ease 0.06s,
+        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s linear 0s;
+    }
+
+    .notice-answer-clip {
       min-height: 0;
       overflow: hidden;
     }
 
-    .faq-answer-content {
-      padding: 0 18px;
+    .notice-answer-content {
+      padding: 0 17px;
       border-top: 1px solid transparent;
       color: var(--sub-text);
-      font-size: 15.5px;
+      font-size: 14.5px;
       font-weight: 400;
-      line-height: 1.8;
-      text-align: left;
+      line-height: 1.82;
       word-break: keep-all;
       overflow-wrap: break-word;
       opacity: 0;
       transform: translateY(-8px);
       transition:
-        padding 0.85s cubic-bezier(0.16,1,0.3,1),
-        border-color 0.45s ease,
-        opacity 0.55s ease,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1);
-    }
-
-    .faq-answer-content strong {
-      font-weight: 700;
-    }
-
-    .answer-title {
-      display: block;
-      margin: 16px 0 6px;
-      color: var(--mint-dark);
-      font-weight: 700;
-    }
-
-    .parts-example-toggle {
-      width: 100%;
-      min-height: 46px;
-      margin: 16px 0 0;
-      padding: 0 15px;
-      border: 1px solid var(--mint);
-      border-radius: 11px;
-      background: var(--mint-pale);
-      color: var(--mint-dark);
-      font-family: 'Paperozi', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.4;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      cursor: pointer;
-      transition:
-        background-color 0.35s ease,
-        color 0.35s ease,
-        box-shadow 0.35s ease;
-    }
-
-    .parts-example-toggle:hover {
-      background: #d4f5f2;
-      box-shadow: 0 5px 14px rgba(36,198,191,0.10);
-    }
-
-    .parts-example-toggle[aria-expanded="true"] {
-      background: var(--mint);
-      color: #ffffff;
-    }
-
-    .parts-example-toggle-icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.75);
-      color: var(--mint-dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 22px;
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 1;
-      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
-    }
-
-    .parts-example-toggle[aria-expanded="true"] .parts-example-toggle-icon {
-      transform: rotate(45deg);
-    }
-
-    .parts-example {
-      display: grid;
-      grid-template-rows: 0fr;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-8px) scale(0.985);
-      transition:
-        grid-template-rows 0.8s cubic-bezier(0.16,1,0.3,1),
+        padding 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.35s ease,
         opacity 0.45s ease,
-        transform 0.7s cubic-bezier(0.16,1,0.3,1),
-        visibility 0s linear 0.8s;
+        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .parts-example.open {
-      grid-template-rows: 1fr;
+    .notice-item.open .notice-answer-content {
+      padding: 14px 17px 17px;
+      border-top-color: var(--line);
       opacity: 1;
-      visibility: visible;
-      transform: translateY(0) scale(1);
-      transition:
-        grid-template-rows 0.8s cubic-bezier(0.16,1,0.3,1),
-        opacity 0.5s ease 0.06s,
-        transform 0.7s cubic-bezier(0.16,1,0.3,1),
-        visibility 0s linear 0s;
+      transform: translateY(0);
     }
 
-    .parts-example-clip {
-      min-height: 0;
-      overflow: hidden;
+    .notice-item.danger.open .notice-answer-content {
+      border-top-color: #ffe3ea;
     }
 
-    .parts-example-content {
-      padding-top: 14px;
+    .notice-answer-content strong {
+      color: var(--mint-dark);
+      font-weight: 700;
     }
 
-    .answer-image {
+    .notice-item.danger .notice-answer-content strong {
+      color: var(--pink-dark);
+    }
+
+    .notice-note {
       display: block;
-      width: 100%;
-      max-width: 616px;
-      height: auto;
-      margin: 0 auto 14px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #f7fbfd;
-    }
-
-    .parts-example-steps {
-      padding: 13px 15px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      background: #f7fffe;
-      color: var(--sub-text);
-      line-height: 1.8;
-    }
-
-    .parts-example-steps strong {
+      margin-top: 8px;
       color: var(--mint-dark);
+      font-weight: 500;
     }
 
-    .answer-notice {
-      color: var(--mint-dark);
-    }
-
-    .faq-item.open {
-      border-color: var(--mint);
-      box-shadow: 0 5px 18px rgba(36,198,191,0.09);
-    }
-
-    .faq-item.open .faq-question {
-      color: var(--mint-dark);
-    }
-
-    .faq-item.open .faq-icon {
-      background: var(--mint);
-      color: #ffffff;
-      transform: rotate(45deg);
-    }
-
-    .faq-item.open .faq-answer {
-      grid-template-rows: 1fr;
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-      transition:
-        grid-template-rows 0.95s cubic-bezier(0.16,1,0.3,1),
-        opacity 0.6s ease 0.08s,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1),
-        visibility 0s linear 0s;
-    }
-
-    .faq-item.open .faq-answer-content {
-      padding: 15px 18px 18px;
-      border-top-color: var(--answer-border);
-      opacity: 1;
-      transform: translateY(0);
-      transition:
-        padding 0.85s cubic-bezier(0.16,1,0.3,1),
-        border-color 0.45s ease,
-        opacity 0.65s ease 0.16s,
-        transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    .notice-item.danger .notice-note {
+      color: var(--pink-dark);
     }
 
     @media (max-width: 560px) {
@@ -403,796 +332,287 @@
         padding: 28px 0 42px;
       }
 
-      .qna-card {
-        width: calc(100% - 32px);
-        padding: 24px 18px;
-        border-radius: 20px;
+      .notice-card {
+        width: calc(100% - 28px);
+        padding: 24px 17px;
+        border-radius: 21px;
       }
 
-      .qna-title {
-        margin-bottom: 14px;
+      .notice-title {
         font-size: 21px;
       }
 
-      .faq-question {
-        min-height: 58px;
-        padding: 0 15px;
-        font-size: 16px;
+      .notice-guide {
+        padding: 13px 14px;
+        font-size: 13.5px;
       }
 
-      .faq-answer-content {
-        padding-right: 15px;
-        padding-left: 15px;
+      .notice-button {
+        min-height: 58px;
+        padding: 9px 13px;
+      }
+
+      .notice-left {
+        gap: 10px;
+      }
+
+      .notice-icon {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+      }
+
+      .notice-label {
         font-size: 15px;
       }
 
-      .faq-item.open .faq-answer-content {
-        padding: 13px 15px 16px;
+      .notice-answer-content {
+        font-size: 14px;
+      }
+
+      .notice-item.open .notice-answer-content {
+        padding: 13px 14px 15px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .faq-item,
-      .faq-question,
-      .faq-icon,
-      .faq-answer,
-      .faq-answer-content {
+      .notice-item,
+      .notice-chevron,
+      .notice-answer,
+      .notice-answer-content {
         transition-duration: 0.01ms !important;
         transition-delay: 0ms !important;
       }
     }
   </style>
-
-
-<style id="iroha-qna-chapter-final">
-  /* IROHA Q&A - CHAPTER FINAL */
-  html,
-  body{
-    background:#ffffff !important;
-  }
-
-  .qna-card{
-    position:relative;
-    width:910px;
-    max-width:calc(100% - 36px);
-    padding:42px;
-    border:1px solid rgba(174,239,233,.98);
-    border-radius:22px;
-    background:#ffffff;
-    box-shadow:
-      0 0 0 1px rgba(211,249,246,.92),
-      0 0 10px rgba(36,198,191,.11),
-      0 0 22px rgba(36,198,191,.08),
-      0 12px 30px rgba(36,198,191,.055);
-    counter-reset:faq;
-    isolation:isolate;
-  }
-
-  .qna-card::before{
-    content:'';
-    position:absolute;
-    inset:-1px;
-    border-radius:23px;
-    pointer-events:none;
-    box-shadow:
-      0 0 0 1px rgba(210,249,246,.94),
-      0 0 8px rgba(83,222,213,.08),
-      0 0 16px rgba(83,222,213,.05);
-  }
-
-  .qna-title{
-    margin-bottom:28px;
-    font-size:30px;
-    letter-spacing:-.035em;
-  }
-
-  .qna-title::before{
-    width:32px;
-    height:4px;
-    margin-right:11px;
-    border-radius:999px;
-    background:var(--mint);
-    flex:0 0 32px;
-  }
-
-  .faq-list{
-    gap:10px;
-  }
-
-  .faq-item{
-    position:relative;
-    overflow:hidden;
-    counter-increment:faq;
-    border:1px solid #e0efed;
-    border-radius:14px;
-    background:#ffffff;
-    box-shadow:none;
-  }
-
-  .faq-item::before{
-    content:counter(faq, decimal-leading-zero);
-    position:absolute;
-    left:16px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#d6efed;
-    font-size:34px;
-    font-weight:700;
-    line-height:1;
-    letter-spacing:-.06em;
-    pointer-events:none;
-    transition:
-      top .45s ease,
-      transform .45s ease,
-      color .35s ease;
-  }
-
-  .faq-question{
-    min-height:74px;
-    padding:0 18px 0 70px;
-    font-size:15.8px;
-    position:relative;
-    z-index:1;
-  }
-
-  .faq-question:hover{
-    background:rgba(226,249,247,.18);
-  }
-
-  .faq-icon{
-    width:25px;
-    height:25px;
-    flex:0 0 25px;
-    background:#edf9f8;
-  }
-
-  .faq-item.open{
-    border-color:#a8dfdb;
-    box-shadow:0 8px 22px rgba(36,198,191,.07);
-  }
-
-  .faq-item.open::before{
-    top:31px;
-    transform:none;
-    color:#bce5e2;
-  }
-
-  .faq-item.open .faq-answer-content{
-    padding:4px 18px 24px 70px;
-    border-top:0;
-  }
-
-  @media (max-width:560px){
-    body{
-      padding:28px 0 42px;
-    }
-
-    .qna-card{
-      width:calc(100% - 24px);
-      max-width:none;
-      padding:26px 17px 32px;
-      border-radius:18px;
-    }
-
-    .qna-title{
-      margin-bottom:20px;
-      font-size:24px;
-    }
-
-    .qna-title::before{
-      width:24px;
-      flex-basis:24px;
-    }
-
-    .faq-list{
-      gap:8px;
-    }
-
-    .faq-item::before{
-      left:12px;
-      font-size:28px;
-    }
-
-    .faq-question{
-      min-height:68px;
-      padding:0 14px 0 58px;
-      font-size:15.5px;
-    }
-
-    .faq-item.open .faq-answer-content{
-      padding:4px 14px 20px 58px;
-      font-size:15px;
-    }
-  }
-</style>
-
-
-<style id="iroha-qna-white-outside-guard">
-html, body {
-  background:#ffffff !important;
-}
-</style>
-
-
-<style id="iroha-qna-notice-tone-final">
-html,
-body{
-  background:#ffffff !important;
-}
-
-.qna-card{
-  position:relative !important;
-  background:rgba(255,255,255,0.98) !important;
-  border:1px solid #b9efea !important;
-  box-shadow:0 16px 42px rgba(36,198,191,0.18) !important;
-}
-
-/* 이전 강한 네온용 가상요소 완전 제거 */
-.qna-card::before{
-  content:none !important;
-  display:none !important;
-  box-shadow:none !important;
-}
-</style>
-
 </head>
 
 <body>
-  <section class="qna-card" aria-label="커미션 Q&A">
-    <h2 class="qna-title">커미션 Q&amp;A</h2>
+  <section class="notice-card" aria-label="커미션 필독사항">
+    <h1 class="notice-title">필독사항</h1>
 
-<div class="faq-list">
-
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        3D 버츄얼이 처음인데도 신청할 수 있나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          네, 처음 시작하시는 분도 신청 가능합니다.<br>
-          상담을 통해 필요한 준비 사항과 작업 과정을 안내해드리며,
-          사용 목적과 예산에 맞는 구성을 추천해드립니다.<br>
-          간단한 구성으로 부담 없이 시작하고 싶으신 경우에는
-          입문 패키지를 권장드립니다.
-        </div>
-      </div>
+    <div class="notice-guide">
+      ※ 약관을 숙지하지 않아 발생한 문제와 저작권·사용 권한·라이선스 관련 책임은 의뢰자에게 있습니다.
     </div>
-  </div>
 
+    <div class="notice-list">
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        BOOTH에서 검색을 어떻게 해야 할지 모르겠고, 어떻게 꾸며야 할지 감이 안 와요
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          <strong class="answer-title" style="margin-top:0;">
-            대신 파츠 서칭 해드립니다
-          </strong>
-원하시는 분위기와 스타일을 알려주시면 아바타에 어울리는
-          의상·헤어·액세서리 등을 대신 찾아드립니다.<br>
-          활용도가 높고 많은 분이 사용하는 인기 파츠를 중심으로
-          추천드리며, 원하시는 콘셉트에 맞춰 여러 후보를
-          안내해드립니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 작업자가 보유하지 않은 상품도 추천 목록에 포함될 수
-            있습니다. 보유 중인 파츠 내에서만 추천을 원하시는 경우
-            미리 말씀해주세요.<br>
-            ※ 대중적이지 않거나 특수한 콘셉트의 경우, 적합한 파츠를
-            찾기 어렵거나 추천 가능한 상품이 제한될 수 있습니다.
+      <article class="notice-item">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">📅</span>
+            <span class="notice-label">작업 소요 기간</span>
           </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
 
-          <button
-            class="parts-example-toggle"
-            type="button"
-            aria-expanded="false"
-          >
-            <span>파츠 서칭 예시</span>
-            <span class="parts-example-toggle-icon" aria-hidden="true">+</span>
-          </button>
-
-          <div class="parts-example">
-            <div class="parts-example-clip">
-              <div class="parts-example-content">
-                <img
-                  class="answer-image"
-                  src="./images/parts-search-example-v28.jpg"
-                  alt="파츠 서칭 결과 안내 예시 이미지"
-                >
-
-                <div class="parts-example-steps">
-                  1. 작업자는 파츠를 서칭해 리스트를 보내드립니다.<br>
-                  2. 의뢰자는 리스트를 참고해 캐릭터에 넣을 파츠를 결정합니다.<br><br>
-                  <strong>작업자가 알잘딱하게 꾸며줬으면 한다!</strong> 하시는 경우에는<br>
-                  “오마카세 파츠 서치 부탁드립니다”라고 말씀해주세요.
-                </div>
-              </div>
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              일반 작업은 약 1주~2주, 2D 원화 기반 성형 작업은 약 2주~최대 4주 정도 소요됩니다.<br>
+              작업 범위에 따라 기간이 변동될 수 있습니다.
             </div>
           </div>
-
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        나에게 맞는 3D 버튜버 프로그램은 무엇인가요?
-        (VRC · VSF · VRM · Warudo · Meligo 차이 안내)
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          <strong class="answer-title" style="margin-top:0;">
-            VRC｜VRChat
-          </strong>
-
-          VRChat을 줄여 부르는 명칭으로, 다른 사용자들과 아바타를
-          이용해 소통하는 소셜 VR 플랫폼입니다. 버츄얼 방송
-          프로그램과는 용도가 다르며, 커스텀 아바타는 계정에 직접
-          업로드해 사용합니다.
-
-          <strong class="answer-title">
-            VSF｜VSeeFace용 아바타 세팅
-          </strong>
-
-          본 페이지에서 VSF는 VSeeFace에서 사용할 수 있도록 제작된
-          아바타 작업을 의미합니다.<br>
-          VSeeFace는 얼굴과 손 움직임을 추적해 3D 아바타로 방송할
-          수 있는 프로그램으로, 기본적인 페이셜 방송을 중심으로
-          사용하기 좋습니다.<br>
-          비교적 가벼운 환경에서도 사용할 수 있어 버츄얼 방송을
-          처음 시작하는 분들이 입문용으로 많이 선택합니다.<br>
-          다만 Warudo나 Meligo에 비해 무대·이펙트·자동 연출 등
-          방송 연출 기능은 제한적인 편입니다.
-
-          <strong class="answer-title">
-            VRM｜3D 아바타 파일 형식
-          </strong>
-
-          VRM은 프로그램 이름이 아니라, 여러 버츄얼 프로그램에서
-          사용할 수 있도록 만들어진 3D 휴머노이드 아바타 파일
-          형식입니다.<br>
-          VSeeFace와 Warudo 등 VRM을 지원하는 프로그램에서 불러와
-          사용할 수 있습니다.
-
-          <strong class="answer-title">
-            Warudo｜방송 연출 중심 프로그램
-          </strong>
-
-          Warudo는 Steam에서 무료로 이용할 수 있는 해외 3D 버츄얼
-          방송 프로그램입니다.<br>
-          다양한 방송 연출이 가능해 스트리머와 버튜버가 많이
-          사용하며, 완성도 높은 화면을 구성할 수 있는 프로그램으로
-          평가받고 있습니다.<br>
-          3D 소품·배경·무대·시각 효과·방송 채팅 연동·자동 이벤트
-          등 여러 기능을 활용할 수 있어 자신만의 방송 화면을
-          세밀하게 꾸미고 싶은 분께 적합합니다.<br>
-          다만 적용하는 기능과 에셋이 많아질수록 PC 사용량도 함께
-          증가하므로, 원활한 구동을 위해서는 어느 정도의 컴퓨터
-          사양이 필요할 수 있습니다.<br>
-          해외 프로그램 특성상 국내 이용 정보가 비교적 적고,
-          문의 및 소통이 다소 어렵게 느껴질 수 있습니다.<br>
-          사용 중 문제가 발생한 경우 Warudo 공식 디스코드의
-          한국어 커뮤니티를 통해 질문하거나 관련 정보를 확인할 수
-          있습니다.
-
-          <strong class="answer-title">
-            Meligo｜국산 통합 모션 캡처 프로그램
-          </strong>
-
-          Meligo는 국내에서 개발된 버츄얼 방송용 통합 모션 캡처
-          프로그램으로, 상반신 및 전신 움직임을 추적할 수
-          있습니다.<br>
-          VSeeFace보다 모션 캡처와 방송 연출 기능이 다양하며,
-          한국어 환경과 국내 이용자 자료가 잘 갖춰져 있어 처음
-          사용하는 분도 비교적 쉽게 정보를 찾을 수 있습니다.<br>
-          한국어 지원이 필요하거나, 단순 페이셜 방송을 넘어
-          상반신·전신 모션과 다양한 방송 연출을 활용하고 싶은
-          분께 적합합니다. 국내 버튜버와 스트리머 사이에서도 많이
-          사용되는 프로그램입니다.<br>
-          또한 Meligo 공식 디스코드를 통해 사용 중 발생한 문제를
-          문의할 수 있으며, 비교적 빠르게 안내받을 수 있다는
-          장점이 있습니다.<br><br>
-
-          <span class="answer-notice">
-            <strong>입문형 버츄얼 방송</strong> → VSeeFace<br>
-            <strong>확장된 모션 캡처와 방송 연출, 국내 버튜버의 인기 선택지</strong>
-            → Meligo<br>
-            <strong>고퀄리티 3D 방송 연출의 끝판왕</strong> → Warudo
+      <article class="notice-item">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">💾</span>
+            <span class="notice-label">파일 보관 및 전달 방식</span>
           </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
+
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              작업 완료 파일은 전달일로부터 최대 1개월간 보관됩니다.<br>
+              유니티 패키지가 필요한 경우 신청 단계에서 해당 옵션을 추가해주세요.<br>
+              보관 기간이 지난 파일은 삭제되며, 이후 재작업이 필요한 경우 신규 신청으로 진행됩니다.
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        페이셜 작업은 어떤 기능인가요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          Face ID를 지원하는 iPhone 또는 iPad로 사용자의 얼굴 움직임을
-          인식해, 아바타의 눈·입·볼 등 다양한 표정을 실시간으로
-          표현할 수 있도록 제작하는 작업입니다.<br>
-          자연스러운 얼굴 추적을 위해 Blender에서 총 52종의
-          페이셜 쉐이프키를 개별 제작하여 아바타에 적용합니다.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        특수 표현 리깅이란?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          아바타에 기본으로 탑재되어 있는 반짝이는 눈, 하트눈,
-          눈물, 홍조 등의 특수 표현을 얼굴 움직임에 맞춰
-          자연스럽게 반응하도록 대응하는 추가 작업입니다.<br>
-
-          페이셜 사용 중 해당 연출을 함께 적용하려면 별도의 대응
-          작업이 필요합니다. 연동되지 않은 경우 눈동자는 움직여도
-          하트나 별과 같은 눈 내부 효과는 제자리에 고정되어
-          부자연스럽게 보일 수 있습니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 아바타 베이스에 이미 포함된 쉐이프키에 한해 작업
-            가능하며, 존재하지 않는 효과의 신규 제작은 포함되지
-            않습니다.
+      <article class="notice-item">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">📦</span>
+            <span class="notice-label">파츠 구매 원칙｜양측 구매</span>
           </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
+
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              커미션에 이용되는 파츠(아바타·의상·헤어·액세서리 등)는 라이선스 준수를 위해 작업자와 신청자의 양측 구매가 필수입니다.<br>
+              작업자가 보유하지 않은 BOOTH 상품으로 결정하실 경우, BOOTH Gift(선물하기)를 이용해 전달 부탁드립니다.
+              <span class="notice-note">※ 파츠 구매 비용은 작업 비용에 포함되지 않습니다.</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        이미 완성된 모델에 뽀잉눈이나 표정 연동형 귀·꼬리 모션을
-        추가할 수 있나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          뽀잉눈은 신규 제작 과정에서 함께 적용하는 조건으로
-          가격이 책정된 항목입니다.<br>
-          완성된 아바타에 단독으로 추가할 경우 작업 범위와
-          소요 시간이 크게 달라져, 별도의 추가 작업은
-          진행하기 어렵습니다.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        유니티 패키지는 어떤 파일로 구성되나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          작업 완료 후 헤드·바디가 포함된 FBX, VRM 및 텍스처
-          데이터를 전달드립니다.<br>
-          의상, 헤어, 액세서리 등의 모델링 파츠와 본 물리,
-          쉐이더 관련 세팅은 전달 범위에 포함되지 않습니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 별도의 의상이나 헤어가 적용되지 않은 기본 캐릭터
-            형태로 제공됩니다.
+      <article class="notice-item">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">🕹️</span>
+            <span class="notice-label">VRChat 아바타 업로드 조건</span>
           </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
+
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              VRChat에는 계정 신뢰 등급이 있으며, 계정만 생성한다고 바로 아바타를 업로드할 수 있는 것은 아닙니다.<br>
+              아바타를 업로드하려면 VRChat 계정의 신뢰 등급이 New User 이상이어야 합니다.<br>
+              Steam 또는 Meta 계정으로 이용 중인 경우, 가능하면 업로드 전 VRChat 계정과 연동해주세요.<br>
+              신뢰 등급은 접속 시간, 방문한 월드 수, 친구 수 등 계정 이용 내역에 따라 순차적으로 상승합니다.
+              <span class="notice-note">
+                ※ VRC+ 가입 시 Visitor 등급에서 New User로 승급되어 아바타 업로드가 가능합니다.<br>
+                ※ 신청 전 본인의 계정 등급과 업로드 가능 여부를 반드시 확인해주세요.
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        신청이 어려운 작업 안내
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          아래 항목에 해당하는 작업은 진행하지 않습니다.
-          신청 전 반드시 확인해주세요.
-
-          <strong class="answer-title">
-            Q. 현재 사용 중인 VSF 또는 Warudo 아바타에 의상만
-            추가할 수 있나요?
-          </strong>
-
-          타 작업자가 제작하거나 세팅한 아바타의 수정·추가
-          작업은 진행하지 않습니다.
-
-          <strong class="answer-title">
-            Q. 유니티 패키지를 보유하고 있는데 VSF 변환만
-            맡길 수 있나요?
-          </strong>
-
-          외부에서 제작된 유니티 패키지의 변환 및 후속 작업은
-          진행하지 않습니다.
-
-          <strong class="answer-title">
-            Q. 사용 중인 VRoid 모델로 아바타 제작을 신청할 수
-            있나요?
-          </strong>
-
-          VRoid 모델은 작업 대상에 포함되지 않습니다.
-          본 커미션은 Booth에서 정식 판매되는 아바타 베이스와
-          파츠를 활용한 작업만 진행합니다.
-
-          <strong class="answer-title">
-            Q. 다른 스트리머나 다른 사용자의 캐릭터와 똑같이
-            제작할 수 있나요?
-          </strong>
-
-          타인의 캐릭터 디자인이나 아바타 사진을 제작 기준으로
-          사용하지 않습니다. 신청자 본인의 원화 또는 직접 준비한
-          디자인 자료를 제출해주세요.
-
-          <strong class="answer-title">
-            Q. 포트폴리오에 올라온 아바타를 구매할 수 있나요?
-          </strong>
-
-          포트폴리오 속 아바타는 기존 의뢰인의 작업물이므로
-          복제·판매하지 않습니다.<br>
-          별도로 구매 가능한 모델은 ‘작가 개인작’으로 안내된
-          아바타에 한합니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 타 사용자 또는 타 작업자가 제작한 아바타 이미지는
-            외형 참고 자료로 제출하지 말아주세요.
+      <article class="notice-item">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">🔎</span>
+            <span class="notice-label">유니티 패키지 이용 원칙</span>
           </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
+
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              유니티 패키지는 의상 교체 등 의뢰자 본인이 직접 수정 작업을 진행할 경우에만 추가해주세요.<br>
+              제공된 파일을 다른 작업자에게 전달해 수정·재가공을 맡기거나, 제3자와 공유·양도하는 행위는 금지됩니다.<br>
+              다만 본 작업자가 진행하지 않는 작업에 한해서는 사전 협의 후 외부 작업을 허용할 수 있습니다.
+              <span class="notice-note">※ 사전 허가 없는 제3자 전달 및 파일 공유는 이용 약관 위반으로 간주합니다.</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        아바타 베이스는 어떤 기준으로 선택하면 되나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
-
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          베이스는 얼굴 인상뿐 아니라 체형, 전용 의상 선택지,
-          향후 확장성까지 함께 고려해 선택하는 것이 좋습니다.<br>
-
-          마음에 드는 얼굴과 원하는 소체가 서로 다른 경우에는
-          헤드와 소체를 조합해 구성할 수 있습니다.
-          다만 서로 다른 베이스를 사용하려면 아바타를 각각
-          구매해야 하므로 추가 비용이 발생할 수 있습니다.<br>
-
-          원하는 얼굴 베이스의 전용 의상이 많지 않아 고민된다면,
-          헤드는 취향에 맞는 모델을 사용하고 소체는 대중성이 높아
-          전용 의상이 풍부한 베이스로 선택하는 방법도
-          추천드립니다.<br>
-
-          처음에는 구매 비용이 늘어날 수 있지만, 이후 의상
-          선택의 폭이 넓어지고 비전용 의상 적용에 드는 비용도
-          줄일 수 있습니다.<br><br>
-
-          <span class="answer-notice">
-            ※ 비전용 의상 적용 및 대응 작업은 진행하지 않으므로,
-            소체 선택 전 전용 의상 보유 여부를 반드시 확인해주세요.
+      <article class="notice-item">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">📸</span>
+            <span class="notice-label">포트폴리오 공개 안내</span>
           </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
+
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              완성된 작업물은 포트폴리오 및 홍보 자료로 활용될 수 있습니다.<br>
+              비공개를 원하시는 경우 신청 단계에서 포트폴리오 비공개 옵션을 추가해주세요.
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        페이셜 작업이 완료된 아바타에 추가 작업을 맡기면 비용은
-        어떻게 되나요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
+      <article class="notice-item">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">🎨</span>
+            <span class="notice-label">수정 반영 기준</span>
+          </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
 
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          기존에 본 작업자에게 페이셜, 실시간 그림자,
-          아바타 세팅을 함께 진행하신 경우에는 기본 작업비를
-          다시 청구하지 않으며, 새로 추가하거나 변경하는
-          항목의 비용만 발생합니다.<br><br>
-
-          예시: 의상 2개 변경, 헤어 2개 변경,
-          Magica Cloth 2 물리 작업
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              작업자의 실수 또는 누락으로 발생한 문제는 수정 횟수에 포함되지 않으며, 확인 후 무상으로 수정해드립니다.<br>
+              의뢰자의 요청에 따른 수정은 기본 2회까지 가능하며, 이후 추가 수정에는 별도 비용이 발생할 수 있습니다.
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
 
-  <div class="faq-item">
-    <button class="faq-question" type="button" aria-expanded="false">
-      <span class="faq-question-text">
-        작가 개인작 구매는 어떤 메뉴인가요?
-      </span>
-      <span class="faq-icon" aria-hidden="true">+</span>
-    </button>
+      <article class="notice-item danger">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">🚨</span>
+            <span class="notice-label">상업적 이용 권한 안내</span>
+          </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
 
-    <div class="faq-answer">
-      <div class="faq-answer-clip">
-        <div class="faq-answer-content">
-          작가가 직접 선정한 아바타 베이스와 정식 판매 중인
-          의상·헤어·액세서리를 조합하고, 외형 커스터마이징과
-          세팅을 더해 완성한 아바타를 구매하는 메뉴입니다.<br>
-
-          ※ 헤드, 바디, 의상 등의 파츠를 처음부터 모델링하는
-          오리지널 제작 방식은 아닙니다.<br><br>
-
-          완성된 개인작은 VSF의 경우 VSF 확장자 파일로 전달되며,
-          VRC의 경우 아바타 업로드 방식으로 제공됩니다.<br>
-
-          구매 후 일부 구성을 변경하고 싶으신 경우에는
-          수정 범위에 따라 추가 비용이 발생할 수 있습니다.<br>
-
-          기본 베이스 형태로 판매되는 개인작은 원하는 의상 1종,
-          헤어 1종, 액세서리 최대 2종을 선택해 완성형 아바타로
-          구성할 수 있습니다.<br>
-
-          이미 외형과 페이셜 작업이 완료된 모델이므로,
-          취향에 맞는 아바타가 있다면 일반 맞춤 제작보다
-          빠르게 받아보실 수 있습니다.
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              BOOTH에서 판매되는 아바타·의상·헤어·액세서리 등은 상품별 이용 약관과 상업적 사용 조건이 다를 수 있습니다.<br>
+              별도의 상업적 이용 허가가 필요한 경우, 해당 권한은 의뢰자가 직접 확인하고 취득해야 합니다.
+              <span class="notice-note">
+                ※ 필요한 허가 없이 방송·수익 활동에 사용해 발생한 저작권 및 라이선스 관련 문제에 대해서는 작업자가 책임지지 않습니다.
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </article>
+
+      <article class="notice-item danger">
+        <button class="notice-button" type="button" aria-expanded="false">
+          <span class="notice-left">
+            <span class="notice-icon" aria-hidden="true">⚠️</span>
+            <span class="notice-label">참고 자료 및 저작권 안내</span>
+          </span>
+          <span class="notice-chevron" aria-hidden="true">▼</span>
+        </button>
+
+        <div class="notice-answer">
+          <div class="notice-answer-clip">
+            <div class="notice-answer-content">
+              Pinterest, X, SNS, 방송 플랫폼 등 온라인에서 수집한 자료나 출처·이용 권한이 불분명한 자료를 제출하는 경우, 해당 자료의 저작권·초상권·디자인 권리 확인에 대한 책임은 의뢰자에게 있습니다.<br>
+              제출 자료로 인해 저작권 침해, 무단 도용, 디자인 분쟁 등의 문제가 발생할 경우 신청자가 책임을 부담하며, 작업자는 관련 분쟁에 책임을 지지 않습니다.<br>
+              타인의 캐릭터, 타 스트리머의 아바타, 다른 작업자의 제작물을 그대로 복제하거나 유사하게 제작하는 요청은 받지 않습니다.<br>
+              작업 진행 중 권리 침해 가능성이 확인될 경우 별도의 안내 없이 자료 변경을 요청하거나 작업을 거절·중단할 수 있습니다.
+              <span class="notice-note">
+                ※ 의뢰자는 제출한 모든 자료를 작업 참고 및 제작에 사용할 수 있는 정당한 권한이 있음을 확인한 것으로 간주합니다.
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+
     </div>
-  </div>
-
-</div>
-
   </section>
 
   <script>
     (function () {
-      const questions = document.querySelectorAll('.faq-question');
-      const exampleToggles = document.querySelectorAll(
-        '.parts-example-toggle'
-      );
-
-      let animationToken = 0;
-      let finishTimer = null;
-
-      function getPageHeight() {
-        const card = document.querySelector('.qna-card');
-        const bodyStyle = window.getComputedStyle(document.body);
-        const bottomPadding =
-          parseFloat(bodyStyle.paddingBottom) || 0;
-
-        const cardBottom = card
-          ? card.getBoundingClientRect().bottom +
-            window.scrollY +
-            bottomPadding +
-            24
-          : 0;
-
-        return Math.ceil(
-          Math.max(
-            cardBottom,
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight,
-            document.documentElement.getBoundingClientRect().height
-          )
-        );
-      }
-
-      function sendMessage(data) {
-        window.parent.postMessage(data, '*');
-      }
+      var items = document.querySelectorAll('.notice-item');
 
       function sendHeight() {
-        sendMessage({
-          type: 'iroha-qna-height',
-          height: getPageHeight()
-        });
-      }
+        var height = Math.ceil(
+          document.documentElement.getBoundingClientRect().height
+        );
 
-      function closePartsExample(scope) {
-        const example = scope.querySelector('.parts-example');
-        const toggle = scope.querySelector('.parts-example-toggle');
-
-        if (example) {
-          example.classList.remove('open');
-        }
-
-        if (toggle) {
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      }
-
-      function isBefore(first, second) {
-        return Boolean(
-          first.compareDocumentPosition(second) &
-          Node.DOCUMENT_POSITION_FOLLOWING
+        window.parent.postMessage(
+          {
+            type: 'iroha-notice-height',
+            height: height
+          },
+          '*'
         );
       }
 
-      function getOpenAnswerHeight(item) {
-        if (!item) {
-          return 0;
-        }
+      function sendHeightDuringAnimation() {
+        var startTime = performance.now();
+        var duration = 1000;
 
-        const answer = item.querySelector('.faq-answer-content');
-        return answer ? answer.getBoundingClientRect().height : 0;
-      }
-
-      function animateHeight(options) {
-        const token = ++animationToken;
-        const startTime = performance.now();
-        const duration = 1100;
-        const preserve = Boolean(options && options.preserve);
-        const button = options && options.button;
-
-        if (finishTimer) {
-          clearTimeout(finishTimer);
-        }
-
-        /*
-          일반 질문은 이전 버전처럼 매 프레임 높이를 동기화합니다.
-          긴 답변이 위에서 접히는 특별한 경우에만 부모 iframe의
-          축소를 잠시 보류해 클릭한 질문이 화면 밖으로 밀리지 않게 합니다.
-        */
         function update(currentTime) {
-          if (token !== animationToken) {
-            return;
-          }
-
-          const height = getPageHeight();
-
-          if (preserve) {
-            sendMessage({
-              type: 'iroha-qna-preserve-grow',
-              height: height
-            });
-          } else {
-            sendMessage({
-              type: 'iroha-qna-height',
-              height: height
-            });
-          }
+          sendHeight();
 
           if (currentTime - startTime < duration) {
             requestAnimationFrame(update);
@@ -1200,85 +620,19 @@ body{
         }
 
         requestAnimationFrame(update);
-
-        finishTimer = setTimeout(function () {
-          if (token !== animationToken) {
-            return;
-          }
-
-          const finalHeight = getPageHeight();
-
-          if (preserve && button) {
-            sendMessage({
-              type: 'iroha-qna-preserve-end',
-              height: finalHeight,
-              top: button.getBoundingClientRect().top
-            });
-          } else {
-            sendMessage({
-              type: 'iroha-qna-height',
-              height: finalHeight
-            });
-          }
-
-          finishTimer = null;
-
-          /*
-            폰트 렌더링과 아트머그 iframe 반영이 늦는 경우를 대비해
-            최종 높이를 추가로 재전송합니다.
-          */
-          [80, 220, 500].forEach(function (delay) {
-            setTimeout(function () {
-              const correctedHeight = getPageHeight();
-
-              if (preserve && button) {
-                sendMessage({
-                  type: 'iroha-qna-preserve-grow',
-                  height: correctedHeight
-                });
-              } else {
-                sendMessage({
-                  type: 'iroha-qna-height',
-                  height: correctedHeight
-                });
-              }
-            }, delay);
-          });
-        }, 1160);
       }
 
-      questions.forEach(function (button) {
+      items.forEach(function (item) {
+        var button = item.querySelector('.notice-button');
+
         button.addEventListener('click', function () {
-          const item = button.closest('.faq-item');
-          const willOpen = !item.classList.contains('open');
-          const currentlyOpen = document.querySelector('.faq-item.open');
+          var willOpen = !item.classList.contains('open');
 
-          /*
-            위치 보정은 아래 조건을 모두 만족할 때만 사용합니다.
-            1. 다른 질문이 이미 열려 있음
-            2. 열린 질문이 새로 누른 질문보다 위에 있음
-            3. 접힐 답변이 충분히 길어 화면 점프가 발생할 가능성이 큼
-          */
-          const shouldPreserve =
-            Boolean(currentlyOpen) &&
-            currentlyOpen !== item &&
-            isBefore(currentlyOpen, item) &&
-            getOpenAnswerHeight(currentlyOpen) >= 420;
-
-          if (shouldPreserve) {
-            sendMessage({
-              type: 'iroha-qna-preserve-start',
-              top: button.getBoundingClientRect().top,
-              height: getPageHeight()
-            });
-          }
-
-          document.querySelectorAll('.faq-item').forEach(function (otherItem) {
+          items.forEach(function (otherItem) {
             if (otherItem !== item) {
               otherItem.classList.remove('open');
-              closePartsExample(otherItem);
 
-              const otherButton = otherItem.querySelector('.faq-question');
+              var otherButton = otherItem.querySelector('.notice-button');
               if (otherButton) {
                 otherButton.setAttribute('aria-expanded', 'false');
               }
@@ -1286,38 +640,12 @@ body{
           });
 
           item.classList.toggle('open', willOpen);
-
-          if (!willOpen) {
-            closePartsExample(item);
-          }
-
           button.setAttribute(
             'aria-expanded',
             willOpen ? 'true' : 'false'
           );
 
-          animateHeight({
-            preserve: shouldPreserve,
-            button: button
-          });
-        });
-      });
-
-      exampleToggles.forEach(function (button) {
-        button.addEventListener('click', function () {
-          const example = button.nextElementSibling;
-          const willOpen = !example.classList.contains('open');
-
-          example.classList.toggle('open', willOpen);
-          button.setAttribute(
-            'aria-expanded',
-            willOpen ? 'true' : 'false'
-          );
-
-          animateHeight({
-            preserve: false,
-            button: button
-          });
+          sendHeightDuringAnimation();
         });
       });
 
@@ -1325,7 +653,6 @@ body{
         sendHeight();
         setTimeout(sendHeight, 150);
         setTimeout(sendHeight, 600);
-        setTimeout(sendHeight, 1200);
       });
 
       window.addEventListener('resize', sendHeight);
@@ -1335,20 +662,10 @@ body{
       }
 
       if ('ResizeObserver' in window) {
-        const observer = new ResizeObserver(function () {
-          /*
-            클릭 애니메이션이 끝난 뒤 최종 높이는 animateHeight가 보냅니다.
-            일반적인 글꼴·화면 크기 변화는 여기서 다시 동기화합니다.
-          */
-          if (!finishTimer) {
-            sendHeight();
-          }
-        });
-
+        var observer = new ResizeObserver(sendHeight);
         observer.observe(document.body);
       }
     })();
   </script>
-
 </body>
 </html>

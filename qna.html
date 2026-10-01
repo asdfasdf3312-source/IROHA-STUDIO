@@ -423,6 +423,150 @@
     }
   </style>
 
+
+<style id="iroha-qna-chapter-final">
+  /* IROHA Q&A - CHAPTER FINAL */
+  body{
+    background:#f7fbfa;
+  }
+
+  .qna-card{
+    width:910px;
+    max-width:calc(100% - 36px);
+    padding:42px;
+    border:0;
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(51,96,93,.08);
+    counter-reset:faq;
+  }
+
+  .qna-title{
+    margin-bottom:28px;
+    font-size:30px;
+    letter-spacing:-.035em;
+  }
+
+  .qna-title::before{
+    width:32px;
+    height:4px;
+    margin-right:11px;
+    border-radius:999px;
+    background:var(--mint);
+    flex:0 0 32px;
+  }
+
+  .faq-list{
+    gap:10px;
+  }
+
+  .faq-item{
+    position:relative;
+    overflow:hidden;
+    counter-increment:faq;
+    border:1px solid #e0efed;
+    border-radius:14px;
+    background:#ffffff;
+    box-shadow:none;
+  }
+
+  .faq-item::before{
+    content:counter(faq, decimal-leading-zero);
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#d6efed;
+    font-size:34px;
+    font-weight:700;
+    line-height:1;
+    letter-spacing:-.06em;
+    pointer-events:none;
+    transition:
+      top .45s ease,
+      transform .45s ease,
+      color .35s ease;
+  }
+
+  .faq-question{
+    min-height:74px;
+    padding:0 18px 0 70px;
+    font-size:15.8px;
+    position:relative;
+    z-index:1;
+  }
+
+  .faq-question:hover{
+    background:rgba(226,249,247,.18);
+  }
+
+  .faq-icon{
+    width:25px;
+    height:25px;
+    flex:0 0 25px;
+    background:#edf9f8;
+  }
+
+  .faq-item.open{
+    border-color:#a8dfdb;
+    box-shadow:0 8px 22px rgba(36,198,191,.07);
+  }
+
+  .faq-item.open::before{
+    top:31px;
+    transform:none;
+    color:#bce5e2;
+  }
+
+  .faq-item.open .faq-answer-content{
+    padding:4px 18px 24px 70px;
+    border-top:0;
+  }
+
+  @media (max-width:560px){
+    body{
+      padding:28px 0 42px;
+    }
+
+    .qna-card{
+      width:calc(100% - 24px);
+      max-width:none;
+      padding:26px 17px 32px;
+      border-radius:18px;
+    }
+
+    .qna-title{
+      margin-bottom:20px;
+      font-size:24px;
+    }
+
+    .qna-title::before{
+      width:24px;
+      flex-basis:24px;
+    }
+
+    .faq-list{
+      gap:8px;
+    }
+
+    .faq-item::before{
+      left:12px;
+      font-size:28px;
+    }
+
+    .faq-question{
+      min-height:68px;
+      padding:0 14px 0 58px;
+      font-size:15.5px;
+    }
+
+    .faq-item.open .faq-answer-content{
+      padding:4px 14px 20px 58px;
+      font-size:15px;
+    }
+  }
+</style>
+
 </head>
 
 <body>

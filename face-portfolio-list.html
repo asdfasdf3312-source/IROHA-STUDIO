@@ -1,284 +1,2652 @@
-<!-- IROHA 스크롤 위치 관리 v25 (1/2) START -->
-<style id="iroha-scroll-v25-style">
-html, body, #detailViews, #detailViews .detailinfo, [id^="sec-"] {overflow-anchor:none!important}
-html.iroha-v25-restoring body {opacity:0!important}
-</style>
-<script id="iroha-scroll-v25-early">(function(){
-  /* 페이지 진입 방식 판별: 첫 접속(navigate) / 새로고침(reload) / 뒤로가기(back_forward) */
-  var key = 'iroha-scroll-v25:' + location.pathname + location.search;
-  var type = 'navigate';
-  try {
-    var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-    if (nav && nav.type) {
-      type = nav.type;
-    } else if (performance.navigation) {
-      type = performance.navigation.type === 1 ? 'reload' : (performance.navigation.type === 2 ? 'back_forward' : 'navigate');
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>✨ 나만의 이미지를 완성하는 페이스 커스텀</title>
+  <link rel="preconnect" href="https://www.youtube.com">
+  <link rel="preconnect" href="https://www.youtube-nocookie.com">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <link rel="preconnect" href="https://www.google.com">
+
+  <style>
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
     }
-  } catch (e) {}
-  /* 브라우저 자체 위치 복원은 끄고, 아래 v25 컨트롤러 하나만 위치를 관리합니다. */
-  try { history.scrollRestoration = 'manual'; } catch (e) {}
-  var saved = null;
-  if (type === 'reload' || type === 'back_forward') {
-    try { saved = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
-  }
-  window.__irohaScrollBoot = { key: key, type: type, saved: saved };
-  /* 복원할 위치가 있을 때만, 이동이 끝날 때까지 잠깐 숨깁니다. (맨 위가 먼저 보이는 현상 방지) */
-  if (saved && saved.mode && saved.mode !== 'top') {
-    var root = document.documentElement;
-    root.classList.add('iroha-v25-restoring');
-    setTimeout(function () { root.classList.remove('iroha-v25-restoring'); }, 2500);
-  }
-})();</script>
-<!-- IROHA 스크롤 위치 관리 v25 (1/2) END -->
-<style id="iroha-artmug-more-hide-all">/* 아트머그 PC + 모바일 상세내용 전체 펼침 */#detailViews .detailinfo,#detailViews .detailinfo.showstep1,.detailinfo,.detailinfo.showstep1,[class*="detailinfo"],[class*="detail_info"]{ height:auto !important; max-height:none !important; overflow:visible !important;}/* 알려진 더보기 버튼/영역 숨김 */#detailViews .btn_open,.btn_open,[class*="btn_open"],[class*="more_btn"],[class*="btn_more"]{ display:none !important;}</style><script id="iroha-artmug-more-hide-mobile-fix">(function(){ function normalizeText(value){ return (value || '').replace(/s+/g,'').trim(); } function expandDetailArea(){ var selectors = [ '#detailViews .detailinfo', '.detailinfo', '[class*="detailinfo"]', '[class*="detail_info"]' ]; selectors.forEach(function(selector){ document.querySelectorAll(selector).forEach(function(detail){ detail.classList.remove('showstep1'); detail.classList.remove('showstep2'); detail.style.setProperty('height','auto','important'); detail.style.setProperty('max-height','none','important'); detail.style.setProperty('overflow','visible','important'); }); }); /* 모바일에서 상위 래퍼가 높이를 제한하는 경우 완화 */ document.querySelectorAll('.showstep1, .showstep2').forEach(function(el){ var cls = String(el.className || '').toLowerCase(); if( cls.indexOf('detail') !== -1 || cls.indexOf('goods') !== -1 || cls.indexOf('content') !== -1 ){ el.classList.remove('showstep1'); el.classList.remove('showstep2'); el.style.setProperty('height','auto','important'); el.style.setProperty('max-height','none','important'); el.style.setProperty('overflow','visible','important'); } }); } function hideKnownMoreButtons(){ document.querySelectorAll( '#detailViews .btn_open, .btn_open, [class*="btn_open"], [class*="more_btn"], [class*="btn_more"]' ).forEach(function(el){ el.style.setProperty('display','none','important'); }); } function hideMoreByText(){ document.querySelectorAll('button, a, div, span, p').forEach(function(el){ var text = normalizeText(el.textContent); if( text === '내용더보기' || text === '상세내용더보기' || text === '더보기' ){ /* 큰 본문 컨테이너를 실수로 숨기지 않도록 작은 UI 요소만 처리 */ var rect = el.getBoundingClientRect(); var childCount = el.children ? el.children.length : 0; if( el.tagName === 'BUTTON' || el.tagName === 'A' || childCount <= 3 || (rect.height > 0 && rect.height <= 120) ){ el.style.setProperty('display','none','important'); /* 버튼 전용 1칸 래퍼면 래퍼도 같이 숨김 */ var parent = el.parentElement; if(parent){ var parentText = normalizeText(parent.textContent); if( parentText === text && parent.children.length <= 2 ){ parent.style.setProperty('display','none','important'); } } } } }); } function applyArtmugMoreFix(){ expandDetailArea(); hideKnownMoreButtons(); hideMoreByText(); } if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', applyArtmugMoreFix); }else{ applyArtmugMoreFix(); } [100,300,700,1200,2000,3500].forEach(function(delay){ setTimeout(applyArtmugMoreFix, delay); }); if('MutationObserver' in window){ var moreObserver = new MutationObserver(function(){ applyArtmugMoreFix(); }); moreObserver.observe(document.documentElement,{ childList:true, subtree:true }); }})();</script><script> (function () { function applyArtmugLayoutFix() { var detail = document.querySelector('#detailViews .detailinfo'); if (detail) { detail.classList.remove('showstep1'); detail.style.setProperty('height', 'auto', 'important'); detail.style.setProperty('max-height', 'none', 'important'); detail.style.setProperty('overflow', 'visible', 'important'); } var moreButton = document.querySelector('#detailViews .btn_open'); if (moreButton) { moreButton.style.setProperty('display', 'none', 'important'); } } if (!document.getElementById('iroha-page-fix-style')) { var pageFixStyle = document.createElement('style'); pageFixStyle.id = 'iroha-page-fix-style'; pageFixStyle.textContent = '#detailViews .detailinfo,' + '#detailViews .detailinfo.showstep1{' + 'height:auto!important;' + 'max-height:none!important;' + 'overflow:visible!important;' + '}' + '#detailViews .btn_open{' + 'display:none!important;' + '}'; document.head.appendChild(pageFixStyle); } if (!document.getElementById('iroha-font-fix')) { var fontStyle = document.createElement('style'); fontStyle.id = 'iroha-font-fix'; fontStyle.textContent = "@font-face{" + "font-family:'Paperozi';" + "src:url('https\://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');" + "font-weight:500;" + "font-style:normal;" + "font-display:swap;" + "}" + "@font-face{" + "font-family:'Paperozi';" + "src:url('https\://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');" + "font-weight:700;" + "font-style:normal;" + "font-display:swap;" + "}"; document.head.appendChild(fontStyle); } window.iroha_go_top = function () { if (window.__irohaScroll) { window.__irohaScroll.menu('@top'); } /* 다른 메뉴에서 남아 있는 위치 보정 타이머 제거 */ if (window.__irohaMenuMoveTimers) { window.__irohaMenuMoveTimers.forEach(function (timer) { clearTimeout(timer); }); window.__irohaMenuMoveTimers = []; } /* 진행 중인 브라우저 스크롤을 한 번 끊고 맨 위로 이동 */ window.scrollTo(0, window.pageYOffset || document.documentElement.scrollTop || 0); requestAnimationFrame(function () { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }); /* 아트머그 내부 이미지/iframe 높이 보정이 늦게 끝나는 경우에도 TOP 위치를 최종적으로 유지하도록 짧게 재확인 */ [180, 500, 1000, 1800].forEach(function (delay) { setTimeout(function () { var y = window.pageYOffset || document.documentElement.scrollTop || 0; if (y > 3) { window.scrollTo({ top: 0, left: 0, behavior: delay < 1000 ? 'smooth' : 'auto' }); } }, delay); });};window.iroha_go_review = function () { if (window.__irohaScroll) { window.__irohaScroll.menu('@bottom'); } function scrollToReviewBottom() { var doc = document.documentElement; var body = document.body; var maxY = Math.max( body ? body.scrollHeight : 0, doc ? doc.scrollHeight : 0, body ? body.offsetHeight : 0, doc ? doc.offsetHeight : 0 ); window.scrollTo({ top: maxY, behavior: 'smooth' }); } scrollToReviewBottom(); setTimeout(scrollToReviewBottom, 350); setTimeout(scrollToReviewBottom, 900); setTimeout(scrollToReviewBottom, 1600); }; window.my_go = function (id) { var target = document.getElementById(id); if (!target) { return; } if (window.__irohaScroll) { window.__irohaScroll.menu(id); } if (window.__irohaMenuMoveTimers) { window.__irohaMenuMoveTimers.forEach(function (timer) { clearTimeout(timer); }); } window.__irohaMenuMoveTimers = []; function getTargetTop(targetNow) { var absoluteTop = targetNow.getBoundingClientRect().top + window.pageYOffset; /* 진행 방식만 화면 위에 딱 붙지 않고 약간 중앙 쪽에 보이도록 */ if (id === 'sec-process') { var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0; var processOffset = Math.max(120, Math.round(viewportHeight * 0.22)); return Math.max(0, absoluteTop - processOffset); } /* 나머지 메뉴는 기존 위치 그대로 */ return Math.max(0, absoluteTop - 18); } function smoothMove(force) { var targetNow = document.getElementById(id); if (!targetNow) { return; } var nextTop = getTargetTop(targetNow); var currentTop = window.pageYOffset || document.documentElement.scrollTop || 0; var gap = Math.abs(currentTop - nextTop); if (force || gap > 26) { window.scrollTo({ top: nextTop, behavior: 'smooth' }); } } function waitImagesBeforeTarget(callback) { var targetNow = document.getElementById(id); if (!targetNow) { callback(); return; } var imgs = Array.prototype.slice.call(document.images || []).filter(function (img) { return (img.compareDocumentPosition(targetNow) & Node.DOCUMENT_POSITION_FOLLOWING) && !img.complete; }); if (!imgs.length) { callback(); return; } var done = false; var left = imgs.length; function finish() { if (done) { return; } left -= 1; if (left <= 0) { done = true; callback(); } } imgs.forEach(function (img) { img.addEventListener('load', finish, { once: true }); img.addEventListener('error', finish, { once: true }); }); setTimeout(function () { if (!done) { done = true; callback(); } }, 850); } /* 첫 클릭 위치 보정은 유지하되, 이전처럼 전부 smooth로 이동하게 해서 딱 끊기는 느낌을 없앴습니다. */ waitImagesBeforeTarget(function () { smoothMove(true); [420, 950, 1550].forEach(function (delay) { var timer = setTimeout(function () { smoothMove(false); }, delay); window.__irohaMenuMoveTimers.push(timer); }); });};window.iroha_toggle_portfolio_menu = function () { var menu = document.getElementById('iroha-portfolio-submenu'); var arrow = document.getElementById('iroha-portfolio-arrow'); if (!menu) { return; } var isOpen = menu.style.display === 'block'; if (isOpen) { /* 다시 누르면 접기 */ menu.style.display = 'none'; if (arrow) { arrow.textContent = '▾'; } } else { /* 첫 클릭 시 펼치기 + 대표 포트폴리오 위치로 이동 */ menu.style.display = 'block'; if (arrow) { arrow.textContent = '▴'; } window.my_go('sec-portfolio'); /* 아트머그 렌더링 지연 시 한 번 더 부드럽게 보정 */ setTimeout(function () { window.my_go('sec-portfolio'); }, 180); }};if (!window.__irohaEmbedMessageListener) { window.__irohaEmbedMessageListener = true; window.__irohaQnaPreserveViewportY = null; window.__irohaQnaPreserving = false; window.addEventListener('message', function (event) { if ( event.origin !== 'https\://asdfasdf3312-source.github.io' || !event.data ) { return; } var data = event.data; var portfolioFrame = document.getElementById('iroha-portfolio-frame'); var facePortfolioFrame = document.getElementById('iroha-face-portfolio-frame'); var personalPortfolioFrame = document.getElementById('iroha-personal-portfolio-frame'); var collabArtistFrame = document.getElementById('iroha-collab-artist-frame'); var avatarFrame = document.getElementById('iroha-avatar-frame'); var noticeFrame = document.getElementById('iroha-notice-frame'); var priceListFrame = document.getElementById('iroha-price-list-frame'); var processFrame = document.getElementById('iroha-process-frame'); var weeklyScheduleFrame = document.getElementById('iroha-weekly-schedule-frame'); var formFrame = document.getElementById('iroha-form-frame'); var qnaFrame = document.getElementById('iroha-qna-frame'); var oldReviewsFrame = document.getElementById('iroha-old-reviews-frame'); if ( data.type === 'iroha-portfolio-height' && portfolioFrame ) { var portfolioHeight = parseInt(data.height, 10); if (!isNaN(portfolioHeight)) { portfolioFrame.style.height = Math.max(100, portfolioHeight) + 'px'; } return; } if ( data.type === 'iroha-face-portfolio-height' && facePortfolioFrame ) { var facePortfolioHeight = parseInt(data.height, 10); if (!isNaN(facePortfolioHeight)) { facePortfolioFrame.style.height = Math.max(100, facePortfolioHeight) + 'px'; } return; } if ( data.type === 'iroha-collab-artist-height' && collabArtistFrame ) { var collabArtistHeight = parseInt(data.height, 10); if (!isNaN(collabArtistHeight)) { collabArtistFrame.style.height = Math.max(100, collabArtistHeight) + 'px'; } return; } if ( data.type === 'iroha-personal-portfolio-height' && personalPortfolioFrame ) { var personalPortfolioHeight = parseInt(data.height, 10); if (!isNaN(personalPortfolioHeight)) { personalPortfolioFrame.style.height = Math.max(100, personalPortfolioHeight) + 'px'; } return; } if ( data.type === 'iroha-avatar-height' && avatarFrame ) { var avatarHeight = parseInt(data.height, 10); if (!isNaN(avatarHeight)) { avatarFrame.style.height = Math.max(100, avatarHeight) + 'px'; } return; } if ( data.type === 'iroha-notice-height' && noticeFrame ) { var noticeHeight = parseInt(data.height, 10); if (!isNaN(noticeHeight)) { noticeFrame.style.height = Math.max(100, noticeHeight) + 'px'; } return; } if ( data.type === 'iroha-price-list-height' && priceListFrame ) { var priceListHeight = parseInt(data.height, 10); if (!isNaN(priceListHeight)) { priceListFrame.style.height = Math.max(100, priceListHeight) + 'px'; } return; } if ( data.type === 'iroha-process-phase-4zone-height' && processFrame ) { var processHeight = parseInt(data.height, 10); if (!isNaN(processHeight)) { processFrame.style.height = Math.max(100, processHeight) + 'px'; } return; } if ( data.type === 'iroha-weekly-schedule-height' && weeklyScheduleFrame ) { var weeklyScheduleHeight = parseInt(data.height, 10); if (!isNaN(weeklyScheduleHeight)) { weeklyScheduleFrame.style.height = Math.max(100, weeklyScheduleHeight) + 'px'; } return; } if ( data.type === 'iroha-form-height' && formFrame ) { var formHeight = parseInt(data.height, 10); if (!isNaN(formHeight)) { formFrame.style.height = Math.max(100, formHeight) + 'px'; } return; } if ( data.type === 'iroha-old-reviews-height' && oldReviewsFrame ) { var oldReviewsHeight = parseInt(data.height, 10); if (!isNaN(oldReviewsHeight)) { oldReviewsFrame.style.setProperty('height', Math.max(1, oldReviewsHeight) + 'px', 'important'); oldReviewsFrame.style.setProperty('min-height', '0', 'important'); } return; } if (!qnaFrame) { return; } /* 일반 Q&A 클릭은 이전 버전과 동일하게 높이만 변경합니다. 선택적 위치 보정 중에는 축소 높이 신호를 무시합니다. */ if (data.type === 'iroha-qna-height') { if (window.__irohaQnaPreserving) { return; } var qnaHeight = parseInt(data.height, 10); if (!isNaN(qnaHeight)) { qnaFrame.style.height = Math.max(100, qnaHeight) + 'px'; } return; } if (data.type === 'iroha-qna-preserve-start') { var startTop = parseFloat(data.top); if (!isNaN(startTop)) { window.__irohaQnaPreserving = true; window.__irohaQnaPreserveViewportY = qnaFrame.getBoundingClientRect().top + startTop; } return; } /* 보정 중 새 콘텐츠가 기존 iframe보다 더 길어지는 경우에만 높이를 늘립니다. 접히면서 작아지는 높이는 마지막까지 보류합니다. */ if (data.type === 'iroha-qna-preserve-grow') { var growHeight = parseInt(data.height, 10); var currentHeight = parseFloat(qnaFrame.style.height) || qnaFrame.offsetHeight; if ( !isNaN(growHeight) && growHeight > currentHeight ) { qnaFrame.style.height = growHeight + 'px'; } return; } if (data.type === 'iroha-qna-preserve-end') { var finalHeight = parseInt(data.height, 10); var finalTop = parseFloat(data.top); if (isNaN(finalHeight)) { window.__irohaQnaPreserving = false; window.__irohaQnaPreserveViewportY = null; return; } /* iframe 높이는 애니메이션 없이 최종값으로 즉시 바꿉니다. 그 다음 클릭한 질문이 움직인 실제 거리만큼 한 번만 보정합니다. */ qnaFrame.style.height = Math.max(100, finalHeight) + 'px'; requestAnimationFrame(function () { requestAnimationFrame(function () { if ( !isNaN(finalTop) && window.__irohaQnaPreserveViewportY !== null ) { var currentViewportY = qnaFrame.getBoundingClientRect().top + finalTop; var delta = currentViewportY - window.__irohaQnaPreserveViewportY; if (Math.abs(delta) > 1) { window.scrollBy(0, delta); } } window.__irohaQnaPreserving = false; window.__irohaQnaPreserveViewportY = null; }); }); } }); } if (document.readyState === 'loading') { document.addEventListener( 'DOMContentLoaded', applyArtmugLayoutFix ); } else { applyArtmugLayoutFix(); } setTimeout(applyArtmugLayoutFix, 300); setTimeout(applyArtmugLayoutFix, 1000); setTimeout(applyArtmugLayoutFix, 2000); if ('MutationObserver' in window) { var observer = new MutationObserver(function () { applyArtmugLayoutFix(); }); observer.observe(document.documentElement, { childList: true, subtree: true }); } })(); </script> <link rel="stylesheet" href="https\://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css"><style id="iroha-artmug-font-only">body{font-family:'NanumSquareNeo' !important;}</style> <div id="top"></div><font size="7">8월부터 바쁜일정으로 <br>샘플 업데이트를 못하고있습니다..</font><div><font size="7">조금만 기다려주시면 감사하겠습니다!!&nbsp;</font><div id="sec-top-visual" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;overflow:hidden;"><iframe id="iroha-old-reviews-frame" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/old-reviews.html?v=8" title="아트머그 이전 후기모음" scrolling="no" style="display: block; width: 100%; border: 0px; background: none; overflow: hidden; height: 231px !important; min-height: 0px !important;"></iframe></div> <div id="sec-collab-artist" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"> <iframe id="iroha-collab-artist-frame" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/collab-artist.html?v=150" title="협업 작가 소개" scrolling="no" style="display: block; width: 100%; height: 810px; border: 0px; background: transparent; overflow: hidden;"></iframe> </div> <div id="sec-intro" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"><img src="https\://artmugfile2.cafe24.com/image/up_img/detail/5/goods_59004/17823252860.gif" loading="eager" decoding="async" style="display:block;width:100%;max-width:1080px;margin:0 auto;border:0;"></div> <div id="sec-package" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"><iframe id="iroha-price-list-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/price-list.html?v=22" title="패키지 구성" scrolling="no" style="display: block; width: 100%; height: 1525px; border: 0px; background: none; overflow: hidden;"></iframe></div> <div id="sec-process" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"> <iframe id="iroha-process-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/process-phase-4zone.html?v=50" title="진행 방식" scrolling="no" style="display: block; width: 100%; height: 607px; border: 0px; background: none; overflow: hidden;"></iframe> </div> <div id="sec-weekly-schedule" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"> <iframe id="iroha-weekly-schedule-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/weekly-schedule.html?v=100" title="예약 현황" scrolling="no" style="display: block; width: 100%; height: 1059px; border: 0px; background: transparent; overflow: hidden;"></iframe> </div> <div id="sec-portfolio" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"> <iframe id="iroha-portfolio-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/portfolio-list.html?v=61" title="포트폴리오" scrolling="no" style="display: block; width: 100%; height: 789px; border: 0px; background: none; overflow: hidden;"></iframe> </div> <div id="sec-face-portfolio" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"> <iframe id="iroha-face-portfolio-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/face-portfolio-list.html?v=501" title="뽀잉눈｜페이셜｜성형" scrolling="no" style="display: block; width: 100%; height: 1070px; border: 0px; background: none; overflow: hidden;"></iframe> </div> <div id="sec-personal-portfolio" style="width:calc(100% - 28px); max-width:1100px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box;"> <iframe id="iroha-personal-portfolio-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/personal-portfolio-list.html?v=29" title="개인작 포트폴리오" scrolling="no" style="display: block; width: 100%; height: 430px; border: 0px; background: transparent; overflow: hidden;"></iframe> </div> <div id="sec-avatar" style="width:calc(100% - 28px); max-width:1100px; margin:12px auto 0; scroll-margin-top:30px; box-sizing:border-box;"> <iframe id="iroha-avatar-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/avatar-list.html?v=40" title="보유 중인 아바타" scrolling="no" style="display: block; width: 100%; height: 762px; border: 0px; background: transparent; overflow: hidden;"></iframe> </div> <div id="sec-notice" style=" width:calc(100% - 28px); max-width:850px; margin:24px auto 0; scroll-margin-top:30px; box-sizing:border-box; "> <iframe id="iroha-notice-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/notice.html?v=100" title="필독사항" scrolling="no" style="display: block; width: 100%; height: 934px; border: 0px; background: none; overflow: hidden;"></iframe> </div> <div id="sec-form" style=" width:100%; padding-top:32px; scroll-margin-top:30px; box-sizing:border-box; "> <iframe id="iroha-form-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/index.html?v=150" title="작업 신청서" scrolling="no" allow="clipboard-write; clipboard-read" style="display: block; width: 100%; height: 3850px; border: 0px; background: none; overflow: hidden;"></iframe> </div><!-- IROHA 작업신청서 견적요약 따라오기 START --><script id="iroha-form-estimate-follow-safe">(function(){ var ticking = false; function syncFormEstimate(){ ticking = false; var section = document.getElementById('sec-form'); var frame = document.getElementById('iroha-form-frame'); if (!section || !frame || !frame.contentWindow) return; var frameRect = frame.getBoundingClientRect(); var sectionRect = section.getBoundingClientRect(); /* 작업신청서 영역과 멀리 떨어져 있으면 원위치. 다른 섹션에는 영향 없음. */ if ( sectionRect.bottom < 0 || sectionRect.top > window.innerHeight ) { frame.contentWindow.postMessage({ type:'iroha-work-form-parent-scroll', offset:0 }, 'https\://asdfasdf3312-source.github.io'); return; } /* iframe 상단이 화면 위로 올라간 만큼 견적요약만 아래로 이동. 실제 하단 제한은 작업신청서 내부 코드가 담당. */ var offset = Math.max(0, 18 - frameRect.top); frame.contentWindow.postMessage({ type:'iroha-work-form-parent-scroll', offset:offset }, 'https\://asdfasdf3312-source.github.io'); } function requestSync(){ if (ticking) return; ticking = true; requestAnimationFrame(syncFormEstimate); } window.addEventListener('scroll', requestSync, {passive:true}); window.addEventListener('resize', requestSync); function init(){ var frame = document.getElementById('iroha-form-frame'); if (frame) { frame.addEventListener('load', function(){ syncFormEstimate(); setTimeout(syncFormEstimate, 150); setTimeout(syncFormEstimate, 500); }); } syncFormEstimate(); } if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }})();</script><!-- IROHA 작업신청서 견적요약 따라오기 END --><div id="sec-qna" style=" width:calc(100% - 28px); max-width:850px; margin:8px auto 50px; scroll-margin-top:30px; box-sizing:border-box; overflow-anchor:none; "> <iframe id="iroha-qna-frame" loading="lazy" src="https\://asdfasdf3312-source.github.io/IROHA-STUDIO/qna.html?v=37" title="커미션 Q&amp;A" scrolling="no" style="display: block; width: 100%; height: 1213px; border: 0px; background: none; overflow: hidden;"></iframe> </div><!-- IROHA 스크롤 위치 관리 v25 (2/2) START -->
-<script id="iroha-scroll-v25-controller">(function(){
-  'use strict';
-  if (window.__irohaScroll) { return; }
 
-  /*
-    위치 관리 원칙 (이 스크립트 하나만 위치를 붙잡습니다)
-    - 첫 접속: 아무것도 하지 않음 → 항상 맨 위에서 시작, 바로 자유롭게 스크롤
-    - 플로팅바 이동: 기존 my_go 애니메이션 그대로. 도착한 뒤에는 그 섹션을 화면 같은 자리에 고정
-    - 새로고침(F5)/뒤로가기: 보고 있던 섹션 + 화면 안 위치를 저장해 두었다가 같은 자리로 복원
-    - 고정 중 위쪽 iframe·이미지 높이가 바뀌면 그 차이만큼 즉시 보정 (화면에 그려지기 전이라 움직임이 보이지 않음)
-    - 사용자가 직접 스크롤하는 순간 고정을 풉니다.
-  */
-
-  var boot = window.__irohaScrollBoot || { key: 'iroha-scroll-v25:' + location.pathname + location.search, type: 'navigate', saved: null };
-  var KEY = boot.key;
-  var IDS = [
-    'sec-top-visual', 'sec-collab-artist', 'sec-intro', 'sec-package', 'sec-process',
-    'sec-weekly-schedule', 'sec-portfolio', 'sec-face-portfolio', 'sec-personal-portfolio',
-    'sec-avatar', 'sec-notice', 'sec-form', 'sec-qna'
-  ];
-  var NAV_KEYS = { ArrowUp: 1, ArrowDown: 1, PageUp: 1, PageDown: 1, Home: 1, End: 1, ' ': 1, Spacebar: 1 };
-  var root = document.documentElement;
-
-  var hold = null;          /* 현재 고정 중인 위치 { kind: 'restore' | 'menu', id, top } 또는 { kind:'restore', mode:'bottom' } */
-  var ready = false;        /* 위치 저장을 시작해도 되는지 */
-  var expectY = -1;         /* 이 스크립트가 마지막으로 이동시킨 위치 */
-  var menu = null;          /* 마지막 플로팅바 이동 { id, at } */
-  var lastScrollAt = 0, loaded = false;
-  var capTimer = 0, quietTimer = 0, saveTimer = 0, armTimer = 0;
-
-  function el(id) { return document.getElementById(id); }
-  function curY() { return window.pageYOffset || root.scrollTop || 0; }
-  function viewH() { return window.innerHeight || root.clientHeight || 0; }
-  function maxY() {
-    var h = Math.max(root.scrollHeight, document.body ? document.body.scrollHeight : 0);
-    return Math.max(0, h - viewH());
-  }
-
-  /* my_go가 섹션을 놓는 위치와 똑같은 규칙 */
-  function menuTop(id) {
-    if (id === 'sec-process') { return Math.max(120, Math.round(viewH() * 0.22)); }
-    return 18;
-  }
-
-  /* 화면 위쪽 기준선에 걸쳐 있는 섹션 = 기준 섹션 */
-  function pickAnchor() {
-    var line = Math.min(Math.max(viewH() * 0.3, 100), 250);
-    var pick = null;
-    for (var i = 0; i < IDS.length; i++) {
-      var node = el(IDS[i]);
-      if (!node) { continue; }
-      if (!pick) { pick = node; }
-      if (node.getBoundingClientRect().top <= line) { pick = node; } else { break; }
+    @font-face {
+      font-family: 'Paperozi';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
     }
-    return pick;
-  }
 
-  /* ---------- 저장 ---------- */
-
-  function menuStillValid() {
-    if (!menu) { return false; }
-    if (Date.now() - menu.at < 3000) { return true; }
-    if (menu.id === '@top') { return curY() < 60; }
-    if (menu.id === '@bottom') { return curY() >= maxY() - 60; }
-    var node = el(menu.id);
-    return !!node && Math.abs(node.getBoundingClientRect().top - menuTop(menu.id)) <= 60;
-  }
-
-  function currentState() {
-    /* 플로팅바로 도착해 고정 중이면, 지금 보이는 그 자리를 그대로 저장 */
-    if (hold && hold.kind === 'menu') {
-      return { mode: 'anchor', id: hold.id, top: hold.top };
+    :root {
+      --mint: #76d8d2;
+      --mint-dark: #4eaaa5;
+      --mint-pale: #edf9f8;
+      --border: #b4e5e1;
+      --text: #333333;
+      --text-light: #819392;
+      --white: rgba(255, 255, 255, 0.97);
+      --shadow-sm: 0 5px 16px rgba(78, 170, 165, 0.10);
+      --shadow-md: 0 16px 42px rgba(78, 170, 165, 0.14);
     }
-    if (menuStillValid()) {
-      if (menu.id === '@top') { return { mode: 'top' }; }
-      if (menu.id === '@bottom') { return { mode: 'bottom' }; }
-      /* 이동 애니메이션 도중이면 도착 예정 자리를 저장 */
-      if (Date.now() - menu.at < 3000) { return { mode: 'menu', id: menu.id }; }
-      /* 도착 후에는 지금 보이는 그 자리를 저장 */
-      return { mode: 'anchor', id: menu.id, top: Math.round(el(menu.id).getBoundingClientRect().top) };
+
+    * {
+      box-sizing: border-box;
     }
-    if (curY() < 2) { return { mode: 'top' }; }
-    var anchor = pickAnchor();
-    if (!anchor) { return { mode: 'y', y: Math.round(curY()) }; }
-    return { mode: 'anchor', id: anchor.id, top: Math.round(anchor.getBoundingClientRect().top) };
-  }
 
-  function save() {
-    /* 복원이 끝나기 전에는 이전 저장값을 그대로 둡니다. (F5 연타 대비) */
-    if (!ready || (hold && hold.kind === 'restore')) { return; }
-    var state = currentState();
-    state.v = 25;
-    state.t = Date.now();
-    try { sessionStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
-  }
-
-  /* ---------- 고정(앵커) ---------- */
-
-  function holdTargetY() {
-    if (!hold) { return null; }
-    if (hold.mode === 'bottom') { return maxY(); }
-    if (hold.mode === 'y') { return Math.max(0, hold.y); }
-    var node = el(hold.id);
-    if (!node) { return null; }
-    return Math.max(0, Math.round(node.getBoundingClientRect().top + curY() - hold.top));
-  }
-
-  function jump(y) {
-    var prev = root.style.scrollBehavior;
-    root.style.scrollBehavior = 'auto';
-    expectY = Math.min(y, maxY());
-    window.scrollTo(0, y);
-    root.style.scrollBehavior = prev;
-  }
-
-  function reveal() { root.classList.remove('iroha-v25-restoring'); }
-
-  function clearHold() {
-    clearTimeout(capTimer);
-    clearTimeout(quietTimer);
-    hold = null;
-  }
-
-  function stopHold() {
-    var wasRestore = hold && hold.kind === 'restore';
-    clearHold();
-    if (wasRestore || !ready) { reveal(); ready = true; }
-  }
-
-  function startHold(h) {
-    clearHold();
-    hold = h;
-    capTimer = setTimeout(stopHold, 20000);
-    pin();
-  }
-
-  function pin() {
-    if (!hold) { return; }
-    var y = holdTargetY();
-    if (y === null) { stopHold(); return; }
-    if (Math.abs(curY() - y) > 1) { jump(y); }
-    if (hold.kind === 'restore' && Math.abs(curY() - y) <= 1) { reveal(); }
-    if (loaded) {
-      clearTimeout(quietTimer);
-      quietTimer = setTimeout(stopHold, 4000);
+    html,
+    body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: transparent;
     }
-  }
 
-  /* 플로팅바 이동이 끝나 섹션이 제자리에 도착하면 그 자리를 고정 */
-  function armMenuHold() {
-    clearTimeout(armTimer);
-    if (!menu || menu.id.charAt(0) === '@') { return; }
-    var id = menu.id, at = menu.at;
-    function check() {
-      if (!menu || menu.id !== id || menu.at !== at) { return; }
-      var since = Date.now() - at;
-      if (since < 300 || Date.now() - lastScrollAt < 200) { armTimer = setTimeout(check, 100); return; }
-      var node = el(id);
-      if (!node) { return; }
-      var top = node.getBoundingClientRect().top;
-      if (Math.abs(top - menuTop(id)) <= 26) {
-        startHold({ kind: 'menu', id: id, top: Math.round(top) });
-        return;
+    body {
+      padding: 34px 16px 42px;
+      color: var(--text);
+      font-family: 'Paperozi', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    .section {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 32px;
+      background: var(--white);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .sec-bar {
+      width: 5px;
+      height: 22px;
+      flex: 0 0 5px;
+      border-radius: 999px;
+      background: var(--mint);
+    }
+
+    .sec-title {
+      margin: 0;
+      color: var(--text);
+      font-size: 23px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .sec-subtitle {
+      margin-left: 2px;
+      color: var(--text-light);
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .filter-btn {
+      min-width: 88px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--text-light);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--mint);
+      color: var(--mint-dark);
+    }
+
+    .filter-btn.active {
+      border-color: var(--mint);
+      background: var(--mint);
+      color: #ffffff;
+      box-shadow: 0 7px 18px rgba(78, 170, 165, 0.18);
+    }
+
+    .portfolio-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: -4px 0 22px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-left: 5px solid var(--mint);
+      border-radius: 16px;
+      background: var(--mint-pale);
+      color: var(--text-light);
+      font-size: 12.8px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .portfolio-notice-icon {
+      flex: 0 0 auto;
+      margin-top: 1px;
+      color: var(--mint-dark);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .portfolio-notice strong {
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+    .portfolio-grid {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0 26px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-inline: contain;
+      touch-action: pan-y;
+      cursor: grab;
+      user-select: none;
+      scrollbar-width: auto;
+      scrollbar-color: var(--mint) transparent;
+    }
+
+    .portfolio-grid.dragging {
+      cursor: grabbing;
+      scroll-snap-type: none;
+    }
+
+    .portfolio-grid::-webkit-scrollbar {
+      height: 40px;
+    }
+
+    .portfolio-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .portfolio-grid::-webkit-scrollbar-thumb {
+      min-width: 140px;
+      border-radius: 999px;
+      background: var(--mint);
+    }
+
+    .portfolio-grid::-webkit-scrollbar-thumb:hover {
+      background: var(--mint);
+    }
+
+    .portfolio-card {
+      position: relative;
+      flex: 0 0 auto;
+      width: min(78vw, 560px);
+      height: 380px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--border);
+      border-radius: 22px;
+      background: var(--mint-pale);
+      box-shadow: var(--shadow-sm);
+      scroll-snap-align: start;
+      cursor: zoom-in;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--mint);
+      box-shadow: 0 12px 26px rgba(78, 170, 165, 0.15);
+    }
+
+    .portfolio-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+
+    .portfolio-card.youtube-embed-card {
+      cursor: default;
+      background: #000000;
+      border-color: rgba(118, 216, 210, 0.88);
+    }
+
+    .portfolio-card.youtube-embed-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--mint);
+      box-shadow: 0 12px 26px rgba(78, 170, 165, 0.15);
+    }
+
+    .portfolio-card.youtube-embed-card iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000000;
+    }
+
+    .portfolio-card.youtube-embed-card .portfolio-badge {
+      display: none;
+    }
+
+    .portfolio-card.video-card:not(.youtube-embed-card)::after {
+      content: '▶';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 3;
+      width: 62px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.20);
+      font-size: 24px;
+      line-height: 1;
+      padding-left: 4px;
+      pointer-events: none;
+    }
+
+    .portfolio-card.video-card:not(.youtube-embed-card)::before {
+      content: 'VIDEO';
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      z-index: 3;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: var(--mint-dark);
+      background: rgba(255, 255, 255, 0.90);
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.10);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .portfolio-badge {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 2;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .empty-state {
+      width: 100%;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 34px 20px;
+      border: 1.5px dashed var(--border);
+      border-radius: 22px;
+      background: var(--mint-pale);
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .empty-title {
+      color: var(--mint-dark);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .empty-text {
+      color: var(--text-light);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .lightbox[hidden] {
+      display: none !important;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow: auto;
+      scroll-behavior: auto;
+      overscroll-behavior: contain;
+      background: rgba(7, 10, 14, 0.78);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      opacity: 1;
+      transition: opacity 0.18s ease;
+    }
+
+    .lightbox.is-opening {
+      opacity: 0;
+    }
+
+    .lightbox-image {
+      display: block;
+      max-width: min(calc(100vw - 48px), 1500px);
+      max-height: calc(100vh - 86px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
+      cursor: zoom-in;
+      user-select: none;
+      -webkit-user-drag: none;
+      transition:
+        opacity 0.24s ease,
+        transform 0.48s cubic-bezier(0.22, 0.76, 0.28, 1),
+        width 0.28s ease,
+        max-width 0.28s ease,
+        max-height 0.28s ease;
+    }
+
+    .lightbox-image.slide-enter-left {
+      opacity: 1;
+      transform: translateX(-30px) scale(0.997);
+      transition: none;
+    }
+
+    .lightbox-image.slide-enter-right {
+      opacity: 1;
+      transform: translateX(30px) scale(0.997);
+      transition: none;
+    }
+
+    .lightbox-image.zoomed {
+      width: min(165vw, 2200px);
+      max-width: none;
+      max-height: none;
+      cursor: grab;
+      touch-action: none;
+      transform: none !important;
+      opacity: 1 !important;
+      filter: none !important;
+      will-change: scroll-position;
+    }
+
+    .lightbox.zoom-active {
+      display: block;
+      text-align: center;
+      align-items: initial;
+      justify-content: initial;
+    }
+
+    .lightbox.zoom-active .lightbox-image.zoomed {
+      display: block;
+      margin: 72px auto 120px;
+    }
+
+    .lightbox-image.zoomed.dragging {
+      cursor: grabbing;
+    }
+
+    .lightbox.zoom-active .lightbox-nav {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .lightbox-close,
+    .lightbox-nav {
+      position: fixed;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      color: #ffffff;
+      background: rgba(118, 216, 210, 0.95);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+      transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease,
+        background-color 0.2s ease;
+    }
+
+    .lightbox-close {
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 26px;
+    }
+
+    .lightbox-nav {
+      top: 50%;
+      width: 48px;
+      height: 64px;
+      border-radius: 16px;
+      transform: translateY(-50%);
+      font-size: 30px;
+    }
+
+    .lightbox-prev {
+      left: 20px;
+    }
+
+    .lightbox-next {
+      right: 20px;
+    }
+
+    .lightbox-guide {
+      position: fixed;
+      left: 50%;
+      bottom: 52px;
+      z-index: 2;
+      transform: translateX(-50%);
+      max-width: calc(100vw - 40px);
+      padding: 9px 14px;
+      border: 1px solid rgba(180, 229, 225, 0.95);
+      border-radius: 999px;
+      color: var(--mint-dark);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 7px 20px rgba(78, 170, 165, 0.14);
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+
+    .lightbox.video-mode {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .lightbox-video-wrap {
+      position: relative;
+      z-index: 5;
+      width: min(94vw, 1180px);
+      aspect-ratio: 16 / 9;
+      display: block;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000000;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
+    }
+
+    .lightbox-video-wrap[hidden] {
+      display: none !important;
+    }
+
+    .lightbox.video-mode .lightbox-video-wrap {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .lightbox-video-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000000;
+    }
+
+    .video-fallback-link {
+      position: absolute;
+      left: 50%;
+      bottom: -46px;
+      transform: translateX(-50%);
+      z-index: 6;
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.95);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    }
+
+    .video-fallback-link[hidden] {
+      display: none !important;
+    }
+
+    .lightbox.video-mode .lightbox-image,
+    .lightbox.video-mode .lightbox-guide {
+      display: none !important;
+    }
+
+    .lightbox-count {
+      position: fixed;
+      left: 50%;
+      bottom: 17px;
+      z-index: 2;
+      transform: translateX(-50%);
+      padding: 7px 13px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(78, 170, 165, 0.92);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    body.lightbox-open {
+      overflow: hidden;
+    }
+
+
+    /* 확대 이미지를 드래그해도 안내 문구와 번호가 화면 하단 중앙에 고정되도록 보정 */
+    .lightbox {
+      --iroha-scroll-left: 0px;
+      --iroha-scroll-top: 0px;
+    }
+
+    .lightbox .lightbox-guide {
+      position: fixed !important;
+      left: 50vw !important;
+      right: auto !important;
+      bottom: 52px !important;
+      transform: translate3d(calc(-50% + var(--iroha-scroll-left, 0px)), var(--iroha-scroll-top, 0px), 0) !important;
+      z-index: 10020 !important;
+      margin: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .lightbox .lightbox-count {
+      position: fixed !important;
+      left: 50vw !important;
+      right: auto !important;
+      bottom: 17px !important;
+      transform: translate3d(calc(-50% + var(--iroha-scroll-left, 0px)), var(--iroha-scroll-top, 0px), 0) !important;
+      z-index: 10021 !important;
+      margin: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .lightbox.video-mode .lightbox-count {
+      display: none !important;
+    }
+
+    @media (max-width: 640px) {
+      .lightbox .lightbox-guide {
+        left: 50vw !important;
+        bottom: 104px !important;
+        width: calc(100vw - 28px) !important;
+        max-width: calc(100vw - 28px) !important;
+        white-space: normal !important;
       }
-      /* 아직 my_go가 위치를 보정하는 중이면 조금 더 기다림 */
-      if (since < 3200) { armTimer = setTimeout(check, 100); }
-    }
-    armTimer = setTimeout(check, 300);
-  }
 
-  /* ---------- 이벤트 ---------- */
-
-  window.addEventListener('scroll', function () {
-    lastScrollAt = Date.now();
-    if (hold) {
-      var y = curY();
-      if (Math.abs(y - expectY) > 1 && !(expectY > y && Math.abs(y - maxY()) <= 1)) {
-        /* 이 스크립트가 움직인 게 아니면 = 사용자가 직접 스크롤 → 즉시 고정 해제 */
-        stopHold();
+      .lightbox .lightbox-count {
+        left: 50vw !important;
+        bottom: 58px !important;
       }
     }
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(save, 150);
-  }, { passive: true });
 
-  window.addEventListener('pagehide', save);
-  window.addEventListener('beforeunload', save);
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'hidden') { save(); }
-  });
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 14px 34px;
+      }
 
-  function userInput() { menu = null; clearTimeout(armTimer); }
-  window.addEventListener('wheel', userInput, { capture: true, passive: true });
-  window.addEventListener('touchstart', userInput, { capture: true, passive: true });
-  window.addEventListener('pointerdown', userInput, { capture: true, passive: true });
-  window.addEventListener('keydown', function (e) { if (NAV_KEYS[e.key]) { userInput(); } }, true);
+      .section {
+        padding: 24px 18px;
+        border-radius: 22px;
+      }
 
-  /* 높이 변화 감지: 섹션·본문 크기 변화 + iframe 높이 메시지(같은 작업 안에서 즉시 보정) */
-  if (window.ResizeObserver) {
-    var ro = new ResizeObserver(function () { pin(); });
-    ro.observe(root);
-    if (document.body) { ro.observe(document.body); }
-    IDS.forEach(function (id) { var node = el(id); if (node) { ro.observe(node); } });
-  }
-  window.addEventListener('message', function (e) {
-    if (hold && e && e.data && typeof e.data.type === 'string' && e.data.type.indexOf('iroha-') === 0) { pin(); }
-  });
+      .sec-title {
+        font-size: 20px;
+      }
 
-  function onLoad() {
-    loaded = true;
-    pin();
-    reveal();
-  }
-  document.addEventListener('DOMContentLoaded', function () { pin(); });
-  if (document.readyState === 'complete') { onLoad(); } else { window.addEventListener('load', onLoad); }
+      .sec-subtitle {
+        width: 100%;
+        margin-left: 16px;
+        margin-top: -4px;
+        font-size: 12px;
+      }
 
-  /* my_go / iroha_go_top / iroha_go_review 에서 호출 */
-  window.__irohaScroll = {
-    menu: function (id) {
-      menu = { id: String(id || ''), at: Date.now() };
-      stopHold();
-      armMenuHold();
-    },
-    save: save
-  };
+      .filter-btn {
+        min-width: auto;
+        padding: 9px 14px;
+        font-size: 13px;
+      }
 
-  /* ---------- 시작 ---------- */
+      .portfolio-notice {
+        margin-bottom: 18px;
+        padding: 12px 13px;
+        font-size: 12px;
+      }
 
-  var saved = boot.saved;
-  var canRestore = !!(saved && saved.mode && saved.mode !== 'top' &&
-    (boot.type === 'reload' || boot.type === 'back_forward'));
+      .portfolio-card {
+        width: 84vw;
+        height: 300px;
+        border-radius: 17px;
+      }
 
-  if (canRestore) {
-    if (saved.mode === 'bottom') {
-      startHold({ kind: 'restore', mode: 'bottom' });
-    } else if (saved.mode === 'y') {
-      startHold({ kind: 'restore', mode: 'y', y: Number(saved.y) || 0 });
-    } else if (el(saved.id)) {
-      startHold({
-        kind: 'restore',
-        id: saved.id,
-        top: saved.mode === 'menu' ? menuTop(saved.id) : (Number(saved.top) || 0)
+      .lightbox-nav {
+        top: auto;
+        bottom: 10px;
+        width: 46px;
+        height: 42px;
+        transform: none;
+      }
+
+      .lightbox-prev {
+        left: calc(50% - 58px);
+      }
+
+      .lightbox-next {
+        right: calc(50% - 58px);
+      }
+
+      .lightbox-guide {
+        bottom: 104px;
+        width: calc(100vw - 28px);
+        padding: 8px 11px;
+        border-radius: 14px;
+        font-size: 11.5px;
+        white-space: normal;
+      }
+
+      .lightbox-count {
+        bottom: 58px;
+      }
+
+      .lightbox-image.zoomed {
+        width: 180vw;
+      }
+
+      .lightbox.zoom-active .lightbox-image.zoomed {
+        margin: 70px auto 118px;
+      }
+    }
+  
+    /* v56 — 메인 샘플 + 썸네일 쇼케이스 */
+    .showcase-wrap{
+      width:100%;
+      margin-top:2px;
+    }
+
+    .showcase-stage{
+      position:relative;
+      width:100%;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      border:2px solid var(--border);
+      border-radius:24px;
+      background:#f5fbfa;
+      box-shadow:var(--shadow-sm);
+    }
+
+    .showcase-media{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background:#f5fbfa;
+      opacity:1;
+      transform:scale(1);
+      transition:opacity .18s ease, transform .24s ease;
+    }
+
+    .showcase-stage.switching .showcase-media{
+      opacity:.18;
+      transform:scale(.992);
+    }
+
+    .showcase-media img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:contain;
+      object-position:center;
+      background:#f7fbfb;
+      cursor:zoom-in;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .showcase-media iframe{
+      width:100%;
+      height:100%;
+      display:block;
+      border:0;
+      background:#000;
+    }
+
+    .showcase-nav{
+      position:absolute;
+      top:50%;
+      z-index:8;
+      width:48px;
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+      border:0;
+      border-radius:50%;
+      transform:translateY(-50%) scale(.94);
+      background:rgba(255,255,255,.94);
+      color:var(--mint-dark);
+      box-shadow:0 8px 22px rgba(0,0,0,.14);
+      font-family:Arial,sans-serif;
+      font-size:31px;
+      line-height:1;
+      cursor:pointer;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .2s ease, visibility .2s ease, transform .2s ease, background-color .2s ease;
+    }
+
+    .showcase-prev{left:16px;}
+    .showcase-next{right:16px;}
+
+    .showcase-stage:hover .showcase-nav,
+    .showcase-stage:focus-within .showcase-nav{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(-50%) scale(1);
+    }
+
+    .showcase-nav:hover{
+      background:#fff;
+      transform:translateY(-50%) scale(1.08);
+    }
+
+    .showcase-info{
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      padding:12px 8px 5px;
+      text-align:center;
+    }
+
+    .showcase-title-line{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
+      flex-wrap:wrap;
+    }
+
+    .showcase-category{
+      color:#9b8290;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .showcase-category::after{
+      content:' · ';
+      color:#c6afb9;
+    }
+
+    .showcase-title{
+      color:#4b3d43;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .showcase-count{
+      flex:0 0 auto;
+      color:#a5b2b1;
+      font-size:11.5px;
+      font-weight:700;
+    }
+
+    .showcase-dots{
+      min-height:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      margin:0 0 9px;
+    }
+
+    .showcase-dot{
+      width:7px;
+      height:7px;
+      padding:0;
+      border:0;
+      border-radius:999px;
+      background:#dff3f1;
+      cursor:pointer;
+      transition:width .2s ease, background-color .2s ease;
+    }
+
+    .showcase-dot.active{
+      width:22px;
+      background:var(--mint);
+    }
+
+    .showcase-thumbs{
+      display:flex;
+      gap:10px;
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      padding:3px 2px 16px;
+      scroll-behavior:smooth;
+      scrollbar-width:auto;
+      scrollbar-color:var(--mint) transparent;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar{
+      height:13px;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-track{
+      background:transparent;
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-thumb{
+      min-width:140px;
+      border-radius:999px;
+      background:var(--mint);
+    }
+
+    .showcase-thumbs::-webkit-scrollbar-thumb:hover{
+      background:var(--mint-dark);
+    }
+
+    .showcase-thumb{
+      position:relative;
+      flex:0 0 150px;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      padding:0;
+      border:1.5px solid #d7e9e7;
+      border-radius:13px;
+      background:#f7fbfb;
+      cursor:pointer;
+      opacity:.75;
+      transition:opacity .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .showcase-thumb:hover{
+      opacity:1;
+      transform:translateY(-2px);
+      border-color:var(--mint);
+    }
+
+    .showcase-thumb.active{
+      opacity:1;
+      border-color:var(--mint-dark);
+      box-shadow:0 5px 14px rgba(78,170,165,.16);
+    }
+
+    .showcase-thumb img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      pointer-events:none;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .showcase-thumb-badge{
+      position:absolute;
+      left:6px;
+      top:6px;
+      z-index:2;
+      padding:4px 6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.92);
+      color:var(--mint-dark);
+      font-size:9px;
+      font-weight:700;
+      line-height:1;
+      box-shadow:0 3px 8px rgba(0,0,0,.08);
+      pointer-events:none;
+    }
+
+    @media (hover:none), (pointer:coarse){
+      .showcase-nav{
+        opacity:1;
+        visibility:visible;
+        transform:translateY(-50%) scale(1);
+      }
+    }
+
+    @media (max-width:640px){
+      .showcase-stage{border-radius:18px;}
+      .showcase-nav{
+        width:40px;
+        height:40px;
+        font-size:26px;
+      }
+      .showcase-prev{left:9px;}
+      .showcase-next{right:9px;}
+      .showcase-info{
+        min-height:44px;
+        padding-top:10px;
+      }
+      .showcase-category{font-size:11px;}
+      .showcase-title{font-size:12.5px;}
+      .showcase-count{display:none;}
+      .showcase-thumb{
+        flex-basis:118px;
+        border-radius:11px;
+      }
+    }
+
+  
+    /* v58 — 원본 확대/드래그 감도 복원 */
+    .lightbox-image.zoomed{
+      width:min(180vw, 2400px) !important;
+      max-width:none !important;
+      max-height:none !important;
+      cursor:grab !important;
+      touch-action:none !important;
+      transform:none !important;
+      opacity:1 !important;
+      filter:none !important;
+      will-change:scroll-position;
+    }
+
+    .lightbox.zoom-active .lightbox-image.zoomed{
+      display:block !important;
+      margin:72px auto 120px !important;
+    }
+
+    .lightbox-image.zoomed.dragging{
+      cursor:grabbing !important;
+    }
+
+    @media (max-width:640px){
+      .lightbox-image.zoomed{
+        width:195vw !important;
+      }
+
+      .lightbox.zoom-active .lightbox-image.zoomed{
+        margin:70px auto 118px !important;
+      }
+    }
+
+  
+    /* v60 — 샘플 하단 메타 정보 표기 */
+    .showcase-info{
+      min-height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      padding:11px 8px 5px;
+      text-align:center;
+    }
+
+    .showcase-meta-line{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      flex-wrap:wrap;
+      color:#55484e;
+      font-size:12.5px;
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .showcase-credit,
+    .showcase-type{
+      color:#55484e;
+    }
+
+    .showcase-sep{
+      color:#c9b7be;
+      font-weight:600;
+    }
+
+    .showcase-category{
+      color:#e0779f !important;
+      font-size:12.5px !important;
+      font-weight:800 !important;
+    }
+
+    .showcase-category::after{
+      content:none !important;
+      display:none !important;
+    }
+
+    .showcase-count{
+      flex:0 0 auto;
+      color:#aab4b5;
+      font-size:11.5px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    @media(max-width:640px){
+      .showcase-info{
+        gap:7px;
+        padding-top:9px;
+      }
+
+      .showcase-meta-line{
+        gap:5px;
+        font-size:11.5px;
+      }
+
+      .showcase-category{
+        font-size:11.5px !important;
+      }
+
+      .showcase-count{
+        display:inline !important;
+        font-size:10.5px;
+      }
+    }
+
+  
+    /* v61 — Before / After 원본 아바타 표기 */
+    .showcase-original-label{
+      color:#55484e;
+      font-size:12.5px;
+      font-weight:700;
+    }
+
+    .showcase-avatar-name{
+      color:#e0779f;
+      font-size:12.5px;
+      font-weight:800;
+    }
+
+    @media(max-width:640px){
+      .showcase-original-label,
+      .showcase-avatar-name{
+        font-size:11.5px;
+      }
+    }
+
+  
+    /* =========================================================
+       v62 — CATEGORY INDEX RAIL / MINT
+       ========================================================= */
+    .category-index-wrap{
+      margin:0 0 34px;
+    }
+
+    .category-index-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:17px;
+    }
+
+    .category-index-kicker{
+      color:#9aa7a6;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.13em;
+      line-height:1;
+    }
+
+    .category-index-viewing{
+      color:#b0baba;
+      font-size:10.5px;
+      font-weight:700;
+      line-height:1;
+    }
+
+    .category-index-scroll{
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .category-index-scroll::-webkit-scrollbar{
+      display:none;
+    }
+
+    .category-index-list{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(6,minmax(112px,1fr));
+      min-width:730px;
+    }
+
+    .filter-btn.category-index-btn{
+      position:relative;
+      min-width:0 !important;
+      display:flex !important;
+      flex-direction:column !important;
+      align-items:center !important;
+      justify-content:center !important;
+      gap:0 !important;
+      padding:6px 14px 18px !important;
+      border:0 !important;
+      border-radius:0 !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      color:inherit !important;
+      text-align:center !important;
+      transform:none !important;
+      cursor:pointer;
+    }
+
+    .filter-btn.category-index-btn.before-after-tab{
+      align-items:flex-start !important;
+      text-align:left !important;
+    }
+
+    .filter-btn.category-index-btn:hover{
+      border:0 !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      transform:none !important;
+    }
+
+    .category-index-no{
+      color:#c1cbca;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.06em;
+      line-height:1;
+      transition:color .22s ease;
+    }
+
+    .category-index-en{
+      color:#7f8c8d;
+      font-size:17px;
+      font-weight:700;
+      letter-spacing:.02em;
+      line-height:1.15;
+      transition:color .22s ease;
+    }
+
+    .filter-btn.category-index-btn:hover .category-index-no,
+    .filter-btn.category-index-btn:hover .category-index-en{
+      color:var(--mint-dark);
+    }
+
+    .filter-btn.category-index-btn.active .category-index-no{
+      color:var(--mint-dark);
+    }
+
+    .filter-btn.category-index-btn.active .category-index-en{
+      color:#364746;
+    }
+
+    .category-index-track{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:7px;
+      height:1px;
+      background:#e5efee;
+      pointer-events:none;
+    }
+
+    .category-index-active-line{
+      position:absolute;
+      left:0;
+      bottom:5px;
+      width:0;
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--mint),var(--mint-dark));
+      box-shadow:0 3px 10px rgba(78,170,165,.18);
+      pointer-events:none;
+      transition:
+        transform .38s cubic-bezier(.22,.8,.3,1),
+        width .38s cubic-bezier(.22,.8,.3,1);
+    }
+
+    .category-index-current{
+      min-height:47px;
+      display:flex;
+      align-items:flex-end;
+      gap:11px;
+      padding:15px 14px 0;
+    }
+
+    .category-index-current-label{
+      color:#bcc6c5;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.1em;
+      line-height:1.1;
+    }
+
+    .category-index-current-name{
+      color:var(--mint-dark);
+      font-size:24px;
+      font-weight:700;
+      line-height:1;
+      letter-spacing:-.035em;
+      opacity:1;
+      transform:translateY(0);
+      transition:
+        opacity .18s ease,
+        transform .18s ease;
+    }
+
+    .category-index-current-name.changing{
+      opacity:0;
+      transform:translateY(5px);
+    }
+
+    @media(max-width:640px){
+      .category-index-wrap{
+        margin-bottom:18px;
+      }
+
+      .category-index-top{
+        margin-bottom:14px;
+      }
+
+      .category-index-list{
+        min-width:660px;
+      }
+
+      .filter-btn.category-index-btn{
+        padding-left:10px !important;
+        padding-right:10px !important;
+      }
+
+      .category-index-current{
+        padding-left:10px;
+        min-height:43px;
+      }
+
+      .category-index-current-name{
+        font-size:21px;
+      }
+    }
+
+  
+    @media(max-width:640px){
+      .category-index-no{
+        font-size:11.5px;
+      }
+
+      .category-index-en{
+        font-size:15px;
+      }
+    }
+
+  
+    .category-index-no{
+      display:none !important;
+    }
+
+  
+    /* v68 — category / notice spacing fix */
+    .category-index-wrap + .portfolio-notice{
+      margin-top:0 !important;
+    }
+
+    @media(max-width:640px){
+      .category-index-wrap{
+        margin-bottom:26px !important;
+      }
+    }
+
+  
+    /* v75 — dark transparent lightbox overlay */
+    .lightbox-close{
+      top:16px !important;
+      left:16px !important;
+      right:auto !important;
+      width:auto !important;
+      min-width:106px !important;
+      height:42px !important;
+      padding:0 16px !important;
+      border:1px solid rgba(255,255,255,.14) !important;
+      border-radius:999px !important;
+      color:#fff !important;
+      background:rgba(42,47,54,.86) !important;
+      box-shadow:0 10px 26px rgba(0,0,0,.24) !important;
+      font-size:15px !important;
+      font-weight:800 !important;
+      letter-spacing:-.02em !important;
+      white-space:nowrap !important;
+    }
+
+    .lightbox-close:hover{
+      background:rgba(58,64,72,.94) !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox-close{
+        top:12px !important;
+        left:12px !important;
+        min-width:100px !important;
+        height:40px !important;
+        padding:0 14px !important;
+        font-size:14px !important;
+      }
+    }
+
+
+
+    /* v76 — white glass overlay + repositioned back button */
+    .lightbox{
+      background: rgba(255,255,255,0.32) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+    }
+
+    .lightbox-close{
+      top: clamp(86px, 13vh, 128px) !important;
+      left: clamp(22px, 3.6vw, 34px) !important;
+      right: auto !important;
+      color: #2f3a40 !important;
+      background: rgba(255,255,255,0.74) !important;
+      border: 1px solid rgba(255,255,255,0.92) !important;
+      box-shadow: 0 10px 26px rgba(20, 32, 40, 0.14) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+
+    .lightbox-close:hover{
+      background: rgba(255,255,255,0.88) !important;
+      color: #1f2a31 !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox{
+        background: rgba(255,255,255,0.28) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+      }
+
+      .lightbox-close{
+        top: 86px !important;
+        left: 12px !important;
+        min-width: 96px !important;
+        height: 38px !important;
+        padding: 0 13px !important;
+        font-size: 13.5px !important;
+      }
+    }
+
+
+
+    /* v77 — solid white overlay + restore X close button */
+    .lightbox{
+      background: rgba(255,255,255,0.42) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+    }
+
+    .lightbox-close{
+      top: 18px !important;
+      left: auto !important;
+      right: 18px !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      border: 0 !important;
+      font-size: 28px !important;
+      line-height: 1 !important;
+      font-weight: 700 !important;
+      color: #ffffff !important;
+      background: rgba(118, 216, 210, 0.95) !important;
+      box-shadow: 0 10px 24px rgba(37, 64, 68, 0.18) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      white-space: nowrap !important;
+    }
+
+    .lightbox-close:hover{
+      background: rgba(94, 206, 199, 1) !important;
+      color: #ffffff !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox{
+        background: rgba(255,255,255,0.46) !important;
+        backdrop-filter: blur(7px) !important;
+        -webkit-backdrop-filter: blur(7px) !important;
+      }
+
+      .lightbox-close{
+        top: 12px !important;
+        right: 12px !important;
+        left: auto !important;
+        width: 40px !important;
+        min-width: 40px !important;
+        height: 40px !important;
+        font-size: 24px !important;
+      }
+    }
+
+  
+
+    /* v82 — softer white overlay + contextual close / guide placement */
+    .lightbox{
+      background: rgba(255,255,255,0.14) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+    }
+
+    .lightbox-close{
+      top: var(--lightbox-close-top, 18px) !important;
+      left: var(--lightbox-close-left, calc(100vw - 62px)) !important;
+      right: auto !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      border: 0 !important;
+      color: #ffffff !important;
+      background: rgba(118,216,210,0.96) !important;
+      box-shadow: 0 12px 28px rgba(38, 60, 70, 0.16) !important;
+      z-index: 10030 !important;
+    }
+
+    .lightbox-close:hover{
+      background: rgba(95,205,198,1) !important;
+    }
+
+    .lightbox-guide{
+      top: var(--lightbox-guide-top, auto) !important;
+      left: var(--lightbox-guide-left, 50vw) !important;
+      right: auto !important;
+      bottom: auto !important;
+      transform: translateX(-50%) !important;
+      z-index: 10025 !important;
+      min-width: min(68vw, 440px) !important;
+      max-width: min(calc(100vw - 36px), 560px) !important;
+      padding: 12px 16px !important;
+      border: 1px solid rgba(133, 191, 255, 0.52) !important;
+      border-radius: 14px !important;
+      color: #4c6e80 !important;
+      background: rgba(230, 244, 255, 0.88) !important;
+      box-shadow: 0 10px 24px rgba(78, 128, 156, 0.10) !important;
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+      line-height: 1.45 !important;
+      text-align: center !important;
+      white-space: normal !important;
+      pointer-events: none !important;
+    }
+
+    .lightbox-count{
+      background: rgba(118,216,210,0.94) !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox{
+        background: rgba(255,255,255,0.16) !important;
+        backdrop-filter: blur(9px) !important;
+        -webkit-backdrop-filter: blur(9px) !important;
+      }
+
+      .lightbox-close{
+        width: 40px !important;
+        min-width: 40px !important;
+        height: 40px !important;
+        font-size: 24px !important;
+      }
+
+      .lightbox-guide{
+        min-width: min(78vw, 360px) !important;
+        max-width: calc(100vw - 28px) !important;
+        padding: 10px 14px !important;
+        font-size: 11.8px !important;
+      }
+    }
+
+  
+    /* v83 — compact mint guide + Before/After X anchor fix */
+    .lightbox-close{
+      top:18px !important;
+      left:auto !important;
+      right:18px !important;
+    }
+
+    .lightbox.before-after-mode .lightbox-close{
+      top:var(--lightbox-close-top,18px) !important;
+      left:var(--lightbox-close-left,calc(100vw - 62px)) !important;
+      right:auto !important;
+    }
+
+    .lightbox .lightbox-guide{
+      position:fixed !important;
+      top:var(--lightbox-guide-top,auto) !important;
+      left:var(--lightbox-guide-left,50vw) !important;
+      right:auto !important;
+      bottom:auto !important;
+
+      width:auto !important;
+      min-width:0 !important;
+      height:auto !important;
+      min-height:0 !important;
+      max-width:min(calc(100vw - 36px),520px) !important;
+
+      margin:0 !important;
+      padding:9px 14px !important;
+
+      border:1px solid rgba(180,229,225,.95) !important;
+      border-radius:999px !important;
+
+      color:var(--mint-dark) !important;
+      background:rgba(255,255,255,.92) !important;
+      box-shadow:0 7px 20px rgba(78,170,165,.14) !important;
+
+      font-size:12.5px !important;
+      font-weight:700 !important;
+      line-height:1.4 !important;
+      text-align:center !important;
+      white-space:nowrap !important;
+
+      transform:translateX(-50%) !important;
+      pointer-events:none !important;
+      z-index:10025 !important;
+    }
+
+    @media(max-width:640px){
+      .lightbox-close{
+        top:12px !important;
+        right:12px !important;
+        left:auto !important;
+      }
+
+      .lightbox.before-after-mode .lightbox-close{
+        top:var(--lightbox-close-top,12px) !important;
+        left:var(--lightbox-close-left,calc(100vw - 52px)) !important;
+        right:auto !important;
+      }
+
+      .lightbox .lightbox-guide{
+        width:auto !important;
+        min-width:0 !important;
+        max-width:calc(100vw - 28px) !important;
+        padding:8px 12px !important;
+        border-radius:14px !important;
+        font-size:11.5px !important;
+        white-space:normal !important;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <section class="section" aria-label="✨ 나만의 이미지를 완성하는 페이스 커스텀">
+    <div class="sec-header">
+      <div class="sec-bar" aria-hidden="true"></div>
+      <h1 class="sec-title">✨ 나만의 이미지를 완성하는 페이스 커스텀</h1>
+      <span class="sec-subtitle">
+        🔎 이미지는 두 번 클릭해 확대하고, 영상은 바로 재생할 수 있어요!
+      </span>
+    </div>
+
+    <div class="category-index-wrap">
+      <div class="category-index-top">
+        <span class="category-index-kicker">FACE CUSTOM MENU</span>
+        <span class="category-index-viewing" id="categoryIndexViewing">VIEWING 01 / 06</span>
+      </div>
+
+      <div class="category-index-scroll">
+        <div class="category-index-list" id="categoryIndexList" role="tablist" aria-label="작업 분류">
+          <button class="filter-btn category-index-btn active" type="button" data-filter="all">
+            <span class="category-index-en">ALL</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="boing-eye">
+            <span class="category-index-en">뽀잉눈</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="smile-eye">
+            <span class="category-index-en">웃는눈 연동</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="facial">
+            <span class="category-index-en">페이셜</span>
+          </button>
+
+          <button class="filter-btn category-index-btn" type="button" data-filter="detail">
+            <span class="category-index-en">성형 디테일</span>
+          </button>
+
+          <button class="filter-btn category-index-btn before-after-tab" type="button" data-filter="before-after">
+            <span class="category-index-en">Before / After</span>
+          </button>
+
+          <div class="category-index-track" aria-hidden="true"></div>
+          <div class="category-index-active-line" id="categoryIndexActiveLine" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portfolio-notice" role="note" aria-label="작업 기준 안내">
+      <div class="portfolio-notice-icon">※</div>
+      <div>
+        <strong>Blender를 활용한 페이셜 성형·쉐이프키 디테일</strong> 작업 예시입니다.<br>
+        아바타 구조에 따라 작업 가능 범위가 달라질 수 있으며, 세부 내용은 상담 후 안내드립니다.
+      </div>
+    </div>
+
+    
+    <div class="showcase-wrap">
+      <div class="showcase-stage" id="showcaseStage">
+        <div class="showcase-media" id="showcaseMedia"></div>
+        <button class="showcase-nav showcase-prev" id="showcasePrev" type="button" aria-label="이전 샘플">‹</button>
+        <button class="showcase-nav showcase-next" id="showcaseNext" type="button" aria-label="다음 샘플">›</button>
+      </div>
+
+      <div class="showcase-info">
+        <div class="showcase-meta-line" id="showcaseMetaLine">
+          <span class="showcase-credit">Modified by IROHA</span>
+          <span class="showcase-sep">·</span>
+          <span class="showcase-category" id="showcaseCategory"></span>
+          <span class="showcase-sep">·</span>
+          <span class="showcase-type">Virtual 3D</span>
+        </div>
+        <span class="showcase-count" id="showcaseCount"></span>
+      </div>
+
+      <div class="showcase-dots" id="showcaseDots"></div>
+      <div class="showcase-thumbs" id="showcaseThumbs"></div>
+    </div>
+
+  </section>
+
+  <div
+    id="face-portfolio-lightbox"
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="작업 이미지 크게 보기"
+    hidden
+  >
+    <button class="lightbox-close" type="button" aria-label="닫기">×</button>
+    <button class="lightbox-nav lightbox-prev" type="button" aria-label="이전 이미지">‹</button>
+    <img class="lightbox-image" src="" alt="">
+
+    <div class="lightbox-video-wrap" hidden>
+      <iframe
+        class="lightbox-video"
+        src=""
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+      <a
+        class="video-fallback-link"
+        href="https://youtu.be/WXFuu_awOqw"
+        target="_blank"
+        rel="noopener noreferrer"
+        hidden
+      >
+        YouTube에서 보기
+      </a>
+    </div>
+    <button class="lightbox-nav lightbox-next" type="button" aria-label="다음 이미지">›</button>
+
+    <div class="lightbox-guide">
+      🖱️ 확대 후 이미지를 누른 채 드래그하면 원하는 부분을 볼 수 있습니다.
+    </div>
+
+    <div class="lightbox-count" aria-live="polite"></div>
+  </div>
+  <script>
+    (function () {
+      const portfolioItems = [
+        {
+          src: 'https://img.youtube.com/vi/WXFuu_awOqw/hqdefault.jpg',
+          category: 'facial',
+          title: '페이셜 움직임 샘플 2',
+          type: 'youtube',
+          youtubeId: 'WXFuu_awOqw'
+        },
+        {
+          src: 'https://img.youtube.com/vi/lNLfSk6LjJQ/hqdefault.jpg',
+          category: 'detail',
+          title: '성형 디테일 영상 2',
+          type: 'youtube',
+          youtubeId: 'lNLfSk6LjJQ'
+        },
+        {
+          src: 'https://img.youtube.com/vi/DUWNYzrZ6HQ/hqdefault.jpg',
+          category: 'detail',
+          title: '성형 디테일 영상',
+          type: 'youtube',
+          youtubeId: 'DUWNYzrZ6HQ'
+        },
+        {
+          src: 'https://img.youtube.com/vi/cAaJ3MnA8TY/hqdefault.jpg',
+          category: 'boing-eye',
+          title: '뽀잉눈 움직임 샘플 2',
+          type: 'youtube',
+          youtubeId: 'cAaJ3MnA8TY'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-13.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 1'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-11.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 2'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-07.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 3'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-06.png?v=55',
+          category: 'before-after',
+          title: 'Befor / After 4'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-09.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 2'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-08.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 3'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-06-2.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 5'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-06-1.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 6'
+        },
+        {
+          src: './images/portfolio/blender-shapekey-face-04.png?v=51',
+          category: 'detail',
+          title: '성형 디테일 9'
+        },
+        {
+          src: 'https://img.youtube.com/vi/wY3I8bUxnUM/hqdefault.jpg',
+          category: 'smile-eye',
+          title: '웃는눈 연동 샘플',
+          type: 'youtube',
+          youtubeId: 'wY3I8bUxnUM'
+        },
+        {
+          src: 'https://img.youtube.com/vi/dAcdmztELK0/hqdefault.jpg',
+          category: 'boing-eye',
+          title: '뽀잉눈 움직임 샘플',
+          type: 'youtube',
+          youtubeId: 'dAcdmztELK0'
+        },
+        {
+          src: 'https://img.youtube.com/vi/pFfbLfAzeqQ/hqdefault.jpg',
+          category: 'facial',
+          title: '페이셜 움직임 샘플',
+          type: 'youtube',
+          youtubeId: 'pFfbLfAzeqQ'
+        }
+      ];
+
+      const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+      const categoryIndexList = document.getElementById('categoryIndexList');
+      const categoryIndexActiveLine = document.getElementById('categoryIndexActiveLine');
+      const categoryIndexViewing = document.getElementById('categoryIndexViewing');
+      const categoryIndexCurrentName = document.getElementById('categoryIndexCurrentName');
+
+      const stage = document.getElementById('showcaseStage');
+      const media = document.getElementById('showcaseMedia');
+      const prevBtn = document.getElementById('showcasePrev');
+      const nextBtn = document.getElementById('showcaseNext');
+      const categoryEl = document.getElementById('showcaseCategory');
+      const metaLineEl = document.getElementById('showcaseMetaLine');
+      const countEl = document.getElementById('showcaseCount');
+      const dotsEl = document.getElementById('showcaseDots');
+      const thumbsEl = document.getElementById('showcaseThumbs');
+
+      const lightbox = document.getElementById('face-portfolio-lightbox');
+      const lightboxImage = lightbox.querySelector('.lightbox-image');
+      const lightboxVideoWrap = lightbox.querySelector('.lightbox-video-wrap');
+      const lightboxVideo = lightbox.querySelector('.lightbox-video');
+      const videoFallbackLink = lightbox.querySelector('.video-fallback-link');
+      const lightboxClose = lightbox.querySelector('.lightbox-close');
+      const lightboxPrev = lightbox.querySelector('.lightbox-prev');
+      const lightboxNext = lightbox.querySelector('.lightbox-next');
+      const lightboxCount = lightbox.querySelector('.lightbox-count');
+      const lightboxGuide = lightbox.querySelector('.lightbox-guide');
+
+      const beforeAfterAvatarNames = [
+        'Hanka',
+        'Komano',
+        'Mayo',
+        'Airi'
+      ];
+
+      let currentFilter = 'all';
+      let visibleItems = [];
+      let currentIndex = 0;
+      let lightboxIndex = 0;
+      let switchTimer = null;
+      let currentLightboxCategory = '';
+
+      let zoomDragging = false;
+      let zoomMoved = false;
+      let zoomStartX = 0;
+      let zoomStartY = 0;
+      let zoomStartScrollLeft = 0;
+      let zoomStartScrollTop = 0;
+      let zoomTargetScrollLeft = 0;
+      let zoomTargetScrollTop = 0;
+      let zoomScrollRaf = null;
+      let zoomLastX = 0;
+      let zoomLastY = 0;
+      let zoomLastTime = 0;
+      let zoomVelocityX = 0;
+      let zoomVelocityY = 0;
+      let zoomMomentumRaf = null;
+
+      function getCategoryLabel(category) {
+        if (category === 'boing-eye') return '뽀잉눈';
+        if (category === 'smile-eye') return '웃는눈 연동';
+        if (category === 'facial') return '페이셜';
+        if (category === 'detail') return '성형디테일';
+        if (category === 'before-after') return 'Before / After';
+        return '전체';
+      }
+
+      function moveCategoryIndexLine(button) {
+        if (!button || !categoryIndexActiveLine) return;
+
+        categoryIndexActiveLine.style.width = button.offsetWidth + 'px';
+        categoryIndexActiveLine.style.transform =
+          'translateX(' + button.offsetLeft + 'px)';
+      }
+
+      function updateCategoryIndexUI(button, index) {
+        if (!button) return;
+
+        if (categoryIndexViewing) {
+          categoryIndexViewing.textContent =
+            'VIEWING ' + String(index + 1).padStart(2, '0') + ' / 06';
+        }
+
+        if (categoryIndexCurrentName) {
+          categoryIndexCurrentName.classList.add('changing');
+
+          setTimeout(function() {
+            categoryIndexCurrentName.textContent =
+              getCategoryLabel(button.dataset.filter);
+
+            categoryIndexCurrentName.classList.remove('changing');
+          }, 130);
+        }
+
+        moveCategoryIndexLine(button);
+      }
+
+      function sendHeight() {
+        const height = Math.ceil(Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        ));
+        window.parent.postMessage({
+          type:'iroha-face-portfolio-height',
+          height:height
+        }, '*');
+      }
+
+      function thumbSrc(item) {
+        if (item.type === 'youtube' && item.youtubeId) {
+          return 'https://img.youtube.com/vi/' + item.youtubeId + '/hqdefault.jpg';
+        }
+        return item.src;
+      }
+
+      function renderDots() {
+        dotsEl.innerHTML = '';
+
+        if (visibleItems.length > 10) {
+          dotsEl.style.display = 'none';
+          return;
+        }
+
+        dotsEl.style.display = 'flex';
+
+        visibleItems.forEach(function(item, index) {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'showcase-dot' + (index === currentIndex ? ' active' : '');
+          dot.setAttribute('aria-label', (index + 1) + '번째 샘플 보기');
+          dot.addEventListener('click', function() {
+            showItem(index, 0);
+          });
+          dotsEl.appendChild(dot);
+        });
+      }
+
+      function renderThumbs() {
+        thumbsEl.innerHTML = '';
+
+        visibleItems.forEach(function(item, index) {
+          const thumb = document.createElement('button');
+          thumb.type = 'button';
+          thumb.className = 'showcase-thumb' + (index === currentIndex ? ' active' : '');
+          thumb.setAttribute('aria-label', (item.title || '샘플') + ' 보기');
+
+          const img = document.createElement('img');
+          img.src = thumbSrc(item);
+          img.alt = '';
+          img.loading = index < 6 ? 'eager' : 'lazy';
+          img.draggable = false;
+          thumb.appendChild(img);
+
+          if (item.type === 'youtube') {
+            const badge = document.createElement('span');
+            badge.className = 'showcase-thumb-badge';
+            badge.textContent = 'VIDEO';
+            thumb.appendChild(badge);
+          }
+
+          thumb.addEventListener('click', function() {
+            showItem(index, 0);
+          });
+
+          thumbsEl.appendChild(thumb);
+        });
+      }
+
+      function updateThumbActive() {
+        Array.from(thumbsEl.querySelectorAll('.showcase-thumb')).forEach(function(thumb, i) {
+          thumb.classList.toggle('active', i === currentIndex);
+        });
+
+        const active = thumbsEl.querySelector('.showcase-thumb.active');
+        if (active) {
+          active.scrollIntoView({
+            behavior:'smooth',
+            block:'nearest',
+            inline:'center'
+          });
+        }
+      }
+
+      function updateInfo(item) {
+        if (item.category === 'before-after') {
+          const beforeAfterIndex = visibleItems
+            .slice(0, currentIndex + 1)
+            .filter(function(entry) {
+              return entry.category === 'before-after';
+            }).length - 1;
+
+          const avatarName =
+            beforeAfterAvatarNames[beforeAfterIndex] || '';
+
+          metaLineEl.innerHTML =
+            '<span class="showcase-original-label">Original Avatar :</span>' +
+            '<span class="showcase-avatar-name">' + avatarName + '</span>';
+        } else {
+          metaLineEl.innerHTML =
+            '<span class="showcase-credit">Modified by IROHA</span>' +
+            '<span class="showcase-sep">·</span>' +
+            '<span class="showcase-category" id="showcaseCategory">' +
+              getCategoryLabel(item.category) +
+            '</span>' +
+            '<span class="showcase-sep">·</span>' +
+            '<span class="showcase-type">Virtual 3D</span>';
+        }
+
+        countEl.textContent =
+          (currentIndex + 1) + '/' + visibleItems.length;
+      }
+
+      function mountMedia(item) {
+        media.innerHTML = '';
+
+        if (item.type === 'youtube' && item.youtubeId) {
+          const iframe = document.createElement('iframe');
+          iframe.src =
+            'https://www.youtube.com/embed/' +
+            item.youtubeId +
+            '?rel=0&modestbranding=1&playsinline=1';
+          iframe.title = item.title || 'YouTube video player';
+          iframe.loading = 'eager';
+          iframe.allow =
+            'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+          iframe.allowFullscreen = true;
+          media.appendChild(iframe);
+          return;
+        }
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.title || '작업 이미지';
+        img.draggable = false;
+        img.addEventListener('click', function() {
+          openLightbox(currentIndex);
+        });
+        media.appendChild(img);
+      }
+
+      function showItem(index, direction) {
+        if (!visibleItems.length) return;
+
+        currentIndex = (index + visibleItems.length) % visibleItems.length;
+        const item = visibleItems[currentIndex];
+
+        stage.classList.add('switching');
+        clearTimeout(switchTimer);
+
+        switchTimer = setTimeout(function() {
+          mountMedia(item);
+          updateInfo(item);
+          renderDots();
+          updateThumbActive();
+          stage.classList.remove('switching');
+          sendHeight();
+        }, direction === 0 ? 70 : 120);
+      }
+
+      function renderShowcase() {
+        visibleItems = portfolioItems.filter(function(item) {
+          return currentFilter === 'all' || item.category === currentFilter;
+        });
+
+        currentIndex = 0;
+
+        if (!visibleItems.length) {
+          media.innerHTML =
+            '<div class="empty-state">' +
+              '<div class="empty-icon">🖼️</div>' +
+              '<div class="empty-title">등록된 작업물이 없습니다.</div>' +
+              '<div class="empty-text">준비되는 대로 이 카테고리에 추가됩니다.</div>' +
+            '</div>';
+          metaLineEl.innerHTML =
+            '<span class="showcase-category">' +
+              getCategoryLabel(currentFilter) +
+            '</span>';
+          countEl.textContent = '';
+          dotsEl.innerHTML = '';
+          thumbsEl.innerHTML = '';
+          sendHeight();
+          return;
+        }
+
+        renderThumbs();
+        showItem(0, 0);
+      }
+
+      function move(step) {
+        showItem(currentIndex + step, step);
+      }
+
+      prevBtn.addEventListener('click', function() { move(-1); });
+      nextBtn.addEventListener('click', function() { move(1); });
+
+      filterButtons.forEach(function(button, buttonIndex) {
+        button.addEventListener('click', function() {
+          currentFilter = button.dataset.filter;
+
+          filterButtons.forEach(function(otherButton) {
+            otherButton.classList.toggle('active', otherButton === button);
+          });
+
+          updateCategoryIndexUI(button, buttonIndex);
+          renderShowcase();
+        });
       });
-    } else {
-      stopHold();
-    }
-  } else {
-    stopHold();
-  }
-})();</script>
-<!-- IROHA 스크롤 위치 관리 v25 (2/2) END --><!-- IROHA 아트머그 기본 옵션 UI CLEAN v19 START --><script id="iroha-native-ui-clean-v19">(function(){ function imp(el, prop, value){ if (!el) return; el.style.setProperty(prop, value, 'important'); } function cleanText(value){ return String(value || '').replace(/s+/g,' ').trim(); } function directText(el){ var out = ''; Array.prototype.forEach.call(el.childNodes || [], function(node){ if (node.nodeType === 3) out += node.nodeValue || ''; }); return cleanText(out); } function isDecoration(text){ return ( text.indexOf('˳') !== -1 || text.indexOf('ॱ') !== -1 || text.indexOf('⋅.') !== -1 ); } function applyBaseStyle(){ var right = document.getElementById('rightInfo'); if (!right) return; imp(right,'font-family',"'NanumSquareNeo',"); imp(right,'font-size','13px'); imp(right,'line-height','1.65'); imp(right,'color','#3D4D51'); var profile = document.getElementById('profile'); if (profile){ imp(profile,'overflow','hidden'); imp(profile,'margin-bottom','16px'); imp(profile,'border','1px solid #BDEBE7'); imp(profile,'border-radius','22px'); imp(profile,'background','#FFFFFF'); imp(profile,'box-shadow','0 12px 26px rgba(36,198,191,.10)'); } ['goodsInfo','goodsOrder'].forEach(function(id){ var box = document.getElementById(id); if (!box) return; imp(box,'margin-top','14px'); imp(box,'border','1px solid #BDEBE7'); imp(box,'border-radius','20px'); imp(box,'background','#FFFFFF'); imp(box,'box-shadow','0 12px 26px rgba(36,198,191,.075)'); imp(box,'overflow','visible'); var head = box.querySelector(':scope > ul.head'); if (head){ imp(head,'height','auto'); imp(head,'margin','0'); imp(head,'padding','12px 14px'); imp(head,'border','0'); imp(head,'border-bottom','1px solid #BDEBE7'); imp(head,'background','linear-gradient(135deg,#DFF8F5 0%,#EEFBFA 62%,#F2EFFF 100%)'); imp(head,'color','#34565A'); imp(head,'font-size','15px'); imp(head,'font-weight','800'); imp(head,'line-height','1.45'); imp(head,'text-align','center'); } }); var info = document.getElementById('goodsInfo'); if (info){ var detailRows = info.querySelectorAll('ol.left_right_dl'); detailRows.forEach(function(row,index){ imp(row,'display','grid'); imp(row,'grid-template-columns','minmax(0,1fr) auto'); imp(row,'gap','10px'); imp(row,'align-items','center'); imp(row,'padding','10px 2px'); imp(row,'border-bottom', index === detailRows.length - 1 ? '0' : '1px solid #E3F1EF'); }); } var order = document.getElementById('goodsOrder'); if (!order) return; var orderInp = order.querySelector('ul.orderInp'); if (orderInp){ imp(orderInp,'margin','0'); imp(orderInp,'padding','10px 14px 16px'); imp(orderInp,'overflow','visible'); } var optionPrice = order.querySelector('#optionPrice'); if (optionPrice) imp(optionPrice,'overflow','visible'); var rows = Array.prototype.slice.call(order.querySelectorAll('#optionPrice .clearfix')); rows.forEach(function(row,index){ var rowZ = 10000 - index; imp(row,'display','grid'); imp(row,'grid-template-columns','minmax(0,1fr) 145px'); imp(row,'gap','10px'); imp(row,'align-items','center'); imp(row,'padding','10px 0'); imp(row,'border-bottom','1px solid #E8F1F0'); imp(row,'position','relative'); imp(row,'z-index',String(rowZ)); imp(row,'overflow','visible'); var title = row.querySelector('.goodsTitle_op'); if (title){ imp(title,'float','none'); imp(title,'width','auto'); imp(title,'min-width','0'); imp(title,'padding','0'); imp(title,'color','#536469'); imp(title,'font-size','13px'); imp(title,'font-weight','800'); imp(title,'line-height','1.55'); imp(title,'white-space','normal'); imp(title,'word-break','keep-all'); imp(title,'overflow','visible'); } var goodsText = row.querySelector('.goodsText'); if (goodsText){ imp(goodsText,'float','none'); imp(goodsText,'width','145px'); imp(goodsText,'min-width','145px'); imp(goodsText,'max-width','145px'); imp(goodsText,'padding','0'); imp(goodsText,'position','relative'); imp(goodsText,'z-index',String(rowZ + 10)); imp(goodsText,'overflow','visible'); } var opBox = row.querySelector('[id^="opBox"]'); if (!opBox) return; imp(opBox,'width','145px'); imp(opBox,'min-width','145px'); imp(opBox,'max-width','145px'); imp(opBox,'height','32px'); imp(opBox,'position','relative'); imp(opBox,'z-index',String(rowZ + 20)); imp(opBox,'overflow','visible'); var children = Array.prototype.slice.call(opBox.children || []); /* 현재 선택값 표시부 */ if (children[0]){ imp(children[0],'width','121px'); imp(children[0],'min-width','121px'); imp(children[0],'max-width','121px'); imp(children[0],'height','30px'); imp(children[0],'line-height','30px'); imp(children[0],'padding','0 6px'); imp(children[0],'overflow','hidden'); imp(children[0],'text-overflow','ellipsis'); imp(children[0],'white-space','nowrap'); } /* 실제 펼쳐지는 목록 */ children.forEach(function(dropdown, childIndex){ if (childIndex < 2) return; var rect = opBox.getBoundingClientRect(); var availableLeft = Math.max(320, Math.floor(rect.right - 18)); var width = Math.min(520, availableLeft); imp(dropdown,'position','absolute'); imp(dropdown,'top','34px'); imp(dropdown,'left','auto'); imp(dropdown,'right','0'); imp(dropdown,'width',width + 'px'); imp(dropdown,'min-width',width + 'px'); imp(dropdown,'max-width',width + 'px'); imp(dropdown,'height','auto'); imp(dropdown,'max-height','none'); imp(dropdown,'min-height','0'); imp(dropdown,'overflow','visible'); imp(dropdown,'box-sizing','border-box'); imp(dropdown,'z-index','999999'); imp(dropdown,'background','#FFFFFF'); imp(dropdown,'border','1px solid #CFE5E2'); imp(dropdown,'border-radius','10px'); imp(dropdown,'box-shadow','0 14px 30px rgba(42,74,78,.18)'); /* 아트머그 기본 드롭다운 내부의 고정 width/height/overflow를 모두 풀어서 텍스트가 잘리지 않도록 합니다. */ Array.prototype.slice.call(dropdown.children || []).forEach(function(item){ imp(item,'width','100%'); imp(item,'min-width','0'); imp(item,'max-width','100%'); imp(item,'height','auto'); imp(item,'min-height','0'); imp(item,'max-height','none'); imp(item,'overflow','visible'); imp(item,'box-sizing','border-box'); imp(item,'white-space','normal'); imp(item,'word-break','keep-all'); imp(item,'overflow-wrap','break-word'); }); dropdown.querySelectorAll('*').forEach(function(el){ imp(el,'height','auto'); imp(el,'min-height','0'); imp(el,'max-height','none'); imp(el,'box-sizing','border-box'); imp(el,'text-overflow','clip'); imp(el,'font-size','13px'); imp(el,'line-height','1.7'); var txt = directText(el); if (txt && isDecoration(txt)){ /* 장식선만 테두리 안에서 자름 */ imp(el,'display','block'); imp(el,'width','100%'); imp(el,'max-width','100%'); imp(el,'white-space','nowrap'); imp(el,'overflow','hidden'); imp(el,'word-break','normal'); } else { /* 실제 문구는 절대 자르지 않음. 짧으면 자연스럽게 한 줄이고, 길면 박스 안에서 자동 줄바꿈. */ imp(el,'max-width','100%'); imp(el,'white-space','normal'); imp(el,'word-break','keep-all'); imp(el,'overflow-wrap','break-word'); imp(el,'overflow','visible'); } }); /* table 구조가 섞여있는 경우도 강제로 폭 해제 */ dropdown.querySelectorAll('table,tbody,tr,td,th').forEach(function(el){ imp(el,'width','100%'); imp(el,'max-width','100%'); imp(el,'height','auto'); imp(el,'overflow','visible'); imp(el,'white-space','normal'); imp(el,'word-break','keep-all'); imp(el,'box-sizing','border-box'); }); }); }); order.querySelectorAll('select, input:not([type="hidden"]), textarea').forEach(function(el){ imp(el,'min-height','32px'); imp(el,'border','1px solid #CFE5E2'); imp(el,'border-radius','10px'); imp(el,'background','#FBFEFD'); imp(el,'color','#485A5F'); imp(el,'font-size','12.5px'); imp(el,'font-weight','700'); imp(el,'box-shadow','none'); imp(el,'outline','none'); }); order.querySelectorAll('.space').forEach(function(el){ imp(el,'height','4px'); imp(el,'min-height','4px'); }); } function init(){ applyBaseStyle(); /* 아트머그 옵션 DOM 생성 지연 대비 유한 재시도 */ [120,350,800,1500,2600].forEach(function(delay){ setTimeout(applyBaseStyle, delay); }); } if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init, {once:true}); }else{ init(); }})();</script><!-- IROHA 아트머그 기본 옵션 UI CLEAN v19 END --><!-- IROHA 드롭다운 설명문 컬러 START --><script id="iroha-native-ui-v22-description-colors">(function(){ var pink = '#D96A9A'; var purple = '#7568C9'; var orange = '#E58A42'; var pinkPhrases = [ '페이셜을 처음 접하시거나', '추천드립니다', '콜라보 할인 이용을 원하실 경우', '각 작가님께 먼저 문의해주세요' ]; var purplePhrases = [ '유니티 패키지에서 직접 뜯다', '기존 탑재 쉐이프키들을', '쉐이프키 개수는 아바타마다 다릅니다', '평균적으로 약 200~400개가량 포함되어 있습니다', 'Magica Cloth 2 물리 작업 시', '캐릭터 전신에 필요한 콜라이더를', '표정 변화에 맞춰 동물귀가 자연스럽게', '눈 감을 때 귀 처짐', '놀란 표정에서 귀 세움', '예- 눈 감을 때 귀 처짐 / 놀란 표정에서 귀 세움', '애니메이션 파일은 별도로 포함되지 않습니다', '해당 옵션들은 유니티 패키지에 포함 되지 않습니다' ]; var orangePhrases = [ 'VSF는 Magica Cloth 2를 사용할 수 없습니다' ]; function paintExactTextNodes(){ var order = document.getElementById('goodsOrder'); if (!order) return; var walker = document.createTreeWalker( order, NodeFilter.SHOW_TEXT, null ); var nodes = []; var node; while ((node = walker.nextNode())){ nodes.push(node); } nodes.forEach(function(textNode){ var text = String(textNode.nodeValue || '').replace(/s+/g,' ').trim(); if (!text) return; var color = ''; if (orangePhrases.some(function(p){ return text.indexOf(p) !== -1; })) { color = orange; } else if (pinkPhrases.some(function(p){ return text.indexOf(p) !== -1; })) { color = pink; } else if (purplePhrases.some(function(p){ return text.indexOf(p) !== -1; })) { color = purple; } if (!color) return; var parent = textNode.parentElement; if (!parent) return; parent.style.setProperty('color', color, 'important'); parent.style.setProperty('font-weight', '700', 'important'); }); } function init(){ paintExactTextNodes(); [120,350,800,1500,2600].forEach(function(delay){ setTimeout(paintExactTextNodes, delay); }); } if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init, {once:true}); }else{ init(); }})();</script><!-- IROHA 드롭다운 설명문 컬러 END --><!-- IROHA 선택박스 중앙정렬 + 라운드 START --><script id="iroha-native-ui-v23-select-round">(function(){ function imp(el, prop, value){ if (!el) return; el.style.setProperty(prop, value, 'important'); } function styleSelectBoxes(){ var order = document.getElementById('goodsOrder'); if (!order) return; /* 실제 select가 보이는 경우 */ order.querySelectorAll('select').forEach(function(el){ imp(el,'text-align','center'); imp(el,'text-align-last','center'); imp(el,'border-radius','12px'); imp(el,'padding-left','8px'); imp(el,'padding-right','8px'); }); /* 아트머그 커스텀 옵션박스 */ order.querySelectorAll('[id^="opBox"]').forEach(function(box){ imp(box,'border-radius','12px'); var children = Array.prototype.slice.call(box.children || []); /* 현재 선택값 표시 영역 */ if (children[0]){ imp(children[0],'text-align','center'); imp(children[0],'border-radius','12px'); imp(children[0],'padding-left','8px'); imp(children[0],'padding-right','8px'); } /* 화살표/우측 영역 */ if (children[1]){ imp(children[1],'border-radius','0 12px 12px 0'); } }); /* input 형태로 렌더링되는 선택 표시도 보정 */ order.querySelectorAll('input:not([type="hidden"])').forEach(function(el){ if ( String(el.value || '').indexOf('선택') !== -1 || String(el.placeholder || '').indexOf('선택') !== -1 ){ imp(el,'text-align','center'); imp(el,'border-radius','12px'); } }); } function init(){ styleSelectBoxes(); [120,350,800,1500,2600].forEach(function(delay){ setTimeout(styleSelectBoxes, delay); }); } if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init, {once:true}); }else{ init(); }})();</script><!-- IROHA 선택박스 중앙정렬 + 라운드 END --><!-- IROHA 선택문구 세로 중앙 미세보정 START --><script id="iroha-native-ui-v24-select-vertical-center">(function(){ function imp(el, prop, value){ if (!el) return; el.style.setProperty(prop, value, 'important'); } function adjustSelectText(){ var order = document.getElementById('goodsOrder'); if (!order) return; /* 실제 select가 보이는 경우 */ order.querySelectorAll('select').forEach(function(el){ imp(el,'text-align','center'); imp(el,'text-align-last','center'); imp(el,'padding-top','6px'); imp(el,'padding-bottom','4px'); imp(el,'line-height','20px'); }); /* 아트머그 커스텀 선택박스 */ order.querySelectorAll('[id^="opBox"]').forEach(function(box){ var children = Array.prototype.slice.call(box.children || []); if (children[0]){ imp(children[0],'display','flex'); imp(children[0],'align-items','center'); imp(children[0],'justify-content','center'); imp(children[0],'padding-top','2px'); imp(children[0],'line-height','1'); } }); /* input 형태 선택 표시 */ order.querySelectorAll('input:not([type="hidden"])').forEach(function(el){ if ( String(el.value || '').indexOf('선택') !== -1 || String(el.placeholder || '').indexOf('선택') !== -1 ){ imp(el,'text-align','center'); imp(el,'padding-top','6px'); imp(el,'padding-bottom','4px'); } }); } function init(){ adjustSelectText(); [120,350,800,1500,2600].forEach(function(delay){ setTimeout(adjustSelectText, delay); }); } if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init, {once:true}); }else{ init(); }})();</script><!-- IROHA 선택문구 세로 중앙 미세보정 END --><!-- IROHA 지정 7문구 NanumSquareNeo START --><style id="iroha-seven-nanumsquareneo-style">.iroha-seven-nanumsquareneo{ font-family:'NanumSquareNeo','', !important;}</style><script id="iroha-seven-nanumsquareneo-script">(function(){ var TARGETS = { '상세 옵션': true, '제출 파일 유형': true, '가격 옵션': true, '해상도': true, '기본 사이즈': true, '수정 횟수': true, '작업 기간': true }; function clean(value){ return String(value || '').replace(/s+/g,' ').trim(); } function applyFont(el){ if (!el) return; el.classList.add('iroha-seven-nanumsquareneo'); el.style.setProperty( 'font-family', "'NanumSquareNeo','',", 'important' ); } function applySeven(){ var right = document.getElementById('rightInfo'); if (!right) return; /* 상세 옵션 / 가격 옵션 제목 */ var info = document.getElementById('goodsInfo'); var order = document.getElementById('goodsOrder'); if (info){ applyFont(info.querySelector(':scope > ul.head')); /* 상세 옵션 내부의 지정 라벨 */ info.querySelectorAll('ol.left_right_dl').forEach(function(row){ var first = row.firstElementChild; if (first && TARGETS[clean(first.textContent)]){ applyFont(first); first.querySelectorAll('*').forEach(applyFont); } }); } if (order){ applyFont(order.querySelector(':scope > ul.head')); } /* 혹시 구조가 다른 경우 정확한 텍스트만 보조 적용 */ right.querySelectorAll('li,dt,dd,div,span,strong,b,p').forEach(function(el){ if (TARGETS[clean(el.textContent)]){ applyFont(el); } }); } function init(){ applySeven(); [120,350,800,1500,2600,3800].forEach(function(delay){ setTimeout(applySeven, delay); }); } if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded',init,{once:true}); }else{ init(); }})();</script><!-- IROHA 지정 7문구 NanumSquareNeo END --><!-- IROHA 가격옵션 ▼ 아이콘 숨김 START --><style id="iroha-hide-option-arrow-style">#goodsOrder [id^="opBox"] > *:nth-child(2),#goodsOrder [id^="opBox"] > *:nth-child(2)::before,#goodsOrder [id^="opBox"] > *:nth-child(2)::after{ opacity:0 !important; color:transparent !important; text-shadow:none !important; background-image:none !important;}</style><script id="iroha-hide-option-arrow-script">(function(){ function hideArrows(){ var order = document.getElementById('goodsOrder'); if (!order) return; order.querySelectorAll('[id^="opBox"]').forEach(function(box){ var children = Array.prototype.slice.call(box.children || []); var arrow = children[1]; if (!arrow) return; /* 클릭 영역은 유지하고 ▼ 표시만 숨김 */ arrow.style.setProperty('opacity','0','important'); arrow.style.setProperty('color','transparent','important'); arrow.style.setProperty('text-shadow','none','important'); arrow.style.setProperty('background-image','none','important'); }); } function init(){ hideArrows(); [120,350,800,1500,2600].forEach(function(delay){ setTimeout(hideArrows, delay); }); } if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded',init,{once:true}); }else{ init(); }})();</script><!-- IROHA 가격옵션 ▼ 아이콘 숨김 END --><!-- IROHA 가벼운 개발자도구 방지 START --><script id="iroha-light-devtools-deterrent">(function(){ /* 주의: - 일반적인 우클릭 / F12 / 주요 단축키만 방지 - 브라우저 메뉴에서 직접 DevTools를 여는 것까지 완전히 막을 수는 없음 */ function isEditableTarget(target){ if (!target) return false; var tag = String(target.tagName || '').toLowerCase(); return ( tag === 'input' || tag === 'textarea' || tag === 'select' || target.isContentEditable === true ); } /* 우클릭 방지 */ document.addEventListener('contextmenu', function(event){ event.preventDefault(); }); /* 개발자도구 / 소스보기 단축키 방지 */ document.addEventListener('keydown', function(event){ var key = String(event.key || '').toLowerCase(); /* F12 */ if (event.key === 'F12' || event.keyCode === 123){ event.preventDefault(); event.stopPropagation(); return false; } /* Ctrl+Shift+I : DevTools Ctrl+Shift+J : Console Ctrl+Shift+C : 요소 선택 */ if ( event.ctrlKey && event.shiftKey && (key === 'i' || key === 'j' || key === 'c') ){ event.preventDefault(); event.stopPropagation(); return false; } /* Ctrl+U : 페이지 소스 보기 */ if ( event.ctrlKey && !event.shiftKey && key === 'u' ){ event.preventDefault(); event.stopPropagation(); return false; } /* macOS 대응: Cmd+Option+I / J / C */ if ( event.metaKey && event.altKey && (key === 'i' || key === 'j' || key === 'c') ){ event.preventDefault(); event.stopPropagation(); return false; } /* 일반 복사/붙여넣기/입력 단축키는 막지 않음. 작업신청서나 입력창 사용에 영향 주지 않게 유지. */ }, true);})();</script><!-- IROHA 가벼운 개발자도구 방지 END --> </div> &#x20;
+
+
+      function updateLightboxOverlayAnchors() {
+        if (lightbox.hidden) return;
+
+        const activeMedia = (!lightboxImage.hidden && lightboxImage.src)
+          ? lightboxImage
+          : ((!lightboxVideoWrap.hidden && lightboxVideoWrap.offsetParent !== null)
+              ? lightboxVideoWrap
+              : null);
+
+        if (!activeMedia) return;
+
+        const rect = activeMedia.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+
+        const isMobile = window.innerWidth <= 640;
+        const closeSize = isMobile ? 40 : 44;
+        const closeGap = isMobile ? 8 : 12;
+        const viewportPadding = isMobile ? 12 : 16;
+
+        const closeTop = Math.max(
+          viewportPadding,
+          rect.top - closeSize - closeGap
+        );
+        const closeLeft = Math.min(
+          window.innerWidth - closeSize - viewportPadding,
+          Math.max(viewportPadding, rect.right - closeSize)
+        );
+
+        const guideTop = Math.min(
+          window.innerHeight - (isMobile ? 90 : 80),
+          rect.bottom + 12
+        );
+        const guideLeft = Math.min(
+          window.innerWidth - viewportPadding,
+          Math.max(viewportPadding, rect.left + rect.width / 2)
+        );
+
+        lightbox.style.setProperty('--lightbox-close-top', closeTop + 'px');
+        lightbox.style.setProperty('--lightbox-close-left', closeLeft + 'px');
+        lightbox.style.setProperty('--lightbox-guide-top', guideTop + 'px');
+        lightbox.style.setProperty('--lightbox-guide-left', guideLeft + 'px');
+        lightbox.classList.toggle(
+          'before-after-mode',
+          currentLightboxCategory === 'before-after'
+        );
+      }
+
+      function updateFixedOverlayPosition() {
+        const isZoomed =
+          lightbox.classList.contains('zoom-active') ||
+          lightbox.classList.contains('zoom-mode');
+
+        const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
+        const scrollTop = isZoomed ? lightbox.scrollTop : 0;
+
+        lightbox.style.setProperty('--iroha-scroll-left', scrollLeft + 'px');
+        lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
+        updateLightboxOverlayAnchors();
+      }
+
+      function stopZoomSmoothScroll() {
+        if (zoomScrollRaf !== null) {
+          cancelAnimationFrame(zoomScrollRaf);
+          zoomScrollRaf = null;
+        }
+      }
+
+      function runZoomSmoothScroll() {
+        const currentLeft = lightbox.scrollLeft;
+        const currentTop = lightbox.scrollTop;
+
+        const nextLeft =
+          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.22;
+
+        const nextTop =
+          currentTop + (zoomTargetScrollTop - currentTop) * 0.22;
+
+        lightbox.scrollLeft = nextLeft;
+        lightbox.scrollTop = nextTop;
+        updateFixedOverlayPosition();
+
+        if (
+          Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
+          Math.abs(zoomTargetScrollTop - nextTop) > 0.5
+        ) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        } else {
+          lightbox.scrollLeft = zoomTargetScrollLeft;
+          lightbox.scrollTop = zoomTargetScrollTop;
+          updateFixedOverlayPosition();
+          zoomScrollRaf = null;
+        }
+      }
+
+      function requestZoomSmoothScroll() {
+        if (zoomScrollRaf === null) {
+          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+        }
+      }
+
+      function stopZoomMomentum() {
+        if (zoomMomentumRaf !== null) {
+          cancelAnimationFrame(zoomMomentumRaf);
+          zoomMomentumRaf = null;
+        }
+      }
+
+      function runZoomMomentum() {
+        if (
+          Math.abs(zoomVelocityX) < 0.12 &&
+          Math.abs(zoomVelocityY) < 0.12
+        ) {
+          zoomMomentumRaf = null;
+          return;
+        }
+
+        lightbox.scrollLeft += zoomVelocityX;
+        lightbox.scrollTop += zoomVelocityY;
+        updateFixedOverlayPosition();
+
+        zoomVelocityX *= 0.82;
+        zoomVelocityY *= 0.82;
+
+        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+      }
+
+      function startZoomMomentum() {
+        stopZoomSmoothScroll();
+        stopZoomMomentum();
+
+        if (
+          Math.abs(zoomVelocityX) < 0.8 &&
+          Math.abs(zoomVelocityY) < 0.8
+        ) {
+          return;
+        }
+
+        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+      }
+
+      function resetLightboxZoom() {
+        stopZoomSmoothScroll();
+        stopZoomMomentum();
+
+        lightboxImage.classList.remove(
+          'zoomed',
+          'dragging',
+          'slide-enter-left',
+          'slide-enter-right'
+        );
+
+        lightbox.classList.remove('zoom-active');
+        lightbox.scrollTop = 0;
+        lightbox.scrollLeft = 0;
+        updateFixedOverlayPosition();
+
+        zoomDragging = false;
+        zoomMoved = false;
+      }
+
+      function stopLightboxVideo() {
+        if (lightboxVideo) lightboxVideo.src = '';
+      }
+
+      function updateLightbox(index) {
+        if (!visibleItems.length) return;
+
+        resetLightboxZoom();
+        lightboxIndex = (index + visibleItems.length) % visibleItems.length;
+        const item = visibleItems[lightboxIndex];
+        currentLightboxCategory = item.category || '';
+
+        lightboxCount.textContent =
+          (lightboxIndex + 1) + ' / ' + visibleItems.length;
+
+        if (item.type === 'youtube' && item.youtubeId) {
+          lightbox.classList.add('video-mode');
+          lightboxImage.hidden = true;
+          lightboxVideoWrap.removeAttribute('hidden');
+          videoFallbackLink.href = 'https://youtu.be/' + item.youtubeId;
+          videoFallbackLink.removeAttribute('hidden');
+          lightboxVideo.src =
+            'https://www.youtube.com/embed/' +
+            item.youtubeId +
+            '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+          requestAnimationFrame(updateLightboxOverlayAnchors);
+        } else {
+          lightbox.classList.remove('video-mode');
+          stopLightboxVideo();
+          lightboxVideoWrap.setAttribute('hidden','');
+          videoFallbackLink.setAttribute('hidden','');
+          lightboxImage.hidden = false;
+          lightboxImage.src = item.src;
+          lightboxImage.alt = item.title || '작업 이미지';
+          lightboxImage.onload = function() {
+            updateLightboxOverlayAnchors();
+          };
+          requestAnimationFrame(updateLightboxOverlayAnchors);
+        }
+      }
+
+      function openLightbox(index) {
+        updateLightbox(index);
+        lightbox.hidden = false;
+        document.body.classList.add('lightbox-open');
+        requestAnimationFrame(updateLightboxOverlayAnchors);
+      }
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lightboxImage.src = '';
+        stopLightboxVideo();
+        resetLightboxZoom();
+        lightbox.classList.remove('video-mode');
+        lightboxVideoWrap.setAttribute('hidden','');
+        videoFallbackLink.setAttribute('hidden','');
+        lightboxImage.hidden = false;
+        currentLightboxCategory = '';
+        document.body.classList.remove('lightbox-open');
+      }
+
+      window.addEventListener('resize', function() {
+        if (!lightbox.hidden) requestAnimationFrame(updateLightboxOverlayAnchors);
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxPrev.addEventListener('click', function() {
+        updateLightbox(lightboxIndex - 1);
+      });
+      lightboxNext.addEventListener('click', function() {
+        updateLightbox(lightboxIndex + 1);
+      });
+
+      lightbox.addEventListener(
+        'scroll',
+        updateFixedOverlayPosition,
+        { passive:true }
+      );
+
+      lightboxImage.addEventListener('pointerdown', function(event) {
+        event.stopPropagation();
+
+        if (lightboxImage.hidden || lightbox.classList.contains('video-mode')) {
+          return;
+        }
+
+        /* 원래 설정: 한 번 더 클릭하면 165vw까지 확대 */
+        if (!lightboxImage.classList.contains('zoomed')) {
+          lightboxImage.classList.add('zoomed');
+          lightbox.classList.add('zoom-active');
+
+          requestAnimationFrame(function() {
+            lightbox.scrollLeft =
+              Math.max(
+                0,
+                (lightbox.scrollWidth - lightbox.clientWidth) / 2
+              );
+
+            lightbox.scrollTop =
+              Math.max(
+                0,
+                (lightbox.scrollHeight - lightbox.clientHeight) / 2
+              );
+
+            updateFixedOverlayPosition();
+
+            zoomTargetScrollLeft = lightbox.scrollLeft;
+            zoomTargetScrollTop = lightbox.scrollTop;
+          });
+
+          return;
+        }
+
+        if (event.pointerType === 'mouse' && event.button !== 0) {
+          return;
+        }
+
+        stopZoomSmoothScroll();
+        stopZoomMomentum();
+
+        zoomDragging = true;
+        zoomMoved = false;
+        zoomStartX = event.clientX;
+        zoomStartY = event.clientY;
+        zoomStartScrollLeft = lightbox.scrollLeft;
+        zoomStartScrollTop = lightbox.scrollTop;
+        zoomTargetScrollLeft = zoomStartScrollLeft;
+        zoomTargetScrollTop = zoomStartScrollTop;
+        zoomLastX = event.clientX;
+        zoomLastY = event.clientY;
+        zoomLastTime = performance.now();
+        zoomVelocityX = 0;
+        zoomVelocityY = 0;
+
+        lightboxImage.classList.add('dragging');
+
+        if (
+          event.pointerId !== undefined &&
+          !lightboxImage.hasPointerCapture(event.pointerId)
+        ) {
+          lightboxImage.setPointerCapture(event.pointerId);
+        }
+      });
+
+      lightboxImage.addEventListener('pointermove', function(event) {
+        if (!zoomDragging) {
+          return;
+        }
+
+        const distanceX = event.clientX - zoomStartX;
+        const distanceY = event.clientY - zoomStartY;
+
+        if (
+          !zoomMoved &&
+          (
+            Math.abs(distanceX) > 1 ||
+            Math.abs(distanceY) > 1
+          )
+        ) {
+          zoomMoved = true;
+        }
+
+        if (zoomMoved) {
+          const now = performance.now();
+          const deltaX = event.clientX - zoomLastX;
+          const deltaY = event.clientY - zoomLastY;
+          const deltaTime = Math.max(8, now - zoomLastTime);
+          const velocityScale = Math.min(1.1, 16 / deltaTime) * 0.16;
+
+          zoomVelocityX = -deltaX * velocityScale;
+          zoomVelocityY = -deltaY * velocityScale;
+
+          zoomTargetScrollLeft =
+            zoomStartScrollLeft - (distanceX * 1.65);
+
+          zoomTargetScrollTop =
+            zoomStartScrollTop - (distanceY * 1.65);
+
+          requestZoomSmoothScroll();
+
+          zoomLastX = event.clientX;
+          zoomLastY = event.clientY;
+          zoomLastTime = now;
+
+          event.preventDefault();
+        }
+      });
+
+      function finishZoomDrag(event, allowClickToggle) {
+        if (!zoomDragging) {
+          return;
+        }
+
+        const shouldZoomOut =
+          allowClickToggle &&
+          !zoomMoved;
+
+        zoomDragging = false;
+        lightboxImage.classList.remove('dragging');
+
+        if (
+          event &&
+          event.pointerId !== undefined &&
+          lightboxImage.hasPointerCapture(event.pointerId)
+        ) {
+          lightboxImage.releasePointerCapture(event.pointerId);
+        }
+
+        if (shouldZoomOut) {
+          stopZoomSmoothScroll();
+          stopZoomMomentum();
+
+          lightboxImage.classList.remove('zoomed');
+          lightbox.classList.remove('zoom-active');
+
+          lightbox.scrollTo({
+            top:0,
+            left:0,
+            behavior:'smooth'
+          });
+        } else if (zoomMoved) {
+          startZoomMomentum();
+        }
+
+        zoomMoved = false;
+      }
+
+      lightboxImage.addEventListener('pointerup', function(event) {
+        finishZoomDrag(event, true);
+      });
+
+      lightboxImage.addEventListener('pointercancel', function(event) {
+        finishZoomDrag(event, false);
+      });
+
+      lightboxImage.addEventListener(
+        'lostpointercapture',
+        function(event) {
+          finishZoomDrag(event, false);
+        }
+      );
+
+      lightbox.addEventListener('click', function(event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener('keydown', function(event) {
+        if (!lightbox.hidden) {
+          if (event.key === 'Escape') closeLightbox();
+          else if (event.key === 'ArrowLeft') updateLightbox(lightboxIndex - 1);
+          else if (event.key === 'ArrowRight') updateLightbox(lightboxIndex + 1);
+          return;
+        }
+
+        if (event.key === 'ArrowLeft') move(-1);
+        else if (event.key === 'ArrowRight') move(1);
+      });
+
+      document.addEventListener('contextmenu', function(event) {
+        if (
+          event.target &&
+          (
+            event.target.tagName === 'IMG' ||
+            event.target.closest('.showcase-wrap') ||
+            event.target.closest('.lightbox')
+          )
+        ) {
+          event.preventDefault();
+        }
+      });
+
+      document.addEventListener('dragstart', function(event) {
+        if (event.target && event.target.tagName === 'IMG') {
+          event.preventDefault();
+        }
+      });
+
+      window.addEventListener('load', function() {
+        renderShowcase();
+
+        const activeCategoryButton =
+          categoryIndexList &&
+          categoryIndexList.querySelector('.category-index-btn.active');
+
+        if (activeCategoryButton) {
+          moveCategoryIndexLine(activeCategoryButton);
+        }
+
+        sendHeight();
+        setTimeout(sendHeight,250);
+        setTimeout(sendHeight,800);
+      });
+
+      window.addEventListener('resize', function() {
+        const activeCategoryButton =
+          categoryIndexList &&
+          categoryIndexList.querySelector('.category-index-btn.active');
+
+        if (activeCategoryButton) {
+          moveCategoryIndexLine(activeCategoryButton);
+        }
+
+        sendHeight();
+      });
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(sendHeight);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1649,6 +1649,26 @@
       }
     }
 
+
+    /* ===== 복사·드래그·길게 누르기 방지 ===== */
+    html,
+    body,
+    * {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    img {
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
+
+    ::selection { background: transparent; }
+    ::-moz-selection { background: transparent; }
   </style>
 </head>
 
@@ -1771,6 +1791,28 @@
 
     <div class="lightbox-count" aria-live="polite"></div>
   </div>
+  <script>
+    /* ===== 우클릭 · 드래그 · 복사 방지 ===== */
+    (function () {
+      var block = function (e) { e.preventDefault(); return false; };
+
+      ['contextmenu', 'selectstart', 'dragstart', 'copy', 'cut'].forEach(function (type) {
+        document.addEventListener(type, block);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        var key = (e.key || '').toLowerCase();
+        var ctrl = e.ctrlKey || e.metaKey;
+
+        // F12, 개발자도구 단축키
+        if (e.keyCode === 123) return block(e);
+        if (ctrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) return block(e);
+        // 소스보기 / 저장 / 전체선택 / 복사 / 잘라내기 / 인쇄
+        if (ctrl && (key === 'u' || key === 's' || key === 'a' || key === 'c' || key === 'x' || key === 'p')) return block(e);
+      });
+    })();
+  </script>
+
   <script>
     (function () {
       const portfolioItems = [

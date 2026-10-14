@@ -27,12 +27,14 @@
       --mint: #76d8d2;
       --mint-dark: #4eaaa5;
       --mint-pale: #edf9f8;
+      --pink: #f4a7c1;
+      --pink-deep: #e2709b;
+      --pink-soft: #fdeaf1;
       --border: #b4e5e1;
       --text: #333333;
       --text-light: #8a9a9a;
-      --white-glass: rgba(255, 255, 255, 0.96);
       --shadow-sm: 0 4px 14px rgba(78, 170, 165, 0.10);
-      --shadow-md: 0 16px 42px rgba(78, 170, 165, 0.14);
+      --shadow-md: 0 16px 42px rgba(120, 190, 190, 0.16);
     }
 
     * {
@@ -56,118 +58,291 @@
       overflow-x: hidden;
     }
 
+    button {
+      font-family: inherit;
+    }
+
     .section {
       width: 100%;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 40px;
+      padding: 36px 40px 32px;
       border: 1.5px solid var(--border);
       border-radius: 32px;
-      background: var(--white-glass);
+      background: linear-gradient(135deg, #e9faf7 0%, #fffefe 45%, #fff3f8 100%);
       box-shadow: var(--shadow-md);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
     }
 
+    /* ===== 헤더 ===== */
     .sec-header {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      margin-bottom: 24px;
-    }
-
-    .sec-bar {
-      width: 5px;
-      height: 22px;
-      flex: 0 0 5px;
-      border-radius: 999px;
-      background: var(--mint);
+      margin-bottom: 22px;
     }
 
     .sec-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
       font-size: 23px;
       font-weight: 700;
       line-height: 1.3;
       color: var(--text);
     }
 
+    .sec-title .sp {
+      font-size: 22px;
+    }
+
     .sec-subtitle {
-      margin-left: 2px;
+      display: block;
+      margin-top: 6px;
       color: var(--text-light);
       font-size: 12.5px;
       font-weight: 400;
-      line-height: 1.55;
-      white-space: normal;
+      line-height: 1.6;
     }
 
-    .scroll-grid {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 2px 0 12px;
-      scroll-snap-type: x proximity;
-      -webkit-overflow-scrolling: touch;
-      cursor: grab;
-      user-select: none;
-      overscroll-behavior-inline: contain;
-      touch-action: pan-y;
-    }
-
-    .scroll-grid.dragging {
-      cursor: grabbing;
-      scroll-snap-type: none;
-    }
-
-    .scroll-grid::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    .scroll-grid::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .scroll-grid::-webkit-scrollbar-thumb {
-      border-radius: 999px;
-      background: var(--mint);
-    }
-
-    .img-card {
+    /* ===== 메인 뷰어 ===== */
+    .av-stage {
       position: relative;
-      height: 430px;
-      flex: 0 0 auto;
+      aspect-ratio: 16 / 9;
       overflow: hidden;
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(135deg, #e6f8f5, #fdeaf1);
+      box-shadow: var(--shadow-sm);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .av-bg {
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      width: calc(100% + 60px);
+      height: calc(100% + 60px);
+      object-fit: cover;
+      filter: blur(26px) saturate(1.1);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .av-main {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 1;
+      transition:
+        opacity 0.22s ease,
+        transform 0.3s cubic-bezier(0.22, 0.8, 0.35, 1);
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    .av-stage:not(.is-ready) .av-main {
+      opacity: 0;
+    }
+
+    .av-main.is-out {
+      opacity: 0;
+      transform: translateX(calc(var(--dir, 1) * -24px));
+    }
+
+    .av-main.is-in {
+      opacity: 0;
+      transform: translateX(calc(var(--dir, 1) * 24px));
+    }
+
+    .av-main.no-tr {
+      transition: none !important;
+    }
+
+    .av-open {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: zoom-in;
+      touch-action: pan-y;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .av-open:focus-visible {
+      outline: 3px solid rgba(226, 112, 155, 0.5);
+      outline-offset: -6px;
+      border-radius: 22px;
+    }
+
+    .av-nav {
+      position: absolute;
+      top: 50%;
+      z-index: 4;
+      width: 46px;
+      height: 46px;
+      margin-top: -23px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid var(--border);
-      border-radius: 20px;
-      background: var(--mint-pale);
-      box-shadow: var(--shadow-sm);
-      scroll-snap-align: start;
-      cursor: zoom-in;
+      border: 0;
+      border-radius: 50%;
+      color: var(--pink-deep);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 8px 20px rgba(100, 140, 140, 0.25);
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
       transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .av-prev {
+      left: 16px;
+    }
+
+    .av-next {
+      right: 16px;
+    }
+
+    .av-count {
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      z-index: 4;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--mint-dark);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 6px 16px rgba(100, 140, 140, 0.18);
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ===== 점 페이지 표시 ===== */
+    .av-dots {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      margin: 16px 0 14px;
+    }
+
+    .av-dot {
+      position: relative;
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: #d5e8e6;
+      cursor: pointer;
+      transition:
+        width 0.3s ease,
+        background 0.3s ease;
+    }
+
+    .av-dot::after {
+      content: "";
+      position: absolute;
+      inset: -9px -4px;
+    }
+
+    .av-dot.is-active {
+      width: 28px;
+      background: linear-gradient(90deg, var(--mint), var(--pink));
+    }
+
+    /* ===== 썸네일 줄 ===== */
+    .av-strip {
+      position: relative;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 4px 22px;
+      scroll-behavior: smooth;
+      overscroll-behavior-inline: contain;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+    }
+
+    .av-strip.dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
+    }
+
+    .av-strip::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .av-strip::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .av-strip::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--mint), var(--pink));
+    }
+
+    .av-thumb {
+      flex: 0 0 calc((100% - 50px) / 6);
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      overflow: hidden;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      background: var(--mint-pale);
+      opacity: 0.72;
+      cursor: pointer;
+      transition:
+        opacity 0.25s ease,
         transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
     }
 
-    .img-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--mint);
-      box-shadow: 0 10px 24px rgba(78, 170, 165, 0.15);
-    }
-
-    .img-card img {
+    .av-thumb img {
       display: block;
-      width: auto;
+      width: 100%;
       height: 100%;
-      max-width: none;
       object-fit: cover;
-      object-position: center;
+      object-position: center 25%;
       pointer-events: none;
       -webkit-user-drag: none;
+    }
+
+    .av-thumb.is-active {
+      opacity: 1;
+      border-color: var(--pink-deep);
+      box-shadow: 0 6px 14px rgba(226, 112, 155, 0.28);
+    }
+
+    .av-thumb:focus-visible {
+      outline: 3px solid rgba(118, 216, 210, 0.7);
+      outline-offset: 2px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .av-nav:hover {
+        color: #ffffff;
+        background: var(--pink-deep);
+        transform: scale(1.07);
+      }
+
+      .av-thumb:hover {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
     }
 
     .card-skeleton {
@@ -197,7 +372,6 @@
       line-height: 1.6;
       text-align: center;
     }
-
 
     .lightbox[hidden] {
       display: none !important;
@@ -449,13 +623,12 @@
       }
 
       .section {
-        padding: 24px 18px;
+        padding: 24px 16px 22px;
         border-radius: 22px;
       }
 
       .sec-header {
-        margin-bottom: 18px;
-        flex-wrap: wrap;
+        margin-bottom: 16px;
       }
 
       .sec-title {
@@ -463,16 +636,47 @@
       }
 
       .sec-subtitle {
-        width: 100%;
-        margin-left: 16px;
-        margin-top: -4px;
         font-size: 12px;
-        white-space: normal;
       }
 
-      .img-card {
-        height: 280px;
-        border-radius: 16px;
+      .av-stage {
+        aspect-ratio: 4 / 3;
+        border-radius: 18px;
+      }
+
+      .av-nav {
+        width: 38px;
+        height: 38px;
+        margin-top: -19px;
+        font-size: 22px;
+      }
+
+      .av-prev {
+        left: 10px;
+      }
+
+      .av-next {
+        right: 10px;
+      }
+
+      .av-count {
+        right: 10px;
+        bottom: 10px;
+        padding: 6px 10px;
+        font-size: 11.5px;
+      }
+
+      .av-dots {
+        margin: 14px 0 10px;
+      }
+
+      .av-strip {
+        gap: 8px;
+      }
+
+      .av-thumb {
+        flex-basis: calc((100% - 16px) / 3.3);
+        border-radius: 12px;
       }
 
       .lightbox {
@@ -532,11 +736,24 @@
       }
     }
 
+    @media (max-width: 900px) and (min-width: 641px) {
+      .av-thumb {
+        flex-basis: calc((100% - 30px) / 4);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .img-card,
+      .av-main,
+      .av-dot,
+      .av-thumb,
+      .av-nav,
       .card-skeleton {
         transition: none !important;
         animation: none !important;
+      }
+
+      .av-strip {
+        scroll-behavior: auto;
       }
     }
   </style>
@@ -545,112 +762,59 @@
 <body>
   <section class="section" aria-label="보유 중인 아바타">
     <div class="sec-header">
-      <div class="sec-bar" aria-hidden="true"></div>
-      <h1 class="sec-title">보유 중인 아바타</h1>
+      <h1 class="sec-title"><span class="sp" aria-hidden="true">✨</span>보유 중인 아바타</h1>
       <span class="sec-subtitle">🔎 이미지를 두 번 클릭해 확대해보세요!<br>확인한 아바타 영문명을 BOOTH에 검색하면 빠르게 찾을 수 있습니다.</span>
     </div>
 
-    <div
-      id="owned-chars-grid"
-      class="scroll-grid"
-      aria-label="보유 아바타 이미지 목록"
-    >
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-01.png"
-          alt="보유 아바타 1"
-          loading="eager"
-        >
-      </div>
+    <div class="av-stage" id="avStage">
+      <div class="card-skeleton"></div>
+      <img class="av-bg" id="avBg" src="./images/avatar-01.png" alt="" aria-hidden="true">
+      <img class="av-main" id="avMain" src="./images/avatar-01.png" alt="보유 아바타 1">
+      <button class="av-open" id="avOpen" type="button" aria-label="이미지 크게 보기"></button>
+      <button class="av-nav av-prev" id="avPrev" type="button" aria-label="이전 아바타">‹</button>
+      <button class="av-nav av-next" id="avNext" type="button" aria-label="다음 아바타">›</button>
+      <div class="av-count" id="avCount" aria-live="polite">01 / 10</div>
+    </div>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-02.png"
-          alt="보유 아바타 2"
-          loading="eager"
-        >
-      </div>
+    <div class="av-dots" id="avDots" role="group" aria-label="아바타 선택"></div>
 
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-03.png"
-          alt="보유 아바타 3"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-04.png"
-          alt="보유 아바타 4"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-05.png"
-          alt="보유 아바타 5"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-06.png"
-          alt="보유 아바타 6"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-07.png"
-          alt="보유 아바타 7"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-08.png"
-          alt="보유 아바타 8"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-09.png"
-          alt="보유 아바타 9"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="img-card">
-        <div class="card-skeleton"></div>
-        <img
-          src="./images/avatar-10.png"
-          alt="보유 아바타 10"
-          loading="lazy"
-        >
-      </div>
+    <div class="av-strip" id="avStrip" aria-label="보유 아바타 목록">
+      <button class="av-thumb" type="button" aria-label="보유 아바타 1 보기">
+        <img src="./images/avatar-01.png" alt="보유 아바타 1" loading="eager" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 2 보기">
+        <img src="./images/avatar-02.png" alt="보유 아바타 2" loading="eager" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 3 보기">
+        <img src="./images/avatar-03.png" alt="보유 아바타 3" loading="eager" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 4 보기">
+        <img src="./images/avatar-04.png" alt="보유 아바타 4" loading="lazy" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 5 보기">
+        <img src="./images/avatar-05.png" alt="보유 아바타 5" loading="lazy" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 6 보기">
+        <img src="./images/avatar-06.png" alt="보유 아바타 6" loading="lazy" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 7 보기">
+        <img src="./images/avatar-07.png" alt="보유 아바타 7" loading="lazy" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 8 보기">
+        <img src="./images/avatar-08.png" alt="보유 아바타 8" loading="lazy" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 9 보기">
+        <img src="./images/avatar-09.png" alt="보유 아바타 9" loading="lazy" draggable="false">
+      </button>
+      <button class="av-thumb" type="button" aria-label="보유 아바타 10 보기">
+        <img src="./images/avatar-10.png" alt="보유 아바타 10" loading="lazy" draggable="false">
+      </button>
     </div>
 
     <p class="notice">
       ※ 일부 아바타는 방송 및 수익 활동이 제한될 수 있으므로, 구매 전 반드시 해당 상품의 이용 약관을 확인해주세요.
     </p>
   </section>
-
 
   <div
     id="avatar-lightbox"
@@ -699,15 +863,27 @@
 
   <script>
     (function () {
-      const grid = document.getElementById('owned-chars-grid');
-      const images = Array.from(grid.querySelectorAll('img'));
-      const cards = Array.from(grid.querySelectorAll('.img-card'));
+      const stage = document.getElementById('avStage');
+      const mainImg = document.getElementById('avMain');
+      const bgImg = document.getElementById('avBg');
+      const openBtn = document.getElementById('avOpen');
+      const prevBtn = document.getElementById('avPrev');
+      const nextBtn = document.getElementById('avNext');
+      const countEl = document.getElementById('avCount');
+      const dotsWrap = document.getElementById('avDots');
+      const strip = document.getElementById('avStrip');
+      const skeleton = stage.querySelector('.card-skeleton');
+      const thumbs = Array.from(strip.querySelectorAll('.av-thumb'));
+      const images = thumbs.map(function (thumb) {
+        return thumb.querySelector('img');
+      });
       const lightbox = document.getElementById('avatar-lightbox');
       const lightboxImage = lightbox.querySelector('.lightbox-image');
       const lightboxClose = lightbox.querySelector('.lightbox-close');
       const lightboxPrev = lightbox.querySelector('.lightbox-prev');
       const lightboxNext = lightbox.querySelector('.lightbox-next');
       const lightboxCount = lightbox.querySelector('.lightbox-count');
+
 
       let isDragging = false;
       let startX = 0;
@@ -733,7 +909,6 @@
       let zoomVelocityX = 0;
       let zoomVelocityY = 0;
       let zoomMomentumRaf = null;
-
 
       function stopZoomSmoothScroll() {
         if (zoomScrollRaf !== null) {
@@ -920,26 +1095,12 @@
         isSwitching = false;
         document.body.classList.remove('lightbox-open');
 
+        syncStageToLightbox();
+
         if (lastFocusedCard) {
           lastFocusedCard.focus();
         }
       }
-
-      cards.forEach(function (card, index) {
-        card.setAttribute('role', 'button');
-        card.setAttribute('tabindex', '0');
-        card.setAttribute(
-          'aria-label',
-          '보유 아바타 ' + (index + 1) + ' 크게 보기'
-        );
-
-        card.addEventListener('keydown', function (event) {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openLightbox(index, card);
-          }
-        });
-      });
 
 
       lightbox.addEventListener(
@@ -1164,122 +1325,287 @@
         lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
       }
 
-      images.forEach(function (image) {
-        const skeleton =
-          image.parentElement.querySelector('.card-skeleton');
+      /* ===== 새 레이아웃: 메인 뷰어 + 점 + 썸네일 ===== */
+      let activeIndex = 0;
+      let swapId = 0;
+      const dots = [];
 
-        function finishLoading() {
-          image.classList.add('loaded');
-
-          if (skeleton) {
-            skeleton.classList.add('hide');
-          }
-
-          sendHeight();
-        }
-
-        if (image.complete) {
-          finishLoading();
-        } else {
-          image.addEventListener('load', finishLoading, { once: true });
-          image.addEventListener(
-            'error',
-            function () {
-              if (skeleton) {
-                skeleton.classList.add('hide');
-              }
-            },
-            { once: true }
-          );
-        }
+      images.forEach(function (image, index) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'av-dot';
+        dot.setAttribute('aria-label', '아바타 ' + (index + 1) + '번 보기');
+        dot.addEventListener('click', function () {
+          setActive(index);
+        });
+        dotsWrap.appendChild(dot);
+        dots.push(dot);
       });
 
-      grid.addEventListener('pointerdown', function (event) {
+      function pad(number) {
+        return String(number).padStart(2, '0');
+      }
+
+      function updateStageUI() {
+        thumbs.forEach(function (thumb, index) {
+          const isOn = index === activeIndex;
+          thumb.classList.toggle('is-active', isOn);
+          thumb.setAttribute('aria-current', isOn ? 'true' : 'false');
+        });
+
+        dots.forEach(function (dot, index) {
+          dot.classList.toggle('is-active', index === activeIndex);
+        });
+
+        countEl.textContent =
+          pad(activeIndex + 1) + ' / ' + pad(images.length);
+      }
+
+      function revealThumb(index) {
+        const thumb = thumbs[index];
+
+        if (!thumb) {
+          return;
+        }
+
+        const left =
+          thumb.offsetLeft -
+          (strip.clientWidth - thumb.offsetWidth) / 2;
+
+        strip.scrollTo({
+          left: Math.max(0, left),
+          behavior: 'smooth'
+        });
+      }
+
+      function markStageReady() {
+        stage.classList.add('is-ready');
+
+        if (skeleton) {
+          skeleton.classList.add('hide');
+        }
+
+        sendHeight();
+      }
+
+      function setActive(index, instant) {
+        index = (index + images.length) % images.length;
+
+        const direction = index >= activeIndex ? 1 : -1;
+        const source = images[index].currentSrc || images[index].src;
+        const alt = images[index].alt || '보유 아바타 이미지';
+        const id = ++swapId;
+
+        activeIndex = index;
+        updateStageUI();
+        revealThumb(index);
+
+        if (instant) {
+          mainImg.src = source;
+          bgImg.src = source;
+          mainImg.alt = alt;
+          mainImg.classList.remove('is-out', 'is-in');
+          return;
+        }
+
+        mainImg.style.setProperty('--dir', direction);
+        mainImg.classList.add('is-out');
+
+        const preload = new Image();
+        let done = false;
+
+        function swap() {
+          if (done || id !== swapId) {
+            return;
+          }
+
+          done = true;
+
+          mainImg.classList.add('no-tr');
+          mainImg.classList.remove('is-out');
+          mainImg.classList.add('is-in');
+          mainImg.src = source;
+          mainImg.alt = alt;
+          bgImg.src = source;
+
+          void mainImg.offsetWidth;
+
+          mainImg.classList.remove('no-tr');
+
+          requestAnimationFrame(function () {
+            mainImg.classList.remove('is-in');
+          });
+        }
+
+        preload.onload = function () {
+          setTimeout(swap, 120);
+        };
+
+        preload.onerror = swap;
+        preload.src = source;
+
+        setTimeout(swap, 900);
+      }
+
+      function syncStageToLightbox() {
+        if (currentImageIndex !== activeIndex) {
+          setActive(currentImageIndex);
+        }
+      }
+
+      mainImg.addEventListener('load', markStageReady);
+      mainImg.addEventListener('error', markStageReady);
+
+      if (mainImg.complete && mainImg.naturalWidth > 0) {
+        markStageReady();
+      }
+
+      prevBtn.addEventListener('click', function () {
+        setActive(activeIndex - 1);
+      });
+
+      nextBtn.addEventListener('click', function () {
+        setActive(activeIndex + 1);
+      });
+
+      /* 메인 이미지: 좌우로 밀면 넘기기, 탭/클릭하면 확대 보기 */
+      let swipeStartX = 0;
+      let swipeStartY = 0;
+      let swipePressed = false;
+      let swiped = false;
+
+      openBtn.addEventListener('pointerdown', function (event) {
         if (event.pointerType === 'mouse' && event.button !== 0) {
           return;
         }
 
-        isDragging = true;
-        moved = false;
-        pressedCard = event.target.closest('.img-card');
-        startX = event.clientX;
-        startScrollLeft = grid.scrollLeft;
+        swipePressed = true;
+        swiped = false;
+        swipeStartX = event.clientX;
+        swipeStartY = event.clientY;
       });
 
-      grid.addEventListener('pointermove', function (event) {
-        if (!isDragging) {
+      openBtn.addEventListener('pointerup', function (event) {
+        if (!swipePressed) {
           return;
         }
 
-        const distance = event.clientX - startX;
+        swipePressed = false;
 
-        if (!moved && Math.abs(distance) > 5) {
-          moved = true;
-          grid.classList.add('dragging');
+        const distanceX = event.clientX - swipeStartX;
+        const distanceY = event.clientY - swipeStartY;
 
-          if (
-            event.pointerId !== undefined &&
-            !grid.hasPointerCapture(event.pointerId)
-          ) {
-            grid.setPointerCapture(event.pointerId);
+        if (
+          Math.abs(distanceX) > 45 &&
+          Math.abs(distanceX) > Math.abs(distanceY) * 1.2
+        ) {
+          swiped = true;
+          setActive(activeIndex + (distanceX < 0 ? 1 : -1));
+        }
+      });
+
+      openBtn.addEventListener('pointercancel', function () {
+        swipePressed = false;
+      });
+
+      openBtn.addEventListener('click', function () {
+        if (swiped) {
+          swiped = false;
+          return;
+        }
+
+        openLightbox(activeIndex, openBtn);
+      });
+
+      openBtn.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          setActive(activeIndex - 1);
+        } else if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          setActive(activeIndex + 1);
+        }
+      });
+
+      /* 썸네일 줄: 마우스 드래그로 옆으로 밀기 (터치는 기본 스크롤) */
+      let stripDragging = false;
+      let stripMoved = false;
+      let stripStartX = 0;
+      let stripStartLeft = 0;
+
+      strip.addEventListener('pointerdown', function (event) {
+        if (event.pointerType !== 'mouse' || event.button !== 0) {
+          return;
+        }
+
+        stripDragging = true;
+        stripMoved = false;
+        stripStartX = event.clientX;
+        stripStartLeft = strip.scrollLeft;
+      });
+
+      strip.addEventListener('pointermove', function (event) {
+        if (!stripDragging) {
+          return;
+        }
+
+        const distance = event.clientX - stripStartX;
+
+        if (!stripMoved && Math.abs(distance) > 5) {
+          stripMoved = true;
+          strip.classList.add('dragging');
+
+          if (!strip.hasPointerCapture(event.pointerId)) {
+            strip.setPointerCapture(event.pointerId);
           }
         }
 
-        if (moved) {
-          grid.scrollLeft = startScrollLeft - distance;
+        if (stripMoved) {
+          strip.scrollLeft = stripStartLeft - distance;
           event.preventDefault();
         }
       });
 
-      function stopDragging(event, openWhenClicked) {
-        if (!isDragging) {
+      function endStripDrag(event) {
+        if (!stripDragging) {
           return;
         }
 
-        const cardToOpen = !moved && openWhenClicked
-          ? pressedCard
-          : null;
-
-        isDragging = false;
-        grid.classList.remove('dragging');
+        stripDragging = false;
+        strip.classList.remove('dragging');
 
         if (
           event &&
           event.pointerId !== undefined &&
-          grid.hasPointerCapture(event.pointerId)
+          strip.hasPointerCapture(event.pointerId)
         ) {
-          grid.releasePointerCapture(event.pointerId);
+          strip.releasePointerCapture(event.pointerId);
         }
 
-        pressedCard = null;
-
-        if (cardToOpen) {
-          const index = cards.indexOf(cardToOpen);
-
-          if (index !== -1) {
-            openLightbox(index, cardToOpen);
-          }
-        }
-
-        moved = false;
+        setTimeout(function () {
+          stripMoved = false;
+        }, 60);
       }
 
-      grid.addEventListener('pointerup', function (event) {
-        stopDragging(event, true);
-      });
+      strip.addEventListener('pointerup', endStripDrag);
+      strip.addEventListener('pointercancel', endStripDrag);
+      strip.addEventListener('lostpointercapture', endStripDrag);
 
-      grid.addEventListener('pointercancel', function (event) {
-        stopDragging(event, false);
-      });
-
-      grid.addEventListener('lostpointercapture', function (event) {
-        stopDragging(event, false);
-      });
-
-
-      grid.addEventListener('dragstart', function (event) {
+      strip.addEventListener('dragstart', function (event) {
         event.preventDefault();
       });
+
+      thumbs.forEach(function (thumb, index) {
+        thumb.addEventListener('click', function () {
+          if (stripMoved) {
+            return;
+          }
+
+          setActive(index);
+        });
+      });
+
+      updateStageUI();
 
       window.addEventListener('load', function () {
         sendHeight();

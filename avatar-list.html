@@ -1,1664 +1,1542 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>보유 중인 아바타</title>
-
-  <style>
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'Paperozi';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    :root {
-      --mint: #76d8d2;
-      --mint-dark: #4eaaa5;
-      --mint-pale: #edf9f8;
-      --pink: #f4a7c1;
-      --pink-deep: #e2709b;
-      --pink-soft: #fdeaf1;
-      --border: #b4e5e1;
-      --text: #333333;
-      --text-light: #8a9a9a;
-      --shadow-sm: 0 4px 14px rgba(78, 170, 165, 0.10);
-      --shadow-md: 0 16px 42px rgba(120, 190, 190, 0.16);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-    }
-
-    body {
-      padding: 34px 16px 42px;
-      color: var(--text);
-      font-family: 'Paperozi', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      overflow-x: hidden;
-    }
-
-    button {
-      font-family: inherit;
-    }
-
-    .section {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 36px 40px 32px;
-      border: 1.5px solid var(--border);
-      border-radius: 32px;
-      background: linear-gradient(135deg, #e9faf7 0%, #fffefe 45%, #fff3f8 100%);
-      box-shadow: var(--shadow-md);
-    }
-
-    /* ===== 헤더 ===== */
-    .sec-header {
-      margin-bottom: 22px;
-    }
-
-    .sec-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0;
-      font-size: 23px;
-      font-weight: 700;
-      line-height: 1.3;
-      color: var(--text);
-    }
-
-    .sec-title .sp {
-      font-size: 22px;
-    }
-
-    .sec-subtitle {
-      display: block;
-      margin-top: 6px;
-      color: var(--text-light);
-      font-size: 12.5px;
-      font-weight: 400;
-      line-height: 1.6;
-    }
-
-    /* ===== 메인 뷰어 ===== */
-    .av-stage {
-      position: relative;
-      /* 사진 비율에 맞춰 가로 여백 없이 꽉 차게 (비율은 첫 사진 기준으로 자동 설정) */
-      width: min(100%, calc(var(--ar, 1) * 680px));
-      aspect-ratio: var(--ar, 1);
-      margin: 0 auto;
-      overflow: hidden;
-      border: 2px solid var(--border);
-      border-radius: 24px;
-      background: linear-gradient(135deg, #e6f8f5, #fdeaf1);
-      box-shadow: var(--shadow-sm);
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .av-bg {
-      position: absolute;
-      top: -30px;
-      left: -30px;
-      width: calc(100% + 60px);
-      height: calc(100% + 60px);
-      object-fit: cover;
-      filter: blur(26px) saturate(1.1);
-      opacity: 0.55;
-      pointer-events: none;
-    }
-
-    .av-main {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      opacity: 1;
-      transition:
-        opacity 0.22s ease,
-        transform 0.3s cubic-bezier(0.22, 0.8, 0.35, 1);
-      pointer-events: none;
-      -webkit-user-drag: none;
-    }
-
-    .av-stage:not(.is-ready) .av-main {
-      opacity: 0;
-    }
-
-    .av-main.is-out {
-      opacity: 0;
-      transform: translateX(calc(var(--dir, 1) * -24px));
-    }
-
-    .av-main.is-in {
-      opacity: 0;
-      transform: translateX(calc(var(--dir, 1) * 24px));
-    }
-
-    .av-main.no-tr {
-      transition: none !important;
-    }
-
-    .av-open {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      cursor: zoom-in;
-      touch-action: pan-y;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .av-open:focus-visible {
-      outline: 3px solid rgba(226, 112, 155, 0.5);
-      outline-offset: -6px;
-      border-radius: 22px;
-    }
-
-    .av-nav {
-      position: absolute;
-      top: 50%;
-      z-index: 4;
-      width: 46px;
-      height: 46px;
-      margin-top: -23px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      border-radius: 50%;
-      color: var(--pink-deep);
-      background: rgba(255, 255, 255, 0.92);
-      box-shadow: 0 8px 20px rgba(100, 140, 140, 0.25);
-      font-size: 26px;
-      line-height: 1;
-      cursor: pointer;
-      transition:
-        transform 0.2s ease,
-        background-color 0.2s ease,
-        color 0.2s ease;
-    }
-
-    .av-prev {
-      left: 16px;
-    }
-
-    .av-next {
-      right: 16px;
-    }
-
-    .av-count {
-      position: absolute;
-      right: 16px;
-      bottom: 14px;
-      z-index: 4;
-      padding: 7px 12px;
-      border-radius: 999px;
-      color: var(--mint-dark);
-      background: rgba(255, 255, 255, 0.92);
-      box-shadow: 0 6px 16px rgba(100, 140, 140, 0.18);
-      font-size: 12.5px;
-      font-weight: 700;
-      line-height: 1;
-      pointer-events: none;
-    }
-
-    /* ===== 점 페이지 표시 ===== */
-    .av-dots {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 7px;
-      margin: 16px 0 14px;
-    }
-
-    .av-dot {
-      position: relative;
-      width: 8px;
-      height: 8px;
-      padding: 0;
-      border: 0;
-      border-radius: 999px;
-      background: #d5e8e6;
-      cursor: pointer;
-      transition:
-        width 0.3s ease,
-        background 0.3s ease;
-    }
-
-    .av-dot::after {
-      content: "";
-      position: absolute;
-      inset: -9px -4px;
-    }
-
-    .av-dot.is-active {
-      width: 28px;
-      background: linear-gradient(90deg, var(--mint), var(--pink));
-    }
-
-    /* ===== 썸네일 줄 ===== */
-    .av-strip {
-      position: relative;
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 8px 4px 22px;
-      scroll-behavior: smooth;
-      overscroll-behavior-inline: contain;
-      -webkit-overflow-scrolling: touch;
-      cursor: grab;
-    }
-
-    .av-strip.dragging {
-      cursor: grabbing;
-      scroll-behavior: auto;
-    }
-
-    /* 스크롤바: 굵게 + 민트색 통일 */
-    .av-strip::-webkit-scrollbar {
-      height: 14px;
-    }
-
-    .av-strip::-webkit-scrollbar-track {
-      border-radius: 999px;
-      background: #dff4f2;
-    }
-
-    .av-strip::-webkit-scrollbar-thumb {
-      border: 3px solid #dff4f2;
-      border-radius: 999px;
-      background: var(--mint);
-    }
-
-    .av-strip::-webkit-scrollbar-thumb:hover {
-      background: var(--mint-dark);
-    }
-
-    @supports not selector(::-webkit-scrollbar) {
-      .av-strip {
-        scrollbar-width: auto;
-        scrollbar-color: var(--mint) #dff4f2;
-      }
-    }
-
-    .av-thumb {
-      flex: 0 0 calc((100% - 50px) / 6);
-      aspect-ratio: 16 / 9;
-      padding: 0;
-      overflow: hidden;
-      border: 2px solid transparent;
-      border-radius: 14px;
-      background: var(--mint-pale);
-      opacity: 0.72;
-      cursor: pointer;
-      transition:
-        opacity 0.25s ease,
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-    }
-
-    .av-thumb img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 25%;
-      pointer-events: none;
-      -webkit-user-drag: none;
-    }
-
-    .av-thumb.is-active {
-      opacity: 1;
-      border-color: var(--pink-deep);
-      box-shadow: 0 6px 14px rgba(226, 112, 155, 0.28);
-    }
-
-    .av-thumb:focus-visible {
-      outline: 3px solid rgba(118, 216, 210, 0.7);
-      outline-offset: 2px;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      .av-nav:hover {
-        color: #ffffff;
-        background: var(--pink-deep);
-        transform: scale(1.07);
-      }
-
-      .av-thumb:hover {
-        opacity: 1;
-        transform: translateY(-2px);
-      }
-    }
-
-    .card-skeleton {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background:
-        linear-gradient(
-          90deg,
-          rgba(226, 249, 247, 0.75) 25%,
-          rgba(255, 255, 255, 0.92) 50%,
-          rgba(226, 249, 247, 0.75) 75%
-        );
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-    }
-
-    .card-skeleton.hide {
-      display: none;
-    }
-
-    .notice {
-      margin: 15px 0 0;
-      color: var(--text-light);
-      font-size: 13.5px;
-      font-weight: 700;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    .lightbox[hidden] {
-      display: none !important;
-    }
-
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      overflow: auto;
-      scroll-behavior: auto;
-      overscroll-behavior: contain;
-      background: rgba(228, 247, 244, 0.48);
-      backdrop-filter: blur(18px) saturate(1.15);
-      -webkit-backdrop-filter: blur(18px) saturate(1.15);
-      opacity: 1;
-      transition: opacity 0.18s ease;
-    }
-
-    .lightbox.is-opening {
-      opacity: 0;
-    }
-
-    .lightbox-image {
-      display: block;
-      max-width: min(97vw, 1500px);
-      max-height: 93vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      background: #ffffff;
-      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
-      cursor: zoom-in;
-      user-select: none;
-      -webkit-user-drag: none;
-      transition:
-        opacity 0.24s ease,
-        transform 0.39s cubic-bezier(0.20, 0.82, 0.27, 1),
-        width 0.28s ease,
-        max-width 0.28s ease,
-        max-height 0.28s ease;
-    }
-
-    .lightbox-image.slide-enter-left {
-      opacity: 1;
-      transform: translateX(-30px) scale(0.997);
-      transition: none;
-    }
-
-    .lightbox-image.slide-enter-right {
-      opacity: 1;
-      transform: translateX(30px) scale(0.997);
-      transition: none;
-    }
-
-    .lightbox-image.zoomed {
-      flex: 0 0 auto;
-      width: var(--zoom-w, min(165vw, 2200px));
-      max-width: none;
-      max-height: none;
-      cursor: grab;
-      touch-action: none;
-      transform: none !important;
-      opacity: 1 !important;
-      will-change: scroll-position;
-    }
-
-    .lightbox-image.zoomed.dragging {
-      cursor: grabbing;
-    }
-
-    .lightbox.zoom-mode {
-      align-items: flex-start;
-      justify-content: flex-start;
-      overflow: auto;
-      padding: 70px 28px 110px;
-    }
-
-    .lightbox.zoom-mode .lightbox-image {
-      margin: 0 auto;
-    }
-
-    .lightbox.zoom-active .lightbox-nav {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .lightbox-close,
-    .lightbox-nav {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      color: #ffffff;
-      background: rgba(118, 216, 210, 0.94);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      transition:
-        transform 0.2s ease,
-        opacity 0.2s ease,
-        visibility 0.2s ease,
-        background-color 0.2s ease;
-    }
-
-    .lightbox-close:hover,
-    .lightbox-nav:hover {
-      transform: scale(1.06);
-      background: var(--mint-dark);
-    }
-
-    .lightbox-close {
-      top: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 26px;
-      line-height: 1;
-    }
-
-    .lightbox-nav {
-      top: 50%;
-      width: 48px;
-      height: 64px;
-      border-radius: 16px;
-      font-size: 30px;
-      transform: translateY(-50%);
-    }
-
-    .lightbox-nav:hover {
-      transform: translateY(-50%) scale(1.06);
-    }
-
-    .lightbox-prev {
-      left: 20px;
-    }
-
-    .lightbox-next {
-      right: 20px;
-    }
-
-    .lightbox-guide {
-      position: fixed;
-      left: 50%;
-      bottom: 52px;
-      z-index: 3;
-      transform: translateX(-50%);
-      max-width: calc(100vw - 40px);
-      padding: 9px 14px;
-      border: 1px solid rgba(180, 229, 225, 0.95);
-      border-radius: 999px;
-      color: var(--mint-dark);
-      background: rgba(255, 255, 255, 0.92);
-      box-shadow: 0 7px 20px rgba(78, 170, 165, 0.14);
-      font-size: 12.5px;
-      font-weight: 700;
-      line-height: 1.4;
-      text-align: center;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    .lightbox-count {
-      position: absolute;
-      left: 50%;
-      bottom: 17px;
-      transform: translateX(-50%);
-      padding: 7px 13px;
-      border-radius: 999px;
-      color: #ffffff;
-      background: rgba(78, 170, 165, 0.92);
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    body.lightbox-open {
-      overflow: hidden;
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: 200% 0;
-      }
-
-      100% {
-        background-position: -200% 0;
-      }
-    }
-
-
-    /* 확대 이미지를 드래그해도 안내 문구와 번호가 화면 하단 중앙에 고정되도록 보정 */
-    .lightbox {
-      --iroha-scroll-left: 0px;
-      --iroha-scroll-top: 0px;
-    }
-
-    .lightbox .lightbox-guide {
-      position: fixed !important;
-      left: 50vw !important;
-      right: auto !important;
-      bottom: 52px !important;
-      transform: translate3d(calc(-50% + var(--iroha-scroll-left, 0px)), var(--iroha-scroll-top, 0px), 0) !important;
-      z-index: 10020 !important;
-      margin: 0 !important;
-      pointer-events: none !important;
-    }
-
-    .lightbox .lightbox-count {
-      position: fixed !important;
-      left: 50vw !important;
-      right: auto !important;
-      bottom: 17px !important;
-      transform: translate3d(calc(-50% + var(--iroha-scroll-left, 0px)), var(--iroha-scroll-top, 0px), 0) !important;
-      z-index: 10021 !important;
-      margin: 0 !important;
-      pointer-events: none !important;
-    }
-
-    .lightbox.video-mode .lightbox-count {
-      display: none !important;
-    }
-
-    @media (max-width: 640px) {
-      .lightbox .lightbox-guide {
-        left: 50vw !important;
-        bottom: 104px !important;
-        width: calc(100vw - 28px) !important;
-        max-width: calc(100vw - 28px) !important;
-        white-space: normal !important;
-      }
-
-      .lightbox .lightbox-count {
-        left: 50vw !important;
-        bottom: 58px !important;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 24px 14px 34px;
-      }
-
-      .section {
-        padding: 24px 16px 22px;
-        border-radius: 22px;
-      }
-
-      .sec-header {
-        margin-bottom: 16px;
-      }
-
-      .sec-title {
-        font-size: 20px;
-      }
-
-      .sec-subtitle {
-        font-size: 12px;
-      }
-
-      .av-stage {
-        border-radius: 18px;
-      }
-
-      .av-nav {
-        width: 38px;
-        height: 38px;
-        margin-top: -19px;
-        font-size: 22px;
-      }
-
-      .av-prev {
-        left: 10px;
-      }
-
-      .av-next {
-        right: 10px;
-      }
-
-      .av-count {
-        right: 10px;
-        bottom: 10px;
-        padding: 6px 10px;
-        font-size: 11.5px;
-      }
-
-      .av-dots {
-        margin: 14px 0 10px;
-      }
-
-      .av-strip {
-        gap: 8px;
-      }
-
-      .av-thumb {
-        flex-basis: calc((100% - 16px) / 3.3);
-        border-radius: 12px;
-      }
-
-      .lightbox {
-        padding: 64px 14px 52px;
-      }
-
-      .lightbox-image {
-        max-width: 96vw;
-        max-height: 86vh;
-        border-radius: 14px;
-      }
-
-      .lightbox-image.zoomed {
-        width: var(--zoom-w, 180vw);
-      }
-
-      .lightbox.zoom-mode {
-        padding: 64px 12px 128px;
-      }
-
-      .lightbox-close {
-        top: 12px;
-        right: 12px;
-      }
-
-      .lightbox-nav {
-        top: auto;
-        bottom: 10px;
-        width: 46px;
-        height: 42px;
-        transform: none;
-      }
-
-      .lightbox-nav:hover {
-        transform: scale(1.06);
-      }
-
-      .lightbox-prev {
-        left: calc(50% - 58px);
-      }
-
-      .lightbox-next {
-        right: calc(50% - 58px);
-      }
-
-      .lightbox-guide {
-        bottom: 104px;
-        width: calc(100vw - 28px);
-        padding: 8px 11px;
-        border-radius: 14px;
-        font-size: 11.5px;
-        white-space: normal;
-      }
-
-      .lightbox-count {
-        bottom: 58px;
-      }
-    }
-
-    @media (max-width: 900px) and (min-width: 641px) {
-      .av-thumb {
-        flex-basis: calc((100% - 30px) / 4);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .av-main,
-      .av-dot,
-      .av-thumb,
-      .av-nav,
-      .card-skeleton {
-        transition: none !important;
-        animation: none !important;
-      }
-
-      .av-strip {
-        scroll-behavior: auto;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>보유 중인 아바타</title>
+
+<style>
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --mint: #76d8d2;
+  --mint-dark: #4eaaa5;
+  --mint-pale: #edf9f8;
+  --pink: #f4a7c1;
+  --pink-deep: #e2709b;
+  --pink-soft: #fdeaf1;
+  --border: #b4e5e1;
+  --text: #333333;
+  --text-light: #8a9a9a;
+  --shadow-sm: 0 4px 14px rgba(78,170,165,.10);
+  --shadow-md: 0 16px 42px rgba(120,190,190,.16);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+body {
+  padding: 34px 16px 42px;
+  color: var(--text);
+  font-family: 'Paperozi', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+button { font-family: inherit; }
+
+/* ===== 전체 섹션 ===== */
+
+.section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 40px 32px;
+  border: 1.5px solid var(--border);
+  border-radius: 32px;
+  background: linear-gradient(
+    135deg, #e9faf7 0%, #fffefe 45%, #fff3f8 100%
+  );
+  box-shadow: var(--shadow-md);
+}
+
+.sec-header { margin-bottom: 22px; }
+
+.sec-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.sec-title .sp { font-size: 22px; }
+
+.sec-subtitle {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-light);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ===== 메인 이미지 ===== */
+
+.av-stage {
+  position: relative;
+  width: min(100%, calc(var(--ar, 1) * 680px));
+  aspect-ratio: var(--ar, 1);
+  margin: 0 auto;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  background: linear-gradient(135deg, #e6f8f5, #fdeaf1);
+  box-shadow: var(--shadow-sm);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.av-bg {
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: calc(100% + 60px);
+  height: calc(100% + 60px);
+  object-fit: cover;
+  filter: blur(26px) saturate(1.1);
+  opacity: .55;
+  pointer-events: none;
+}
+
+.av-main {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 1;
+  transition:
+    opacity .22s ease,
+    transform .3s cubic-bezier(.22,.8,.35,1);
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.av-stage:not(.is-ready) .av-main { opacity: 0; }
+
+.av-main.is-out {
+  opacity: 0;
+  transform: translateX(calc(var(--dir, 1) * -24px));
+}
+
+.av-main.is-in {
+  opacity: 0;
+  transform: translateX(calc(var(--dir, 1) * 24px));
+}
+
+.av-main.no-tr { transition: none !important; }
+
+.av-open {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.av-open:focus-visible {
+  outline: 3px solid rgba(226,112,155,.5);
+  outline-offset: -6px;
+  border-radius: 22px;
+}
+
+.av-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-top: -23px;
+  border: 0;
+  border-radius: 50%;
+  color: var(--pink-deep);
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 8px 20px rgba(100,140,140,.25);
+  font-size: 26px;
+  cursor: pointer;
+  transition: transform .2s, background .2s, color .2s;
+}
+
+.av-prev { left: 16px; }
+.av-next { right: 16px; }
+
+.av-count {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  z-index: 4;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: var(--mint-dark);
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 6px 16px rgba(100,140,140,.18);
+  font-size: 12.5px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* ===== 페이지 점 ===== */
+
+.av-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+  margin: 16px 0 14px;
+}
+
+.av-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #d5e8e6;
+  cursor: pointer;
+  transition: width .3s, background .3s;
+}
+
+.av-dot::after {
+  content: "";
+  position: absolute;
+  inset: -9px -4px;
+}
+
+.av-dot.is-active {
+  width: 28px;
+  background: linear-gradient(90deg, var(--mint), var(--pink));
+}
+
+/* ===== 썸네일 ===== */
+
+.av-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 4px 22px;
+  scroll-behavior: smooth;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+
+.av-strip.dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.av-strip::-webkit-scrollbar { height: 14px; }
+
+.av-strip::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: #dff4f2;
+}
+
+.av-strip::-webkit-scrollbar-thumb {
+  border: 3px solid #dff4f2;
+  border-radius: 999px;
+  background: var(--mint);
+}
+
+.av-strip::-webkit-scrollbar-thumb:hover {
+  background: var(--mint-dark);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .av-strip {
+    scrollbar-width: auto;
+    scrollbar-color: var(--mint) #dff4f2;
+  }
+}
+
+.av-thumb {
+  flex: 0 0 calc((100% - 50px) / 6);
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--mint-pale);
+  opacity: .72;
+  cursor: pointer;
+  transition:
+    opacity .25s,
+    transform .25s,
+    border-color .25s,
+    box-shadow .25s;
+}
+
+.av-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.av-thumb.is-active {
+  opacity: 1;
+  border-color: var(--pink-deep);
+  box-shadow: 0 6px 14px rgba(226,112,155,.28);
+}
+
+.av-thumb:focus-visible {
+  outline: 3px solid rgba(118,216,210,.7);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .av-nav:hover {
+    color: white;
+    background: var(--pink-deep);
+    transform: scale(1.07);
+  }
+  .av-thumb:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+/* ===== 로딩 ===== */
+
+.card-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(226,249,247,.75) 25%,
+    rgba(255,255,255,.92) 50%,
+    rgba(226,249,247,.75) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.card-skeleton.hide { display: none; }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.notice {
+  margin: 15px 0 0;
+  color: var(--text-light);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ===== 이미지 확대 창 ===== */
+
+.lightbox[hidden] { display: none !important; }
+
+.lightbox {
+  --iroha-scroll-left: 0px;
+  --iroha-scroll-top: 0px;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  overflow: auto;
+  scroll-behavior: auto;
+  overscroll-behavior: contain;
+  background: rgba(228,247,244,.48);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  opacity: 1;
+  transition: opacity .18s ease;
+}
+
+.lightbox.is-opening { opacity: 0; }
+
+.lightbox-image {
+  display: block;
+  max-width: min(97vw, 1500px);
+  max-height: 93vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 2px solid rgba(255,255,255,.9);
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 22px 70px rgba(0,0,0,.34);
+  cursor: zoom-in;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition:
+    opacity .24s,
+    transform .39s cubic-bezier(.20,.82,.27,1),
+    width .28s,
+    max-width .28s,
+    max-height .28s;
+}
+
+.lightbox-image.slide-enter-left {
+  opacity: 1;
+  transform: translateX(-30px) scale(.997);
+  transition: none;
+}
+
+.lightbox-image.slide-enter-right {
+  opacity: 1;
+  transform: translateX(30px) scale(.997);
+  transition: none;
+}
+
+.lightbox-image.zoomed {
+  flex: 0 0 auto;
+  width: var(--zoom-w, min(165vw,2200px));
+  max-width: none;
+  max-height: none;
+  cursor: grab;
+  touch-action: none;
+  transform: none !important;
+  opacity: 1 !important;
+  will-change: scroll-position;
+}
+
+.lightbox-image.zoomed.dragging { cursor: grabbing; }
+
+.lightbox.zoom-mode {
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: auto;
+  padding: 70px 28px 110px;
+}
+
+.lightbox.zoom-mode .lightbox-image { margin: 0 auto; }
+
+.lightbox.zoom-active .lightbox-nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lightbox-close,
+.lightbox-nav {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  color: white;
+  background: rgba(118,216,210,.94);
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  cursor: pointer;
+  transition:
+    transform .2s,
+    opacity .2s,
+    visibility .2s,
+    background .2s;
+}
+
+.lightbox-close:hover,
+.lightbox-nav:hover {
+  background: var(--mint-dark);
+}
+
+.lightbox-close {
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 26px;
+}
+
+.lightbox-close:hover { transform: scale(1.06); }
+
+.lightbox-nav {
+  top: 50%;
+  width: 48px;
+  height: 64px;
+  border-radius: 16px;
+  font-size: 30px;
+  transform: translateY(-50%);
+}
+
+.lightbox-nav:hover {
+  transform: translateY(-50%) scale(1.06);
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+.lightbox-guide {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  bottom: 52px !important;
+  z-index: 10020 !important;
+  transform: translate3d(
+    calc(-50% + var(--iroha-scroll-left)),
+    var(--iroha-scroll-top),
+    0
+  ) !important;
+  max-width: calc(100vw - 40px);
+  margin: 0 !important;
+  padding: 9px 14px;
+  border: 1px solid rgba(180,229,225,.95);
+  border-radius: 999px;
+  color: var(--mint-dark);
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 7px 20px rgba(78,170,165,.14);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none !important;
+}
+
+.lightbox-count {
+  position: fixed !important;
+  left: 50vw !important;
+  right: auto !important;
+  bottom: 17px !important;
+  z-index: 10021 !important;
+  transform: translate3d(
+    calc(-50% + var(--iroha-scroll-left)),
+    var(--iroha-scroll-top),
+    0
+  ) !important;
+  margin: 0 !important;
+  padding: 7px 13px;
+  border-radius: 999px;
+  color: white;
+  background: rgba(78,170,165,.92);
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none !important;
+}
+
+body.lightbox-open { overflow: hidden; }
+
+/* ===== 반응형 ===== */
+
+@media (max-width: 900px) and (min-width: 641px) {
+  .av-thumb { flex-basis: calc((100% - 30px) / 4); }
+}
+
+@media (max-width: 640px) {
+  body { padding: 24px 14px 34px; }
+
+  .section {
+    padding: 24px 16px 22px;
+    border-radius: 22px;
+  }
+
+  .sec-header { margin-bottom: 16px; }
+  .sec-title { font-size: 20px; }
+  .sec-subtitle { font-size: 12px; }
+  .av-stage { border-radius: 18px; }
+
+  .av-nav {
+    width: 38px;
+    height: 38px;
+    margin-top: -19px;
+    font-size: 22px;
+  }
+
+  .av-prev { left: 10px; }
+  .av-next { right: 10px; }
+
+  .av-count {
+    right: 10px;
+    bottom: 10px;
+    padding: 6px 10px;
+    font-size: 11.5px;
+  }
+
+  .av-dots { margin: 14px 0 10px; }
+  .av-strip { gap: 8px; }
+
+  .av-thumb {
+    flex-basis: calc((100% - 16px) / 3.3);
+    border-radius: 12px;
+  }
+
+  .lightbox { padding: 64px 14px 52px; }
+
+  .lightbox-image {
+    max-width: 96vw;
+    max-height: 86vh;
+    border-radius: 14px;
+  }
+
+  .lightbox-image.zoomed {
+    width: var(--zoom-w, 180vw);
+  }
+
+  .lightbox.zoom-mode { padding: 64px 12px 128px; }
+
+  .lightbox-close {
+    top: 12px;
+    right: 12px;
+  }
+
+  .lightbox-nav {
+    top: auto;
+    bottom: 10px;
+    width: 46px;
+    height: 42px;
+    transform: none;
+  }
+
+  .lightbox-nav:hover { transform: scale(1.06); }
+  .lightbox-prev { left: calc(50% - 58px); }
+  .lightbox-next { right: calc(50% - 58px); }
+
+  .lightbox-guide {
+    left: 50vw !important;
+    bottom: 104px !important;
+    width: calc(100vw - 28px) !important;
+    max-width: calc(100vw - 28px) !important;
+    padding: 8px 11px;
+    border-radius: 14px;
+    font-size: 11.5px;
+    white-space: normal !important;
+  }
+
+  .lightbox-count {
+    left: 50vw !important;
+    bottom: 58px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .av-main,
+  .av-dot,
+  .av-thumb,
+  .av-nav,
+  .card-skeleton {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .av-strip { scroll-behavior: auto; }
+}
+</style>
 </head>
 
 <body>
-  <section class="section" aria-label="보유 중인 아바타">
-    <div class="sec-header">
-      <h1 class="sec-title"><span class="sp" aria-hidden="true">✨</span>보유 중인 아바타</h1>
-      <span class="sec-subtitle">🔎 이미지를 두 번 클릭해 확대해보세요!<br>확인한 아바타 영문명을 BOOTH에 검색하면 빠르게 찾을 수 있습니다.</span>
-    </div>
 
-    <div class="av-stage" id="avStage">
-      <div class="card-skeleton"></div>
-      <img class="av-bg" id="avBg" src="./images/avatar-01.png" alt="" aria-hidden="true">
-      <img class="av-main" id="avMain" src="./images/avatar-01.png" alt="보유 아바타 1">
-      <button class="av-open" id="avOpen" type="button" aria-label="이미지 크게 보기"></button>
-      <button class="av-nav av-prev" id="avPrev" type="button" aria-label="이전 아바타">‹</button>
-      <button class="av-nav av-next" id="avNext" type="button" aria-label="다음 아바타">›</button>
-      <div class="av-count" id="avCount" aria-live="polite">01 / 10</div>
-    </div>
+<section class="section" aria-label="보유 중인 아바타">
 
-    <div class="av-dots" id="avDots" role="group" aria-label="아바타 선택"></div>
-
-    <div class="av-strip" id="avStrip" aria-label="보유 아바타 목록">
-      <button class="av-thumb" type="button" aria-label="보유 아바타 1 보기">
-        <img src="./images/avatar-01.png" alt="보유 아바타 1" loading="eager" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 2 보기">
-        <img src="./images/avatar-02.png" alt="보유 아바타 2" loading="eager" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 3 보기">
-        <img src="./images/avatar-03.png" alt="보유 아바타 3" loading="eager" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 4 보기">
-        <img src="./images/avatar-04.png" alt="보유 아바타 4" loading="lazy" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 5 보기">
-        <img src="./images/avatar-05.png" alt="보유 아바타 5" loading="lazy" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 6 보기">
-        <img src="./images/avatar-06.png" alt="보유 아바타 6" loading="lazy" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 7 보기">
-        <img src="./images/avatar-07.png" alt="보유 아바타 7" loading="lazy" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 8 보기">
-        <img src="./images/avatar-08.png" alt="보유 아바타 8" loading="lazy" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 9 보기">
-        <img src="./images/avatar-09.png" alt="보유 아바타 9" loading="lazy" draggable="false">
-      </button>
-      <button class="av-thumb" type="button" aria-label="보유 아바타 10 보기">
-        <img src="./images/avatar-10.png" alt="보유 아바타 10" loading="lazy" draggable="false">
-      </button>
-    </div>
-
-    <p class="notice">
-      ※ 일부 아바타는 방송 및 수익 활동이 제한될 수 있으므로, 구매 전 반드시 해당 상품의 이용 약관을 확인해주세요.
-    </p>
-  </section>
-
-  <div
-    id="avatar-lightbox"
-    class="lightbox"
-    role="dialog"
-    aria-modal="true"
-    aria-label="아바타 이미지 크게 보기"
-    hidden
-  >
-    <button
-      class="lightbox-close"
-      type="button"
-      aria-label="닫기"
-    >
-      ×
-    </button>
-
-    <button
-      class="lightbox-nav lightbox-prev"
-      type="button"
-      aria-label="이전 이미지"
-    >
-      ‹
-    </button>
-
-    <img
-      class="lightbox-image"
-      src=""
-      alt=""
-    >
-
-    <button
-      class="lightbox-nav lightbox-next"
-      type="button"
-      aria-label="다음 이미지"
-    >
-      ›
-    </button>
-
-    <div class="lightbox-guide">
-      🖱️ 추가 확대 후 이미지를 누른 채 드래그하면 원하는 부분을 볼 수 있습니다.
-    </div>
-
-    <div class="lightbox-count" aria-live="polite"></div>
+  <div class="sec-header">
+    <h1 class="sec-title">
+      <span class="sp" aria-hidden="true">✨</span>
+      보유 중인 아바타
+    </h1>
+    <span class="sec-subtitle">
+      🔎 이미지를 두 번 클릭해 확대해보세요!<br>
+      확인한 아바타 영문명을 BOOTH에 검색하면 빠르게 찾을 수 있습니다.
+    </span>
   </div>
 
-  <script>
-    (function () {
-      /* 확대 배율: 숫자를 키우면 더 크게 확대됩니다 (기본 3배) */
-      const ZOOM_SCALE = 3;
+  <!-- 첫 이미지: avatar-00.png -->
+  <div class="av-stage" id="avStage">
+    <div class="card-skeleton"></div>
 
-      const stage = document.getElementById('avStage');
-      const mainImg = document.getElementById('avMain');
-      const bgImg = document.getElementById('avBg');
-      const openBtn = document.getElementById('avOpen');
-      const prevBtn = document.getElementById('avPrev');
-      const nextBtn = document.getElementById('avNext');
-      const countEl = document.getElementById('avCount');
-      const dotsWrap = document.getElementById('avDots');
-      const strip = document.getElementById('avStrip');
-      const skeleton = stage.querySelector('.card-skeleton');
-      const thumbs = Array.from(strip.querySelectorAll('.av-thumb'));
-      const images = thumbs.map(function (thumb) {
-        return thumb.querySelector('img');
-      });
-      const lightbox = document.getElementById('avatar-lightbox');
-      const lightboxImage = lightbox.querySelector('.lightbox-image');
-      const lightboxClose = lightbox.querySelector('.lightbox-close');
-      const lightboxPrev = lightbox.querySelector('.lightbox-prev');
-      const lightboxNext = lightbox.querySelector('.lightbox-next');
-      const lightboxCount = lightbox.querySelector('.lightbox-count');
+    <img class="av-bg" id="avBg"
+         src="./images/avatar-00.png"
+         alt="" aria-hidden="true">
 
+    <img class="av-main" id="avMain"
+         src="./images/avatar-00.png"
+         alt="보유 아바타 1">
 
-      let isDragging = false;
-      let startX = 0;
-      let startScrollLeft = 0;
-      let moved = false;
-      let pressedCard = null;
-      let currentImageIndex = 0;
-      let lastFocusedCard = null;
-      let isSwitching = false;
+    <button class="av-open" id="avOpen"
+            type="button" aria-label="이미지 크게 보기"></button>
 
-      let zoomDragging = false;
-      let zoomMoved = false;
-      let zoomStartX = 0;
-      let zoomStartY = 0;
-      let zoomStartScrollLeft = 0;
-      let zoomStartScrollTop = 0;
-      let zoomTargetScrollLeft = 0;
-      let zoomTargetScrollTop = 0;
-      let zoomScrollRaf = null;
-      let zoomLastX = 0;
-      let zoomLastY = 0;
-      let zoomLastTime = 0;
-      let zoomVelocityX = 0;
-      let zoomVelocityY = 0;
-      let zoomMomentumRaf = null;
+    <button class="av-nav av-prev" id="avPrev"
+            type="button" aria-label="이전 아바타">‹</button>
 
-      function stopZoomSmoothScroll() {
-        if (zoomScrollRaf !== null) {
-          cancelAnimationFrame(zoomScrollRaf);
-          zoomScrollRaf = null;
-        }
-      }
+    <button class="av-nav av-next" id="avNext"
+            type="button" aria-label="다음 아바타">›</button>
 
-      function runZoomSmoothScroll() {
-        const currentLeft = lightbox.scrollLeft;
-        const currentTop = lightbox.scrollTop;
+    <div class="av-count" id="avCount"
+         aria-live="polite">01 / 11</div>
+  </div>
 
-        const nextLeft =
-          currentLeft + (zoomTargetScrollLeft - currentLeft) * 0.30;
+  <div class="av-dots" id="avDots"
+       role="group" aria-label="아바타 선택"></div>
 
-        const nextTop =
-          currentTop + (zoomTargetScrollTop - currentTop) * 0.30;
+  <!-- 총 11장: 00부터 10까지 -->
+  <div class="av-strip" id="avStrip"
+       aria-label="보유 아바타 목록">
 
-        lightbox.scrollLeft = nextLeft;
-        lightbox.scrollTop = nextTop;
+    <button class="av-thumb" type="button" aria-label="보유 아바타 1 보기">
+      <img src="./images/avatar-00.png" alt="보유 아바타 1" loading="eager" draggable="false">
+    </button>
 
-        if (
-          Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
-          Math.abs(zoomTargetScrollTop - nextTop) > 0.5
-        ) {
-          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
-        } else {
-          lightbox.scrollLeft = zoomTargetScrollLeft;
-          lightbox.scrollTop = zoomTargetScrollTop;
-          updateFixedOverlayPosition();
-          zoomScrollRaf = null;
-        }
-      }
+    <button class="av-thumb" type="button" aria-label="보유 아바타 2 보기">
+      <img src="./images/avatar-01.png" alt="보유 아바타 2" loading="eager" draggable="false">
+    </button>
 
-      function requestZoomSmoothScroll() {
-        if (zoomScrollRaf === null) {
-          zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
-        }
-      }
+    <button class="av-thumb" type="button" aria-label="보유 아바타 3 보기">
+      <img src="./images/avatar-02.png" alt="보유 아바타 3" loading="eager" draggable="false">
+    </button>
 
-      function stopZoomMomentum() {
-        if (zoomMomentumRaf !== null) {
-          cancelAnimationFrame(zoomMomentumRaf);
-          zoomMomentumRaf = null;
-        }
-      }
+    <button class="av-thumb" type="button" aria-label="보유 아바타 4 보기">
+      <img src="./images/avatar-03.png" alt="보유 아바타 4" loading="lazy" draggable="false">
+    </button>
 
-      function runZoomMomentum() {
-        if (
-          Math.abs(zoomVelocityX) < 0.12 &&
-          Math.abs(zoomVelocityY) < 0.12
-        ) {
-          zoomMomentumRaf = null;
-          return;
-        }
+    <button class="av-thumb" type="button" aria-label="보유 아바타 5 보기">
+      <img src="./images/avatar-04.png" alt="보유 아바타 5" loading="lazy" draggable="false">
+    </button>
 
-        lightbox.scrollLeft += zoomVelocityX;
-        lightbox.scrollTop += zoomVelocityY;
+    <button class="av-thumb" type="button" aria-label="보유 아바타 6 보기">
+      <img src="./images/avatar-05.png" alt="보유 아바타 6" loading="lazy" draggable="false">
+    </button>
 
-        updateFixedOverlayPosition();
+    <button class="av-thumb" type="button" aria-label="보유 아바타 7 보기">
+      <img src="./images/avatar-06.png" alt="보유 아바타 7" loading="lazy" draggable="false">
+    </button>
 
-        zoomVelocityX *= 0.91;
-        zoomVelocityY *= 0.91;
+    <button class="av-thumb" type="button" aria-label="보유 아바타 8 보기">
+      <img src="./images/avatar-07.png" alt="보유 아바타 8" loading="lazy" draggable="false">
+    </button>
 
-        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
-      }
+    <button class="av-thumb" type="button" aria-label="보유 아바타 9 보기">
+      <img src="./images/avatar-08.png" alt="보유 아바타 9" loading="lazy" draggable="false">
+    </button>
 
-      function startZoomMomentum() {
-        stopZoomSmoothScroll();
-        stopZoomMomentum();
+    <button class="av-thumb" type="button" aria-label="보유 아바타 10 보기">
+      <img src="./images/avatar-09.png" alt="보유 아바타 10" loading="lazy" draggable="false">
+    </button>
 
-        if (
-          Math.abs(zoomVelocityX) < 0.8 &&
-          Math.abs(zoomVelocityY) < 0.8
-        ) {
-          return;
-        }
+    <button class="av-thumb" type="button" aria-label="보유 아바타 11 보기">
+      <img src="./images/avatar-10.png" alt="보유 아바타 11" loading="lazy" draggable="false">
+    </button>
 
-        zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
-      }
+  </div>
 
-      function resetLightboxZoom() {
-        stopZoomSmoothScroll();
-        stopZoomMomentum();
+  <p class="notice">
+    ※ 일부 아바타는 방송 및 수익 활동이 제한될 수 있으므로,
+    구매 전 반드시 해당 상품의 이용 약관을 확인해주세요.
+  </p>
 
-        lightboxImage.classList.remove(
-          'zoomed',
-          'dragging',
-          'slide-enter-left',
-          'slide-enter-right'
-        );
+</section>
 
-        lightbox.classList.remove('zoom-mode', 'zoom-active');
-        lightbox.scrollTop = 0;
-        lightbox.scrollLeft = 0;
-        updateFixedOverlayPosition();
-        zoomDragging = false;
-        zoomMoved = false;
-      }
+<!-- 이미지 확대 창 -->
+<div id="avatar-lightbox"
+     class="lightbox"
+     role="dialog"
+     aria-modal="true"
+     aria-label="아바타 이미지 크게 보기"
+     hidden>
 
-      function updateLightbox(index) {
-        currentImageIndex =
-          (index + images.length) % images.length;
+  <button class="lightbox-close"
+          type="button" aria-label="닫기">×</button>
 
-        const image = images[currentImageIndex];
-        lightboxImage.src = image.currentSrc || image.src;
-        lightboxImage.alt = image.alt || '보유 아바타 이미지';
-        lightboxCount.textContent =
-          (currentImageIndex + 1) + ' / ' + images.length;
-      }
+  <button class="lightbox-nav lightbox-prev"
+          type="button" aria-label="이전 이미지">‹</button>
 
-      function moveLightbox(step) {
-        if (!images.length || isSwitching) {
-          return;
-        }
+  <img class="lightbox-image" src="" alt="">
 
-        isSwitching = true;
+  <button class="lightbox-nav lightbox-next"
+          type="button" aria-label="다음 이미지">›</button>
 
-        const nextIndex =
-          (currentImageIndex + step + images.length) %
-          images.length;
+  <div class="lightbox-guide">
+    🖱️ 추가 확대 후 이미지를 누른 채 드래그하면 원하는 부분을 볼 수 있습니다.
+  </div>
 
-        resetLightboxZoom();
+  <div class="lightbox-count" aria-live="polite"></div>
+</div>
 
-        const nextImage = images[nextIndex];
-        const nextSrc = nextImage.currentSrc || nextImage.src;
-        const preload = new Image();
-        let changed = false;
+<script>
+(function () {
+  /* 확대 배율: 기본 3배 */
+  const ZOOM_SCALE = 3;
 
-        function changeImage() {
-          if (changed) {
-            return;
-          }
+  const stage = document.getElementById('avStage');
+  const mainImg = document.getElementById('avMain');
+  const bgImg = document.getElementById('avBg');
+  const openBtn = document.getElementById('avOpen');
+  const prevBtn = document.getElementById('avPrev');
+  const nextBtn = document.getElementById('avNext');
+  const countEl = document.getElementById('avCount');
+  const dotsWrap = document.getElementById('avDots');
+  const strip = document.getElementById('avStrip');
+  const skeleton = stage.querySelector('.card-skeleton');
 
-          changed = true;
+  const thumbs = Array.from(
+    strip.querySelectorAll('.av-thumb')
+  );
 
-          const enterClass = step > 0
-            ? 'slide-enter-right'
-            : 'slide-enter-left';
+  const images = thumbs.map(function (thumb) {
+    return thumb.querySelector('img');
+  });
 
-          updateLightbox(nextIndex);
-          lightboxImage.classList.add(enterClass);
+  const lightbox = document.getElementById('avatar-lightbox');
+  const lightboxImage = lightbox.querySelector('.lightbox-image');
+  const lightboxClose = lightbox.querySelector('.lightbox-close');
+  const lightboxPrev = lightbox.querySelector('.lightbox-prev');
+  const lightboxNext = lightbox.querySelector('.lightbox-next');
+  const lightboxCount = lightbox.querySelector('.lightbox-count');
 
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              lightboxImage.classList.remove(enterClass);
+  let currentImageIndex = 0;
+  let lastFocusedCard = null;
+  let isSwitching = false;
 
-              setTimeout(function () {
-                isSwitching = false;
-              }, 340);
-            });
-          });
-        }
+  let zoomDragging = false;
+  let zoomMoved = false;
+  let zoomStartX = 0;
+  let zoomStartY = 0;
+  let zoomStartScrollLeft = 0;
+  let zoomStartScrollTop = 0;
+  let zoomTargetScrollLeft = 0;
+  let zoomTargetScrollTop = 0;
+  let zoomScrollRaf = null;
+  let zoomLastX = 0;
+  let zoomLastY = 0;
+  let zoomLastTime = 0;
+  let zoomVelocityX = 0;
+  let zoomVelocityY = 0;
+  let zoomMomentumRaf = null;
 
-        preload.onload = changeImage;
-        preload.onerror = changeImage;
-        preload.src = nextSrc;
+  /* ===== 확대 이미지 스크롤 ===== */
 
-        setTimeout(changeImage, 700);
-      }
+  function updateFixedOverlayPosition() {
+    const isZoomed =
+      lightbox.classList.contains('zoom-active') ||
+      lightbox.classList.contains('zoom-mode');
 
-      function openLightbox(index, card) {
-        lastFocusedCard = card || null;
-        updateLightbox(index);
-        resetLightboxZoom();
-        lightbox.classList.add('is-opening');
-        lightbox.hidden = false;
-        document.body.classList.add('lightbox-open');
+    const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
+    const scrollTop = isZoomed ? lightbox.scrollTop : 0;
 
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            lightbox.classList.remove('is-opening');
-          });
-        });
+    lightbox.style.setProperty(
+      '--iroha-scroll-left', scrollLeft + 'px'
+    );
+    lightbox.style.setProperty(
+      '--iroha-scroll-top', scrollTop + 'px'
+    );
+  }
 
-        lightboxClose.focus();
-      }
+  function stopZoomSmoothScroll() {
+    if (zoomScrollRaf !== null) {
+      cancelAnimationFrame(zoomScrollRaf);
+      zoomScrollRaf = null;
+    }
+  }
 
-      function closeLightbox() {
-        lightbox.hidden = true;
-        lightboxImage.src = '';
-        resetLightboxZoom();
-        lightbox.classList.remove('is-opening');
+  function runZoomSmoothScroll() {
+    const currentLeft = lightbox.scrollLeft;
+    const currentTop = lightbox.scrollTop;
+
+    const nextLeft = currentLeft +
+      (zoomTargetScrollLeft - currentLeft) * 0.30;
+    const nextTop = currentTop +
+      (zoomTargetScrollTop - currentTop) * 0.30;
+
+    lightbox.scrollLeft = nextLeft;
+    lightbox.scrollTop = nextTop;
+
+    if (
+      Math.abs(zoomTargetScrollLeft - nextLeft) > 0.5 ||
+      Math.abs(zoomTargetScrollTop - nextTop) > 0.5
+    ) {
+      zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+    } else {
+      lightbox.scrollLeft = zoomTargetScrollLeft;
+      lightbox.scrollTop = zoomTargetScrollTop;
+      updateFixedOverlayPosition();
+      zoomScrollRaf = null;
+    }
+  }
+
+  function requestZoomSmoothScroll() {
+    if (zoomScrollRaf === null) {
+      zoomScrollRaf = requestAnimationFrame(runZoomSmoothScroll);
+    }
+  }
+
+  function stopZoomMomentum() {
+    if (zoomMomentumRaf !== null) {
+      cancelAnimationFrame(zoomMomentumRaf);
+      zoomMomentumRaf = null;
+    }
+  }
+
+  function runZoomMomentum() {
+    if (
+      Math.abs(zoomVelocityX) < 0.12 &&
+      Math.abs(zoomVelocityY) < 0.12
+    ) {
+      zoomMomentumRaf = null;
+      return;
+    }
+
+    lightbox.scrollLeft += zoomVelocityX;
+    lightbox.scrollTop += zoomVelocityY;
+    updateFixedOverlayPosition();
+
+    zoomVelocityX *= 0.91;
+    zoomVelocityY *= 0.91;
+    zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+  }
+
+  function startZoomMomentum() {
+    stopZoomSmoothScroll();
+    stopZoomMomentum();
+
+    if (
+      Math.abs(zoomVelocityX) < 0.8 &&
+      Math.abs(zoomVelocityY) < 0.8
+    ) return;
+
+    zoomMomentumRaf = requestAnimationFrame(runZoomMomentum);
+  }
+
+  function resetLightboxZoom() {
+    stopZoomSmoothScroll();
+    stopZoomMomentum();
+
+    lightboxImage.classList.remove(
+      'zoomed', 'dragging',
+      'slide-enter-left', 'slide-enter-right'
+    );
+
+    lightbox.classList.remove('zoom-mode', 'zoom-active');
+    lightbox.scrollTop = 0;
+    lightbox.scrollLeft = 0;
+    updateFixedOverlayPosition();
+    zoomDragging = false;
+    zoomMoved = false;
+  }
+
+  /* ===== 라이트박스 이미지 변경 ===== */
+
+  function updateLightbox(index) {
+    currentImageIndex = (index + images.length) % images.length;
+    const image = images[currentImageIndex];
+
+    lightboxImage.src = image.currentSrc || image.src;
+    lightboxImage.alt = image.alt || '보유 아바타 이미지';
+    lightboxCount.textContent =
+      (currentImageIndex + 1) + ' / ' + images.length;
+  }
+
+  function moveLightbox(step) {
+    if (!images.length || isSwitching) return;
+    isSwitching = true;
+
+    const nextIndex =
+      (currentImageIndex + step + images.length) % images.length;
+
+    resetLightboxZoom();
+
+    const nextImage = images[nextIndex];
+    const nextSrc = nextImage.currentSrc || nextImage.src;
+    const preload = new Image();
+    let changed = false;
+
+    function changeImage() {
+      if (changed || lightbox.hidden) {
         isSwitching = false;
-        document.body.classList.remove('lightbox-open');
-
-        syncStageToLightbox();
-
-        if (lastFocusedCard) {
-          lastFocusedCard.focus();
-        }
+        return;
       }
 
+      changed = true;
 
-      lightbox.addEventListener(
-        'scroll',
-        updateFixedOverlayPosition,
-        { passive: true }
+      const enterClass = step > 0
+        ? 'slide-enter-right'
+        : 'slide-enter-left';
+
+      updateLightbox(nextIndex);
+      lightboxImage.classList.add(enterClass);
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          lightboxImage.classList.remove(enterClass);
+          setTimeout(function () {
+            isSwitching = false;
+          }, 340);
+        });
+      });
+    }
+
+    preload.onload = changeImage;
+    preload.onerror = changeImage;
+    preload.src = nextSrc;
+
+    setTimeout(changeImage, 700);
+  }
+
+  function openLightbox(index, card) {
+    lastFocusedCard = card || null;
+    updateLightbox(index);
+    resetLightboxZoom();
+
+    lightbox.classList.add('is-opening');
+    lightbox.hidden = false;
+    document.body.classList.add('lightbox-open');
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        lightbox.classList.remove('is-opening');
+      });
+    });
+
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImage.src = '';
+    resetLightboxZoom();
+
+    lightbox.classList.remove('is-opening');
+    isSwitching = false;
+    document.body.classList.remove('lightbox-open');
+
+    syncStageToLightbox();
+
+    if (lastFocusedCard) lastFocusedCard.focus();
+  }
+
+  lightbox.addEventListener(
+    'scroll', updateFixedOverlayPosition, { passive: true }
+  );
+
+  lightboxClose.addEventListener('click', closeLightbox);
+
+  lightboxPrev.addEventListener('click', function () {
+    moveLightbox(-1);
+  });
+
+  lightboxNext.addEventListener('click', function () {
+    moveLightbox(1);
+  });
+
+  /* ===== 이미지 확대 및 드래그 ===== */
+
+  lightboxImage.addEventListener('pointerdown', function (event) {
+    event.stopPropagation();
+
+    if (event.pointerType === 'mouse' && event.button !== 0) {
+      return;
+    }
+
+    if (!lightboxImage.classList.contains('zoomed')) {
+      const fittedWidth =
+        lightboxImage.getBoundingClientRect().width;
+
+      lightboxImage.style.setProperty(
+        '--zoom-w',
+        Math.round(fittedWidth * ZOOM_SCALE) + 'px'
       );
 
-      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxImage.classList.add('zoomed');
+      lightbox.classList.add('zoom-mode', 'zoom-active');
 
-      lightboxPrev.addEventListener('click', function () {
-        moveLightbox(-1);
+      requestAnimationFrame(function () {
+        lightbox.scrollLeft = Math.max(
+          0,
+          (lightbox.scrollWidth - lightbox.clientWidth) / 2
+        );
+
+        lightbox.scrollTop = Math.max(
+          0,
+          (lightbox.scrollHeight - lightbox.clientHeight) / 2
+        );
+
+        updateFixedOverlayPosition();
+        zoomTargetScrollLeft = lightbox.scrollLeft;
+        zoomTargetScrollTop = lightbox.scrollTop;
       });
+      return;
+    }
 
-      lightboxNext.addEventListener('click', function () {
-        moveLightbox(1);
+    stopZoomSmoothScroll();
+    stopZoomMomentum();
+
+    zoomDragging = true;
+    zoomMoved = false;
+    zoomStartX = event.clientX;
+    zoomStartY = event.clientY;
+    zoomStartScrollLeft = lightbox.scrollLeft;
+    zoomStartScrollTop = lightbox.scrollTop;
+    zoomTargetScrollLeft = zoomStartScrollLeft;
+    zoomTargetScrollTop = zoomStartScrollTop;
+    zoomLastX = event.clientX;
+    zoomLastY = event.clientY;
+    zoomLastTime = performance.now();
+    zoomVelocityX = 0;
+    zoomVelocityY = 0;
+
+    lightboxImage.classList.add('dragging');
+
+    if (
+      event.pointerId !== undefined &&
+      !lightboxImage.hasPointerCapture(event.pointerId)
+    ) {
+      lightboxImage.setPointerCapture(event.pointerId);
+    }
+  });
+
+  lightboxImage.addEventListener('pointermove', function (event) {
+    if (!zoomDragging) return;
+
+    const distanceX = event.clientX - zoomStartX;
+    const distanceY = event.clientY - zoomStartY;
+
+    if (
+      !zoomMoved &&
+      (Math.abs(distanceX) > 4 || Math.abs(distanceY) > 4)
+    ) {
+      zoomMoved = true;
+    }
+
+    if (zoomMoved) {
+      const now = performance.now();
+      const deltaX = event.clientX - zoomLastX;
+      const deltaY = event.clientY - zoomLastY;
+      const deltaTime = Math.max(8, now - zoomLastTime);
+      const velocityScale =
+        Math.min(1.40, 16 / deltaTime) * 0.54;
+
+      zoomVelocityX = -deltaX * velocityScale;
+      zoomVelocityY = -deltaY * velocityScale;
+
+      zoomTargetScrollLeft = zoomStartScrollLeft - distanceX;
+      zoomTargetScrollTop = zoomStartScrollTop - distanceY;
+
+      requestZoomSmoothScroll();
+
+      zoomLastX = event.clientX;
+      zoomLastY = event.clientY;
+      zoomLastTime = now;
+
+      event.preventDefault();
+    }
+  });
+
+  function finishZoomDrag(event, allowClickToggle) {
+    if (!zoomDragging) return;
+
+    const shouldZoomOut = allowClickToggle && !zoomMoved;
+
+    zoomDragging = false;
+    lightboxImage.classList.remove('dragging');
+
+    if (
+      event &&
+      event.pointerId !== undefined &&
+      lightboxImage.hasPointerCapture(event.pointerId)
+    ) {
+      lightboxImage.releasePointerCapture(event.pointerId);
+    }
+
+    if (shouldZoomOut) {
+      stopZoomSmoothScroll();
+      stopZoomMomentum();
+
+      lightboxImage.classList.remove('zoomed');
+      lightbox.classList.remove('zoom-mode', 'zoom-active');
+
+      lightbox.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
       });
+    } else if (zoomMoved) {
+      startZoomMomentum();
+    }
 
-      lightboxImage.addEventListener('pointerdown', function (event) {
-        event.stopPropagation();
+    zoomMoved = false;
+  }
 
-        if (!lightboxImage.classList.contains('zoomed')) {
-          const fittedWidth = lightboxImage.getBoundingClientRect().width;
-          lightboxImage.style.setProperty(
-            '--zoom-w',
-            Math.round(fittedWidth * ZOOM_SCALE) + 'px'
-          );
-          lightboxImage.classList.add('zoomed');
-          lightbox.classList.add('zoom-mode', 'zoom-active');
+  lightboxImage.addEventListener('pointerup', function (event) {
+    finishZoomDrag(event, true);
+  });
 
-          requestAnimationFrame(function () {
-            lightbox.scrollLeft =
-              Math.max(
-                0,
-                (lightbox.scrollWidth - lightbox.clientWidth) / 2
-              );
+  lightboxImage.addEventListener('pointercancel', function (event) {
+    finishZoomDrag(event, false);
+  });
 
-            lightbox.scrollTop =
-              Math.max(
-                0,
-                (lightbox.scrollHeight - lightbox.clientHeight) / 2
-              );
+  lightboxImage.addEventListener('lostpointercapture', function (event) {
+    finishZoomDrag(event, false);
+  });
 
-            updateFixedOverlayPosition();
+  lightbox.addEventListener('click', function (event) {
+    if (event.target === lightbox) closeLightbox();
+  });
 
-            zoomTargetScrollLeft = lightbox.scrollLeft;
-            zoomTargetScrollTop = lightbox.scrollTop;
-          });
+  document.addEventListener('keydown', function (event) {
+    if (lightbox.hidden) return;
 
-          return;
-        }
+    if (event.key === 'Escape') {
+      closeLightbox();
+    } else if (event.key === 'ArrowLeft') {
+      moveLightbox(-1);
+    } else if (event.key === 'ArrowRight') {
+      moveLightbox(1);
+    }
+  });
 
-        if (event.pointerType === 'mouse' && event.button !== 0) {
-          return;
-        }
+  /* ===== 높이 자동 전달 ===== */
 
-        stopZoomSmoothScroll();
-        stopZoomMomentum();
+  function sendHeight() {
+    const height = Math.ceil(Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    ));
 
-        zoomDragging = true;
-        zoomMoved = false;
-        zoomStartX = event.clientX;
-        zoomStartY = event.clientY;
-        zoomStartScrollLeft = lightbox.scrollLeft;
-        zoomStartScrollTop = lightbox.scrollTop;
-        zoomTargetScrollLeft = zoomStartScrollLeft;
-        zoomTargetScrollTop = zoomStartScrollTop;
-        zoomLastX = event.clientX;
-        zoomLastY = event.clientY;
-        zoomLastTime = performance.now();
-        zoomVelocityX = 0;
-        zoomVelocityY = 0;
+    window.parent.postMessage({
+      type: 'iroha-avatar-height',
+      height: height
+    }, '*');
+  }
 
-        lightboxImage.classList.add('dragging');
+  /* ===== 메인 이미지와 페이지 점 ===== */
 
-        if (
-          event.pointerId !== undefined &&
-          !lightboxImage.hasPointerCapture(event.pointerId)
-        ) {
-          lightboxImage.setPointerCapture(event.pointerId);
-        }
-      });
+  let activeIndex = 0;
+  let swapId = 0;
+  const dots = [];
 
-      lightboxImage.addEventListener('pointermove', function (event) {
-        if (!zoomDragging) {
-          return;
-        }
+  images.forEach(function (image, index) {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'av-dot';
+    dot.setAttribute(
+      'aria-label', '아바타 ' + (index + 1) + '번 보기'
+    );
 
-        const distanceX = event.clientX - zoomStartX;
-        const distanceY = event.clientY - zoomStartY;
+    dot.addEventListener('click', function () {
+      setActive(index);
+    });
 
-        if (
-          !zoomMoved &&
-          (
-            Math.abs(distanceX) > 4 ||
-            Math.abs(distanceY) > 4
-          )
-        ) {
-          zoomMoved = true;
-        }
+    dotsWrap.appendChild(dot);
+    dots.push(dot);
+  });
 
-        if (zoomMoved) {
-          const now = performance.now();
-          const deltaX = event.clientX - zoomLastX;
-          const deltaY = event.clientY - zoomLastY;
-          const deltaTime = Math.max(8, now - zoomLastTime);
-          const velocityScale = Math.min(1.40, 16 / deltaTime) * 0.54;
+  function pad(number) {
+    return String(number).padStart(2, '0');
+  }
 
-          zoomVelocityX = -deltaX * velocityScale;
-          zoomVelocityY = -deltaY * velocityScale;
-
-          zoomTargetScrollLeft =
-            zoomStartScrollLeft - distanceX;
-
-          zoomTargetScrollTop =
-            zoomStartScrollTop - distanceY;
-
-          requestZoomSmoothScroll();
-
-          zoomLastX = event.clientX;
-          zoomLastY = event.clientY;
-          zoomLastTime = now;
-
-          event.preventDefault();
-        }
-      });
-
-      function finishZoomDrag(event, allowClickToggle) {
-        if (!zoomDragging) {
-          return;
-        }
-
-        const shouldZoomOut =
-          allowClickToggle &&
-          !zoomMoved;
-
-        zoomDragging = false;
-        lightboxImage.classList.remove('dragging');
-
-        if (
-          event &&
-          event.pointerId !== undefined &&
-          lightboxImage.hasPointerCapture(event.pointerId)
-        ) {
-          lightboxImage.releasePointerCapture(event.pointerId);
-        }
-
-        if (shouldZoomOut) {
-          stopZoomMomentum();
-          lightboxImage.classList.remove('zoomed');
-          lightbox.classList.remove('zoom-mode', 'zoom-active');
-
-          lightbox.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-          });
-        } else if (zoomMoved) {
-          startZoomMomentum();
-        }
-
-        zoomMoved = false;
-      }
-
-      lightboxImage.addEventListener('pointerup', function (event) {
-        finishZoomDrag(event, true);
-      });
-
-      lightboxImage.addEventListener('pointercancel', function (event) {
-        finishZoomDrag(event, false);
-      });
-
-      lightboxImage.addEventListener(
-        'lostpointercapture',
-        function (event) {
-          finishZoomDrag(event, false);
-        }
+  function updateStageUI() {
+    thumbs.forEach(function (thumb, index) {
+      const isOn = index === activeIndex;
+      thumb.classList.toggle('is-active', isOn);
+      thumb.setAttribute(
+        'aria-current', isOn ? 'true' : 'false'
       );
+    });
 
-      lightbox.addEventListener('click', function (event) {
-        if (event.target === lightbox) {
-          closeLightbox();
-        }
+    dots.forEach(function (dot, index) {
+      dot.classList.toggle('is-active', index === activeIndex);
+    });
+
+    countEl.textContent =
+      pad(activeIndex + 1) + ' / ' + pad(images.length);
+  }
+
+  function revealThumb(index) {
+    const thumb = thumbs[index];
+    if (!thumb) return;
+
+    const left = thumb.offsetLeft -
+      (strip.clientWidth - thumb.offsetWidth) / 2;
+
+    strip.scrollTo({
+      left: Math.max(0, left),
+      behavior: 'smooth'
+    });
+  }
+
+  let ratioSet = false;
+
+  function markStageReady() {
+    if (
+      !ratioSet &&
+      mainImg.naturalWidth > 0 &&
+      mainImg.naturalHeight > 0
+    ) {
+      ratioSet = true;
+
+      stage.style.setProperty(
+        '--ar',
+        (mainImg.naturalWidth / mainImg.naturalHeight).toFixed(4)
+      );
+    }
+
+    stage.classList.add('is-ready');
+    if (skeleton) skeleton.classList.add('hide');
+    sendHeight();
+  }
+
+  function setActive(index, instant) {
+    index = (index + images.length) % images.length;
+
+    const direction = index >= activeIndex ? 1 : -1;
+    const source = images[index].currentSrc || images[index].src;
+    const alt = images[index].alt || '보유 아바타 이미지';
+    const id = ++swapId;
+
+    activeIndex = index;
+    updateStageUI();
+    revealThumb(index);
+
+    if (instant) {
+      mainImg.src = source;
+      bgImg.src = source;
+      mainImg.alt = alt;
+      mainImg.classList.remove('is-out', 'is-in');
+      return;
+    }
+
+    mainImg.style.setProperty('--dir', direction);
+    mainImg.classList.add('is-out');
+
+    const preload = new Image();
+    let done = false;
+
+    function swap() {
+      if (done || id !== swapId) return;
+      done = true;
+
+      mainImg.classList.add('no-tr');
+      mainImg.classList.remove('is-out');
+      mainImg.classList.add('is-in');
+
+      mainImg.src = source;
+      mainImg.alt = alt;
+      bgImg.src = source;
+
+      void mainImg.offsetWidth;
+      mainImg.classList.remove('no-tr');
+
+      requestAnimationFrame(function () {
+        mainImg.classList.remove('is-in');
       });
+    }
 
-      document.addEventListener('keydown', function (event) {
-        if (lightbox.hidden) {
-          return;
-        }
+    preload.onload = function () {
+      setTimeout(swap, 120);
+    };
 
-        if (event.key === 'Escape') {
-          closeLightbox();
-        } else if (event.key === 'ArrowLeft') {
-          moveLightbox(-1);
-        } else if (event.key === 'ArrowRight') {
-          moveLightbox(1);
-        }
-      });
+    preload.onerror = swap;
+    preload.src = source;
 
-      function sendHeight() {
-        const height = Math.ceil(
-          Math.max(
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight
-          )
-        );
+    setTimeout(swap, 900);
+  }
 
-        window.parent.postMessage(
-          {
-            type: 'iroha-avatar-height',
-            height: height
-          },
-          '*'
-        );
+  function syncStageToLightbox() {
+    if (currentImageIndex !== activeIndex) {
+      setActive(currentImageIndex);
+    }
+  }
+
+  mainImg.addEventListener('load', markStageReady);
+  mainImg.addEventListener('error', markStageReady);
+
+  if (mainImg.complete && mainImg.naturalWidth > 0) {
+    markStageReady();
+  }
+
+  prevBtn.addEventListener('click', function () {
+    setActive(activeIndex - 1);
+  });
+
+  nextBtn.addEventListener('click', function () {
+    setActive(activeIndex + 1);
+  });
+
+  /* ===== 메인 이미지 좌우 스와이프 ===== */
+
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+  let swipePressed = false;
+  let swiped = false;
+
+  openBtn.addEventListener('pointerdown', function (event) {
+    if (event.pointerType === 'mouse' && event.button !== 0) {
+      return;
+    }
+
+    swipePressed = true;
+    swiped = false;
+    swipeStartX = event.clientX;
+    swipeStartY = event.clientY;
+  });
+
+  openBtn.addEventListener('pointerup', function (event) {
+    if (!swipePressed) return;
+    swipePressed = false;
+
+    const distanceX = event.clientX - swipeStartX;
+    const distanceY = event.clientY - swipeStartY;
+
+    if (
+      Math.abs(distanceX) > 45 &&
+      Math.abs(distanceX) > Math.abs(distanceY) * 1.2
+    ) {
+      swiped = true;
+      setActive(activeIndex + (distanceX < 0 ? 1 : -1));
+    }
+  });
+
+  openBtn.addEventListener('pointercancel', function () {
+    swipePressed = false;
+  });
+
+  openBtn.addEventListener('click', function () {
+    if (swiped) {
+      swiped = false;
+      return;
+    }
+
+    openLightbox(activeIndex, openBtn);
+  });
+
+  openBtn.addEventListener('keydown', function (event) {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      setActive(activeIndex - 1);
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      setActive(activeIndex + 1);
+    }
+  });
+
+  /* ===== 썸네일 마우스 드래그 ===== */
+
+  let stripDragging = false;
+  let stripMoved = false;
+  let stripStartX = 0;
+  let stripStartLeft = 0;
+
+  strip.addEventListener('pointerdown', function (event) {
+    if (event.pointerType !== 'mouse' || event.button !== 0) {
+      return;
+    }
+
+    stripDragging = true;
+    stripMoved = false;
+    stripStartX = event.clientX;
+    stripStartLeft = strip.scrollLeft;
+  });
+
+  strip.addEventListener('pointermove', function (event) {
+    if (!stripDragging) return;
+
+    const distance = event.clientX - stripStartX;
+
+    if (!stripMoved && Math.abs(distance) > 5) {
+      stripMoved = true;
+      strip.classList.add('dragging');
+
+      if (!strip.hasPointerCapture(event.pointerId)) {
+        strip.setPointerCapture(event.pointerId);
       }
+    }
+
+    if (stripMoved) {
+      strip.scrollLeft = stripStartLeft - distance;
+      event.preventDefault();
+    }
+  });
+
+  function endStripDrag(event) {
+    if (!stripDragging) return;
+
+    stripDragging = false;
+    strip.classList.remove('dragging');
+
+    if (
+      event &&
+      event.pointerId !== undefined &&
+      strip.hasPointerCapture(event.pointerId)
+    ) {
+      strip.releasePointerCapture(event.pointerId);
+    }
+
+    setTimeout(function () {
+      stripMoved = false;
+    }, 60);
+  }
+
+  strip.addEventListener('pointerup', endStripDrag);
+  strip.addEventListener('pointercancel', endStripDrag);
+  strip.addEventListener('lostpointercapture', endStripDrag);
+
+  strip.addEventListener('dragstart', function (event) {
+    event.preventDefault();
+  });
+
+  thumbs.forEach(function (thumb, index) {
+    thumb.addEventListener('click', function () {
+      if (stripMoved) return;
+      setActive(index);
+    });
+  });
+
+  /* ===== 초기화 ===== */
+
+  updateStageUI();
+
+  window.addEventListener('load', function () {
+    sendHeight();
+    setTimeout(sendHeight, 250);
+    setTimeout(sendHeight, 800);
+  });
+
+  window.addEventListener('resize', sendHeight);
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(sendHeight);
+  }
+
+  if ('ResizeObserver' in window) {
+    const observer = new ResizeObserver(sendHeight);
+    observer.observe(document.body);
+  }
+})();
+</script>
 
-
-      function updateFixedOverlayPosition() {
-        const isZoomed =
-          lightbox.classList.contains('zoom-active') ||
-          lightbox.classList.contains('zoom-mode');
-
-        const scrollLeft = isZoomed ? lightbox.scrollLeft : 0;
-        const scrollTop = isZoomed ? lightbox.scrollTop : 0;
-
-        lightbox.style.setProperty('--iroha-scroll-left', scrollLeft + 'px');
-        lightbox.style.setProperty('--iroha-scroll-top', scrollTop + 'px');
-      }
-
-      /* ===== 새 레이아웃: 메인 뷰어 + 점 + 썸네일 ===== */
-      let activeIndex = 0;
-      let swapId = 0;
-      const dots = [];
-
-      images.forEach(function (image, index) {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'av-dot';
-        dot.setAttribute('aria-label', '아바타 ' + (index + 1) + '번 보기');
-        dot.addEventListener('click', function () {
-          setActive(index);
-        });
-        dotsWrap.appendChild(dot);
-        dots.push(dot);
-      });
-
-      function pad(number) {
-        return String(number).padStart(2, '0');
-      }
-
-      function updateStageUI() {
-        thumbs.forEach(function (thumb, index) {
-          const isOn = index === activeIndex;
-          thumb.classList.toggle('is-active', isOn);
-          thumb.setAttribute('aria-current', isOn ? 'true' : 'false');
-        });
-
-        dots.forEach(function (dot, index) {
-          dot.classList.toggle('is-active', index === activeIndex);
-        });
-
-        countEl.textContent =
-          pad(activeIndex + 1) + ' / ' + pad(images.length);
-      }
-
-      function revealThumb(index) {
-        const thumb = thumbs[index];
-
-        if (!thumb) {
-          return;
-        }
-
-        const left =
-          thumb.offsetLeft -
-          (strip.clientWidth - thumb.offsetWidth) / 2;
-
-        strip.scrollTo({
-          left: Math.max(0, left),
-          behavior: 'smooth'
-        });
-      }
-
-      let ratioSet = false;
-
-      function markStageReady() {
-        if (!ratioSet && mainImg.naturalWidth > 0 && mainImg.naturalHeight > 0) {
-          ratioSet = true;
-          stage.style.setProperty(
-            '--ar',
-            (mainImg.naturalWidth / mainImg.naturalHeight).toFixed(4)
-          );
-        }
-
-        stage.classList.add('is-ready');
-
-        if (skeleton) {
-          skeleton.classList.add('hide');
-        }
-
-        sendHeight();
-      }
-
-      function setActive(index, instant) {
-        index = (index + images.length) % images.length;
-
-        const direction = index >= activeIndex ? 1 : -1;
-        const source = images[index].currentSrc || images[index].src;
-        const alt = images[index].alt || '보유 아바타 이미지';
-        const id = ++swapId;
-
-        activeIndex = index;
-        updateStageUI();
-        revealThumb(index);
-
-        if (instant) {
-          mainImg.src = source;
-          bgImg.src = source;
-          mainImg.alt = alt;
-          mainImg.classList.remove('is-out', 'is-in');
-          return;
-        }
-
-        mainImg.style.setProperty('--dir', direction);
-        mainImg.classList.add('is-out');
-
-        const preload = new Image();
-        let done = false;
-
-        function swap() {
-          if (done || id !== swapId) {
-            return;
-          }
-
-          done = true;
-
-          mainImg.classList.add('no-tr');
-          mainImg.classList.remove('is-out');
-          mainImg.classList.add('is-in');
-          mainImg.src = source;
-          mainImg.alt = alt;
-          bgImg.src = source;
-
-          void mainImg.offsetWidth;
-
-          mainImg.classList.remove('no-tr');
-
-          requestAnimationFrame(function () {
-            mainImg.classList.remove('is-in');
-          });
-        }
-
-        preload.onload = function () {
-          setTimeout(swap, 120);
-        };
-
-        preload.onerror = swap;
-        preload.src = source;
-
-        setTimeout(swap, 900);
-      }
-
-      function syncStageToLightbox() {
-        if (currentImageIndex !== activeIndex) {
-          setActive(currentImageIndex);
-        }
-      }
-
-      mainImg.addEventListener('load', markStageReady);
-      mainImg.addEventListener('error', markStageReady);
-
-      if (mainImg.complete && mainImg.naturalWidth > 0) {
-        markStageReady();
-      }
-
-      prevBtn.addEventListener('click', function () {
-        setActive(activeIndex - 1);
-      });
-
-      nextBtn.addEventListener('click', function () {
-        setActive(activeIndex + 1);
-      });
-
-      /* 메인 이미지: 좌우로 밀면 넘기기, 탭/클릭하면 확대 보기 */
-      let swipeStartX = 0;
-      let swipeStartY = 0;
-      let swipePressed = false;
-      let swiped = false;
-
-      openBtn.addEventListener('pointerdown', function (event) {
-        if (event.pointerType === 'mouse' && event.button !== 0) {
-          return;
-        }
-
-        swipePressed = true;
-        swiped = false;
-        swipeStartX = event.clientX;
-        swipeStartY = event.clientY;
-      });
-
-      openBtn.addEventListener('pointerup', function (event) {
-        if (!swipePressed) {
-          return;
-        }
-
-        swipePressed = false;
-
-        const distanceX = event.clientX - swipeStartX;
-        const distanceY = event.clientY - swipeStartY;
-
-        if (
-          Math.abs(distanceX) > 45 &&
-          Math.abs(distanceX) > Math.abs(distanceY) * 1.2
-        ) {
-          swiped = true;
-          setActive(activeIndex + (distanceX < 0 ? 1 : -1));
-        }
-      });
-
-      openBtn.addEventListener('pointercancel', function () {
-        swipePressed = false;
-      });
-
-      openBtn.addEventListener('click', function () {
-        if (swiped) {
-          swiped = false;
-          return;
-        }
-
-        openLightbox(activeIndex, openBtn);
-      });
-
-      openBtn.addEventListener('keydown', function (event) {
-        if (event.key === 'ArrowLeft') {
-          event.preventDefault();
-          setActive(activeIndex - 1);
-        } else if (event.key === 'ArrowRight') {
-          event.preventDefault();
-          setActive(activeIndex + 1);
-        }
-      });
-
-      /* 썸네일 줄: 마우스 드래그로 옆으로 밀기 (터치는 기본 스크롤) */
-      let stripDragging = false;
-      let stripMoved = false;
-      let stripStartX = 0;
-      let stripStartLeft = 0;
-
-      strip.addEventListener('pointerdown', function (event) {
-        if (event.pointerType !== 'mouse' || event.button !== 0) {
-          return;
-        }
-
-        stripDragging = true;
-        stripMoved = false;
-        stripStartX = event.clientX;
-        stripStartLeft = strip.scrollLeft;
-      });
-
-      strip.addEventListener('pointermove', function (event) {
-        if (!stripDragging) {
-          return;
-        }
-
-        const distance = event.clientX - stripStartX;
-
-        if (!stripMoved && Math.abs(distance) > 5) {
-          stripMoved = true;
-          strip.classList.add('dragging');
-
-          if (!strip.hasPointerCapture(event.pointerId)) {
-            strip.setPointerCapture(event.pointerId);
-          }
-        }
-
-        if (stripMoved) {
-          strip.scrollLeft = stripStartLeft - distance;
-          event.preventDefault();
-        }
-      });
-
-      function endStripDrag(event) {
-        if (!stripDragging) {
-          return;
-        }
-
-        stripDragging = false;
-        strip.classList.remove('dragging');
-
-        if (
-          event &&
-          event.pointerId !== undefined &&
-          strip.hasPointerCapture(event.pointerId)
-        ) {
-          strip.releasePointerCapture(event.pointerId);
-        }
-
-        setTimeout(function () {
-          stripMoved = false;
-        }, 60);
-      }
-
-      strip.addEventListener('pointerup', endStripDrag);
-      strip.addEventListener('pointercancel', endStripDrag);
-      strip.addEventListener('lostpointercapture', endStripDrag);
-
-      strip.addEventListener('dragstart', function (event) {
-        event.preventDefault();
-      });
-
-      thumbs.forEach(function (thumb, index) {
-        thumb.addEventListener('click', function () {
-          if (stripMoved) {
-            return;
-          }
-
-          setActive(index);
-        });
-      });
-
-      updateStageUI();
-
-      window.addEventListener('load', function () {
-        sendHeight();
-        setTimeout(sendHeight, 250);
-        setTimeout(sendHeight, 800);
-      });
-
-      window.addEventListener('resize', sendHeight);
-
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(sendHeight);
-      }
-
-      if ('ResizeObserver' in window) {
-        const observer = new ResizeObserver(sendHeight);
-        observer.observe(document.body);
-      }
-    })();
-  </script>
 </body>
 </html>

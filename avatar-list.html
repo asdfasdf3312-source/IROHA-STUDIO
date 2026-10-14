@@ -451,7 +451,8 @@
     }
 
     .lightbox-image.zoomed {
-      width: min(165vw, 2200px);
+      flex: 0 0 auto;
+      width: var(--zoom-w, min(165vw, 2200px));
       max-width: none;
       max-height: none;
       cursor: grab;
@@ -706,7 +707,7 @@
       }
 
       .lightbox-image.zoomed {
-        width: 180vw;
+        width: var(--zoom-w, 180vw);
       }
 
       .lightbox.zoom-mode {
@@ -879,6 +880,9 @@
 
   <script>
     (function () {
+      /* 확대 배율: 숫자를 키우면 더 크게 확대됩니다 (기본 3배) */
+      const ZOOM_SCALE = 3;
+
       const stage = document.getElementById('avStage');
       const mainImg = document.getElementById('avMain');
       const bgImg = document.getElementById('avBg');
@@ -1139,6 +1143,11 @@
         event.stopPropagation();
 
         if (!lightboxImage.classList.contains('zoomed')) {
+          const fittedWidth = lightboxImage.getBoundingClientRect().width;
+          lightboxImage.style.setProperty(
+            '--zoom-w',
+            Math.round(fittedWidth * ZOOM_SCALE) + 'px'
+          );
           lightboxImage.classList.add('zoomed');
           lightbox.classList.add('zoom-mode', 'zoom-active');
 

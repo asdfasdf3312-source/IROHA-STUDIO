@@ -1,745 +1,599 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;}
+@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+</style>
+<title>이로하 필독사항</title>
+<style>
+  /* Layout: vertical timeline of 3 stages (신청 전 → 작업 중 → 완료 후), each stage a card of accordion rows */
+  :root {
+    --mint: #24c6bf;
+    --mint-dark: #159a95;
+    --mint-pale: #effdfc;
+    --mint-line: #cdf3ef;
+    --pink: #f05b7d;
+    --pink-dark: #d83d62;
+    --pink-pale: #fff4f7;
+    --pink-line: #ffc8d4;
+    --text: #2d2d2d;
+    --sub-text: #5c5c5c;
+    --muted: #7a8a89;
+    --page: #ffffff;
+    --font: 'Paperlogy', 'Noto Sans KR', sans-serif;
+    color-scheme: light;
+  }
 
-  <title>이로하 필독사항</title>
+  * { box-sizing: border-box; }
 
-  <style>
-    @font-face {
-      font-family: 'Paperlogy';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
+  body {
+    margin: 0;
+    padding-block: 40px 58px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    background: var(--page);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
 
-    @font-face {
-      font-family: 'Paperlogy';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
+  button { font: inherit; }
 
-    @font-face {
-      font-family: 'Paperlogy';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
+  .notice-card {
+    width: 760px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 34px;
+    border: 1px solid #b9efea;
+    border-radius: 28px;
+    background: linear-gradient(145deg, #ffffff 0%, #f6fffe 55%, #fff7fa 100%);
+    box-shadow: 0 16px 42px rgba(36, 198, 191, 0.18);
+  }
 
-    :root {
-      --mint: #24c6bf;
-      --mint-dark: #159a95;
-      --mint-pale: #effdfc;
-      --mint-line: #cdf3ef;
+  .notice-title {
+    display: flex;
+    align-items: center;
+    margin: 0 0 6px;
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
 
-      --pink: #f05b7d;
-      --pink-dark: #d83d62;
-      --pink-pale: #fff4f7;
-      --pink-line: #ffc8d4;
+  .notice-title::before {
+    content: '';
+    width: 5px;
+    height: 21px;
+    margin-right: 10px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, var(--mint), #ff9db6);
+    flex: 0 0 5px;
+  }
 
-      --text: #2d2d2d;
-      --sub-text: #5c5c5c;
-      --white: #ffffff;
-    }
+  .notice-lead {
+    margin: 0 0 18px 15px;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
 
-    * {
-      box-sizing: border-box;
-    }
+  .notice-guide {
+    margin-bottom: 26px;
+    padding: 14px 17px;
+    border: 1px solid var(--pink-line);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fff5f8 0%, #effdfc 100%);
+    color: var(--pink-dark);
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.7;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
 
-    html,
-    body {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      background: #ffffff;
-    }
+  /* ===== 단계 ===== */
+  .stage-list { display: flex; flex-direction: column; }
 
-    body {
-      padding: 40px 0 58px;
-      color: var(--text);
-      font-family: 'Paperlogy', 'Noto Sans KR', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
+  .stage {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 14px;
+  }
 
-    button {
-      font: inherit;
-    }
+  .stage-rail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
 
-    /* ===== 전체 카드 ===== */
-    .notice-card {
-      width: 760px;
-      max-width: calc(100% - 32px);
-      margin: 0 auto;
-      padding: 34px;
-      border: 1px solid #b9efea;
-      border-radius: 28px;
-      background: linear-gradient(145deg, #ffffff 0%, #f6fffe 55%, #fff7fa 100%);
-      box-shadow: 0 16px 42px rgba(36, 198, 191, 0.18);
-    }
+  .stage-rail::after {
+    content: '';
+    position: absolute;
+    top: 46px;
+    bottom: 6px;
+    width: 2px;
+    border-radius: 2px;
+    background: repeating-linear-gradient(180deg, var(--mint-line) 0 6px, transparent 6px 11px);
+  }
 
-    .notice-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
+  .stage:last-child .stage-rail::after { display: none; }
 
-    .notice-title {
-      display: flex;
-      align-items: center;
-      min-height: 28px;
-      margin: 0;
-      color: var(--text);
-      font-size: 23px;
-      font-weight: 700;
-      line-height: 1.3;
-    }
+  .stage-num {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--mint), #5fe0d9);
+    box-shadow: 0 6px 14px rgba(36, 198, 191, 0.3);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+  }
 
-    .notice-title::before {
-      content: '';
-      width: 5px;
-      height: 21px;
-      margin-right: 10px;
-      border-radius: 3px;
-      background: linear-gradient(180deg, var(--mint), #ff9db6);
-      flex: 0 0 5px;
-    }
+  .stage:first-child .stage-num {
+    background: linear-gradient(135deg, var(--pink), #ff93ab);
+    box-shadow: 0 6px 14px rgba(240, 91, 125, 0.3);
+  }
 
-    .notice-badge {
-      flex: 0 0 auto;
-      padding: 6px 13px;
-      border: 1px solid var(--mint-line);
-      border-radius: 999px;
-      background: #ffffff;
-      color: var(--mint-dark);
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
+  .stage-body { min-width: 0; padding-bottom: 24px; }
+  .stage:last-child .stage-body { padding-bottom: 0; }
 
-    .notice-guide {
-      margin-bottom: 16px;
-      padding: 14px 17px;
-      border: 1px solid var(--mint-line);
-      border-radius: 14px;
-      background: linear-gradient(135deg, #e9fcfa 0%, #fff1f5 100%);
-      color: var(--mint-dark);
-      font-size: 13.5px;
-      font-weight: 500;
-      line-height: 1.7;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
+  .stage-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin: 6px 0 12px;
+  }
 
-    /* ===== 카드 그리드 ===== */
-    .notice-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
+  .stage-name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
 
-    .notice-item {
-      overflow: hidden;
-      border: 1px solid var(--mint-line);
-      border-radius: 18px;
-      background: var(--white);
-      box-shadow: 0 4px 14px rgba(36, 198, 191, 0.07);
-      transition:
-        border-color 0.35s ease,
-        box-shadow 0.35s ease,
-        transform 0.35s ease;
-    }
+  .stage-sub {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+  }
 
-    .notice-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 22px rgba(36, 198, 191, 0.14);
-    }
+  .stage-card {
+    overflow: hidden;
+    border: 1px solid var(--mint-line);
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(36, 198, 191, 0.08);
+  }
 
-    .notice-item.open {
-      border-color: var(--mint);
-      box-shadow: 0 10px 24px rgba(36, 198, 191, 0.16);
-    }
+  .stage:first-child .stage-card {
+    border-color: var(--pink-line);
+    box-shadow: 0 6px 18px rgba(240, 91, 125, 0.08);
+  }
 
-    .notice-item.wide,
-    .notice-item.danger,
-    .notice-item.open {
-      grid-column: 1 / -1;
-    }
+  /* ===== 항목 ===== */
+  .row { border-top: 1px solid #e9f7f5; }
+  .row:first-child { border-top: 0; }
+  .stage:first-child .row { border-top-color: #ffe6ec; }
+  .stage:first-child .row:first-child { border-top: 0; }
 
-    .notice-item.danger {
-      border-color: var(--pink-line);
-      background: var(--pink-pale);
-      box-shadow: 0 4px 14px rgba(240, 91, 125, 0.07);
-    }
+  .row.open { background: #fbfffe; }
+  .stage:first-child .row.open { background: #fffafb; }
 
-    .notice-item.danger:hover,
-    .notice-item.danger.open {
-      border-color: var(--pink);
-      box-shadow: 0 10px 22px rgba(240, 91, 125, 0.14);
-    }
+  .row-button {
+    width: 100%;
+    padding: 14px 16px;
+    border: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+  }
 
-    .notice-button {
-      width: 100%;
-      padding: 16px 17px;
-      border: 0;
-      outline: none;
-      background: transparent;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 12px;
-      color: var(--text);
-      text-align: left;
-      cursor: pointer;
-    }
+  .row-button:hover { background: rgba(239, 253, 252, 0.7); }
+  .stage:first-child .row-button:hover { background: rgba(255, 244, 247, 0.8); }
 
-    .notice-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
+  .row-button:focus-visible {
+    outline: 2px solid var(--mint-dark);
+    outline-offset: -3px;
+  }
 
-    .notice-icon {
-      width: 38px;
-      height: 38px;
-      flex: 0 0 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 13px;
-      background: var(--mint-pale);
-      font-size: 18px;
-      line-height: 1;
-    }
+  .row-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    border-radius: 12px;
+    background: var(--mint-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    line-height: 1;
+  }
 
-    .danger .notice-icon {
-      background: #ffeaf0;
-    }
+  .stage:first-child .row-icon { background: #ffeaf0; }
 
-    .notice-chevron {
-      width: 24px;
-      height: 24px;
-      flex: 0 0 24px;
-      border-radius: 8px;
-      background: var(--mint-pale);
-      color: var(--mint);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1;
-      transition:
-        transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-        background-color 0.35s ease,
-        color 0.35s ease;
-    }
+  .row-text { min-width: 0; flex: 1; }
 
-    .danger .notice-chevron {
-      background: #ffeaf0;
-      color: var(--pink);
-    }
+  .row-label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    font-size: 15.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    word-break: keep-all;
+  }
 
-    .notice-item.open .notice-chevron {
-      transform: rotate(180deg);
-      background: var(--mint);
-      color: #ffffff;
-    }
+  .row-tag {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--pink);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
 
-    .notice-item.danger.open .notice-chevron {
-      background: var(--pink);
-      color: #ffffff;
-    }
+  .row-summary {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
 
-    .notice-label {
-      color: var(--text);
-      font-size: 15.5px;
-      font-weight: 700;
-      line-height: 1.4;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
+  .row-chevron {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border-radius: 8px;
+    background: var(--mint-pale);
+    color: var(--mint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, color 0.3s ease;
+  }
 
-    .danger .notice-label {
-      color: var(--pink-dark);
-    }
+  .stage:first-child .row-chevron { background: #ffeaf0; color: var(--pink); }
 
-    .notice-summary {
-      margin-top: 4px;
-      color: #7a8a89;
-      font-size: 13px;
-      font-weight: 500;
-      line-height: 1.5;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
+  .row.open .row-chevron {
+    transform: rotate(180deg);
+    background: var(--mint);
+    color: #fff;
+  }
 
-    .danger .notice-summary {
-      color: #c9708a;
-    }
+  .stage:first-child .row.open .row-chevron { background: var(--pink); }
 
-    /* ===== 펼침 내용 ===== */
-    .notice-answer {
-      display: grid;
-      grid-template-rows: 0fr;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-6px);
-      transition:
-        grid-template-rows 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.45s ease,
-        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-        visibility 0s linear 0.85s;
-    }
+  .row-answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    transition: grid-template-rows 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0s linear 0.8s;
+  }
 
-    .notice-item.open .notice-answer {
-      grid-template-rows: 1fr;
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-      transition:
-        grid-template-rows 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.5s ease 0.06s,
-        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-        visibility 0s linear 0s;
-    }
+  .row.open .row-answer {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transition: grid-template-rows 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease 0.05s, visibility 0s linear 0s;
+  }
 
-    .notice-answer-clip {
-      min-height: 0;
-      overflow: hidden;
-    }
+  .row-clip { min-height: 0; overflow: hidden; }
 
-    .notice-answer-content {
-      margin: 0 17px;
-      padding: 0;
-      border-top: 1px dashed transparent;
-      color: var(--sub-text);
-      font-size: 14.5px;
-      font-weight: 400;
-      line-height: 1.82;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-      opacity: 0;
-      transform: translateY(-8px);
-      transition:
-        padding 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-        border-color 0.35s ease,
-        opacity 0.45s ease,
-        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+  .row-content {
+    margin: 0 16px 0 65px;
+    padding: 0 0 16px;
+    color: var(--sub-text);
+    font-size: 14.5px;
+    line-height: 1.82;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
 
-    .notice-item.open .notice-answer-content {
-      padding: 14px 0 18px;
-      border-top-color: var(--mint-line);
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .row-note {
+    display: block;
+    margin-top: 8px;
+    color: var(--mint-dark);
+    font-weight: 500;
+  }
 
-    .notice-item.danger.open .notice-answer-content {
-      border-top-color: var(--pink-line);
-    }
+  .stage:first-child .row-note { color: var(--pink-dark); }
 
-    .notice-answer-content strong {
-      color: var(--mint-dark);
-      font-weight: 700;
-    }
+  @media (max-width: 560px) {
+    body { padding-block: 28px 42px; }
+    .notice-card { padding: 24px 14px; border-radius: 21px; }
+    .notice-title { font-size: 21px; }
+    .notice-lead { margin-left: 0; }
+    .notice-guide { padding: 13px 14px; font-size: 13px; }
+    .stage { grid-template-columns: 32px minmax(0, 1fr); gap: 10px; }
+    .stage-num { width: 32px; height: 32px; font-size: 13.5px; }
+    .stage-rail::after { top: 40px; }
+    .stage-name { font-size: 17px; }
+    .row-button { padding: 13px 12px; gap: 10px; }
+    .row-icon { width: 32px; height: 32px; flex-basis: 32px; font-size: 15px; }
+    .row-content { margin: 0 12px 0 12px; font-size: 14px; }
+  }
 
-    .notice-item.danger .notice-answer-content strong {
-      color: var(--pink-dark);
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .row-chevron, .row-answer { transition-duration: 0.01ms !important; transition-delay: 0ms !important; }
+  }
+</style>
 
-    .notice-note {
-      display: block;
-      margin-top: 8px;
-      color: var(--mint-dark);
-      font-weight: 500;
-    }
+<section class="notice-card" aria-label="커미션 필독사항">
+  <h1 class="notice-title">필독사항</h1>
+  <p class="notice-lead">신청부터 완료까지, 순서대로 확인해주세요.</p>
 
-    .notice-item.danger .notice-note {
-      color: var(--pink-dark);
-    }
+  <div class="notice-guide">
+    ※ 약관을 숙지하지 않아 발생한 문제와 저작권·사용 권한·라이선스 관련 책임은 의뢰자에게 있습니다.
+  </div>
 
-    /* ===== 모바일 ===== */
-    @media (max-width: 560px) {
-      body {
-        padding: 28px 0 42px;
-      }
+  <div class="stage-list">
 
-      .notice-card {
-        width: calc(100% - 28px);
-        padding: 24px 15px;
-        border-radius: 21px;
-      }
-
-      .notice-title {
-        font-size: 21px;
-      }
-
-      .notice-badge {
-        display: none;
-      }
-
-      .notice-guide {
-        padding: 13px 14px;
-        font-size: 13px;
-      }
-
-      .notice-list {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .notice-item.wide,
-      .notice-item.danger,
-      .notice-item.open {
-        grid-column: auto;
-      }
-
-      .notice-button {
-        padding: 14px 15px;
-      }
-
-      .notice-answer-content {
-        margin: 0 15px;
-        font-size: 14px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .notice-item,
-      .notice-chevron,
-      .notice-answer,
-      .notice-answer-content {
-        transition-duration: 0.01ms !important;
-        transition-delay: 0ms !important;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <section class="notice-card" aria-label="커미션 필독사항">
-    <div class="notice-head">
-      <h1 class="notice-title">필독사항</h1>
-      <span class="notice-badge">CHECK POINT</span>
-    </div>
-
-    <div class="notice-guide">
-      ※ 약관을 숙지하지 않아 발생한 문제와 저작권·사용 권한·라이선스 관련 책임은 의뢰자에게 있습니다.
-    </div>
-
-    <div class="notice-list">
-
-      <article class="notice-item">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">📅</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">작업 소요 기간</span>
-            <span class="notice-summary" style="display:block;">일반 1~2주 · 2D 원화 성형 2~4주</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
-              일반 작업은 약 1주~2주, 2D 원화 기반 성형 작업은 약 2주~최대 4주 정도 소요됩니다.<br>
-              작업 범위에 따라 기간이 변동될 수 있습니다.
-            </div>
-          </div>
+    <!-- 1단계 -->
+    <section class="stage">
+      <div class="stage-rail"><span class="stage-num">1</span></div>
+      <div class="stage-body">
+        <div class="stage-head">
+          <h2 class="stage-name">신청 전에 꼭 확인</h2>
+          <span class="stage-sub">신청 전에 읽어주세요</span>
         </div>
-      </article>
+        <div class="stage-card">
 
-      <article class="notice-item">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">💾</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">파일 보관 및 전달 방식</span>
-            <span class="notice-summary" style="display:block;">완료 파일 최대 1개월 보관</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
-              작업 완료 파일은 전달일로부터 최대 1개월간 보관됩니다.<br>
-              유니티 패키지가 필요한 경우 신청 단계에서 해당 옵션을 추가해주세요.<br>
-              보관 기간이 지난 파일은 삭제되며, 이후 재작업이 필요한 경우 신규 신청으로 진행됩니다.
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="notice-item">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">📦</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">파츠 구매 원칙｜양측 구매</span>
-            <span class="notice-summary" style="display:block;">작업자·신청자 양측 구매 필수</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
-              커미션에 이용되는 파츠(아바타·의상·헤어·액세서리 등)는 라이선스 준수를 위해 작업자와 신청자의 양측 구매가 필수입니다.<br>
-              작업자가 보유하지 않은 BOOTH 상품으로 결정하실 경우, BOOTH Gift(선물하기)를 이용해 전달 부탁드립니다.
-              <span class="notice-note">※ 파츠 구매 비용은 작업 비용에 포함되지 않습니다.</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="notice-item">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">🕹️</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">VRChat 아바타 업로드 조건</span>
-            <span class="notice-summary" style="display:block;">계정 신뢰 등급 New User 이상</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
-              VRChat에는 계정 신뢰 등급이 있으며, 계정만 생성한다고 바로 아바타를 업로드할 수 있는 것은 아닙니다.<br>
-              아바타를 업로드하려면 VRChat 계정의 신뢰 등급이 New User 이상이어야 합니다.<br>
-              Steam 또는 Meta 계정으로 이용 중인 경우, 가능하면 업로드 전 VRChat 계정과 연동해주세요.<br>
-              신뢰 등급은 접속 시간, 방문한 월드 수, 친구 수 등 계정 이용 내역에 따라 순차적으로 상승합니다.
-              <span class="notice-note">
-                ※ VRC+ 가입 시 Visitor 등급에서 New User로 승급되어 아바타 업로드가 가능합니다.<br>
-                ※ 신청 전 본인의 계정 등급과 업로드 가능 여부를 반드시 확인해주세요.
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">🚨</span>
+              <span class="row-text">
+                <span class="row-label">상업적 이용 권한 안내 <span class="row-tag">꼭 확인</span></span>
+                <span class="row-summary">방송·수익 활동 허가는 의뢰자가 직접 확인</span>
               </span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="notice-item">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">🔎</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">유니티 패키지 이용 원칙</span>
-            <span class="notice-summary" style="display:block;">본인 수정용만 · 제3자 전달 금지</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
-              유니티 패키지는 의상 교체 등 의뢰자 본인이 직접 수정 작업을 진행할 경우에만 추가해주세요.<br>
-              제공된 파일을 다른 작업자에게 전달해 수정·재가공을 맡기거나, 제3자와 공유·양도하는 행위는 금지됩니다.<br>
-              다만 본 작업자가 진행하지 않는 작업에 한해서는 사전 협의 후 외부 작업을 허용할 수 있습니다.
-              <span class="notice-note">※ 사전 허가 없는 제3자 전달 및 파일 공유는 이용 약관 위반으로 간주합니다.</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="notice-item">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">📸</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">포트폴리오 공개 안내</span>
-            <span class="notice-summary" style="display:block;">완성작은 홍보에 활용될 수 있어요</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
-              완성된 작업물은 포트폴리오 및 홍보 자료로 활용될 수 있습니다.<br>
-              비공개를 원하시는 경우 신청 단계에서 포트폴리오 비공개 옵션을 추가해주세요.
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="notice-item">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">🎨</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">수정 반영 기준</span>
-            <span class="notice-summary" style="display:block;">기본 2회 · 작업자 실수는 무상</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
-              작업자의 실수 또는 누락으로 발생한 문제는 수정 횟수에 포함되지 않으며, 확인 후 무상으로 수정해드립니다.<br>
-              의뢰자의 요청에 따른 수정은 기본 2회까지 가능하며, 이후 추가 수정에는 별도 비용이 발생할 수 있습니다.
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="notice-item danger">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">🚨</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">상업적 이용 권한 안내</span>
-            <span class="notice-summary" style="display:block;">방송·수익 활동 허가는 의뢰자가 직접 확인</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
               BOOTH에서 판매되는 아바타·의상·헤어·액세서리 등은 상품별 이용 약관과 상업적 사용 조건이 다를 수 있습니다.<br>
               별도의 상업적 이용 허가가 필요한 경우, 해당 권한은 의뢰자가 직접 확인하고 취득해야 합니다.
-              <span class="notice-note">
-                ※ 필요한 허가 없이 방송·수익 활동에 사용해 발생한 저작권 및 라이선스 관련 문제에 대해서는 작업자가 책임지지 않습니다.
+              <span class="row-note">※ 필요한 허가 없이 방송·수익 활동에 사용해 발생한 저작권 및 라이선스 관련 문제에 대해서는 작업자가 책임지지 않습니다.</span>
+            </div></div></div>
+          </article>
+
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">⚠️</span>
+              <span class="row-text">
+                <span class="row-label">참고 자료 및 저작권 안내 <span class="row-tag">꼭 확인</span></span>
+                <span class="row-summary">제출 자료의 저작권 책임은 의뢰자에게 있어요</span>
               </span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="notice-item danger">
-        <button class="notice-button" type="button" aria-expanded="false">
-          <span class="notice-top">
-            <span class="notice-icon" aria-hidden="true">⚠️</span>
-            <span class="notice-chevron" aria-hidden="true">▼</span>
-          </span>
-          <span>
-            <span class="notice-label">참고 자료 및 저작권 안내</span>
-            <span class="notice-summary" style="display:block;">제출 자료의 저작권 책임은 의뢰자에게 있어요</span>
-          </span>
-        </button>
-
-        <div class="notice-answer">
-          <div class="notice-answer-clip">
-            <div class="notice-answer-content">
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
               Pinterest, X, SNS, 방송 플랫폼 등 온라인에서 수집한 자료나 출처·이용 권한이 불분명한 자료를 제출하는 경우, 해당 자료의 저작권·초상권·디자인 권리 확인에 대한 책임은 의뢰자에게 있습니다.<br>
               제출 자료로 인해 저작권 침해, 무단 도용, 디자인 분쟁 등의 문제가 발생할 경우 신청자가 책임을 부담하며, 작업자는 관련 분쟁에 책임을 지지 않습니다.<br>
               타인의 캐릭터, 타 스트리머의 아바타, 다른 작업자의 제작물을 그대로 복제하거나 유사하게 제작하는 요청은 받지 않습니다.<br>
               작업 진행 중 권리 침해 가능성이 확인될 경우 별도의 안내 없이 자료 변경을 요청하거나 작업을 거절·중단할 수 있습니다.
-              <span class="notice-note">
-                ※ 의뢰자는 제출한 모든 자료를 작업 참고 및 제작에 사용할 수 있는 정당한 권한이 있음을 확인한 것으로 간주합니다.
+              <span class="row-note">※ 의뢰자는 제출한 모든 자료를 작업 참고 및 제작에 사용할 수 있는 정당한 권한이 있음을 확인한 것으로 간주합니다.</span>
+            </div></div></div>
+          </article>
+
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">📦</span>
+              <span class="row-text">
+                <span class="row-label">파츠 구매 원칙｜양측 구매</span>
+                <span class="row-summary">작업자·신청자 양측 구매 필수</span>
               </span>
-            </div>
-          </div>
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
+              커미션에 이용되는 파츠(아바타·의상·헤어·액세서리 등)는 라이선스 준수를 위해 작업자와 신청자의 양측 구매가 필수입니다.<br>
+              작업자가 보유하지 않은 BOOTH 상품으로 결정하실 경우, BOOTH Gift(선물하기)를 이용해 전달 부탁드립니다.
+              <span class="row-note">※ 파츠 구매 비용은 작업 비용에 포함되지 않습니다.</span>
+            </div></div></div>
+          </article>
+
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">🕹️</span>
+              <span class="row-text">
+                <span class="row-label">VRChat 아바타 업로드 조건</span>
+                <span class="row-summary">계정 신뢰 등급 New User 이상</span>
+              </span>
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
+              VRChat에는 계정 신뢰 등급이 있으며, 계정만 생성한다고 바로 아바타를 업로드할 수 있는 것은 아닙니다.<br>
+              아바타를 업로드하려면 VRChat 계정의 신뢰 등급이 New User 이상이어야 합니다.<br>
+              Steam 또는 Meta 계정으로 이용 중인 경우, 가능하면 업로드 전 VRChat 계정과 연동해주세요.<br>
+              신뢰 등급은 접속 시간, 방문한 월드 수, 친구 수 등 계정 이용 내역에 따라 순차적으로 상승합니다.
+              <span class="row-note">
+                ※ VRC+ 가입 시 Visitor 등급에서 New User로 승급되어 아바타 업로드가 가능합니다.<br>
+                ※ 신청 전 본인의 계정 등급과 업로드 가능 여부를 반드시 확인해주세요.
+              </span>
+            </div></div></div>
+          </article>
+
         </div>
-      </article>
+      </div>
+    </section>
 
-    </div>
-  </section>
+    <!-- 2단계 -->
+    <section class="stage">
+      <div class="stage-rail"><span class="stage-num">2</span></div>
+      <div class="stage-body">
+        <div class="stage-head">
+          <h2 class="stage-name">작업 진행 중</h2>
+          <span class="stage-sub">기간과 수정 기준</span>
+        </div>
+        <div class="stage-card">
 
-  <script>
-    (function () {
-      var items = document.querySelectorAll('.notice-item');
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">📅</span>
+              <span class="row-text">
+                <span class="row-label">작업 소요 기간</span>
+                <span class="row-summary">일반 1~2주 · 2D 원화 성형 2~4주</span>
+              </span>
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
+              일반 작업은 약 1주~2주, 2D 원화 기반 성형 작업은 약 2주~최대 4주 정도 소요됩니다.<br>
+              작업 범위에 따라 기간이 변동될 수 있습니다.
+            </div></div></div>
+          </article>
 
-      /* 홀수 개일 때 마지막 일반 카드를 가로 전체로 확장 */
-      var normalItems = document.querySelectorAll('.notice-item:not(.danger)');
-      if (normalItems.length % 2 === 1) {
-        normalItems[normalItems.length - 1].classList.add('wide');
-      }
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">🎨</span>
+              <span class="row-text">
+                <span class="row-label">수정 반영 기준</span>
+                <span class="row-summary">기본 2회 · 작업자 실수는 무상</span>
+              </span>
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
+              작업자의 실수 또는 누락으로 발생한 문제는 수정 횟수에 포함되지 않으며, 확인 후 무상으로 수정해드립니다.<br>
+              의뢰자의 요청에 따른 수정은 기본 2회까지 가능하며, 이후 추가 수정에는 별도 비용이 발생할 수 있습니다.
+            </div></div></div>
+          </article>
 
-      function sendHeight() {
-        var height = Math.ceil(
-          document.documentElement.getBoundingClientRect().height
-        );
+        </div>
+      </div>
+    </section>
 
-        window.parent.postMessage(
-          {
-            type: 'iroha-notice-height',
-            height: height
-          },
-          '*'
-        );
-      }
+    <!-- 3단계 -->
+    <section class="stage">
+      <div class="stage-rail"><span class="stage-num">3</span></div>
+      <div class="stage-body">
+        <div class="stage-head">
+          <h2 class="stage-name">완료 후</h2>
+          <span class="stage-sub">파일과 공개 안내</span>
+        </div>
+        <div class="stage-card">
 
-      function sendHeightDuringAnimation() {
-        var startTime = performance.now();
-        var duration = 1000;
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">💾</span>
+              <span class="row-text">
+                <span class="row-label">파일 보관 및 전달 방식</span>
+                <span class="row-summary">완료 파일 최대 1개월 보관</span>
+              </span>
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
+              작업 완료 파일은 전달일로부터 최대 1개월간 보관됩니다.<br>
+              유니티 패키지가 필요한 경우 신청 단계에서 해당 옵션을 추가해주세요.<br>
+              보관 기간이 지난 파일은 삭제되며, 이후 재작업이 필요한 경우 신규 신청으로 진행됩니다.
+            </div></div></div>
+          </article>
 
-        function update(currentTime) {
-          sendHeight();
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">🔎</span>
+              <span class="row-text">
+                <span class="row-label">유니티 패키지 이용 원칙</span>
+                <span class="row-summary">본인 수정용만 · 제3자 전달 금지</span>
+              </span>
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
+              유니티 패키지는 의상 교체 등 의뢰자 본인이 직접 수정 작업을 진행할 경우에만 추가해주세요.<br>
+              제공된 파일을 다른 작업자에게 전달해 수정·재가공을 맡기거나, 제3자와 공유·양도하는 행위는 금지됩니다.<br>
+              다만 본 작업자가 진행하지 않는 작업에 한해서는 사전 협의 후 외부 작업을 허용할 수 있습니다.
+              <span class="row-note">※ 사전 허가 없는 제3자 전달 및 파일 공유는 이용 약관 위반으로 간주합니다.</span>
+            </div></div></div>
+          </article>
 
-          if (currentTime - startTime < duration) {
-            requestAnimationFrame(update);
+          <article class="row">
+            <button class="row-button" type="button" aria-expanded="false">
+              <span class="row-icon" aria-hidden="true">📸</span>
+              <span class="row-text">
+                <span class="row-label">포트폴리오 공개 안내</span>
+                <span class="row-summary">완성작은 홍보에 활용될 수 있어요</span>
+              </span>
+              <span class="row-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="row-answer"><div class="row-clip"><div class="row-content">
+              완성된 작업물은 포트폴리오 및 홍보 자료로 활용될 수 있습니다.<br>
+              비공개를 원하시는 경우 신청 단계에서 포트폴리오 비공개 옵션을 추가해주세요.
+            </div></div></div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    var rows = document.querySelectorAll('.row');
+
+    rows.forEach(function (row) {
+      var button = row.querySelector('.row-button');
+
+      button.addEventListener('click', function () {
+        var willOpen = !row.classList.contains('open');
+
+        rows.forEach(function (other) {
+          if (other !== row) {
+            other.classList.remove('open');
+            var otherButton = other.querySelector('.row-button');
+            if (otherButton) otherButton.setAttribute('aria-expanded', 'false');
           }
-        }
-
-        requestAnimationFrame(update);
-      }
-
-      items.forEach(function (item) {
-        var button = item.querySelector('.notice-button');
-
-        button.addEventListener('click', function () {
-          var willOpen = !item.classList.contains('open');
-
-          items.forEach(function (otherItem) {
-            if (otherItem !== item) {
-              otherItem.classList.remove('open');
-
-              var otherButton = otherItem.querySelector('.notice-button');
-              if (otherButton) {
-                otherButton.setAttribute('aria-expanded', 'false');
-              }
-            }
-          });
-
-          item.classList.toggle('open', willOpen);
-          button.setAttribute(
-            'aria-expanded',
-            willOpen ? 'true' : 'false'
-          );
-
-          sendHeightDuringAnimation();
         });
+
+        row.classList.toggle('open', willOpen);
+        button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
       });
-
-      window.addEventListener('load', function () {
-        sendHeight();
-        setTimeout(sendHeight, 150);
-        setTimeout(sendHeight, 600);
-      });
-
-      window.addEventListener('resize', sendHeight);
-
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(sendHeight);
-      }
-
-      if ('ResizeObserver' in window) {
-        var observer = new ResizeObserver(sendHeight);
-        observer.observe(document.body);
-      }
-    })();
-  </script>
+    });
+  })();
+</script>
+<script>
+(function () {
+  function sendHeight() {
+    var height = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    window.parent.postMessage({ type: 'iroha-notice-height', height: height }, '*');
+  }
+  function sendHeightDuringAnimation() {
+    var start = performance.now();
+    function update(now) {
+      sendHeight();
+      if (now - start < 1000) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+  document.querySelectorAll('.row-button').forEach(function (b) {
+    b.addEventListener('click', sendHeightDuringAnimation);
+  });
+  window.addEventListener('load', function () {
+    sendHeight();
+    setTimeout(sendHeight, 150);
+    setTimeout(sendHeight, 600);
+  });
+  window.addEventListener('resize', sendHeight);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sendHeight);
+  if ('ResizeObserver' in window) new ResizeObserver(sendHeight).observe(document.body);
+})();
+</script>
 </body>
 </html>

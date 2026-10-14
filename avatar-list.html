@@ -36,6 +36,24 @@
 
 * { box-sizing: border-box; }
 
+/* ===== 복사·드래그·길게 누르기 방지 ===== */
+html, body, * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+::selection { background: transparent; }
+::-moz-selection { background: transparent; }
+
 html, body {
   width: 100%;
   margin: 0;
@@ -94,11 +112,23 @@ button { font-family: inherit; }
 
 /* ===== 메인 이미지 ===== */
 
+/* 이전/다음 버튼이 사진 바깥 좌우에 오도록 감싸는 영역 */
+.av-stage-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+}
+
 .av-stage {
   position: relative;
-  width: min(100%, calc(var(--ar, 1) * 680px));
+  flex: 0 1 auto;
+  min-width: 0;
+  width: calc(var(--ar, 1) * 680px);
+  max-width: 100%;
   aspect-ratio: var(--ar, 1);
-  margin: 0 auto;
+  margin: 0;
   overflow: hidden;
   border: 2px solid var(--border);
   border-radius: 24px;
@@ -170,27 +200,25 @@ button { font-family: inherit; }
 }
 
 .av-nav {
-  position: absolute;
-  top: 50%;
+  position: relative;
+  flex: 0 0 auto;
   z-index: 4;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 46px;
   height: 46px;
-  margin-top: -23px;
-  border: 0;
+  padding: 0;
+  border: 1.5px solid var(--border);
   border-radius: 50%;
   color: var(--pink-deep);
-  background: rgba(255,255,255,.92);
-  box-shadow: 0 8px 20px rgba(100,140,140,.25);
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 6px 16px rgba(100,140,140,.18);
   font-size: 26px;
+  line-height: 1;
   cursor: pointer;
   transition: transform .2s, background .2s, color .2s;
 }
-
-.av-prev { left: 16px; }
-.av-next { right: 16px; }
 
 .av-count {
   position: absolute;
@@ -573,15 +601,13 @@ body.lightbox-open { overflow: hidden; }
   .sec-subtitle { font-size: 12px; }
   .av-stage { border-radius: 18px; }
 
-  .av-nav {
-    width: 38px;
-    height: 38px;
-    margin-top: -19px;
-    font-size: 22px;
-  }
+  .av-stage-wrap { gap: 6px; }
 
-  .av-prev { left: 10px; }
-  .av-next { right: 10px; }
+  .av-nav {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+  }
 
   .av-count {
     right: 10px;
@@ -676,7 +702,12 @@ body.lightbox-open { overflow: hidden; }
     </span>
   </div>
 
-  <!-- 첫 이미지: avatar-00.png -->
+  <!-- 첫 이미지: avatar-00.png (이전/다음 버튼은 사진 바깥) -->
+  <div class="av-stage-wrap">
+
+    <button class="av-nav av-prev" id="avPrev"
+            type="button" aria-label="이전 아바타">‹</button>
+
   <div class="av-stage" id="avStage">
     <div class="card-skeleton"></div>
 
@@ -691,14 +722,13 @@ body.lightbox-open { overflow: hidden; }
     <button class="av-open" id="avOpen"
             type="button" aria-label="이미지 크게 보기"></button>
 
-    <button class="av-nav av-prev" id="avPrev"
-            type="button" aria-label="이전 아바타">‹</button>
+    <div class="av-count" id="avCount"
+         aria-live="polite">01 / 11</div>
+  </div>
 
     <button class="av-nav av-next" id="avNext"
             type="button" aria-label="다음 아바타">›</button>
 
-    <div class="av-count" id="avCount"
-         aria-live="polite">01 / 11</div>
   </div>
 
   <div class="av-dots" id="avDots"
@@ -786,6 +816,28 @@ body.lightbox-open { overflow: hidden; }
 
   <div class="lightbox-count" aria-live="polite"></div>
 </div>
+
+<script>
+/* ===== 우클릭 · 드래그 · 복사 방지 ===== */
+(function () {
+  var block = function (e) { e.preventDefault(); return false; };
+
+  ['contextmenu', 'selectstart', 'dragstart', 'copy', 'cut'].forEach(function (type) {
+    document.addEventListener(type, block);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    var key = (e.key || '').toLowerCase();
+    var ctrl = e.ctrlKey || e.metaKey;
+
+    // F12, 개발자도구 단축키
+    if (e.keyCode === 123) return block(e);
+    if (ctrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) return block(e);
+    // 소스보기 / 저장 / 전체선택 / 복사 / 잘라내기 / 인쇄
+    if (ctrl && (key === 'u' || key === 's' || key === 'a' || key === 'c' || key === 'x' || key === 'p')) return block(e);
+  });
+})();
+</script>
 
 <script>
 (function () {

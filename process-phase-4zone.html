@@ -3,1064 +3,338 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IROHA 제작 과정 인터랙티브 미리보기</title>
+<title>IROHA 제작 과정 한눈에 보기</title>
 
 <style>
 @font-face{
   font-family:'Paperlogy';
   src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-  font-weight:400;
-  font-style:normal;
-  font-display:swap;
+  font-weight:400;font-style:normal;font-display:swap;
 }
 @font-face{
   font-family:'Paperlogy';
   src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-  font-weight:700;
-  font-style:normal;
-  font-display:swap;
+  font-weight:700;font-style:normal;font-display:swap;
 }
 
 :root{
-  --ink:#43363b;
-  --sub:#9a878e;
-  --pink:#f4c4d2;
-  --pink-deep:#e685a5;
-  --mint:#cbeeea;
-  --mint-deep:#42b2ab;
-  --lav:#e9e4ff;
-  --lav-deep:#8876d3;
-  --cream:#fff0cf;
-  --cream-deep:#c7902f;
-  --line:#f0d9e1;
+  --ink:#34494b;
+  --mint:#2f9f97;
+  --mint-soft:#e4f6f4;
+  --mint-mid:#b9e6e1;
+  --line:#cbeeea;
 }
-
 *{box-sizing:border-box;}
-
-html,body{
-  margin:0;
-  padding:0;
-  background:transparent;
-  font-family:'Paperlogy',sans-serif;
-  color:var(--ink);
-}
-
+html,body{margin:0;padding:0;background:transparent;font-family:'Paperlogy',sans-serif;color:var(--ink);}
 body{padding:18px;}
 
 .process-shell{
-  width:100%;
-  max-width:1080px;
-  margin:0 auto;
+  width:100%;max-width:1080px;margin:0 auto;
   overflow:hidden;
-  border-radius:30px;
-  border:1px solid rgba(244,196,210,.55);
-  background:#fff;
-  box-shadow:0 18px 42px rgba(203,135,159,.10);
-}
-.process-shell{
+  border-radius:34px;
+  background:linear-gradient(135deg,#d3f2ec 0%,#edf9f7 28%,#fffdfd 52%,#fff1f6 76%,#fce3ed 100%);
+  border:1px solid #cdeeea;
+  box-shadow:0 18px 42px rgba(120,190,190,.18);
   scroll-margin-top:22vh;
 }
 
-
+/* 핑크 상단 밴드 */
 .process-head{
-  padding:26px 24px 22px;
+  padding:30px 24px 26px;
   text-align:center;
-  background:
-    radial-gradient(circle at 8% 20%,rgba(203,238,234,.45),transparent 32%),
-    radial-gradient(circle at 90% 10%,rgba(233,228,255,.45),transparent 32%),
-    linear-gradient(135deg,#fde6ee 0%,#fff2f6 58%,#fff8fb 100%);
+  background:linear-gradient(120deg,rgba(190,236,229,.8) 0%,rgba(232,248,245,.55) 50%,rgba(250,212,228,.75) 100%);
 }
-
 .kicker{
-  display:inline-flex;
-  padding:6px 13px;
-  border-radius:999px;
-  background:rgba(255,255,255,.88);
-  color:var(--pink-deep);
-  font-size:14.5px;
-  font-weight:700;
+  display:inline-block;
+  padding:7px 20px;border-radius:999px;
+  border:1px solid #bfe9e3;
+  background:#fff;color:var(--mint);
+  font-size:13px;font-weight:700;letter-spacing:.06em;
 }
-
 .process-head h1{
-  margin:9px 0 5px;
-  font-size:31px;
-  line-height:1.25;
-  letter-spacing:-.04em;
+  margin:12px 0 0;
+  font-size:31px;line-height:1.3;letter-spacing:-.045em;
 }
+.process-head h1 em{font-style:normal;color:#e2709b;}
 
-.process-head p{
-  margin:0;
-  color:#8f7d84;
-  font-size:14.5px;
-  line-height:1.6;
-}
+.process-body{padding:34px 26px 28px;}
 
-.process-body{
-  padding:20px 22px 22px;
-}
-
-.tile-grid{
+/* 6 카드 한 줄 */
+.grid{
   display:grid;
   grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:10px;
+  gap:18px;
+  margin:0;padding:0;list-style:none;
 }
-
-.tile{
+.card{
   position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
   min-width:0;
-  min-height:154px;
-  padding:17px 11px 15px;
-  border-radius:18px;
-  border:1px solid var(--line);
+  min-height:156px;
+  padding:22px 8px 18px;
+  border-radius:22px;
   background:#fff;
+  border:1.5px solid var(--line);
   text-align:center;
-  cursor:pointer;
-  transition:
-    transform .22s ease,
-    background .22s ease,
-    border-color .22s ease,
-    box-shadow .22s ease;
-  animation:tileFloat 5.2s ease-in-out infinite;
+  transition:translate .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
-
-.tile:nth-child(2){animation-delay:.25s;}
-.tile:nth-child(3){animation-delay:.50s;}
-.tile:nth-child(4){animation-delay:.75s;}
-.tile:nth-child(5){animation-delay:1s;}
-.tile:nth-child(6){animation-delay:1.25s;}
-
-.tile-step{
-  position:absolute;
-  top:-7px;
-  right:-5px;
-  width:23px;
-  height:23px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#f5c2d0;
-  color:#fff;
-  font-size:10.5px;
-  font-weight:700;
-  box-shadow:0 4px 10px rgba(229,133,165,.18);
-}
-
-.tile-icon{
-  width:48px;
-  height:48px;
-  margin:3px auto 10px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#fff0f5;
-  font-size:24px;
-  transition:transform .22s ease,background .22s ease;
-}
-
-.tile:nth-child(2) .tile-icon,
-.tile:nth-child(5) .tile-icon{background:#eefaf8;}
-
-.tile:nth-child(4) .tile-icon{background:#f5f2ff;}
-.tile:nth-child(6) .tile-icon{background:#fff8e8;}
-
-.tile-title{
-  margin:0;
-  font-size:15px;
-  line-height:1.35;
-  font-weight:700;
-  letter-spacing:-.03em;
-  word-break:keep-all;
-}
-
-.tile-mini{
-  margin-top:6px;
-  color:#a08e94;
-  font-size:12px;
-  line-height:1.55;
-  word-break:keep-all;
-}
-
-.tile.active{
-  transform:translateY(-5px);
-  border-color:#eeaac0;
-  background:#fff7fa;
-  box-shadow:0 12px 25px rgba(223,132,163,.14);
-  animation-play-state:paused;
-}
-
-.tile.active .tile-icon{
-  transform:scale(1.08);
-  background:#f8d9e4;
-}
-
-.detail-panel{
-  position:relative;
-  margin-top:14px;
-  min-height:0;
-  padding:16px 19px 17px;
-  border-radius:20px;
-  border:1px solid #f1dde4;
-  background:
-    linear-gradient(135deg,rgba(255,249,251,.97),rgba(249,255,254,.95));
-  overflow:hidden;
-}
-
-.detail-panel::after{
-  content:"";
-  position:absolute;
-  right:-45px;
-  bottom:-55px;
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  background:rgba(203,238,234,.25);
-  pointer-events:none;
-}
-
-.detail-top{
-  position:relative;
-  z-index:1;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:9px;
-}
-
-.detail-no{
-  flex:0 0 auto;
-  min-width:42px;
-  height:30px;
-  padding:0 10px;
-  border-radius:999px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#f6d3de;
-  color:#d56f91;
-  font-size:12.5px;
-  font-weight:700;
-}
-
-.detail-title{
-  margin:0;
-  font-size:22px;
-  line-height:1.3;
-  letter-spacing:-.035em;
-}
-
-.detail-list{
-  position:relative;
-  z-index:1;
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:8px;
-}
-
-.detail-item{
-  display:flex;
-  gap:9px;
-  align-items:flex-start;
-  min-width:0;
-  padding:9px 11px;
-  border-radius:12px;
-  border:1px solid rgba(244,196,210,.42);
-  background:rgba(255,255,255,.84);
-  color:#66575c;
-  font-size:13.8px;
-  line-height:1.55;
-  font-weight:700;
-  word-break:keep-all;
-}
-
-.detail-item b{
-  flex:0 0 auto;
-  color:#d97899;
-}
-
-.detail-note{
-  position:relative;
-  z-index:1;
-  margin-top:8px;
-  padding:9px 11px;
-  border-radius:12px;
-  border:1px dashed rgba(229,133,165,.40);
-  background:rgba(255,255,255,.70);
-  color:#906c78;
-  font-size:12.5px;
-  line-height:1.55;
-  font-weight:700;
-}
-
-.footer-note{
-  margin-top:10px;
-  text-align:center;
-  color:#a18f95;
-  font-size:12.5px;
-  line-height:1.55;
-}
-
-@keyframes tileFloat{
+/* 카드 둥실 모션: 카드 전체(배지·아이콘·글자)가 한 덩어리로 위아래 이동,
+   카드마다 시작 타이밍을 달리해 물결처럼 보이게 함 */
+@keyframes irohaCardFloat{
   0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-2px);}
+  50%{transform:translateY(-6px);}
 }
+.card{
+  animation:irohaCardFloat 4.5s ease-in-out infinite;
+  will-change:transform;
+}
+.card:nth-child(1){animation-delay:0s;}
+.card:nth-child(2){animation-delay:-.7s;}
+.card:nth-child(3){animation-delay:-1.4s;}
+.card:nth-child(4){animation-delay:-2.1s;}
+.card:nth-child(5){animation-delay:-2.8s;}
+.card:nth-child(6){animation-delay:-3.5s;}
 
 @media(hover:hover) and (pointer:fine){
-  .tile:hover{
-    transform:translateY(-6px);
-    border-color:#efb0c3;
-    background:#fff8fb;
-    box-shadow:0 12px 24px rgba(222,133,163,.13);
-    animation-play-state:paused;
-  }
-
-  .tile:hover .tile-icon{
-    transform:scale(1.08);
-  }
-
-  .tile:nth-child(2):hover,
-  .tile:nth-child(5):hover{
-    border-color:#aee1dc;
-    background:#f5fcfb;
-  }
-
-  .tile:nth-child(4):hover{
-    border-color:#cfc5f3;
-    background:#faf8ff;
-  }
-
-  .tile:nth-child(6):hover{
-    border-color:#ecd59e;
-    background:#fffaf0;
+  .card:hover{
+    translate:0 -4px;
+    border-color:#86d3cb;
+    box-shadow:0 14px 24px -12px rgba(66,178,171,.45);
   }
 }
+
+/* 카드 사이 화살표 */
+.card:not(:last-child)::after{
+  content:"›";
+  position:absolute;
+  right:-15px;top:50%;
+  width:12px;margin-top:-12px;
+  color:#f2b3c9;
+  font-size:22px;line-height:1;font-weight:700;
+  text-align:center;
+}
+
+.badge{
+  position:absolute;top:-9px;right:-7px;
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#f4a7c1;color:#fff;
+  font-size:11px;font-weight:700;
+  box-shadow:0 5px 10px -3px rgba(232,112,155,.45);
+}
+.ic{
+  width:52px;height:52px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--mint-soft);
+  font-size:25px;
+  margin-bottom:12px;
+}
+.card:nth-child(even) .ic{background:#fdeaf1;}
+.ttl{
+  margin:0;
+  font-size:15.5px;line-height:1.4;font-weight:700;letter-spacing:-.035em;
+  word-break:keep-all;
+}
+.sub{
+  margin-top:6px;
+  font-size:12px;line-height:1.5;color:#8fa7a5;
+  word-break:keep-all;
+}
+
+/* 필독 카드 */
+.card.must{
+  border:1.5px solid rgba(232,112,155,.55);
+  background:linear-gradient(180deg,#fff 0%,#fff3f7 100%);
+  box-shadow:0 10px 22px -12px rgba(232,112,155,.45);
+}
+.tag{
+  position:absolute;top:-10px;left:10px;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 9px;border-radius:999px;
+  background:#ffeef4;border:1px solid rgba(232,112,155,.5);
+  color:#d6558a;font-size:10.5px;font-weight:700;line-height:1;
+}
+.tag::before{
+  content:"";width:5px;height:5px;border-radius:50%;background:#e8709b;
+  animation:ping 1.8s ease-out infinite;
+}
+@keyframes ping{
+  0%{box-shadow:0 0 0 0 rgba(232,112,155,.4);}
+  70%{box-shadow:0 0 0 5px rgba(232,112,155,0);}
+  100%{box-shadow:0 0 0 0 rgba(232,112,155,0);}
+}
+
+/* 가운데 알약 (필독 안내) */
+.center-pill{
+  display:flex;justify-content:center;
+  margin-top:28px;
+}
+.pill{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:9px 22px 9px 9px;
+  border-radius:999px;
+  background:#fff;
+  border:1.5px solid rgba(232,112,155,.45);
+  box-shadow:0 8px 18px -12px rgba(232,112,155,.55);
+  font-size:13.5px;font-weight:700;color:var(--ink);
+  line-height:1.4;
+}
+.pill i{
+  flex:0 0 auto;
+  padding:6px 11px;border-radius:999px;
+  background:linear-gradient(135deg,#fbd3e1,#fde6ee);
+  color:#d6558a;font-style:normal;font-size:12px;
+}
+.pill span{word-break:keep-all;}
+
+/* 작은 안내 문구 */
+.notes{
+  margin:22px auto 0;
+  max-width:760px;
+  text-align:center;
+  color:#9db3b1;
+  font-size:12px;line-height:1.85;
+  word-break:keep-all;
+}
+.notes p{margin:0;}
 
 @media(max-width:900px){
-  .tile-grid{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 14px;}
+  .card:not(:last-child)::after{display:none;}
+  .card{min-height:148px;}
 }
-
 @media(max-width:560px){
   body{padding:10px;}
-  .process-shell{border-radius:24px;}
-  .process-head{padding:22px 14px 18px;}
-  .process-head h1{font-size:26px;}
-  .process-body{padding:16px 14px 18px;}
-
-  .tile-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
-  .tile{
-    min-height:135px;
-  }
-
-  .detail-list{
-    grid-template-columns:1fr;
-  }
+  .process-shell{border-radius:26px;}
+  .process-head{padding:24px 14px 20px;}
+  .process-head h1{font-size:25px;}
+  .process-body{padding:28px 14px 22px;}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px;}
+  .card{min-height:140px;padding:20px 6px 16px;}
+  .pill{font-size:12.5px;padding:8px 16px 8px 8px;}
+  .notes{font-size:11.5px;}
 }
-
 @media(prefers-reduced-motion:reduce){
-  .tile{
-    animation:none !important;
-    transition:none !important;
-  }
+  *,*::before,*::after{animation:none !important;transition:none !important;}
 }
-
-.flow-roadmap{
-  margin-top:12px;
-  padding:10px 14px;
-  border-radius:14px;
-  border:1px solid rgba(244,196,210,.32);
-  background:
-    linear-gradient(90deg,
-      rgba(203,238,234,.34) 0%,
-      rgba(255,247,250,.88) 36%,
-      rgba(233,228,255,.34) 72%,
-      rgba(255,240,207,.34) 100%);
-  color:#725f66;
-  font-size:13px;
-  line-height:1.55;
-  font-weight:700;
-  text-align:center;
-  word-break:keep-all;
-}
-
-.flow-roadmap .arrow{
-  display:inline-block;
-  margin:0 5px;
-  color:#cf9bad;
-  font-weight:700;
-}
-
-@media(max-width:560px){
-  .flow-roadmap{
-    padding:9px 10px;
-    font-size:12.5px;
-    line-height:1.65;
-  }
-
-  .flow-roadmap .arrow{
-    margin:0 3px;
-  }
-}
-
-
-/* ===== v7 motion 강화 ===== */
-
-@keyframes irohaTileFloatStrong{
-  0%,100%{
-    transform:translateY(0);
-  }
-  50%{
-    transform:translateY(-5px);
-  }
-}
-
-@keyframes irohaIconBreathe{
-  0%,100%{
-    transform:translateY(0) scale(1);
-  }
-  50%{
-    transform:translateY(-2px) scale(1.045);
-  }
-}
-
-@keyframes irohaStepPulse{
-  0%,100%{
-    transform:scale(1);
-    box-shadow:0 4px 10px rgba(229,133,165,.18);
-  }
-  50%{
-    transform:scale(1.10);
-    box-shadow:0 6px 16px rgba(229,133,165,.30);
-  }
-}
-
-@keyframes irohaRoadmapGlow{
-  0%,100%{
-    box-shadow:
-      inset 0 0 0 rgba(255,255,255,0),
-      0 4px 14px rgba(215,151,174,.04);
-    background-position:0% 50%;
-  }
-  50%{
-    box-shadow:
-      inset 0 0 18px rgba(255,255,255,.32),
-      0 6px 18px rgba(215,151,174,.09);
-    background-position:100% 50%;
-  }
-}
-
-@keyframes irohaArrowFlow{
-  0%,100%{
-    transform:translateX(0) scale(1);
-    opacity:.42;
-    color:#d5a8b8;
-  }
-  50%{
-    transform:translateX(3px) scale(1.14);
-    opacity:1;
-    color:#e17d9e;
-  }
-}
-
-/* 카드 모션 다시 확실하게 */
-.tile{
-  animation:irohaTileFloatStrong 4.2s ease-in-out infinite !important;
-}
-
-.tile:nth-child(1){animation-delay:0s !important;}
-.tile:nth-child(2){animation-delay:.28s !important;}
-.tile:nth-child(3){animation-delay:.56s !important;}
-.tile:nth-child(4){animation-delay:.84s !important;}
-.tile:nth-child(5){animation-delay:1.12s !important;}
-.tile:nth-child(6){animation-delay:1.40s !important;}
-
-.tile-icon{
-  animation:irohaIconBreathe 3.5s ease-in-out infinite;
-}
-
-.tile-step{
-  animation:irohaStepPulse 3.2s ease-in-out infinite;
-}
-
-/* 전체 흐름 바 자체도 은은하게 살아 있게 */
-.flow-roadmap{
-  background-size:220% 220%;
-  animation:irohaRoadmapGlow 6s ease-in-out infinite;
-}
-
-/* 화살표는 앞에서 뒤로 순서대로 진행 */
-.flow-roadmap .arrow{
-  animation:irohaArrowFlow 1.8s ease-in-out infinite;
-}
-
-.flow-roadmap .arrow:nth-of-type(1){animation-delay:0s;}
-.flow-roadmap .arrow:nth-of-type(2){animation-delay:.24s;}
-.flow-roadmap .arrow:nth-of-type(3){animation-delay:.48s;}
-.flow-roadmap .arrow:nth-of-type(4){animation-delay:.72s;}
-
-/* hover 시 기본 모션 잠깐 멈추고 강조 */
-@media(hover:hover) and (pointer:fine){
-  .tile:hover,
-  .tile.active{
-    animation-play-state:paused !important;
-  }
-
-  .tile:hover .tile-icon,
-  .tile.active .tile-icon{
-    animation-play-state:paused;
-  }
-
-  .flow-roadmap:hover{
-    box-shadow:0 8px 20px rgba(215,151,174,.12);
-  }
-
-  .flow-roadmap:hover .arrow{
-    animation-duration:1.25s;
-  }
-}
-
-@media(prefers-reduced-motion:reduce){
-  .tile,
-  .tile-icon,
-  .tile-step,
-  .flow-roadmap,
-  .flow-roadmap .arrow{
-    animation:none !important;
-  }
-}
-
-
-/* ===== v8 상세 내용 부드러운 전환 ===== */
-.detail-top,
-.detail-list,
-.detail-note{
-  transition:
-    opacity .18s ease,
-    transform .18s ease;
-}
-
-.detail-panel.is-changing .detail-top,
-.detail-panel.is-changing .detail-list,
-.detail-panel.is-changing .detail-note{
-  opacity:0;
-  transform:translateY(7px);
-}
-
-@keyframes irohaDetailItemIn{
-  from{
-    opacity:0;
-    transform:translateY(8px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-@keyframes irohaDetailTitleIn{
-  from{
-    opacity:0;
-    transform:translateX(-6px);
-  }
-  to{
-    opacity:1;
-    transform:translateX(0);
-  }
-}
-
-.detail-panel.just-entered .detail-no,
-.detail-panel.just-entered .detail-title{
-  animation:irohaDetailTitleIn .30s cubic-bezier(.22,.8,.35,1) both;
-}
-
-.detail-panel.just-entered .detail-item{
-  animation:irohaDetailItemIn .34s cubic-bezier(.22,.8,.35,1) both;
-}
-
-.detail-panel.just-entered .detail-item:nth-child(1){
-  animation-delay:.03s;
-}
-.detail-panel.just-entered .detail-item:nth-child(2){
-  animation-delay:.09s;
-}
-.detail-panel.just-entered .detail-item:nth-child(3){
-  animation-delay:.15s;
-}
-.detail-panel.just-entered .detail-item:nth-child(4){
-  animation-delay:.21s;
-}
-
-.detail-panel.just-entered .detail-note{
-  animation:irohaDetailItemIn .34s .14s cubic-bezier(.22,.8,.35,1) both;
-}
-
-@media(prefers-reduced-motion:reduce){
-  .detail-top,
-  .detail-list,
-  .detail-note{
-    transition:none !important;
-  }
-
-  .detail-panel.just-entered .detail-no,
-  .detail-panel.just-entered .detail-title,
-  .detail-panel.just-entered .detail-item,
-  .detail-panel.just-entered .detail-note{
-    animation:none !important;
-  }
-}
-
-
-/* ===== v9 페이셜 필독 표시 ===== */
-.tile[data-step="3"]{
-  border-color:rgba(229,133,165,.38);
-}
-
-.tile[data-step="3"]::before{
-  content:"⚠ 필독";
-  position:absolute;
-  left:10px;
-  top:9px;
-  z-index:5;
-  padding:4px 8px;
-  border-radius:999px;
-  background:#fff0f5;
-  border:1px solid rgba(229,133,165,.32);
-  color:#d96f92;
-  font-size:10.5px;
-  line-height:1;
-  font-weight:700;
-  letter-spacing:.01em;
-  box-shadow:0 4px 10px rgba(229,133,165,.10);
-  animation:irohaMustReadPulse 2.2s ease-in-out infinite;
-}
-
-
-@keyframes irohaMustReadPulse{
-  0%,100%{
-    transform:scale(1);
-    background:#fff0f5;
-    box-shadow:0 4px 10px rgba(229,133,165,.10);
-  }
-  50%{
-    transform:scale(1.055);
-    background:#ffe7ef;
-    box-shadow:0 5px 14px rgba(229,133,165,.20);
-  }
-}
-
-@media(hover:hover) and (pointer:fine){
-  .tile[data-step="3"]:hover::before,
-  .tile[data-step="3"].active::before{
-    background:#f7d5e0;
-    border-color:rgba(217,111,146,.45);
-  }
-}
-
-@media(prefers-reduced-motion:reduce){
-  .tile[data-step="3"]::before{
-    animation:none !important;
-  }
-}
-
-
-/* ===== v11 흐름 화살표 모션 제거 ===== */
-.flow-roadmap .arrow{
-  animation:none !important;
-  transform:none !important;
-  opacity:1 !important;
-  color:#cf9bad !important;
-}
-
-
-/* ===== v12 페이셜 필독: 작은 코너 태그 ===== */
-.tile[data-step="3"]{
-  border:1.5px solid rgba(226,103,145,.46) !important;
-  background:linear-gradient(180deg,#fffdfd 0%,#fff8fb 100%) !important;
-  box-shadow:0 8px 20px rgba(226,103,145,.09) !important;
-}
-
-/* 작은 '필독' 태그 */
-.tile[data-step="3"]::before{
-  content:"필독";
-  position:absolute;
-  left:10px;
-  top:9px;
-  z-index:6;
-  padding:4px 8px 4px 17px;
-  border-radius:999px;
-  background:#fff1f5;
-  border:1px solid rgba(226,103,145,.34);
-  color:#d7658c;
-  font-size:10.5px;
-  line-height:1;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-/* 태그 앞 작은 펄스 점 */
-.tile[data-step="3"]::after{
-  content:"";
-  position:absolute;
-  left:16px;
-  top:15px;
-  z-index:7;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#e56f98;
-  box-shadow:0 0 0 0 rgba(229,111,152,.30);
-  animation:irohaReadDot 1.8s ease-out infinite;
-}
-
-@keyframes irohaReadDot{
-  0%{
-    box-shadow:0 0 0 0 rgba(229,111,152,.34);
-  }
-  70%{
-    box-shadow:0 0 0 5px rgba(229,111,152,0);
-  }
-  100%{
-    box-shadow:0 0 0 0 rgba(229,111,152,0);
-  }
-}
-
-@media(hover:hover) and (pointer:fine){
-  .tile[data-step="3"]:hover,
-  .tile[data-step="3"].active{
-    border-color:#df789a !important;
-    background:#fff5f8 !important;
-    box-shadow:0 13px 27px rgba(217,95,139,.15) !important;
-  }
-}
-
-@media(prefers-reduced-motion:reduce){
-  .tile[data-step="3"]::after{
-    animation:none !important;
-  }
-}
-
 </style>
 </head>
 
 <body>
 <section class="process-shell" id="processGuideSection" data-nav-label="진행 방식">
   <header class="process-head">
-    <div class="kicker">✦ PROCESS GUIDE</div>
-    <h1>제작 과정 한눈에 보기</h1>
-    <p>단계를 선택하면 아래에서 세부 진행 내용을 확인할 수 있습니다.</p>
+    <div class="kicker">PROCESS GUIDE</div>
+    <h1>제작 과정 <em>한눈에</em> 보기</h1>
   </header>
 
   <div class="process-body">
+    <ol class="grid">
+      <li class="card">
+        <span class="badge">01</span>
+        <div class="ic">💬</div>
+        <h2 class="ttl">문의 · 주문</h2>
+        <div class="sub">상담 → 입금</div>
+      </li>
 
-    <div class="tile-grid" id="tileGrid">
-      <button class="tile active" type="button" data-step="0">
-        <span class="tile-step">01</span>
-        <div class="tile-icon">💬</div>
-        <h2 class="tile-title">문의 · 주문</h2>
-        <div class="tile-mini">상담부터 입금까지</div>
-      </button>
+      <li class="card">
+        <span class="badge">02</span>
+        <div class="ic">🔎</div>
+        <h2 class="ttl">파츠서칭</h2>
+        <div class="sub">서칭 → 구매 인증</div>
+      </li>
 
-      <button class="tile" type="button" data-step="1">
-        <span class="tile-step">02</span>
-        <div class="tile-icon">🔎</div>
-        <h2 class="tile-title">파츠서칭</h2>
-        <div class="tile-mini">자료 기반 파츠 탐색</div>
-      </button>
+      <li class="card">
+        <span class="badge">03</span>
+        <div class="ic">✨</div>
+        <h2 class="ttl">성형</h2>
+        <div class="sub">제작 → 1차 컨펌</div>
+      </li>
 
-      <button class="tile" type="button" data-step="2">
-        <span class="tile-step">03</span>
-        <div class="tile-icon">✨</div>
-        <h2 class="tile-title">성형</h2>
-        <div class="tile-mini">성형 제작 · 1차 컨펌</div>
-      </button>
+      <li class="card must">
+        <span class="badge">04</span>
+        <div class="ic">😊</div>
+        <h2 class="ttl">페이셜</h2>
+        <div class="sub">제작 → 2차 컨펌</div>
+      </li>
 
-      <button class="tile" type="button" data-step="3">
-        <span class="tile-step">04</span>
-        <div class="tile-icon">😊</div>
-        <h2 class="tile-title">페이셜</h2>
-        <div class="tile-mini">페이셜 제작 · 2차 컨펌</div>
-      </button>
+      <li class="card">
+        <span class="badge">05</span>
+        <div class="ic">🛠️</div>
+        <h2 class="ttl">유니티 · 물리</h2>
+        <div class="sub">의상 확인 → 물리 세팅</div>
+      </li>
 
-      <button class="tile" type="button" data-step="4">
-        <span class="tile-step">05</span>
-        <div class="tile-icon">🛠️</div>
-        <h2 class="tile-title">유니티 · 물리</h2>
-        <div class="tile-mini">의상 · 물리 세팅</div>
-      </button>
+      <li class="card">
+        <span class="badge">06</span>
+        <div class="ic">🎁</div>
+        <h2 class="ttl">최종 전달</h2>
+        <div class="sub">최종 컨펌 → 완성본</div>
+      </li>
+    </ol>
 
-      <button class="tile" type="button" data-step="5">
-        <span class="tile-step">06</span>
-        <div class="tile-icon">🎁</div>
-        <h2 class="tile-title">최종 전달</h2>
-        <div class="tile-mini">최종 컨펌 · 완성본</div>
-      </button>
-    </div>
-
-    <div class="flow-roadmap" aria-label="전체 제작 흐름">
-      신청준비
-      <span class="arrow">→</span>
-      파츠서칭·인증
-      <span class="arrow">→</span>
-      성형·페이셜 제작
-      <span class="arrow">→</span>
-      유니티 세팅 및 물리 작업
-      <span class="arrow">→</span>
-      최종확인·전달
-    </div>
-
-    <section class="detail-panel" aria-live="polite">
-      <div class="detail-top">
-        <div class="detail-no" id="detailNo">STEP 01</div>
-        <h3 class="detail-title" id="detailTitle">문의 · 주문</h3>
+    <div class="center-pill">
+      <div class="pill">
+        <i>필독</i>
+        <span>페이셜 단계부터는 성형 수정이 불가합니다</span>
       </div>
+    </div>
 
-      <div class="detail-list" id="detailList"></div>
-      <div class="detail-note" id="detailNote" hidden></div>
-    </section>
-
-    <div class="footer-note">
-      ※ 작업 종류와 요청 범위에 따라 컨펌 횟수, 세부 진행 방식 및 전달 자료는 일부 조정될 수 있습니다.
+    <div class="notes">
+      <p>*파츠서칭은 2D 일러 및 참고자료를 기반으로 진행되며, 구매 인증 후 다음 단계로 넘어갑니다.</p>
+      <p>*유니티 단계에서는 스프링본 및 Magica Cloth 2 물리 세팅 후, 확인용 영상을 전달드립니다.</p>
+      <p>*작업 종류와 요청 범위에 따라 컨펌 횟수, 세부 진행 방식 및 전달 자료는 일부 조정될 수 있습니다.</p>
     </div>
   </div>
 </section>
 
 <script>
 (function(){
-  const data=[
-    {
-      no:'STEP 01',
-      title:'문의 · 주문',
-      items:[
-        ['01','문의 및 상담'],
-        ['02','주문 및 입금']
-      ]
-    },
-    {
-      no:'STEP 02',
-      title:'파츠서칭 · 구매 인증',
-      items:[
-        ['03','2D 일러 기반 및 참고자료 기반 파츠서칭'],
-        ['04','파츠 구매 인증']
-      ]
-    },
-    {
-      no:'STEP 03',
-      title:'성형 작업',
-      items:[
-        ['05','성형 작업'],
-        ['06','1차 컨펌']
-      ]
-    },
-    {
-      no:'STEP 04',
-      title:'페이셜 작업',
-      items:[
-        ['07','페이셜 작업'],
-        ['08','2차 컨펌']
-      ],
-      note:'※ 페이셜 단계부터는 성형 수정이 불가하니, 신중한 결정 부탁드립니다.'
-    },
-    {
-      no:'STEP 05',
-      title:'유니티 세팅 · 물리 작업',
-      items:[
-        ['A','헤어·의상 적용 상태와 전체 조합을 확인합니다.'],
-        ['B','스프링본 및 Magica Cloth 2 물리 세팅 후, 확인용 영상을 전달드립니다.']
-      ]
-    },
-    {
-      no:'STEP 06',
-      title:'최종 확인 · 전달',
-      items:[
-        ['09','변환 전 최종컨펌'],
-        ['10','완성본 전달']
-      ]
-    }
-  ];
-
-  const tiles=[...document.querySelectorAll('.tile')];
-  const panel=document.querySelector('.detail-panel');
-  const detailNo=document.getElementById('detailNo');
-  const detailTitle=document.getElementById('detailTitle');
-  const detailList=document.getElementById('detailList');
-  const detailNote=document.getElementById('detailNote');
-
-  let currentIndex=0;
-  let changeTimer=null;
-  let enterTimer=null;
-
-  function fillDetail(index){
-    const item=data[index];
-
-    detailNo.textContent=item.no;
-    detailTitle.textContent=item.title;
-    detailList.innerHTML='';
-
-    item.items.forEach(function(row){
-      const div=document.createElement('div');
-      div.className='detail-item';
-
-      const num=document.createElement('b');
-      num.textContent=row[0];
-
-      const label=document.createElement('span');
-      label.textContent=row[1];
-
-      div.appendChild(num);
-      div.appendChild(label);
-      detailList.appendChild(div);
-    });
-
-    if(item.note){
-      detailNote.hidden=false;
-      detailNote.textContent=item.note;
-    }else{
-      detailNote.hidden=true;
-      detailNote.textContent='';
-    }
-
-    tiles.forEach(function(tile,i){
-      tile.classList.toggle('active',i===index);
-      tile.setAttribute('aria-pressed',i===index ? 'true':'false');
-    });
-
-    currentIndex=index;
-    sendHeight();
-  }
-
-  function animateTo(index){
-    if(index===currentIndex && !panel.classList.contains('is-changing')){
-      return;
-    }
-
-    if(changeTimer){
-      clearTimeout(changeTimer);
-      changeTimer=null;
-    }
-
-    if(enterTimer){
-      clearTimeout(enterTimer);
-      enterTimer=null;
-    }
-
-    panel.classList.remove('just-entered');
-    panel.classList.add('is-changing');
-
-    changeTimer=setTimeout(function(){
-      fillDetail(index);
-
-      requestAnimationFrame(function(){
-        panel.classList.remove('is-changing');
-        panel.classList.add('just-entered');
-
-        enterTimer=setTimeout(function(){
-          panel.classList.remove('just-entered');
-        },520);
-      });
-    },135);
-  }
-
-  tiles.forEach(function(tile,index){
-    tile.addEventListener('click',function(){
-      animateTo(index);
-    });
-
-    if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
-      tile.addEventListener('mouseenter',function(){
-        animateTo(index);
-      });
-    }
-  });
-
+  /* ===== 부모 페이지 높이 전달 (기존과 동일한 메시지 타입) ===== */
   function sendHeight(){
     const shell=document.querySelector('.process-shell');
     let height=0;
-
     if(shell){
       const rect=shell.getBoundingClientRect();
-      const bodyStyle=window.getComputedStyle(document.body);
-      const bottomPadding=parseFloat(bodyStyle.paddingBottom) || 0;
-
-      height=Math.ceil(
-        rect.bottom +
-        window.pageYOffset +
-        bottomPadding
-      );
+      const bottomPadding=parseFloat(window.getComputedStyle(document.body).paddingBottom)||0;
+      height=Math.ceil(rect.bottom+window.pageYOffset+bottomPadding);
     }else{
-      height=document.body ? document.body.scrollHeight : 0;
+      height=document.body?document.body.scrollHeight:0;
     }
-
     if(window.parent!==window && height>0){
-      window.parent.postMessage({
-        type:'iroha-process-phase-4zone-height',
-        height:height
-      },'*');
+      window.parent.postMessage({type:'iroha-process-phase-4zone-height',height:height},'*');
     }
   }
-
   window.sendHeight=sendHeight;
 
-
+  /* ===== '진행 방식' 메뉴 클릭 시 스크롤 (기존 기능 유지) ===== */
   function scrollProcessGuideIntoView(){
-    const shell=document.getElementById('processGuideSection') || document.querySelector('.process-shell');
-    if(!shell){
-      return;
-    }
-
+    const shell=document.getElementById('processGuideSection')||document.querySelector('.process-shell');
+    if(!shell){return;}
     const rect=shell.getBoundingClientRect();
-    const absoluteTop=rect.top + window.pageYOffset;
-    const viewportHeight=window.innerHeight || document.documentElement.clientHeight || 0;
-    const desiredTop=Math.max(72, Math.round(viewportHeight * 0.22));
-    const targetTop=Math.max(0, absoluteTop - desiredTop);
-
-    window.scrollTo({
-      top:targetTop,
-      behavior:'smooth'
-    });
+    const absoluteTop=rect.top+window.pageYOffset;
+    const vh=window.innerHeight||document.documentElement.clientHeight||0;
+    const desiredTop=Math.max(72,Math.round(vh*0.22));
+    window.scrollTo({top:Math.max(0,absoluteTop-desiredTop),behavior:'smooth'});
   }
 
   function isProcessNavTarget(el){
-    if(!el){
-      return false;
-    }
-
-    const href=(el.getAttribute('href') || '').trim();
-    const text=(el.textContent || '').replace(/\s+/g,' ').trim();
-    const controls=(el.getAttribute('aria-controls') || '').trim();
-
-    if(
-      href==='#processGuideSection' ||
-      href==='#process-guide' ||
-      href==='#process' ||
-      href==='#guide-process' ||
-      controls==='processGuideSection'
-    ){
+    if(!el){return false;}
+    const href=(el.getAttribute('href')||'').trim();
+    const text=(el.textContent||'').replace(/\s+/g,' ').trim();
+    const controls=(el.getAttribute('aria-controls')||'').trim();
+    if(href==='#processGuideSection'||href==='#process-guide'||href==='#process'||href==='#guide-process'||controls==='processGuideSection'){
       return true;
     }
-
-    return text==='진행 방식' || text==='진행방식';
+    return text==='진행 방식'||text==='진행방식';
   }
 
-  function bindProcessNavLinks(root){
-    const scope=root && root.querySelectorAll ? root : document;
-    const nodes=[...scope.querySelectorAll('a, button, [role="button"]')];
-
-    nodes.forEach(function(node){
-      if(node.dataset.processGuideBound==='1' || !isProcessNavTarget(node)){
-        return;
-      }
-
+  function bindProcessNavLinks(scopeRoot){
+    const scope=scopeRoot&&scopeRoot.querySelectorAll?scopeRoot:document;
+    [...scope.querySelectorAll('a, button, [role="button"]')].forEach(function(node){
+      if(node.dataset.processGuideBound==='1'||!isProcessNavTarget(node)){return;}
       node.dataset.processGuideBound='1';
       node.addEventListener('click',function(event){
-        if(!isProcessNavTarget(node)){
-          return;
-        }
-
+        if(!isProcessNavTarget(node)){return;}
         event.preventDefault();
         scrollProcessGuideIntoView();
       });
@@ -1069,47 +343,37 @@ body{padding:18px;}
 
   bindProcessNavLinks(document);
 
-  if(document.body && 'MutationObserver' in window){
-    const navObserver=new MutationObserver(function(mutations){
-      mutations.forEach(function(mutation){
-        mutation.addedNodes.forEach(function(added){
-          if(added && added.nodeType===1){
-            if(added.matches && added.matches('a, button, [role="button"]')){
-              bindProcessNavLinks(added.parentNode || document);
+  if(document.body&&'MutationObserver' in window){
+    new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        m.addedNodes.forEach(function(added){
+          if(added&&added.nodeType===1){
+            if(added.matches&&added.matches('a, button, [role="button"]')){
+              bindProcessNavLinks(added.parentNode||document);
             }else if(added.querySelectorAll){
               bindProcessNavLinks(added);
             }
           }
         });
       });
-    });
-
-    navObserver.observe(document.body,{childList:true,subtree:true});
+    }).observe(document.body,{childList:true,subtree:true});
   }
 
-  fillDetail(0);
-
+  sendHeight();
   window.addEventListener('load',function(){
     sendHeight();
     setTimeout(sendHeight,200);
     setTimeout(sendHeight,600);
   });
-
   window.addEventListener('resize',sendHeight);
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(sendHeight);}
 
-  window.addEventListener('hashchange',function(){
-    const hash=(location.hash || '').toLowerCase();
-    if(hash==='#processguidesection' || hash==='#process-guide' || hash==='#process' || hash==='#guide-process'){
-      setTimeout(scrollProcessGuideIntoView,40);
-    }
-  });
-
-  if(location.hash){
-    const initialHash=location.hash.toLowerCase();
-    if(initialHash==='#processguidesection' || initialHash==='#process-guide' || initialHash==='#process' || initialHash==='#guide-process'){
-      setTimeout(scrollProcessGuideIntoView,120);
-    }
+  function hashMatches(){
+    const h=(location.hash||'').toLowerCase();
+    return h==='#processguidesection'||h==='#process-guide'||h==='#process'||h==='#guide-process';
   }
+  window.addEventListener('hashchange',function(){if(hashMatches()){setTimeout(scrollProcessGuideIntoView,40);}});
+  if(location.hash&&hashMatches()){setTimeout(scrollProcessGuideIntoView,120);}
 })();
 </script>
 </body>

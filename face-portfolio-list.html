@@ -2044,11 +2044,22 @@
 
         const active = thumbsEl.querySelector('.showcase-thumb.active');
         if (active) {
-          active.scrollIntoView({
-            behavior:'smooth',
-            block:'nearest',
-            inline:'center'
-          });
+          /*
+            썸네일 줄(가로 스크롤 영역)만 움직입니다.
+            scrollIntoView는 iframe 바깥의 아트머그 페이지까지 스크롤시켜서
+            새로고침/첫 접속 때 화면이 이 포트폴리오로 끌려오는 원인이었습니다.
+          */
+          const stripRect = thumbsEl.getBoundingClientRect();
+          const activeRect = active.getBoundingClientRect();
+          const delta =
+            (activeRect.left + activeRect.width / 2) -
+            (stripRect.left + stripRect.width / 2);
+          const maxLeft = Math.max(0, thumbsEl.scrollWidth - thumbsEl.clientWidth);
+          const nextLeft = Math.max(0, Math.min(maxLeft, thumbsEl.scrollLeft + delta));
+
+          if (Math.abs(nextLeft - thumbsEl.scrollLeft) > 1) {
+            thumbsEl.scrollTo({ left: nextLeft, behavior: 'smooth' });
+          }
         }
       }
 

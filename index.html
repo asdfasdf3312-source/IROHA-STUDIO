@@ -2771,6 +2771,33 @@ body{
 .warning.rush-warning .rush-item{
   color:#C95F8C !important;
 }
+
+/* ===== 복사·드래그·길게 누르기 방지 =====
+   입력창(input·textarea)은 신청서 작성과 복사 기능에 필요하므로 제외 */
+html,
+body,
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
 </style>
 </head>
 <body>
@@ -3167,6 +3194,53 @@ body{
 
   </div>
 </div>
+
+<script>
+/* ===== 우클릭 · 드래그 · 복사 방지 =====
+   입력창(input·textarea) 안에서는 붙여넣기·복사·전체선택이 가능해야 하고,
+   '신청서 복사' 버튼도 내부적으로 복사 명령을 쓰므로 해당 동작은 막지 않습니다. */
+(function () {
+  function isField(el) {
+    if (!el || !el.tagName) return false;
+    var tag = el.tagName.toLowerCase();
+    return tag === 'input' || tag === 'textarea' || el.isContentEditable === true;
+  }
+
+  var block = function (e) { e.preventDefault(); return false; };
+
+  document.addEventListener('contextmenu', function (e) {
+    if (isField(e.target)) return;
+    return block(e);
+  });
+
+  document.addEventListener('selectstart', function (e) {
+    if (isField(e.target)) return;
+    return block(e);
+  });
+
+  document.addEventListener('dragstart', block);
+
+  ['copy', 'cut'].forEach(function (type) {
+    document.addEventListener(type, function (e) {
+      if (isField(e.target) || isField(document.activeElement)) return;
+      return block(e);
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    var key = (e.key || '').toLowerCase();
+    var ctrl = e.ctrlKey || e.metaKey;
+
+    // F12, 개발자도구 단축키
+    if (e.keyCode === 123) return block(e);
+    if (ctrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) return block(e);
+    // 소스보기 / 저장 / 인쇄
+    if (ctrl && (key === 'u' || key === 's' || key === 'p')) return block(e);
+    // 입력창 밖에서의 전체선택 / 복사 / 잘라내기
+    if (ctrl && (key === 'a' || key === 'c' || key === 'x') && !isField(e.target)) return block(e);
+  });
+})();
+</script>
 
 <script>
 var currentStep = 0;

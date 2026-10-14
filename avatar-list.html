@@ -105,7 +105,10 @@
     /* ===== 메인 뷰어 ===== */
     .av-stage {
       position: relative;
-      aspect-ratio: 16 / 9;
+      /* 사진 비율에 맞춰 가로 여백 없이 꽉 차게 (비율은 첫 사진 기준으로 자동 설정) */
+      width: min(100%, calc(var(--ar, 1) * 680px));
+      aspect-ratio: var(--ar, 1);
+      margin: 0 auto;
       overflow: hidden;
       border: 2px solid var(--border);
       border-radius: 24px;
@@ -281,17 +284,31 @@
       scroll-behavior: auto;
     }
 
+    /* 스크롤바: 굵게 + 민트색 통일 */
     .av-strip::-webkit-scrollbar {
-      height: 6px;
+      height: 14px;
     }
 
     .av-strip::-webkit-scrollbar-track {
-      background: transparent;
+      border-radius: 999px;
+      background: #dff4f2;
     }
 
     .av-strip::-webkit-scrollbar-thumb {
+      border: 3px solid #dff4f2;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--mint), var(--pink));
+      background: var(--mint);
+    }
+
+    .av-strip::-webkit-scrollbar-thumb:hover {
+      background: var(--mint-dark);
+    }
+
+    @supports not selector(::-webkit-scrollbar) {
+      .av-strip {
+        scrollbar-width: auto;
+        scrollbar-color: var(--mint) #dff4f2;
+      }
     }
 
     .av-thumb {
@@ -640,7 +657,6 @@
       }
 
       .av-stage {
-        aspect-ratio: 4 / 3;
         border-radius: 18px;
       }
 
@@ -1378,7 +1394,17 @@
         });
       }
 
+      let ratioSet = false;
+
       function markStageReady() {
+        if (!ratioSet && mainImg.naturalWidth > 0 && mainImg.naturalHeight > 0) {
+          ratioSet = true;
+          stage.style.setProperty(
+            '--ar',
+            (mainImg.naturalWidth / mainImg.naturalHeight).toFixed(4)
+          );
+        }
+
         stage.classList.add('is-ready');
 
         if (skeleton) {
